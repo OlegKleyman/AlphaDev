@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{AC431663
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Web", "web\AlphaDev.Web\AlphaDev.Web.csproj", "{15CBB3F5-592E-4CCA-B484-2893E4194944}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDev.Core", "core\AppDev.Core\AppDev.Core.csproj", "{B04E2F07-4455-4859-A38E-EB9993DF6B39}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,11 +25,16 @@ Global
 		{15CBB3F5-592E-4CCA-B484-2893E4194944}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15CBB3F5-592E-4CCA-B484-2893E4194944}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15CBB3F5-592E-4CCA-B484-2893E4194944}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B04E2F07-4455-4859-A38E-EB9993DF6B39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B04E2F07-4455-4859-A38E-EB9993DF6B39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B04E2F07-4455-4859-A38E-EB9993DF6B39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B04E2F07-4455-4859-A38E-EB9993DF6B39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{15CBB3F5-592E-4CCA-B484-2893E4194944} = {84C624B3-E76D-4BDE-8A47-92778791225F}
+		{B04E2F07-4455-4859-A38E-EB9993DF6B39} = {8561F13A-FB6E-45CE-8020-CEDCC9EA77DB}
 	EndGlobalSection
 EndGlobal
