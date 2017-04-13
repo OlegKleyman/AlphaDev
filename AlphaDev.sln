@@ -19,9 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit", "unit", "{E0C4CBD9-0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integration", "integration", "{6041D273-6E6B-4F68-B316-646209191525}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Core..Tests", "tests\unit\AlphaDev.Core..Tests\AlphaDev.Core..Tests.csproj", "{410AA4B6-AF7B-49FC-91BE-95F8FF813935}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Core..Tests.Unit", "tests\unit\AlphaDev.Core..Tests.Unit\AlphaDev.Core..Tests.Unit.csproj", "{410AA4B6-AF7B-49FC-91BE-95F8FF813935}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Web.Tests", "tests\unit\AlphaDev.Web.Tests\AlphaDev.Web.Tests.csproj", "{A0583729-6DEB-439A-A3A5-BC6EC10E336A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Web.Tests.Unit", "tests\unit\AlphaDev.Web.Tests.Unit\AlphaDev.Web.Tests.Unit.csproj", "{A0583729-6DEB-439A-A3A5-BC6EC10E336A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
