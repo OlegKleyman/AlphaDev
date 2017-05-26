@@ -2,11 +2,17 @@
 
   <PropertyGroup>    
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <LightBddScope />
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Features\Homepage_feature.Steps.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CoreCompat.Selenium.WebDriver" Version="3.2.0-beta003" />
     <PackageReference Include="FluentAssertions" Version="4.19.2" />
+    <PackageReference Include="LightBDD.XUnit2" Version="2.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
     <PackageReference Include="SpecFlow.NetCore" Version="1.0.0-rc8" />
     <PackageReference Include="TestStack.BDDfy" Version="4.3.2" />
@@ -15,8 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\" />
-    <Folder Include="FeatureSteps\" />
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 
 </Project>
