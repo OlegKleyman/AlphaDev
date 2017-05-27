@@ -1,20 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AlphaDev.Web.Tests.Integration.Features
+﻿namespace AlphaDev.Web.Tests.Integration.Features
 {
+    using System;
+    using System.Net;
+    using System.Net.Sockets;
+	
+
+    using FluentAssertions;
+
     using LightBDD.XUnit2;
+
+    using Microsoft.AspNetCore.Hosting;
+
+    using OpenQA.Selenium.Chrome;
 
     using Xunit.Abstractions;
 
-    public partial class Homepage_feature : FeatureFixture
+    public partial class Homepage_feature : FeatureFixture, IDisposable
     {
+        private readonly ChromeDriver driver;
+
         public Homepage_feature(ITestOutputHelper output)
             : base(output)
         {
-        }
+            var path = Environment.GetEnvironmentVariable("PATH");
 
+			Environment.SetEnvironmentVariable("PATH", path + ";.");
+
+            driver = new ChromeDriver();
+        }
+		
         private void Given_i_am_a_user()
         {
             
@@ -22,12 +36,32 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void When_i_go_to_the_homepage()
         {
-            throw new NotImplementedException();
+            var url = $"http://127.0.0.1:{GetOpenPort()}";
+            using (var host = new WebHostBuilder().UseKestrel().UseStartup<Startup>().UseUrls(url).Build())
+            {
+				host.Start();
+
+				driver.Navigate().GoToUrl(url);
+            }
+        }
+
+        private int GetOpenPort()
+        {
+            using (var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            {
+                const int randomOpenPort = 0;
+
+                sock.Bind(new IPEndPoint(IPAddress.Loopback, randomOpenPort));
+
+                return ((IPEndPoint)sock.LocalEndPoint).Port;
+            }
         }
 
         private void Then_it_should_load()
         {
-            throw new NotImplementedException();
+            driver.Title.ShouldBeEquivalentTo("AlphaDev");
         }
+
+        public void Dispose() => driver?.Dispose();
     }
 }
