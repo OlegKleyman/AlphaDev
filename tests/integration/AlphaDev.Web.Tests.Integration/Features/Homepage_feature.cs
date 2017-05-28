@@ -15,5 +15,11 @@
             _ => Given_i_am_a_user(),
             _ => When_i_go_to_the_homepage(),
             _ => Then_it_should_load());
+
+        [Scenario]
+        public void Display_nav() => Runner.RunScenario(
+            _ => Given_i_am_a_user(),
+            _ => When_i_go_to_the_homepage(),
+            _ => Then_it_should_display_navigation_links());
     }
 }
