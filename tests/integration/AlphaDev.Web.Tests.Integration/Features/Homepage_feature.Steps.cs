@@ -14,12 +14,13 @@
 
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
+    using OpenQA.Selenium.Firefox;
 
     using Xunit.Abstractions;
 
     public partial class Homepage_feature : FeatureFixture, IDisposable
     {
-        private readonly ChromeDriver driver;
+        private readonly IWebDriver driver;
 
         public Homepage_feature(ITestOutputHelper output)
             : base(output)
@@ -28,7 +29,7 @@
 
             Environment.SetEnvironmentVariable("PATH", path + ";.");
 
-            driver = new ChromeDriver();
+            driver = new FirefoxDriver();
         }
 
         public void Dispose() => driver.Dispose();
