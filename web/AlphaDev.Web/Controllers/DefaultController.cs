@@ -8,6 +8,6 @@ namespace AlphaDev.Web.Controllers
 {
     public class DefaultController : Controller
     {
-        public IActionResult Index() => View();
+        public IActionResult Index() => View(nameof(Index));
     }
 }
