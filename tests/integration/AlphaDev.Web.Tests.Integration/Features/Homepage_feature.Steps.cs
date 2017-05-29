@@ -5,14 +5,12 @@
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
-	
 
     using FluentAssertions;
 
     using LightBDD.XUnit2;
 
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.PlatformAbstractions;
 
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
@@ -28,24 +26,27 @@
         {
             var path = Environment.GetEnvironmentVariable("PATH");
 
-			Environment.SetEnvironmentVariable("PATH", path + ";.");
+            Environment.SetEnvironmentVariable("PATH", path + ";.");
 
             driver = new ChromeDriver();
         }
-		
+
+        public void Dispose() => driver.Dispose();
+
         private void Given_i_am_a_user()
         {
-            
         }
 
         private void When_i_go_to_the_homepage()
         {
             var url = $"http://127.0.0.1:{GetOpenPort()}";
-            using (var host = new WebHostBuilder().UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel().UseStartup<Startup>().UseUrls(url).Build())
+            using (var host = new WebHostBuilder()
+                .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel()
+                .UseStartup<Startup>().UseUrls(url).Build())
             {
-				host.Start();
+                host.Start();
 
-				driver.Navigate().GoToUrl(url);
+                driver.Navigate().GoToUrl(url);
             }
         }
 
@@ -63,10 +64,7 @@
 
         private void Then_it_should_load() => driver.Title.ShouldBeEquivalentTo("Home - AlphaDev");
 
-        public void Dispose() => driver.Dispose();
-
-        private void Then_it_should_display_navigation_links() => driver
-            .FindElements(By.CssSelector("ul.navbar-nav a")).Select(element => element.Text)
-            .ShouldBeEquivalentTo(new[] { "Posts", "About", "Contact" });
+        private void Then_it_should_display_navigation_links() => driver.FindElements(By.CssSelector("ul.navbar-nav a"))
+            .Select(element => element.Text).ShouldBeEquivalentTo(new[] { "Posts", "About", "Contact" });
     }
 }

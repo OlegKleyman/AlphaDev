@@ -8,6 +8,8 @@
 
     public class DefaultControllerTests
     {
+        private DefaultController GetDefaultController() => new DefaultController();
+
         [Fact]
         public void IndexShouldReturnIndexView()
         {
@@ -15,7 +17,5 @@
 
             controller.Index().Should().BeViewResult();
         }
-
-        private DefaultController GetDefaultController() => new DefaultController();
     }
 }
