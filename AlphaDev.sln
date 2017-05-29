@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Web.Tests.Unit", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Web.Tests.Integration", "tests\integration\AlphaDev.Web.Tests.Integration\AlphaDev.Web.Tests.Integration.csproj", "{B20F2BE4-A248-4537-B0B6-38EE51026186}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{92372243-C4A7-43E3-9C66-C09640C8BDAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Test.Core", "tests\core\AlphaDev.Test.Core\AlphaDev.Test.Core.csproj", "{F6D26E54-81DF-42E1-80A0-AF5AE08FC70F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,10 @@ Global
 		{B20F2BE4-A248-4537-B0B6-38EE51026186}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B20F2BE4-A248-4537-B0B6-38EE51026186}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B20F2BE4-A248-4537-B0B6-38EE51026186}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6D26E54-81DF-42E1-80A0-AF5AE08FC70F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6D26E54-81DF-42E1-80A0-AF5AE08FC70F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6D26E54-81DF-42E1-80A0-AF5AE08FC70F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6D26E54-81DF-42E1-80A0-AF5AE08FC70F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,5 +71,7 @@ Global
 		{410AA4B6-AF7B-49FC-91BE-95F8FF813935} = {E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}
 		{A0583729-6DEB-439A-A3A5-BC6EC10E336A} = {E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}
 		{B20F2BE4-A248-4537-B0B6-38EE51026186} = {6041D273-6E6B-4F68-B316-646209191525}
+		{92372243-C4A7-43E3-9C66-C09640C8BDAF} = {A8CC5FA8-7A37-4FC8-9C7E-D6800DBC0157}
+		{F6D26E54-81DF-42E1-80A0-AF5AE08FC70F} = {92372243-C4A7-43E3-9C66-C09640C8BDAF}
 	EndGlobalSection
 EndGlobal
