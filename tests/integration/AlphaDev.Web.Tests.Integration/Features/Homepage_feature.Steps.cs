@@ -1,38 +1,44 @@
 ﻿namespace AlphaDev.Web.Tests.Integration.Features
 {
     using System;
+    using System.Data.SqlClient;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
+
+    using AlphaDev.Core.Data.Sql.Contexts;
 
     using FluentAssertions;
 
     using LightBDD.XUnit2;
 
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+
+    using Omego.Extensions.QueryableExtensions;
 
     using OpenQA.Selenium;
-    using OpenQA.Selenium.Chrome;
-    using OpenQA.Selenium.Firefox;
 
+    using Xunit;
     using Xunit.Abstractions;
 
-    public partial class Homepage_feature : FeatureFixture, IDisposable
+    public partial class Homepage_feature : FeatureFixture, IDisposable, IClassFixture<SiteTester>
     {
         private readonly IWebDriver driver;
 
-        public Homepage_feature(ITestOutputHelper output)
+        public Homepage_feature(ITestOutputHelper output, SiteTester siteTester)
             : base(output)
         {
-            var path = Environment.GetEnvironmentVariable("PATH");
-
-            Environment.SetEnvironmentVariable("PATH", path + ";.");
-
-            driver = new FirefoxDriver();
+            driver = siteTester.Value;
+            
+            Configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("connectionstrings.json", false, true).Build();
         }
-
-        public void Dispose() => driver.Dispose();
+        
+        public void Dispose() {}
 
         private void Given_i_am_a_user()
         {
@@ -70,7 +76,21 @@
 
         private void Then_it_should_display_the_latest_blog_post()
         {
-            throw new NotImplementedException();
+            var blogContext = new BlogContext(
+                string.Format(
+                    CultureInfo.InvariantCulture,
+                    Configuration.GetConnectionString("integration"),
+                    Directory.GetCurrentDirectory()));
+            
+            blogContext.Blogs.OrderBy(blog => blog.Created)
+                .SingleOrThrow(
+                    new InvalidOperationException("No blogs found."),
+                    new InvalidOperationException("Multiple blogs found")).ShouldBeEquivalentTo(
+                    new { Created = driver.FindElement(By.CssSelector("div.blog .title")) },
+                    options => options.Including(blog => blog.Created).Including(blog => blog.Content)
+                        .Including(blog => blog.Title));
         }
+
+        public readonly IConfigurationRoot Configuration;
     }
 }

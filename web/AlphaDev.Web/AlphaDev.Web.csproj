@@ -22,4 +22,9 @@
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\core\AlphaDev.Core.Data.Sql\AlphaDev.Core.Data.Sql.csproj" />
+    <ProjectReference Include="..\..\core\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
+  </ItemGroup>
 </Project>

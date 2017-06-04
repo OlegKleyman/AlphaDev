@@ -1,0 +1,5 @@
+{
+  "connectionStrings": {
+    "integration": "Data Source=(LocalDB)\\v11.0;AttachDbFilename={0}\\Resources\\Databases\\integration_data.mdf;Integrated Security=True;MultipleActiveResultSets=true"
+  }
+}
