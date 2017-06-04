@@ -82,6 +82,8 @@
                     Configuration.GetConnectionString("integration"),
                     Directory.GetCurrentDirectory()));
             
+            blogContext.Database.Migrate();
+
             blogContext.Blogs.OrderBy(blog => blog.Created)
                 .SingleOrThrow(
                     new InvalidOperationException("No blogs found."),

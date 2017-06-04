@@ -46,9 +46,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\Databases\" />
-  </ItemGroup>
   <!-- https://github.com/NuGet/Home/issues/4412. -->
   <Target Name="CopyDepsFiles" AfterTargets="Build" Condition="'$(TargetFramework)'!=''">
     <ItemGroup>
