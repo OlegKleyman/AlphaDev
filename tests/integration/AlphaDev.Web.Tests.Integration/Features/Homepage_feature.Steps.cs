@@ -67,5 +67,10 @@
 
         private void Then_it_should_display_navigation_links() => driver.FindElements(By.CssSelector("ul.navbar-nav a"))
             .Select(element => element.Text).ShouldBeEquivalentTo(new[] { "Posts", "About", "Contact" });
+
+        private void Then_it_should_display_the_latest_blog_post()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
