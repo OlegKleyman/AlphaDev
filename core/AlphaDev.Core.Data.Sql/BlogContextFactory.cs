@@ -10,12 +10,13 @@
 
     public class BlogContextFactory : IDbContextFactory<BlogContext>
     {
-        public BlogContext Create(DbContextFactoryOptions options)
-        {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("connectionstrings.json", true, true).Build();
+        private readonly IConfigurationRoot config;
 
-            return new BlogContext(builder.GetConnectionString("AlphaDevDefault") ?? "Data Source=(LocalDB)\\v11.0;AttachDbFilename=integration_data.mdf;Integrated Security=True;MultipleActiveResultSets=true");
-        }
+        public BlogContextFactory() { }
+
+        public BlogContextFactory(IConfigurationRoot config) => this.config = config;
+
+        public BlogContext Create(DbContextFactoryOptions options) => new BlogContext(
+            config?.GetConnectionString("AlphaDevDefault") ?? @"Data Source=(LocalDB)\v11.0;");
     }
 }
