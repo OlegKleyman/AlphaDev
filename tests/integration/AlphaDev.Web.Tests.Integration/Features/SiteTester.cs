@@ -13,10 +13,10 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
             Environment.SetEnvironmentVariable("PATH", path + ";.");
 
-            Value = new FirefoxDriver();
+            Driver = new FirefoxDriver();
         }
-        public IWebDriver Value { get; set; }
+        public IWebDriver Driver { get; set; }
 
-        public void Dispose() => Value.Dispose();
+        public void Dispose() => Driver.Dispose();
     }
 }

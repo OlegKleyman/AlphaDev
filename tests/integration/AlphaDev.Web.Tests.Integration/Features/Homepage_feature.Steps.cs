@@ -25,20 +25,18 @@
     using Xunit;
     using Xunit.Abstractions;
 
-    public partial class Homepage_feature : FeatureFixture, IDisposable, IClassFixture<SiteTester>
+    public partial class Homepage_feature : FeatureFixture, IClassFixture<SiteTester>, IClassFixture<DatabaseFixture>
     {
-        private readonly IWebDriver driver;
+        private readonly SiteTester siteTester;
 
-        public Homepage_feature(ITestOutputHelper output, SiteTester siteTester)
+        private readonly DatabaseFixture databaseFixture;
+
+        public Homepage_feature(ITestOutputHelper output, SiteTester siteTester, DatabaseFixture databaseFixture)
             : base(output)
         {
-            driver = siteTester.Value;
-            
-            Configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("connectionstrings.json", false, true).Build();
+            this.siteTester = siteTester;
+            this.databaseFixture = databaseFixture;
         }
-        
-        public void Dispose() {}
 
         private void Given_i_am_a_user()
         {
@@ -53,7 +51,7 @@
             {
                 host.Start();
 
-                driver.Navigate().GoToUrl(url);
+                siteTester.Driver.Navigate().GoToUrl(url);
             }
         }
 
@@ -69,30 +67,23 @@
             }
         }
 
-        private void Then_it_should_load() => driver.Title.ShouldBeEquivalentTo("Home - AlphaDev");
+        private void Then_it_should_load() => siteTester.Driver.Title.ShouldBeEquivalentTo("Home - AlphaDev");
 
-        private void Then_it_should_display_navigation_links() => driver.FindElements(By.CssSelector("ul.navbar-nav a"))
+        private void Then_it_should_display_navigation_links() => siteTester.Driver.FindElements(By.CssSelector("ul.navbar-nav a"))
             .Select(element => element.Text).ShouldBeEquivalentTo(new[] { "Posts", "About", "Contact" });
 
         private void Then_it_should_display_the_latest_blog_post()
         {
-            var blogContext = new BlogContext(
-                string.Format(
-                    CultureInfo.InvariantCulture,
-                    Configuration.GetConnectionString("integration"),
-                    Directory.GetCurrentDirectory()));
-            
-            blogContext.Database.Migrate();
+            databaseFixture.BlogContext.Database.Migrate();
 
-            blogContext.Blogs.OrderBy(blog => blog.Created)
+            databaseFixture.BlogContext.Blogs.OrderBy(blog => blog.Created)
                 .SingleOrThrow(
                     new InvalidOperationException("No blogs found."),
                     new InvalidOperationException("Multiple blogs found")).ShouldBeEquivalentTo(
-                    new { Created = driver.FindElement(By.CssSelector("div.blog .title")) },
+                    new { Created = siteTester.Driver.FindElement(By.CssSelector("div.blog .title")) },
                     options => options.Including(blog => blog.Created).Including(blog => blog.Content)
                         .Including(blog => blog.Title));
         }
 
-        public readonly IConfigurationRoot Configuration;
     }
 }
