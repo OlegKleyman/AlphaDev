@@ -39,7 +39,7 @@
     <None Update="Resources\Databases\integration_data.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Databases\integration_log.ldf">
+    <None Update="Resources\Databases\integration_data_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="xunit.runner.json">
