@@ -28,6 +28,7 @@
     <ProjectReference Include="..\..\..\core\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
     <ProjectReference Include="..\..\..\web\AlphaDev.Web\AlphaDev.Web.csproj" />
     <ProjectReference Include="..\..\core\AlphaDev.Test.Core\AlphaDev.Test.Core.csproj" />
+    <ProjectReference Include="..\..\core\AlphaDev.Test.Integration.Core\AlphaDev.Test.Integration.Core.csproj" />
   </ItemGroup>
 
   <!-- Solves Problem#2 (404 when executing service calls hosted in other assemblies) -->
@@ -35,12 +36,6 @@
   <ItemGroup>
     <None Update="connectionstrings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\Databases\integration_data.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\Databases\integration_data_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
