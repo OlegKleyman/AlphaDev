@@ -10,6 +10,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
     using System.Linq;
     using System.Reflection;
 
+    using AlphaDev.Core.Data.Entties;
     using AlphaDev.Core.Data.Sql.Contexts;
 
     using FluentAssertions;
@@ -48,7 +49,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             using (var context = new DbContext(options))
             {
                 Enumerable.Range(1, 10).ToList().ForEach(
-                    i => context.Database.ExecuteSqlCommand($"INSERT INTO Blogs(Created, Content, Title) VALUES('1/{i}/2015', 'test {i}', 'Title {i}')"));
+                    i => context.Database.ExecuteSqlCommand($"INSERT INTO Blogs(Content, Title) VALUES('test {i}', 'Title {i}')"));
             }
         }
 
@@ -95,6 +96,26 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
                     targetBlog.GetType().GetProperties().ToDictionary(
                         x => x.Name,
                         x => x.GetGetMethod().Invoke(targetBlog, null)));
+            }
+        }
+
+        [Fact]
+        public void BlogsShouldAddBlogWithCurrentDate()
+        {
+            using (var context = GetBlogContext())
+            {
+                var blog = new Blog
+                               {
+                                   Content = string.Empty,
+                                   Title = string.Empty
+                               };
+
+                context.Blogs.Add(blog);
+
+                context.SaveChanges();
+
+                GetTable("Blogs").Last()["Created"].Should().BeOfType<DateTime>().Which.Should()
+                    .BeCloseTo(DateTime.UtcNow, 1000).And.Subject.ShouldBeEquivalentTo(blog.Created);
             }
         }
 

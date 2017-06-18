@@ -1,5 +1,9 @@
 namespace AlphaDev.Core.Data.Sql.Contexts
 {
+    using System;
+
+    using AlphaDev.Core.Data.Entties;
+
     using Microsoft.EntityFrameworkCore;
 
     public sealed class BlogContext : Data.Contexts.BlogContext
@@ -13,7 +17,11 @@ namespace AlphaDev.Core.Data.Sql.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            var entity = modelBuilder.Entity<Blog>();
+
+            entity.Property(blog => blog.Created).HasDefaultValue(DateTime.UtcNow);
+            entity.Property(blog => blog.Content).IsRequired();
+            entity.Property(blog => blog.Title).IsRequired();
         }
     }
 }
