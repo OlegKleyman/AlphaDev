@@ -13,6 +13,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\core\AlphaDev.Core.Data.Sql\AlphaDev.Core.Data.Sql.csproj" />
+    <ProjectReference Include="..\..\core\AlphaDev.Test.Integration.Core\AlphaDev.Test.Integration.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="connectionstrings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 
 </Project>
