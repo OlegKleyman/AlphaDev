@@ -8,8 +8,8 @@ using AlphaDev.Core.Data.Sql.Contexts;
 namespace AlphaDev.Core.Data.Sql.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    [Migration("20170604200453_Initial")]
-    partial class Initial
+    [Migration("20170618230508_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,11 +22,15 @@ namespace AlphaDev.Core.Data.Sql.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .IsRequired();
 
-                    b.Property<DateTime>("Created");
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.HasKey("Id");
 

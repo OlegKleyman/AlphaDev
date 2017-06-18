@@ -19,7 +19,8 @@ namespace AlphaDev.Core.Data.Sql.Contexts
         {
             var entity = modelBuilder.Entity<Blog>();
 
-            entity.Property(blog => blog.Created).HasDefaultValue(DateTime.UtcNow);
+            entity.HasKey(blog => blog.Id);
+            entity.Property(blog => blog.Created).HasDefaultValueSql("GETUTCDATE()").ValueGeneratedOnAdd();
             entity.Property(blog => blog.Content).IsRequired();
             entity.Property(blog => blog.Title).IsRequired();
         }
