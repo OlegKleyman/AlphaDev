@@ -119,6 +119,25 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             }
         }
 
+        [Fact]
+        public void BlogsShouldAddBlog()
+        {
+            using (var context = GetBlogContext())
+            {
+                var blog = new Blog
+                               {
+                                   Content = string.Empty,
+                                   Title = string.Empty
+                               };
+
+                context.Blogs.Add(blog);
+
+                context.SaveChanges();
+
+                GetTable("Blogs").Should().HaveCount(11);
+            }
+        }
+
         private BlogContext GetBlogContext()
         {
             var context = new BlogContext(connectionString);
