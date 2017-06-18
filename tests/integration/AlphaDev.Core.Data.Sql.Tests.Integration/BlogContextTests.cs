@@ -57,13 +57,44 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
         {
             using (var context = GetBlogContext())
             {
-                var blogs = context.Blogs.ToList();
+                var blogs = context.Blogs;
 
                 var blogsDictionary = blogs.Select(
                     blog => blog.GetType().GetProperties()
-                        .ToDictionary(x => x.Name, x => x.GetGetMethod()?.Invoke(blog, null)));
+                        .ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(blog, null)));
 
                 GetTable("Blogs").ShouldBeEquivalentTo(blogsDictionary);
+            }
+        }
+
+        [Fact]
+        public void BlogsShouldDeleteBlogs()
+        {
+            using (var context = GetBlogContext())
+            {
+                context.Blogs.RemoveRange(context.Blogs);
+                context.SaveChanges();
+
+                GetTable("Blogs").Should().BeEmpty();
+            }
+        }
+
+        [Fact]
+        public void BlogsShouldUpdateBlogs()
+        {
+            using (var context = GetBlogContext())
+            {
+                var targetBlog = context.Blogs.First();
+
+                targetBlog.Title = "Updated Title";
+                targetBlog.Content = "Updated Content";
+
+                context.SaveChanges();
+
+                GetTable("Blogs").First().ShouldBeEquivalentTo(
+                    targetBlog.GetType().GetProperties().ToDictionary(
+                        x => x.Name,
+                        x => x.GetGetMethod().Invoke(targetBlog, null)));
             }
         }
 
