@@ -8,9 +8,10 @@ using AlphaDev.Core.Data.Sql.Contexts;
 namespace AlphaDev.Core.Data.Sql.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    partial class BlogContextModelSnapshot : ModelSnapshot
+    [Migration("20170619185625_AddModified")]
+    partial class AddModified
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")

@@ -21,6 +21,7 @@ namespace AlphaDev.Core.Data.Sql.Contexts
 
             entity.HasKey(blog => blog.Id);
             entity.Property(blog => blog.Created).HasDefaultValueSql("GETUTCDATE()").ValueGeneratedOnAdd();
+            entity.Property(blog => blog.Modified);
             entity.Property(blog => blog.Content).IsRequired();
             entity.Property(blog => blog.Title).IsRequired();
         }

@@ -11,5 +11,7 @@ namespace AlphaDev.Core.Data.Entties
         public string Content { get; set; }
 
         public string Title { get; set; }
+
+        public DateTime? Modified { get; set; }
     }
 }
