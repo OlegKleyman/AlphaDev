@@ -161,7 +161,11 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
                     while (reader.Read())
                     {
                         yield return Enumerable.Range(0, reader.FieldCount)
-                            .ToDictionary(reader.GetName, reader.GetValue);
+                            .ToDictionary(reader.GetName, i =>
+                                {
+                                    var value = reader.GetValue(i);
+                                    return value == DBNull.Value ? null : value;
+                                });
                     }
                 }
             }
