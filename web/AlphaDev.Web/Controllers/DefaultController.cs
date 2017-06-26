@@ -1,9 +1,20 @@
 namespace AlphaDev.Web.Controllers
 {
+    using AppDev.Core;
+
     using Microsoft.AspNetCore.Mvc;
 
     public class DefaultController : Controller
     {
-        public IActionResult Index() => View(nameof(Index));
+        private readonly IBlogService blogService;
+
+        public DefaultController(IBlogService blogService) => this.blogService = blogService;
+
+        public ViewResult Index()
+        {
+            var blog = blogService.GetLastCreated();
+
+            return View(nameof(Index), blog);
+        }
     }
 }
