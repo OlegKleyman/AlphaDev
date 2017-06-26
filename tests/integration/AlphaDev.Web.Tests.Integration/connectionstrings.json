@@ -1,5 +1,5 @@
 {
   "connectionStrings": {
-    "integration": "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename={0}\\Resources\\Databases\\integration_data.mdf;Integrated Security=True;MultipleActiveResultSets=true"
+    "integration": "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename={0}\\Resources\\Databases\\integration_data.mdf;Integrated Security=True;MultipleActiveResultSets=true;Database=Alphadev;"
   }
 }

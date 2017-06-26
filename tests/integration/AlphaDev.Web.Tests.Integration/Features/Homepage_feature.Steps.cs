@@ -8,6 +8,7 @@
     using System.Net;
     using System.Net.Sockets;
 
+    using AlphaDev.Core.Data.Entties;
     using AlphaDev.Core.Data.Sql.Contexts;
 
     using FluentAssertions;
@@ -25,17 +26,23 @@
     using Xunit;
     using Xunit.Abstractions;
 
-    public partial class Homepage_feature : FeatureFixture, IClassFixture<SiteTester>, IClassFixture<DatabaseFixture>
+    public partial class Homepage_feature : FeatureFixture, IClassFixture<SiteTester>, IDisposable
     {
         private readonly SiteTester siteTester;
 
         private readonly DatabaseFixture databaseFixture;
 
-        public Homepage_feature(ITestOutputHelper output, SiteTester siteTester, DatabaseFixture databaseFixture)
+        public Homepage_feature(ITestOutputHelper output, SiteTester siteTester)
             : base(output)
         {
             this.siteTester = siteTester;
-            this.databaseFixture = databaseFixture;
+            databaseFixture = new DatabaseFixture();
+
+            databaseFixture.BlogContext.Blogs.AddRange(
+                new Blog { Content = "Content integration test1.", Title = "Title integration test1." },
+                new Blog { Content = "Content integration test2.", Title = "Title integration test2." });
+
+            databaseFixture.BlogContext.SaveChanges();
         }
 
         private void Given_i_am_a_user()
@@ -72,18 +79,19 @@
         private void Then_it_should_display_navigation_links() => siteTester.Driver.FindElements(By.CssSelector("ul.navbar-nav a"))
             .Select(element => element.Text).ShouldBeEquivalentTo(new[] { "Posts", "About", "Contact" });
 
-        private void Then_it_should_display_the_latest_blog_post()
-        {
-            databaseFixture.BlogContext.Database.Migrate();
-
+        private void Then_it_should_display_the_latest_blog_post() => new
+                                                                          {
+                                                                              Title = siteTester.Driver.FindElement(
+                                                                                      By.CssSelector("div.blog .title"))
+                                                                                  .Text,
+                                                                              Content = siteTester.Driver.FindElement(
+                                                                                      By.CssSelector(
+                                                                                          "div.blog .content"))
+                                                                                  .Text
+                                                                          }.ShouldBeEquivalentTo(
             databaseFixture.BlogContext.Blogs.OrderBy(blog => blog.Created)
-                .SingleOrThrow(
-                    new InvalidOperationException("No blogs found."),
-                    new InvalidOperationException("Multiple blogs found")).ShouldBeEquivalentTo(
-                    new { Created = siteTester.Driver.FindElement(By.CssSelector("div.blog .title")) },
-                    options => options.Including(blog => blog.Created).Including(blog => blog.Content)
-                        .Including(blog => blog.Title));
-        }
+                .FirstOrThrow(new InvalidOperationException("No blogs found.")));
 
+        public void Dispose() => databaseFixture.Dispose();
     }
 }

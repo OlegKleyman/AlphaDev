@@ -6,6 +6,7 @@
 
     using AlphaDev.Core.Data.Sql.Contexts;
 
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
 
     public class DatabaseFixture: IDisposable
@@ -22,8 +23,15 @@
                     CultureInfo.InvariantCulture,
                     configuration.GetConnectionString("integration"),
                     Directory.GetCurrentDirectory()));
+
+            BlogContext.Database.EnsureDeleted();
+            BlogContext.Database.Migrate();
         }
 
-        public void Dispose() => BlogContext.Dispose();
+        public void Dispose()
+        {
+            BlogContext.Database.EnsureDeleted();
+            BlogContext.Dispose();
+        }
     }
 }
