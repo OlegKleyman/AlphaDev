@@ -1,7 +1,26 @@
-﻿@model object
+﻿@model AppDev.Core.Blog
 
 @{
     ViewBag.Title = "Home";
 }
+<style type="text/css">.blog { }
+
+ .title { }
+</style>
 
 <h2>AlphaDev</h2>
+
+<div class="blog">
+    <div class="title">
+        @Model.Title
+    </div>
+    <div>
+        @Model.Dates.Created
+    </div>
+    <div>
+        @Model.Dates.Modified
+    </div>
+    <div>
+        @Model.Content
+    </div>
+</div>
