@@ -1,11 +1,18 @@
 ﻿namespace AppDev.Core
 {
-    public class Blog
+    public class Blog : BlogBase
     {
-        public string Title { get; }
+        public Blog(string title, string content, Dates dates)
+        {
+            Title = title;
+            Content = content;
+            Dates = dates;
+        }
 
-        public Dates Dates { get; }
+        public override string Title { get; }
 
-        public string Content { get; }
+        public override Dates Dates { get; }
+
+        public override string Content { get; }
     }
 }

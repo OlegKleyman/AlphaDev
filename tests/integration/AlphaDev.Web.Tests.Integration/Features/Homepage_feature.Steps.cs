@@ -8,7 +8,7 @@
     using System.Net;
     using System.Net.Sockets;
 
-    using AlphaDev.Core.Data.Entties;
+    using AlphaDev.Core.Data.Entities;
     using AlphaDev.Core.Data.Sql.Contexts;
 
     using FluentAssertions;

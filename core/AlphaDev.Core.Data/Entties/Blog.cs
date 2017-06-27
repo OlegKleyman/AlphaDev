@@ -1,4 +1,4 @@
-namespace AlphaDev.Core.Data.Entties
+namespace AlphaDev.Core.Data.Entities
 {
     using System;
 

@@ -1,6 +1,6 @@
 namespace AlphaDev.Core.Data.Contexts
 {
-    using AlphaDev.Core.Data.Entties;
+    using AlphaDev.Core.Data.Entities;
 
     using Microsoft.EntityFrameworkCore;
 

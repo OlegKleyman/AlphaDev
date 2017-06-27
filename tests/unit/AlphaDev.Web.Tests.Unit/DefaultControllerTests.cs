@@ -16,7 +16,7 @@
         private DefaultController GetDefaultController()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetLastCreated().Returns(new Blog());
+            blogService.GetLatest().Returns(new Blog(null, null, null));
 
             return new DefaultController(blogService);
         }

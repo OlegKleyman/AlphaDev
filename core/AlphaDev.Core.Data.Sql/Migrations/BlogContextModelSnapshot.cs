@@ -16,7 +16,7 @@ namespace AlphaDev.Core.Data.Sql.Migrations
                 .HasAnnotation("ProductVersion", "1.1.2")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("AlphaDev.Core.Data.Entties.Blog", b =>
+            modelBuilder.Entity("AlphaDev.Core.Data.Entities.Blog", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();

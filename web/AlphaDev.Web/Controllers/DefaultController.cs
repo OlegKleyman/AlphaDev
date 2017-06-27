@@ -12,7 +12,7 @@ namespace AlphaDev.Web.Controllers
 
         public ViewResult Index()
         {
-            var blog = blogService.GetLastCreated();
+            var blog = blogService.GetLatest();
 
             return View(nameof(Index), blog);
         }

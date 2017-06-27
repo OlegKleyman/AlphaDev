@@ -2,7 +2,7 @@ namespace AlphaDev.Core.Data.Sql.Contexts
 {
     using System;
 
-    using AlphaDev.Core.Data.Entties;
+    using AlphaDev.Core.Data.Entities;
 
     using Microsoft.EntityFrameworkCore;
 

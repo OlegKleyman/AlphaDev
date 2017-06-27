@@ -10,7 +10,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
     using System.Linq;
     using System.Reflection;
 
-    using AlphaDev.Core.Data.Entties;
+    using AlphaDev.Core.Data.Entities;
     using AlphaDev.Core.Data.Sql.Contexts;
 
     using FluentAssertions;
