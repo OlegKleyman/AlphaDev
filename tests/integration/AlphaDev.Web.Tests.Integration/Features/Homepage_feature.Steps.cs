@@ -8,16 +8,19 @@
     using System.Net;
     using System.Net.Sockets;
 
-    using AlphaDev.Core.Data.Entities;
     using AlphaDev.Core.Data.Sql.Contexts;
 
+    using AppDev.Core;
+
     using FluentAssertions;
+    using FluentAssertions.Common;
 
     using LightBDD.XUnit2;
 
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
 
     using Omego.Extensions.QueryableExtensions;
 
@@ -25,6 +28,8 @@
 
     using Xunit;
     using Xunit.Abstractions;
+
+    using Blog = AlphaDev.Core.Data.Entities.Blog;
 
     public partial class Homepage_feature : FeatureFixture, IClassFixture<SiteTester>, IDisposable
     {
@@ -53,8 +58,12 @@
         {
             var url = $"http://127.0.0.1:{GetOpenPort()}";
             using (var host = new WebHostBuilder()
-                .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel()
-                .UseStartup<Startup>().UseUrls(url).Build())
+                .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel().ConfigureServices(
+                    services =>
+                        {
+                            services.AddSingleton<IConfigurationBuilder, IConfigurationBuilder>(
+                                provider => new ConfigurationBuilder().SetBasePath(Path.GetFullPath(".")));
+                        }).UseStartup<Startup>().UseUrls(url).Build())
             {
                 host.Start();
 

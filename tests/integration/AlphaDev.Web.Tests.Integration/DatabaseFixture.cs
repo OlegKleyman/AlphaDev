@@ -21,7 +21,7 @@
             BlogContext = new BlogContext(
                 string.Format(
                     CultureInfo.InvariantCulture,
-                    configuration.GetConnectionString("integration"),
+                    configuration.GetConnectionString("default"),
                     Directory.GetCurrentDirectory()));
 
             BlogContext.Database.EnsureDeleted();
