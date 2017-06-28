@@ -44,8 +44,18 @@
             databaseFixture = new DatabaseFixture();
 
             databaseFixture.BlogContext.Blogs.AddRange(
-                new Blog { Content = "Content integration test1.", Title = "Title integration test1." },
-                new Blog { Content = "Content integration test2.", Title = "Title integration test2." });
+                new Blog
+                    {
+                        Content = "Content integration test1.",
+                        Title = "Title integration test1.",
+                        Created = new DateTime(2016, 1, 1)
+                    },
+                new Blog
+                    {
+                        Content = "Content integration test2.",
+                        Title = "Title integration test2.",
+                        Created = new DateTime(2017, 2, 1)
+                    });
 
             databaseFixture.BlogContext.SaveChanges();
         }
@@ -98,7 +108,7 @@
                                                                                           "div.blog .content"))
                                                                                   .Text
                                                                           }.ShouldBeEquivalentTo(
-            databaseFixture.BlogContext.Blogs.OrderBy(blog => blog.Created)
+            databaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created)
                 .FirstOrThrow(new InvalidOperationException("No blogs found.")));
 
         public void Dispose() => databaseFixture.Dispose();
