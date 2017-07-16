@@ -54,8 +54,9 @@
                     {
                         Content = "Content integration test2.",
                         Title = "Title integration test2.",
-                        Created = new DateTime(2017, 2, 1)
-                    });
+                        Created = new DateTime(2017, 2, 1),
+                        Modified = new DateTime(2017, 7, 12)
+                });
 
             databaseFixture.BlogContext.SaveChanges();
         }
@@ -101,12 +102,15 @@
         private void Then_it_should_display_the_latest_blog_post() => new
                                                                           {
                                                                               Title = siteTester.Driver.FindElement(
-                                                                                      By.CssSelector("div.blog .title"))
+                                                                                      By.CssSelector(
+                                                                                          "div.blog .title h2"))
                                                                                   .Text,
                                                                               Content = siteTester.Driver.FindElement(
                                                                                       By.CssSelector(
                                                                                           "div.blog .content"))
-                                                                                  .Text
+                                                                                  .Text,
+                                                                              Created = "Wednesday, February 1, 2017",
+                                                                              Modified = "Wednesday, July 12, 2017"
                                                                           }.ShouldBeEquivalentTo(
             databaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created)
                 .FirstOrThrow(new InvalidOperationException("No blogs found.")));

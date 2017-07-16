@@ -1,8 +1,14 @@
 namespace AlphaDev.Web.Controllers
 {
+    using System;
+
+    using AlphaDev.Web.Models;
+
     using AppDev.Core;
 
     using Microsoft.AspNetCore.Mvc;
+
+    using Optional;
 
     public class DefaultController : Controller
     {
@@ -13,8 +19,12 @@ namespace AlphaDev.Web.Controllers
         public ViewResult Index()
         {
             var blog = blogService.GetLatest();
+            var model = new BlogViewModel(
+                blog.Title,
+                blog.Content,
+                new DatesViewModel(blog.Dates.Created, blog.Dates.Modified));
 
-            return View(nameof(Index), blog);
+            return View(nameof(Index), model);
         }
     }
 }

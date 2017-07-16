@@ -4,7 +4,7 @@
 
     using Optional;
 
-    public class Dates
+    public struct Dates
     {
         public Dates(DateTime created, Option<DateTime> modified)
         {
@@ -14,6 +14,6 @@
 
         public DateTime Created { get; }
 
-        public Option<DateTime> Modified { get; }
+        public Option<DateTime> Modified { get; set; }
     }
 }

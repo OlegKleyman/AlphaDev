@@ -1,27 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AlphaDev.Core.Tests.Unit
+﻿namespace AlphaDev.Web.Tests.Unit.Models
 {
-    using AppDev.Core;
+    using System;
+
+    using AlphaDev.Web.Models;
 
     using FluentAssertions;
 
     using Optional;
-    using Optional.Unsafe;
 
     using Xunit;
 
-    public class DatesTests
+    public class DatesViewModelTests
     {
         [Fact]
         public void ConstructorShouldSetProperties()
         {
-            var created = new DateTime(2017, 1,1);
+            var created = new DateTime(2017, 1, 1);
             var modified = Option.Some(new DateTime(2017, 2, 1));
 
-            var dates = new Dates(created, modified);
+            var dates = new DatesViewModel(created, modified);
 
             dates.Created.ShouldBeEquivalentTo(created);
             dates.Modified.ShouldBeEquivalentTo(modified);

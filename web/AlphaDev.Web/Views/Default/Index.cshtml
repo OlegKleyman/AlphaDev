@@ -1,26 +1,19 @@
-﻿@model AppDev.Core.BlogBase
+﻿@model AlphaDev.Web.Models.BlogViewModel
 
 @{
     ViewBag.Title = "Home";
 }
-<style type="text/css">.blog { }
 
- .title { }
-</style>
+<h1 class="text-center">AlphaDev</h1>
 
-<h2>AlphaDev</h2>
-
-<div class="blog">
-    <div class="title">
-        @Model.Title
-    </div>
+<div class="blog container">
+    
+    <div class="text-center title"><h2>@Model.Title</h2></div>
+    
     <div>
-        @Model.Dates.Created
+        @await Component.InvokeAsync("Dates", new{Model.Dates.Created, Model.Dates.Modified})
     </div>
-    <div>
-        @Model.Dates.Modified
-    </div>
-    <div class="content">
+    <div class="row content">
         @Model.Content
     </div>
 </div>
