@@ -52,7 +52,14 @@
                 var blogContext = provider.GetService<Core.Data.Contexts.BlogContext>();
                 blogContext.Database.EnsureDeleted();
                 blogContext.Database.Migrate();
-                blogContext.Blogs.Add(new Core.Data.Entities.Blog { Content = "testing the blog", Title = "testing" });
+                blogContext.Blogs.Add(
+                    new Core.Data.Entities.Blog
+                        {
+                            Content = GetDevelopmentContent(),
+                            Title = "testing",
+                            Created = new DateTime(2016, 7, 7),
+                            Modified = new DateTime(2017, 7, 10)
+                        });
                 blogContext.SaveChanges();
                 blogContext.Database.CloseConnection();
 
@@ -67,5 +74,28 @@
 
             app.UseMvc(routes => { routes.MapRoute("default", "{controller=Default}/{action=Index}/{id?}"); });
         }
+
+        private string GetDevelopmentContent() =>
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porttitor rutrum "
+            + "tellus, a fermentum lacus congue eget. Interdum et malesuada fames ac ante ipsum primis "
+            + "in faucibus. Proin imperdiet nisl ullamcorper nisi accumsan, in ultrices diam iaculis. "
+            + "Vestibulum luctus consectetur vestibulum. Interdum et malesuada fames ac ante ipsum "
+            + "primis in faucibus. Vestibulum sed pulvinar lorem. Maecenas eget sollicitudin odio. Sed "
+            + "mattis sem sit amet orci pharetra, at laoreet felis faucibus. Donec eleifend urna et "
+            + "sodales laoreet. Duis dolor sem, scelerisque sit amet ex ut, placerat imperdiet est. "
+            + "Nunc at sodales ex, sed scelerisque lacus. Nam nec efficitur libero. Morbi bibendum "
+            + "orci ipsum, in hendrerit ex vestibulum blandit. Vivamus vitae magna ultrices, "
+            + "lobortis nulla ac, pulvinar elit. Vivamus ullamcorper feugiat erat, in efficitur lacus "
+            + "euismod vitae." + "<br />Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porttitor rutrum "
+            + "tellus, a fermentum lacus congue eget. Interdum et malesuada fames ac ante ipsum primis "
+            + "in faucibus. Proin imperdiet nisl ullamcorper nisi accumsan, in ultrices diam iaculis. "
+            + "Vestibulum luctus consectetur vestibulum. Interdum et malesuada fames ac ante ipsum "
+            + "primis in faucibus. Vestibulum sed pulvinar lorem. Maecenas eget sollicitudin odio. Sed "
+            + "mattis sem sit amet orci pharetra, at laoreet felis faucibus. Donec eleifend urna et "
+            + "sodales laoreet. Duis dolor sem, scelerisque sit amet ex ut, placerat imperdiet est. "
+            + "Nunc at sodales ex, sed scelerisque lacus. Nam nec efficitur libero. Morbi bibendum "
+            + "orci ipsum, in hendrerit ex vestibulum blandit. Vivamus vitae magna ultrices, "
+            + "lobortis nulla ac, pulvinar elit. Vivamus ullamcorper feugiat erat, in efficitur lacus "
+            + "euismod vitae.";
     }
 }
