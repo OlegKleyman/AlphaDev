@@ -30,9 +30,11 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("connectionstrings.json", false, true).Build();
 
-            connectionString = configuration.GetConnectionString("integration");
-
             var optionsBuilder = new DbContextOptionsBuilder();
+            var connectionBuilder = new SqlConnectionStringBuilder(configuration.GetConnectionString("integration"));
+            connectionBuilder.InitialCatalog = Guid.NewGuid().ToString();
+
+            connectionString = connectionBuilder.ToString();
             var options = optionsBuilder.UseSqlServer(connectionString).Options;
 
             using (var context = new DbContext(options))

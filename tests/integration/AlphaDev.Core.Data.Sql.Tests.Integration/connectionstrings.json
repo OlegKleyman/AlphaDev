@@ -1,5 +1,5 @@
 {
   "connectionStrings": {
-    "integration": "Data Source=(LocalDB)\\MSSQLLocalDB;Integrated Security=True;MultipleActiveResultSets=true;Database=Alphadev;"
+    "integration": "Data Source=(LocalDB)\\MSSQLLocalDB;Integrated Security=True;MultipleActiveResultSets=true;"
   }
 }
