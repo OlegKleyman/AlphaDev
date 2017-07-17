@@ -15,7 +15,8 @@
             var host = new WebHostBuilder().UseKestrel().UseContentRoot(contentRoot).UseIISIntegration()
                 .UseStartup<Startup>().UseApplicationInsights().ConfigureServices(
                     services => services.AddSingleton<IConfigurationBuilder, IConfigurationBuilder>(
-                        provider => new ConfigurationBuilder().SetBasePath(contentRoot))).Build();
+                        provider => new ConfigurationBuilder().SetBasePath(contentRoot)
+                            .AddJsonFile("connectionstrings.json", true, true))).Build();
 
             host.Run();
         }

@@ -1,4 +1,6 @@
-﻿namespace AlphaDev.Web.Tests.Integration
+﻿using System.Data.SqlClient;
+
+namespace AlphaDev.Web.Tests.Integration
 {
     using System;
     using System.Globalization;
@@ -12,16 +14,17 @@
     public class DatabaseFixture: IDisposable
     {
         public BlogContext BlogContext { get; }
+        public string ConnectionString { get; }
 
         public DatabaseFixture()
         {
-            var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("connectionstrings.json", false, true).Build();
-
+            ConnectionString =
+                $@"Data Source=(LocalDB)\MSSQLLocalDB;Integrated Security=True;MultipleActiveResultSets=true;Database={Guid.NewGuid()};";
+            
             BlogContext = new BlogContext(
                 string.Format(
                     CultureInfo.InvariantCulture,
-                    configuration.GetConnectionString("default"),
+                    ConnectionString,
                     Directory.GetCurrentDirectory()));
 
             BlogContext.Database.EnsureDeleted();

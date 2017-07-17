@@ -22,7 +22,6 @@
         public Startup(IHostingEnvironment env, IConfigurationBuilder builder)
         {
             builder
-                .AddJsonFile("connectionstrings.json", true, true)
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true).AddEnvironmentVariables();
             Configuration = builder.Build();

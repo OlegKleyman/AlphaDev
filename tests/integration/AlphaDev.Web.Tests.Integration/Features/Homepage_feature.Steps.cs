@@ -1,4 +1,6 @@
-﻿namespace AlphaDev.Web.Tests.Integration.Features
+﻿using System.Collections.Generic;
+
+namespace AlphaDev.Web.Tests.Integration.Features
 {
     using System;
     using System.Data.SqlClient;
@@ -25,6 +27,8 @@
     using Omego.Extensions.QueryableExtensions;
 
     using OpenQA.Selenium;
+
+    using Optional;
 
     using Xunit;
     using Xunit.Abstractions;
@@ -71,10 +75,15 @@
             using (var host = new WebHostBuilder()
                 .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel().ConfigureServices(
                     services =>
-                        {
-                            services.AddSingleton<IConfigurationBuilder, IConfigurationBuilder>(
-                                provider => new ConfigurationBuilder().SetBasePath(Path.GetFullPath(".")));
-                        }).UseStartup<Startup>().UseUrls(url).Build())
+                    {
+                        services.AddSingleton<IConfigurationBuilder, IConfigurationBuilder>(
+                            provider => new ConfigurationBuilder().SetBasePath(Path.GetFullPath("."))
+                                .AddInMemoryCollection(new[]
+                                {
+                                    new KeyValuePair<string, string>("connectionStrings:default",
+                                        databaseFixture.ConnectionString)
+                                }));
+                    }).UseStartup<Startup>().UseUrls(url).Build())
             {
                 host.Start();
 
@@ -99,21 +108,31 @@
         private void Then_it_should_display_navigation_links() => siteTester.Driver.FindElements(By.CssSelector("ul.navbar-nav a"))
             .Select(element => element.Text).ShouldBeEquivalentTo(new[] { "Posts", "About", "Contact" });
 
-        private void Then_it_should_display_the_latest_blog_post() => new
-                                                                          {
-                                                                              Title = siteTester.Driver.FindElement(
-                                                                                      By.CssSelector(
-                                                                                          "div.blog .title h2"))
-                                                                                  .Text,
-                                                                              Content = siteTester.Driver.FindElement(
-                                                                                      By.CssSelector(
-                                                                                          "div.blog .content"))
-                                                                                  .Text,
-                                                                              Created = "Wednesday, February 1, 2017",
-                                                                              Modified = "Wednesday, July 12, 2017"
-                                                                          }.ShouldBeEquivalentTo(
-            databaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created)
-                .FirstOrThrow(new InvalidOperationException("No blogs found.")));
+        private void Then_it_should_display_the_latest_blog_post()
+        {
+            new
+            {
+                Title = siteTester.Driver.FindElement(
+                        By.CssSelector(
+                            "div.blog .title h2"))
+                    .Text,
+                Content = siteTester.Driver.FindElement(
+                        By.CssSelector(
+                            "div.blog .content"))
+                    .Text,
+                Dates = siteTester.Driver.FindElement(
+                    By.CssSelector(
+                        "div.blog .dates")).Text
+            }.ShouldBeEquivalentTo(
+                databaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).Select(blog => new
+                    {
+                        blog.Title,
+                        blog.Content,
+                        Dates =
+                        $"Created: {blog.Created:D} Modified: {(blog.Modified.HasValue ? blog.Modified.Value.ToString("D") : string.Empty)}"
+                    })
+                    .FirstOrThrow(new InvalidOperationException("No blogs found.")));
+        }
 
         public void Dispose() => databaseFixture.Dispose();
     }
