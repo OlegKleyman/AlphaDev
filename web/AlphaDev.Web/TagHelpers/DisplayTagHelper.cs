@@ -16,6 +16,8 @@ namespace AlphaDev.Web.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            if(output == null) throw new ArgumentNullException(nameof(output));
+
             output.TagName = "div";
             output.Attributes.Add(new TagHelperAttribute("style", Value ? "display: inline;" : "display: none;"));
 

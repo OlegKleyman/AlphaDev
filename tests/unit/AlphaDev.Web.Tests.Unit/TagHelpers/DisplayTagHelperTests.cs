@@ -1,4 +1,7 @@
-﻿namespace AlphaDev.Web.Tests.Unit.TagHelpers
+﻿using System;
+using System.Threading.Tasks;
+
+namespace AlphaDev.Web.Tests.Unit.TagHelpers
 {
     using AlphaDev.Web.TagHelpers;
 
@@ -40,6 +43,30 @@
         [Fact]
         public void ProcessShouldSetValuePropertyToTrueByDefault() => GetDisplayTagHelper().Value
             .ShouldBeEquivalentTo(true);
+
+        [Fact]
+        public void ProcessShouldThrowArgumentNullExceptionWhenOutputArgumentIsNull()
+        {
+            var sut = GetDisplayTagHelper();
+
+            Action process = () => sut.Process(null, null);
+
+            process.ShouldThrow<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: output")
+                .Which.ParamName.ShouldBeEquivalentTo("output");
+        }
+
+        [Fact]
+        public void ProcessAsyncShouldThrowArgumentNullExceptionWhenOutputArgumentIsNull()
+        {
+            var sut = GetDisplayTagHelper();
+
+            Func<Task> process = async () => await sut.ProcessAsync(null, null);
+
+            Action asserter = () => process.ShouldThrow<ArgumentNullException>()
+                .WithMessage("Value cannot be null.\r\nParameter name: output");
+
+            asserter.ShouldNotThrow();
+        }
 
         private DisplayTagHelper GetDisplayTagHelper() => new DisplayTagHelper();
     }
