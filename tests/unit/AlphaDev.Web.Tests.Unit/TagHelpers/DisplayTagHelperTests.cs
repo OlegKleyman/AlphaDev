@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace AlphaDev.Web.Tests.Unit.TagHelpers
@@ -14,30 +16,22 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
     public class DisplayTagHelperTests
     {
         [Theory]
-        [InlineData(true, "display: inline;")]
-        [InlineData(false, "display: none;")]
-        public void ProcessShouldCreateElementWithStyleDisplayPropertyCorrespondingToTheArgument(bool value, string expectedDisplayValue)
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ProcessShouldDisplayContentsBasedOnValue(bool value)
         {
             var sut = GetDisplayTagHelper();
 
             sut.Value = value;
             var tagHelperOutput = new TagHelperOutput(default(string), new TagHelperAttributeList(), (_, __) =>  null);
-
+            tagHelperOutput.Content.Append("test");
             sut.Process(null, tagHelperOutput);
 
-            tagHelperOutput.Attributes["style"].Value.Should().BeOfType<string>().Which.ShouldBeEquivalentTo(expectedDisplayValue);
-        }
-
-        [Fact]
-        public void ProcessShouldCreateDivElement()
-        {
-            var sut = GetDisplayTagHelper();
+            var writer = new StringWriter();
             
-            var tagHelperOutput = new TagHelperOutput(default(string), new TagHelperAttributeList(), (_, __) => null);
+            tagHelperOutput.Content.WriteTo(writer, HtmlEncoder.Default);
 
-            sut.Process(null, tagHelperOutput);
-
-            tagHelperOutput.TagName.ShouldBeEquivalentTo("div");
+            writer.ToString().ShouldBeEquivalentTo(value ? "test" : string.Empty);
         }
 
         [Fact]

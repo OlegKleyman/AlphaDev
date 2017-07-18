@@ -18,8 +18,9 @@ namespace AlphaDev.Web.TagHelpers
         {
             if(output == null) throw new ArgumentNullException(nameof(output));
 
-            output.TagName = "div";
-            output.Attributes.Add(new TagHelperAttribute("style", Value ? "display: inline;" : "display: none;"));
+            output.TagName = string.Empty;
+
+            if (!Value) output.SuppressOutput();
 
             base.Process(context, output);
         }
