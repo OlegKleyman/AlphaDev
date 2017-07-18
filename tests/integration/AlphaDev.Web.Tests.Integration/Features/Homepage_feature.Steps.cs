@@ -135,5 +135,22 @@ namespace AlphaDev.Web.Tests.Integration.Features
         }
 
         public void Dispose() => databaseFixture.Dispose();
+
+        private void And_the_latest_blog_post_was(bool modifiedState)
+        {
+            var modified = modifiedState ? new DateTime(2017, 7, 12) : (DateTime?)null;
+
+            databaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).First().Modified = modified;
+
+            databaseFixture.BlogContext.SaveChanges();
+        }
+
+        private void Then_it_should_display_the_latest_blog_post_with_modification_date(bool modifiedState)
+        {
+            var dates = siteTester.Driver.FindElement(By.CssSelector("div.blog .dates")).Text;
+
+            if (modifiedState) dates.Should().Contain("Modified");
+            else dates.Should().NotContain("Modified");
+        }
     }
 }
