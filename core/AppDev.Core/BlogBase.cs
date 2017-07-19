@@ -1,9 +1,8 @@
+using System;
+using Optional;
+
 namespace AppDev.Core
 {
-    using System;
-
-    using Optional;
-
     public abstract class BlogBase
     {
         private static readonly Lazy<EmptyBlog> EmptyBlogEntry = new Lazy<EmptyBlog>(() => new EmptyBlog());
@@ -13,7 +12,7 @@ namespace AppDev.Core
         public abstract Dates Dates { get; }
 
         public abstract string Content { get; }
-        
+
         public static BlogBase Empty => EmptyBlogEntry.Value;
 
         private class EmptyBlog : BlogBase

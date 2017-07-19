@@ -1,24 +1,21 @@
+using AlphaDev.Web.Models;
+using AppDev.Core;
+using Microsoft.AspNetCore.Mvc;
+
 namespace AlphaDev.Web.Controllers
 {
-    using System;
-
-    using AlphaDev.Web.Models;
-
-    using AppDev.Core;
-
-    using Microsoft.AspNetCore.Mvc;
-
-    using Optional;
-
     public class DefaultController : Controller
     {
-        private readonly IBlogService blogService;
+        private readonly IBlogService _blogService;
 
-        public DefaultController(IBlogService blogService) => this.blogService = blogService;
+        public DefaultController(IBlogService blogService)
+        {
+            _blogService = blogService;
+        }
 
         public ViewResult Index()
         {
-            var blog = blogService.GetLatest();
+            var blog = _blogService.GetLatest();
             var model = new BlogViewModel(
                 blog.Title,
                 blog.Content,
@@ -27,9 +24,6 @@ namespace AlphaDev.Web.Controllers
             return View(nameof(Index), model);
         }
 
-        public IActionResult Error()
-        {
-            return View(nameof(Error));
-        }
+        public IActionResult Error() => View(nameof(Error));
     }
 }

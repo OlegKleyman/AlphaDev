@@ -7,13 +7,15 @@
 <h1 class="text-center">AlphaDev</h1>
 
 <div class="blog container">
-    <div class="text-center title"><h2>@Model.Title</h2></div>
-    
+    <div class="text-center title">
+        <h2>@Model.Title</h2>
+    </div>
+
     <div>
-        @await Component.InvokeAsync("Dates", new{Model.Dates.Created, Model.Dates.Modified})
+        @await Component.InvokeAsync("Dates", new {Model.Dates.Created, Model.Dates.Modified})
     </div>
 
     <div class="row content">
-        @Html.Raw(@Model.Content)
+        @Html.Raw(Model.Content)
     </div>
 </div>

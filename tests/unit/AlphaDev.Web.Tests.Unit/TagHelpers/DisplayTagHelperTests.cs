@@ -2,17 +2,13 @@
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using AlphaDev.Web.TagHelpers;
+using FluentAssertions;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using Xunit;
 
 namespace AlphaDev.Web.Tests.Unit.TagHelpers
 {
-    using AlphaDev.Web.TagHelpers;
-
-    using FluentAssertions;
-
-    using Microsoft.AspNetCore.Razor.TagHelpers;
-
-    using Xunit;
-
     public class DisplayTagHelperTests
     {
         [Theory]
@@ -23,30 +19,20 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             var sut = GetDisplayTagHelper();
 
             sut.Value = value;
-            var tagHelperOutput = new TagHelperOutput(default(string), new TagHelperAttributeList(), (_, __) =>  null);
+            var tagHelperOutput = new TagHelperOutput(default(string), new TagHelperAttributeList(), (_, __) => null);
             tagHelperOutput.Content.Append("test");
             sut.Process(null, tagHelperOutput);
 
             var writer = new StringWriter();
-            
+
             tagHelperOutput.Content.WriteTo(writer, HtmlEncoder.Default);
 
             writer.ToString().ShouldBeEquivalentTo(value ? "test" : string.Empty);
         }
 
-        [Fact]
-        public void ProcessShouldSetValuePropertyToTrueByDefault() => GetDisplayTagHelper().Value
-            .ShouldBeEquivalentTo(true);
-
-        [Fact]
-        public void ProcessShouldThrowArgumentNullExceptionWhenOutputArgumentIsNull()
+        private DisplayTagHelper GetDisplayTagHelper()
         {
-            var sut = GetDisplayTagHelper();
-
-            Action process = () => sut.Process(null, null);
-
-            process.ShouldThrow<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: output")
-                .Which.ParamName.ShouldBeEquivalentTo("output");
+            return new DisplayTagHelper();
         }
 
         [Fact]
@@ -62,6 +48,22 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             asserter.ShouldNotThrow();
         }
 
-        private DisplayTagHelper GetDisplayTagHelper() => new DisplayTagHelper();
+        [Fact]
+        public void ProcessShouldSetValuePropertyToTrueByDefault()
+        {
+            GetDisplayTagHelper().Value
+                .ShouldBeEquivalentTo(true);
+        }
+
+        [Fact]
+        public void ProcessShouldThrowArgumentNullExceptionWhenOutputArgumentIsNull()
+        {
+            var sut = GetDisplayTagHelper();
+
+            Action process = () => sut.Process(null, null);
+
+            process.ShouldThrow<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: output")
+                .Which.ParamName.ShouldBeEquivalentTo("output");
+        }
     }
 }

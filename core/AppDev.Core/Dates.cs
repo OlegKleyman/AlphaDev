@@ -1,9 +1,8 @@
-﻿namespace AppDev.Core
+﻿using System;
+using Optional;
+
+namespace AppDev.Core
 {
-    using System;
-
-    using Optional;
-
     public struct Dates
     {
         public Dates(DateTime created, Option<DateTime> modified)

@@ -7,18 +7,23 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AlphaDev.Web.Tests.Integration.Features
+namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
     public class WebSite : IDisposable
     {
-        private IWebHost host;
+        private IWebHost _host;
         public string Url { get; private set; }
+
+        public void Dispose()
+        {
+            _host?.Dispose();
+        }
 
         public void Start(string connectionString)
         {
             var url = $"http://127.0.0.1:{GetOpenPort()}";
 
-            host = new WebHostBuilder()
+            _host = new WebHostBuilder()
                 .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel().ConfigureServices(
                     services =>
                     {
@@ -30,7 +35,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                                         connectionString)
                                 }));
                     }).UseStartup<Startup>().UseUrls(url).Build();
-            host.Start();
+            _host.Start();
             Url = url;
         }
 
@@ -42,13 +47,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
                 sock.Bind(new IPEndPoint(IPAddress.Loopback, randomOpenPort));
 
-                return ((IPEndPoint)sock.LocalEndPoint).Port;
+                return ((IPEndPoint) sock.LocalEndPoint).Port;
             }
-        }
-
-        public void Dispose()
-        {
-            host?.Dispose();
         }
     }
 }
