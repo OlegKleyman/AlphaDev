@@ -5,12 +5,4 @@
     <Version></Version>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Optional" Version="3.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
-  </ItemGroup>
-
 </Project>

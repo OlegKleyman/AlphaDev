@@ -22,16 +22,4 @@
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Include="connectionstrings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\core\AlphaDev.Core.Data.Sql\AlphaDev.Core.Data.Sql.csproj" />
-    <ProjectReference Include="..\..\core\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
-    <ProjectReference Include="..\..\core\AppDev.Core\AppDev.Core.csproj" />
-  </ItemGroup>
 </Project>
