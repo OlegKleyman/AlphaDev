@@ -11,23 +11,35 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web", "web", "{84C624B3-E76
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{AC431663-77E4-4606-9C1B-DF8BBDC9F4C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Web", "web\AlphaDev.Web\AlphaDev.Web.csproj", "{15CBB3F5-592E-4CCA-B484-2893E4194944}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Web", "web\AlphaDev.Web\AlphaDev.Web.csproj", "{15CBB3F5-592E-4CCA-B484-2893E4194944}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDev.Core", "core\AppDev.Core\AppDev.Core.csproj", "{B04E2F07-4455-4859-A38E-EB9993DF6B39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppDev.Core", "core\AppDev.Core\AppDev.Core.csproj", "{B04E2F07-4455-4859-A38E-EB9993DF6B39}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit", "unit", "{E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integration", "integration", "{6041D273-6E6B-4F68-B316-646209191525}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Core..Tests.Unit", "tests\unit\AlphaDev.Core..Tests.Unit\AlphaDev.Core..Tests.Unit.csproj", "{410AA4B6-AF7B-49FC-91BE-95F8FF813935}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Core..Tests.Unit", "tests\unit\AlphaDev.Core..Tests.Unit\AlphaDev.Core..Tests.Unit.csproj", "{410AA4B6-AF7B-49FC-91BE-95F8FF813935}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Web.Tests.Unit", "tests\unit\AlphaDev.Web.Tests.Unit\AlphaDev.Web.Tests.Unit.csproj", "{A0583729-6DEB-439A-A3A5-BC6EC10E336A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Web.Tests.Unit", "tests\unit\AlphaDev.Web.Tests.Unit\AlphaDev.Web.Tests.Unit.csproj", "{A0583729-6DEB-439A-A3A5-BC6EC10E336A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Web.Tests.Integration", "tests\integration\AlphaDev.Web.Tests.Integration\AlphaDev.Web.Tests.Integration.csproj", "{B20F2BE4-A248-4537-B0B6-38EE51026186}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Web.Tests.Integration", "tests\integration\AlphaDev.Web.Tests.Integration\AlphaDev.Web.Tests.Integration.csproj", "{B20F2BE4-A248-4537-B0B6-38EE51026186}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{92372243-C4A7-43E3-9C66-C09640C8BDAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Test.Core", "tests\core\AlphaDev.Test.Core\AlphaDev.Test.Core.csproj", "{F6D26E54-81DF-42E1-80A0-AF5AE08FC70F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Test.Core", "tests\core\AlphaDev.Test.Core\AlphaDev.Test.Core.csproj", "{F6D26E54-81DF-42E1-80A0-AF5AE08FC70F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Core.Data", "core\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj", "{11FDC41A-DC27-4458-851C-24A319B26AE6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Core.Data.Tests.Unit", "tests\unit\AlphaDev.Core.Data.Tests.Unit\AlphaDev.Core.Data.Tests.Unit.csproj", "{CAEE4535-E065-4F00-80A9-E37CE40934E7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Core.Data.Sql", "core\AlphaDev.Core.Data.Sql\AlphaDev.Core.Data.Sql.csproj", "{7D0E8F52-88E1-4153-82F0-C9DF67DC6240}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Core.Data.Sql.Tests.Unit", "tests\unit\AlphaDev.Core.Data.Sql.Tests.Unit\AlphaDev.Core.Data.Sql.Tests.Unit.csproj", "{32A20B3C-9905-44BB-A883-00E4A719784C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Core.Data.Sql.Tests.Integration", "tests\integration\AlphaDev.Core.Data.Sql.Tests.Integration\AlphaDev.Core.Data.Sql.Tests.Integration.csproj", "{183A2FAF-FB07-4DF3-A01A-679E443F9D62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Test.Integration.Core", "tests\core\AlphaDev.Test.Integration.Core\AlphaDev.Test.Integration.Core.csproj", "{962AE06E-AC8F-4C15-87CC-95397E17D4F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +71,30 @@ Global
 		{F6D26E54-81DF-42E1-80A0-AF5AE08FC70F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6D26E54-81DF-42E1-80A0-AF5AE08FC70F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6D26E54-81DF-42E1-80A0-AF5AE08FC70F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11FDC41A-DC27-4458-851C-24A319B26AE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11FDC41A-DC27-4458-851C-24A319B26AE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11FDC41A-DC27-4458-851C-24A319B26AE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11FDC41A-DC27-4458-851C-24A319B26AE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAEE4535-E065-4F00-80A9-E37CE40934E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAEE4535-E065-4F00-80A9-E37CE40934E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAEE4535-E065-4F00-80A9-E37CE40934E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAEE4535-E065-4F00-80A9-E37CE40934E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D0E8F52-88E1-4153-82F0-C9DF67DC6240}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D0E8F52-88E1-4153-82F0-C9DF67DC6240}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D0E8F52-88E1-4153-82F0-C9DF67DC6240}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D0E8F52-88E1-4153-82F0-C9DF67DC6240}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32A20B3C-9905-44BB-A883-00E4A719784C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32A20B3C-9905-44BB-A883-00E4A719784C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32A20B3C-9905-44BB-A883-00E4A719784C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32A20B3C-9905-44BB-A883-00E4A719784C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{183A2FAF-FB07-4DF3-A01A-679E443F9D62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{183A2FAF-FB07-4DF3-A01A-679E443F9D62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{183A2FAF-FB07-4DF3-A01A-679E443F9D62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{183A2FAF-FB07-4DF3-A01A-679E443F9D62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{962AE06E-AC8F-4C15-87CC-95397E17D4F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{962AE06E-AC8F-4C15-87CC-95397E17D4F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{962AE06E-AC8F-4C15-87CC-95397E17D4F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{962AE06E-AC8F-4C15-87CC-95397E17D4F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,5 +109,11 @@ Global
 		{B20F2BE4-A248-4537-B0B6-38EE51026186} = {6041D273-6E6B-4F68-B316-646209191525}
 		{92372243-C4A7-43E3-9C66-C09640C8BDAF} = {A8CC5FA8-7A37-4FC8-9C7E-D6800DBC0157}
 		{F6D26E54-81DF-42E1-80A0-AF5AE08FC70F} = {92372243-C4A7-43E3-9C66-C09640C8BDAF}
+		{11FDC41A-DC27-4458-851C-24A319B26AE6} = {8561F13A-FB6E-45CE-8020-CEDCC9EA77DB}
+		{CAEE4535-E065-4F00-80A9-E37CE40934E7} = {E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}
+		{7D0E8F52-88E1-4153-82F0-C9DF67DC6240} = {8561F13A-FB6E-45CE-8020-CEDCC9EA77DB}
+		{32A20B3C-9905-44BB-A883-00E4A719784C} = {E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}
+		{183A2FAF-FB07-4DF3-A01A-679E443F9D62} = {6041D273-6E6B-4F68-B316-646209191525}
+		{962AE06E-AC8F-4C15-87CC-95397E17D4F8} = {92372243-C4A7-43E3-9C66-C09640C8BDAF}
 	EndGlobalSection
 EndGlobal
