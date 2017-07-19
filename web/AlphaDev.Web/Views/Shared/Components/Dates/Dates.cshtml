@@ -1,0 +1,9 @@
+﻿@model AlphaDev.Web.Models.DatesViewModel
+
+<div class="text-center dates" style="font-size: 12px">
+    <strong>Created:</strong> @Model.Created.ToString("D")
+    <display value="@Model.Modified.HasValue">
+        <strong>Modified:</strong>
+        @Model.Modified.Match(time => $"{time:D}", () => string.Empty)
+    </display>
+</div>
