@@ -40,12 +40,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private readonly SiteTester siteTester;
 
         private readonly DatabaseFixture databaseFixture;
+        private string connectionString;
+        private WebSite webSite;
 
         public Homepage_feature(ITestOutputHelper output, SiteTester siteTester)
             : base(output)
         {
             this.siteTester = siteTester;
             databaseFixture = new DatabaseFixture();
+            webSite = new WebSite();
 
             databaseFixture.BlogContext.Blogs.AddRange(
                 new Blog
@@ -63,6 +66,10 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 });
 
             databaseFixture.BlogContext.SaveChanges();
+
+            webSite.Start(databaseFixture.ConnectionString);
+
+            connectionString = databaseFixture.ConnectionString;
         }
 
         private void Given_i_am_a_user()
@@ -71,36 +78,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void When_i_go_to_the_homepage()
         {
-            var url = $"http://127.0.0.1:{GetOpenPort()}";
-            using (var host = new WebHostBuilder()
-                .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel().ConfigureServices(
-                    services =>
-                    {
-                        services.AddSingleton<IConfigurationBuilder, IConfigurationBuilder>(
-                            provider => new ConfigurationBuilder().SetBasePath(Path.GetFullPath("."))
-                                .AddInMemoryCollection(new[]
-                                {
-                                    new KeyValuePair<string, string>("connectionStrings:default",
-                                        databaseFixture.ConnectionString)
-                                }));
-                    }).UseStartup<Startup>().UseUrls(url).Build())
-            {
-                host.Start();
-
-                siteTester.Driver.Navigate().GoToUrl(url);
-            }
-        }
-
-        private int GetOpenPort()
-        {
-            using (var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
-            {
-                const int randomOpenPort = 0;
-
-                sock.Bind(new IPEndPoint(IPAddress.Loopback, randomOpenPort));
-
-                return ((IPEndPoint)sock.LocalEndPoint).Port;
-            }
+            siteTester.Driver.Navigate().GoToUrl(webSite.Url);
         }
 
         private void Then_it_should_load() => siteTester.Driver.Title.ShouldBeEquivalentTo("Home - AlphaDev");
@@ -134,7 +112,11 @@ namespace AlphaDev.Web.Tests.Integration.Features
                     .FirstOrThrow(new InvalidOperationException("No blogs found.")));
         }
 
-        public void Dispose() => databaseFixture.Dispose();
+        public void Dispose()
+        {
+            webSite?.Dispose();
+            databaseFixture?.Dispose();
+        }
 
         private void And_the_latest_blog_post_was(bool modifiedState)
         {
@@ -151,6 +133,16 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
             if (modifiedState) dates.Should().Contain("Modified");
             else dates.Should().NotContain("Modified");
+        }
+
+        private void Given_the_website_has_a_problem()
+        {
+            databaseFixture.BlogContext.Database.EnsureDeleted();
+        }
+
+        private void Then_it_should_display_an_error()
+        {
+            siteTester.Driver.Title.ShouldBeEquivalentTo("Error - AlphaDev");
         }
     }
 }
