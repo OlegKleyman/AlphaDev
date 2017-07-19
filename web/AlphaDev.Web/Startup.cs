@@ -46,21 +46,11 @@
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            var blogContext = provider.GetService<Core.Data.Contexts.BlogContext>();
+
             if (env.IsDevelopment())
             {
-                var blogContext = provider.GetService<Core.Data.Contexts.BlogContext>();
                 blogContext.Database.EnsureDeleted();
-                blogContext.Database.Migrate();
-                blogContext.Blogs.Add(
-                    new Core.Data.Entities.Blog
-                        {
-                            Content = GetDevelopmentContent(),
-                            Title = "testing",
-                            Created = new DateTime(2016, 7, 7),
-                            Modified = new DateTime(2017, 7, 10)
-                        });
-                blogContext.SaveChanges();
-                blogContext.Database.CloseConnection();
 
                 app.UseDeveloperExceptionPage();
             }
@@ -68,6 +58,23 @@
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            blogContext.Database.Migrate();
+
+            if (env.IsDevelopment())
+            {
+                blogContext.Blogs.Add(
+                    new Core.Data.Entities.Blog
+                    {
+                        Content = GetDevelopmentContent(),
+                        Title = "testing",
+                        Created = new DateTime(2016, 7, 7),
+                        Modified = new DateTime(2017, 7, 10)
+                    });
+                blogContext.SaveChanges();
+            }
+
+            blogContext.Database.CloseConnection();
 
             app.UseStaticFiles();
 
