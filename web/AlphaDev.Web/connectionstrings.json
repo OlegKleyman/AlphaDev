@@ -1,5 +1,0 @@
-{
-  "connectionStrings": {
-    "default": "Data Source=(LocalDB)\\MSSQLLocalDB;Integrated Security=True;MultipleActiveResultSets=true;Database=Alphadev;"
-  }
-}
