@@ -39,5 +39,12 @@ namespace AlphaDev.Web.Tests.Integration.Features
             () => And_the_latest_blog_post_was(modifiedState),
             When_i_go_to_the_homepage,
             () => Then_it_should_display_the_latest_blog_post_with_modification_date(modifiedState));
+
+        [Scenario]
+        public void Display_error_page() => Runner.RunScenario(
+            Given_i_am_a_user,
+            Given_the_website_has_a_problem,
+            When_i_go_to_the_homepage,
+            Then_it_should_display_an_error);
     }
 }

@@ -26,5 +26,10 @@ namespace AlphaDev.Web.Controllers
 
             return View(nameof(Index), model);
         }
+
+        public IActionResult Error()
+        {
+            return View(nameof(Error));
+        }
     }
 }

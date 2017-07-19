@@ -56,7 +56,7 @@
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Default/Error");
             }
 
             blogContext.Database.Migrate();

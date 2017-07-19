@@ -61,6 +61,12 @@
                 new { blog.Title, blog.Content, Dates = new { blog.Dates.Created, blog.Dates.Modified } });
         }
 
+        [Fact]
+        public void ErrorShouldReturnErrorView()
+        {
+            GetDefaultController().Error().Should().BeViewResult().WithViewName("Error");
+        }
+
         private DefaultController GetDefaultController(IBlogService blogService) => new DefaultController(blogService);
     }
 }
