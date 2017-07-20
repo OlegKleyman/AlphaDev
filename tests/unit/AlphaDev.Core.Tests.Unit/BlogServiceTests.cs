@@ -1,10 +1,8 @@
 ﻿using System;
 using AlphaDev.Core.Data.Contexts;
-using AppDev.Core;
 using FluentAssertions;
 using Optional;
 using Xunit;
-using Blog = AlphaDev.Core.Data.Entities.Blog;
 
 namespace AlphaDev.Core.Tests.Unit
 {
@@ -21,7 +19,7 @@ namespace AlphaDev.Core.Tests.Unit
             const string testValue = "test content";
 
             var context = new MockBlogContext(nameof(GetLatestShouldReturnBlogWithContent));
-            context.Blogs.Add(new Blog {Content = testValue});
+            context.Blogs.Add(new Data.Entities.Blog { Content = testValue});
             context.SaveChanges();
 
             var service = GetBlogService(context);
@@ -37,7 +35,7 @@ namespace AlphaDev.Core.Tests.Unit
             var testValue = new DateTime(2017, 1, 1);
 
             var context = new MockBlogContext(nameof(GetLatestShouldReturnBlogWithCreatedDate));
-            context.Blogs.Add(new Blog {Created = new DateTime(2017, 1, 1)});
+            context.Blogs.Add(new Data.Entities.Blog {Created = new DateTime(2017, 1, 1)});
             context.SaveChanges();
 
             var service = GetBlogService(context);
@@ -51,7 +49,7 @@ namespace AlphaDev.Core.Tests.Unit
         public void GetLatestShouldReturnBlogWithEmptyContentWhenDbContentIsNull()
         {
             var context = new MockBlogContext(nameof(GetLatestShouldReturnBlogWithEmptyContentWhenDbContentIsNull));
-            context.Blogs.Add(new Blog {Content = null});
+            context.Blogs.Add(new Data.Entities.Blog {Content = null});
             context.SaveChanges();
 
             var service = GetBlogService(context);
@@ -65,7 +63,7 @@ namespace AlphaDev.Core.Tests.Unit
         public void GetLatestShouldReturnBlogWithEmptyTitleWhenDbTitleIsNull()
         {
             var context = new MockBlogContext(nameof(GetLatestShouldReturnBlogWithEmptyTitleWhenDbTitleIsNull));
-            context.Blogs.Add(new Blog {Title = null});
+            context.Blogs.Add(new Data.Entities.Blog {Title = null});
             context.SaveChanges();
 
             var service = GetBlogService(context);
@@ -81,7 +79,7 @@ namespace AlphaDev.Core.Tests.Unit
             var testValue = new DateTime(2017, 1, 1);
 
             var context = new MockBlogContext(nameof(GetLatestShouldReturnBlogWithModifiedDate));
-            context.Blogs.Add(new Blog {Modified = new DateTime(2017, 1, 1)});
+            context.Blogs.Add(new Data.Entities.Blog {Modified = new DateTime(2017, 1, 1)});
             context.SaveChanges();
 
             var service = GetBlogService(context);
@@ -96,7 +94,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var context = new MockBlogContext(
                 nameof(GetLatestShouldReturnBlogWithNoModifiedDateWhenDbModifiedDateIsNull));
-            context.Blogs.Add(new Blog {Modified = null});
+            context.Blogs.Add(new Data.Entities.Blog {Modified = null});
             context.SaveChanges();
 
             var service = GetBlogService(context);
@@ -112,7 +110,7 @@ namespace AlphaDev.Core.Tests.Unit
             const string testValue = "test";
 
             var context = new MockBlogContext(nameof(GetLatestShouldReturnBlogWithTitle));
-            context.Blogs.Add(new Blog {Title = testValue});
+            context.Blogs.Add(new Data.Entities.Blog {Title = testValue});
             context.SaveChanges();
 
             var service = GetBlogService(context);
@@ -135,10 +133,10 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var context = new MockBlogContext(nameof(GetLatestShouldReturnLatestBlog));
             context.Blogs.AddRange(
-                new Blog {Created = new DateTime(2017, 1, 1)},
-                new Blog {Created = new DateTime(2013, 1, 1)},
-                new Blog {Created = new DateTime(2017, 6, 20)},
-                new Blog {Created = new DateTime(2014, 1, 1)});
+                new Data.Entities.Blog {Created = new DateTime(2017, 1, 1)},
+                new Data.Entities.Blog {Created = new DateTime(2013, 1, 1)},
+                new Data.Entities.Blog {Created = new DateTime(2017, 6, 20)},
+                new Data.Entities.Blog {Created = new DateTime(2014, 1, 1)});
             context.SaveChanges();
 
             var service = GetBlogService(context);

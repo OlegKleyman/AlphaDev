@@ -1,6 +1,6 @@
 ﻿using System;
 using AlphaDev.Core.Data.Contexts;
-using AppDev.Core;
+using AlphaDev.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;

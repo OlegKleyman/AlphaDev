@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A8CC5FA8-7A37-4FC8-9C7E-D6800DBC0157}"
 EndProject
@@ -13,13 +13,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{AC431663
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Web", "web\AlphaDev.Web\AlphaDev.Web.csproj", "{15CBB3F5-592E-4CCA-B484-2893E4194944}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppDev.Core", "core\AppDev.Core\AppDev.Core.csproj", "{B04E2F07-4455-4859-A38E-EB9993DF6B39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Core", "core\AlphaDev.Core\AlphaDev.Core.csproj", "{B04E2F07-4455-4859-A38E-EB9993DF6B39}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit", "unit", "{E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integration", "integration", "{6041D273-6E6B-4F68-B316-646209191525}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Core..Tests.Unit", "tests\unit\AlphaDev.Core..Tests.Unit\AlphaDev.Core..Tests.Unit.csproj", "{410AA4B6-AF7B-49FC-91BE-95F8FF813935}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Core.Tests.Unit", "tests\unit\AlphaDev.Core.Tests.Unit\AlphaDev.Core.Tests.Unit.csproj", "{410AA4B6-AF7B-49FC-91BE-95F8FF813935}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Web.Tests.Unit", "tests\unit\AlphaDev.Web.Tests.Unit\AlphaDev.Web.Tests.Unit.csproj", "{A0583729-6DEB-439A-A3A5-BC6EC10E336A}"
 EndProject
@@ -37,9 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Core.Data.Sql", "c
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Core.Data.Sql.Tests.Unit", "tests\unit\AlphaDev.Core.Data.Sql.Tests.Unit\AlphaDev.Core.Data.Sql.Tests.Unit.csproj", "{32A20B3C-9905-44BB-A883-00E4A719784C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Core.Data.Sql.Tests.Integration", "tests\integration\AlphaDev.Core.Data.Sql.Tests.Integration\AlphaDev.Core.Data.Sql.Tests.Integration.csproj", "{183A2FAF-FB07-4DF3-A01A-679E443F9D62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Core.Data.Sql.Tests.Integration", "tests\integration\AlphaDev.Core.Data.Sql.Tests.Integration\AlphaDev.Core.Data.Sql.Tests.Integration.csproj", "{183A2FAF-FB07-4DF3-A01A-679E443F9D62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Test.Integration.Core", "tests\core\AlphaDev.Test.Integration.Core\AlphaDev.Test.Integration.Core.csproj", "{962AE06E-AC8F-4C15-87CC-95397E17D4F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Test.Integration.Core", "tests\core\AlphaDev.Test.Integration.Core\AlphaDev.Test.Integration.Core.csproj", "{962AE06E-AC8F-4C15-87CC-95397E17D4F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

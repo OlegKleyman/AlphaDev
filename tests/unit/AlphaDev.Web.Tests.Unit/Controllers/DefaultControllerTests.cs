@@ -1,7 +1,7 @@
 ﻿using System;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
-using AppDev.Core;
+using AlphaDev.Core;
 using FluentAssertions;
 using FluentAssertions.Mvc;
 using NSubstitute;

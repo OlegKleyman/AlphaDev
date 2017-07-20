@@ -1,7 +1,7 @@
 using System;
 using Optional;
 
-namespace AppDev.Core
+namespace AlphaDev.Core
 {
     public abstract class BlogBase
     {

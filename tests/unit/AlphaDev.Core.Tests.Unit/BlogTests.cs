@@ -1,5 +1,5 @@
 ﻿using System;
-using AppDev.Core;
+using AlphaDev.Core;
 using FluentAssertions;
 using Optional;
 using Xunit;

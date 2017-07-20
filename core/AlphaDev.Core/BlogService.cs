@@ -2,7 +2,7 @@
 using AlphaDev.Core.Data.Contexts;
 using Optional;
 
-namespace AppDev.Core
+namespace AlphaDev.Core
 {
     public class BlogService : IBlogService
     {

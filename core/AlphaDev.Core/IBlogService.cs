@@ -1,4 +1,4 @@
-namespace AppDev.Core
+namespace AlphaDev.Core
 {
     public interface IBlogService
     {
