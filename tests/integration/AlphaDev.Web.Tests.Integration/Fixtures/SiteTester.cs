@@ -1,10 +1,9 @@
-namespace AlphaDev.Web.Tests.Integration.Features
+using System;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Firefox;
+
+namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
-    using System;
-
-    using OpenQA.Selenium;
-    using OpenQA.Selenium.Firefox;
-
     public class SiteTester : IDisposable
     {
         public SiteTester()
@@ -15,8 +14,12 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
             Driver = new FirefoxDriver();
         }
+
         public IWebDriver Driver { get; set; }
 
-        public void Dispose() => Driver.Dispose();
+        public void Dispose()
+        {
+            Driver.Dispose();
+        }
     }
 }

@@ -1,11 +1,10 @@
-﻿namespace AlphaDev.Web
+﻿using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace AlphaDev.Web
 {
-    using System.IO;
-
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-
     public class Program
     {
         public static void Main(string[] args)

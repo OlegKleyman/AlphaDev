@@ -1,19 +1,22 @@
+using AlphaDev.Core.Data.Entities;
+using Microsoft.EntityFrameworkCore;
+
 namespace AlphaDev.Core.Data.Sql.Contexts
 {
-    using System;
-
-    using AlphaDev.Core.Data.Entities;
-
-    using Microsoft.EntityFrameworkCore;
-
     public sealed class BlogContext : Data.Contexts.BlogContext
     {
-        private readonly string connectionString;
+        private readonly string _connectionString;
 
-        public BlogContext(string connectionString) => this.connectionString = connectionString;
+        public BlogContext(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer(
-            connectionString);
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(
+                _connectionString);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

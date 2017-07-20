@@ -1,23 +1,15 @@
-﻿namespace AlphaDev.Web.Tests.Unit.Controllers
+﻿using System;
+using AlphaDev.Web.Controllers;
+using AlphaDev.Web.Models;
+using AlphaDev.Core;
+using FluentAssertions;
+using FluentAssertions.Mvc;
+using NSubstitute;
+using Optional;
+using Xunit;
+
+namespace AlphaDev.Web.Tests.Unit.Controllers
 {
-    using System;
-
-    using AlphaDev.Web.Controllers;
-    using AlphaDev.Web.Models;
-
-    using AppDev.Core;
-
-    using FluentAssertions;
-    using FluentAssertions.Mvc;
-
-    using Microsoft.AspNetCore.Mvc;
-
-    using NSubstitute;
-
-    using Optional;
-
-    using Xunit;
-
     public class DefaultControllerTests
     {
         private DefaultController GetDefaultController()
@@ -28,12 +20,15 @@
             return GetDefaultController(blogService);
         }
 
-        [Fact]
-        public void IndexShouldReturnIndexView()
+        private DefaultController GetDefaultController(IBlogService blogService)
         {
-            var controller = GetDefaultController();
+            return new DefaultController(blogService);
+        }
 
-            controller.Index().Should().BeViewResult();
+        [Fact]
+        public void ErrorShouldReturnErrorView()
+        {
+            GetDefaultController().Error().Should().BeViewResult().WithViewName("Error");
         }
 
         [Fact]
@@ -58,15 +53,15 @@
             var controller = GetDefaultController(blogService);
 
             controller.Index().Model.ShouldBeEquivalentTo(
-                new { blog.Title, blog.Content, Dates = new { blog.Dates.Created, blog.Dates.Modified } });
+                new {blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}});
         }
 
         [Fact]
-        public void ErrorShouldReturnErrorView()
+        public void IndexShouldReturnIndexView()
         {
-            GetDefaultController().Error().Should().BeViewResult().WithViewName("Error");
-        }
+            var controller = GetDefaultController();
 
-        private DefaultController GetDefaultController(IBlogService blogService) => new DefaultController(blogService);
+            controller.Index().Should().BeViewResult();
+        }
     }
 }

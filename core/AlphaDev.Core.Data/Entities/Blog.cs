@@ -1,7 +1,7 @@
+using System;
+
 namespace AlphaDev.Core.Data.Entities
 {
-    using System;
-
     public class Blog
     {
         public int Id { get; set; }

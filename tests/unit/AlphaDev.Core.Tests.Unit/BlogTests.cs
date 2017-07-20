@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using AlphaDev.Core;
+using FluentAssertions;
+using Optional;
+using Xunit;
 
 namespace AlphaDev.Core.Tests.Unit
 {
-    using AppDev.Core;
-
-    using FluentAssertions;
-
-    using Optional;
-
-    using Xunit;
-
     public class BlogTests
     {
         [Fact]

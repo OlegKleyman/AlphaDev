@@ -1,15 +1,11 @@
-﻿namespace AlphaDev.Web.Tests.Unit.Models
+﻿using System;
+using AlphaDev.Web.Models;
+using FluentAssertions;
+using Optional;
+using Xunit;
+
+namespace AlphaDev.Web.Tests.Unit.Models
 {
-    using System;
-
-    using AlphaDev.Web.Models;
-
-    using FluentAssertions;
-
-    using Optional;
-
-    using Xunit;
-
     public class DatesViewModelTests
     {
         [Fact]

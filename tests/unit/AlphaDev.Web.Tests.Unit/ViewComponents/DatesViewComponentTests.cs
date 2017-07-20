@@ -1,22 +1,31 @@
-﻿namespace AlphaDev.Web.Tests.Unit.ViewComponents
+﻿using System;
+using System.Threading.Tasks;
+using AlphaDev.Web.Models;
+using AlphaDev.Web.ViewComponents;
+using FluentAssertions;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
+using Optional;
+using Xunit;
+
+namespace AlphaDev.Web.Tests.Unit.ViewComponents
 {
-    using System;
-    using System.Threading.Tasks;
-
-    using AlphaDev.Web.Models;
-    using AlphaDev.Web.ViewComponents;
-
-    using FluentAssertions;
-
-    using Microsoft.AspNetCore.Mvc.Rendering;
-    using Microsoft.AspNetCore.Mvc.ViewComponents;
-
-    using Optional;
-
-    using Xunit;
-
     public class DatesViewComponentTests
     {
+        private DatesViewComponent GetDatesViewComponent()
+        {
+            return new DatesViewComponent();
+        }
+
+        [Fact]
+        public async Task InvokeAsyncShouldReturnDatesViewComponentResult()
+        {
+            var sut = GetDatesViewComponent();
+
+            var result = (ViewViewComponentResult) await sut.InvokeAsync(default(DateTime), Option.None<DateTime>());
+
+            result.ViewName.ShouldBeEquivalentTo("Dates");
+        }
+
         [Fact]
         public async Task InvokeAsyncShouldReturnViewComponentResult()
         {
@@ -28,21 +37,11 @@
         }
 
         [Fact]
-        public async Task InvokeAsyncShouldReturnDatesViewComponentResult()
-        {
-            var sut = GetDatesViewComponent();
-
-            var result = (ViewViewComponentResult)await sut.InvokeAsync(default(DateTime), Option.None<DateTime>());
-
-            result.ViewName.ShouldBeEquivalentTo("Dates");
-        }
-
-        [Fact]
         public async Task InvokeAsyncShouldReturnViewComponentResultWithDatesViewModel()
         {
             var sut = GetDatesViewComponent();
 
-            var result = (ViewViewComponentResult)await sut.InvokeAsync(default(DateTime), Option.None<DateTime>());
+            var result = (ViewViewComponentResult) await sut.InvokeAsync(default(DateTime), Option.None<DateTime>());
             result.ViewData.Model.Should()
                 .BeOfType<DatesViewModel>();
         }
@@ -55,10 +54,9 @@
             var created = new DateTime(2015, 1, 27);
             var modified = Option.None<DateTime>();
 
-            var result = (DatesViewModel) ((ViewViewComponentResult)await sut.InvokeAsync(created, modified)).ViewData.Model;
-            result.ShouldBeEquivalentTo(new { Created = created, Modified = modified });
+            var result = (DatesViewModel) ((ViewViewComponentResult) await sut.InvokeAsync(created, modified)).ViewData
+                .Model;
+            result.ShouldBeEquivalentTo(new {Created = created, Modified = modified});
         }
-
-        private DatesViewComponent GetDatesViewComponent() => new DatesViewComponent();
     }
 }

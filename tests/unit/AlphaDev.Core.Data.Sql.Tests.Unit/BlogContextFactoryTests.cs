@@ -1,28 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Xunit;
 
 namespace AlphaDev.Core.Data.Sql.Tests.Unit
 {
-    using System.Data.SqlClient;
-    using System.IO;
-
-    using FluentAssertions;
-
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Infrastructure;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.Configuration.Memory;
-
-    using Xunit;
-
     public class BlogContextFactoryTests
     {
+        private BlogContextFactory GetBlogContextFactory(IConfigurationRoot config)
+        {
+            return new BlogContextFactory(config);
+        }
+
+        [Fact]
+        public void CreateShouldReturnContextFactoryWithConnectionStringIfOnePresent()
+        {
+            var builder = new ConfigurationBuilder().AddInMemoryCollection(
+                new[] {new KeyValuePair<string, string>("connectionStrings:AlphaDevDefault", "Data Source=(Test);")});
+
+            var factory = GetBlogContextFactory(builder.Build());
+
+            // ReSharper disable once AssignNullToNotNullAttribute - null is allowed with this method, resharper is
+            // bonkers.
+            factory.Create(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.ConnectionString
+                .ShouldBeEquivalentTo("Data Source=(Test);");
+        }
+
         [Fact]
         public void CreateShouldReturnContextFactoryWithDefaultConnectionStringIfConfigIsNull()
         {
             var factory = GetBlogContextFactory(null);
 
+            // ReSharper disable once AssignNullToNotNullAttribute - null is allowed with this method, resharper is
+            // bonkers.
+            factory.Create(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.ConnectionString
+                .ShouldBeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
+        }
+
+        [Fact]
+        public void CreateShouldReturnContextFactoryWithDefaultConnectionStringIfNoConfigIsPassed()
+        {
+            var factory = new BlogContextFactory();
+
+            // ReSharper disable once AssignNullToNotNullAttribute - null is allowed with this method, resharper is
+            // bonkers.
             factory.Create(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.ConnectionString
                 .ShouldBeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
         }
@@ -34,31 +57,10 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
 
             var factory = GetBlogContextFactory(builder.Build());
 
+            // ReSharper disable once AssignNullToNotNullAttribute - null is allowed with this method, resharper is
+            // bonkers.
             factory.Create(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.ConnectionString
                 .ShouldBeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
         }
-
-        [Fact]
-        public void CreateShouldReturnContextFactoryWithConnectionStringIfOnePresent()
-        {
-            var builder = new ConfigurationBuilder().AddInMemoryCollection(
-                new[] { new KeyValuePair<string, string>("connectionStrings:AlphaDevDefault", "Data Source=(Test);") });
-            
-            var factory = GetBlogContextFactory(builder.Build());
-
-            factory.Create(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.ConnectionString
-                .ShouldBeEquivalentTo("Data Source=(Test);");
-        }
-
-        [Fact]
-        public void CreateShouldReturnContextFactoryWithDefaultConnectionStringIfNoConfigIsPassed()
-        {
-            var factory = new BlogContextFactory();
-
-            factory.Create(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.ConnectionString
-                .ShouldBeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
-        }
-
-        private BlogContextFactory GetBlogContextFactory(IConfigurationRoot config) => new BlogContextFactory(config);
     }
 }
