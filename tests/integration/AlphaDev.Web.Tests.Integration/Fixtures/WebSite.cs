@@ -1,23 +1,46 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using AlphaDev.Web.Bootstrap;
+using FluentAssertions.Common;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
     public class WebSite : IDisposable
     {
+        static WebSite()
+        {
+            const string logTraceListenerName = "alpha_dev_integration_log";
+            
+            if (!(Trace.Listeners[logTraceListenerName] is TextWriterTraceListener traceListener) ||
+                !(traceListener.Writer is StringWriter))
+            {
+                Trace.Listeners.Remove(logTraceListenerName);
+                LogWriter = new StringWriter();
+                Trace.Listeners.Add(new TextWriterTraceListener(LogWriter)
+                {
+                    Name = logTraceListenerName
+                });
+            }
+        }
+
         private IWebHost _host;
+        private static readonly StringWriter LogWriter;
         public string Url { get; private set; }
+
+        public string Log => LogWriter.ToString();
 
         public void Dispose()
         {
+            LogWriter.GetStringBuilder().Clear();
             _host?.Dispose();
         }
 
@@ -38,6 +61,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
                                 }));
                     }).UseStartup<Startup>().UseUrls(url).UseSetting(WebHostDefaults.ApplicationKey,
                     typeof(Program).GetTypeInfo().Assembly.FullName).Build();
+
             _host.Start();
             Url = url;
         }

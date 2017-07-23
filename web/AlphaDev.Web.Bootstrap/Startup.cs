@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using Blog = AlphaDev.Core.Data.Entities.Blog;
 
 namespace AlphaDev.Web.Bootstrap
@@ -40,6 +41,8 @@ namespace AlphaDev.Web.Bootstrap
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            var logger = new LoggerConfiguration().ReadFrom.Configuration(Configuration).CreateLogger();
+            loggerFactory.AddSerilog(logger);
 
             var blogContext = provider.GetService<BlogContext>();
 

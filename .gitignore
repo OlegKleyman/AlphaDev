@@ -235,3 +235,6 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 /web/AlphaDev.Web/wwwroot/lib
+
+# ALPHADEV
+web/AlphaDev.Web/log-*.log

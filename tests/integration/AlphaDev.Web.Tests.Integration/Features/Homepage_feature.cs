@@ -59,5 +59,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 When_i_go_to_the_homepage,
                 Then_it_should_display_an_error);
         }
+
+        [Scenario]
+        public void Website_should_log_errors()
+        {
+            Runner.RunScenario(
+                Given_i_am_a_user,
+                Given_the_website_has_a_problem,
+                When_i_go_to_the_homepage,
+                Then_an_error_should_be_logged);
+        }
     }
 }

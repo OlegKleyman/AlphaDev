@@ -33,4 +33,10 @@
     <ProjectReference Include="..\..\core\AlphaDev.Core\AlphaDev.Core.csproj" />
     <ProjectReference Include="..\AlphaDev.Web.Bootstrap\AlphaDev.Web.Bootstrap.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

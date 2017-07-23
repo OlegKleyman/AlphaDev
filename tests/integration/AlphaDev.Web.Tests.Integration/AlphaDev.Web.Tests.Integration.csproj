@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Features\Homepage_feature.Steps.cs" />
   </ItemGroup>
 
@@ -19,6 +26,7 @@
     <PackageReference Include="Omego.Extensions" Version="2.0.14" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.30.0.1" />
     <PackageReference Include="Selenium.WebDriver.GeckoDriver.Win32" Version="0.17.0" />
+    <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
     <PackageReference Include="xunit" Version="2.3.0-beta3-build3705" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta3-build3705" />
   </ItemGroup>

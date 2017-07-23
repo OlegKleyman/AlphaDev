@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using FluentAssertions;
 using LightBDD.XUnit2;
+using Microsoft.Extensions.Logging;
 using Omego.Extensions.QueryableExtensions;
 using OpenQA.Selenium;
+using Serilog.Core;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -121,6 +125,11 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_an_error()
         {
             _siteTester.Driver.Title.ShouldBeEquivalentTo("Error - AlphaDev");
+        }
+
+        private void Then_an_error_should_be_logged()
+        {
+            _webSite.Log.Should().Contain("[Error] An unhandled exception has occurred");
         }
     }
 }
