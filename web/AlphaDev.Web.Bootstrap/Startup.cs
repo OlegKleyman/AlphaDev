@@ -1,6 +1,6 @@
 ﻿using System;
-using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core;
+using AlphaDev.Core.Data.Contexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Blog = AlphaDev.Core.Data.Entities.Blog;
 
-namespace AlphaDev.Web
+namespace AlphaDev.Web.Bootstrap
 {
     public class Startup
     {

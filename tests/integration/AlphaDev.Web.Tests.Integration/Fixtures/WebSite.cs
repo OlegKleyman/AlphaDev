@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
+using AlphaDev.Web.Bootstrap;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +36,8 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
                                     new KeyValuePair<string, string>("connectionStrings:default",
                                         connectionString)
                                 }));
-                    }).UseStartup<Startup>().UseUrls(url).Build();
+                    }).UseStartup<Startup>().UseUrls(url).UseSetting(WebHostDefaults.ApplicationKey,
+                    typeof(Program).GetTypeInfo().Assembly.FullName).Build();
             _host.Start();
             Url = url;
         }
