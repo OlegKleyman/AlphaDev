@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
@@ -24,13 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="connectionstrings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\..\core\AlphaDev.Core.Data.Sql\AlphaDev.Core.Data.Sql.csproj" />
+    <ProjectReference Include="..\..\core\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
+    <ProjectReference Include="..\..\core\AlphaDev.Core\AlphaDev.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\core\AlphaDev.Core\AlphaDev.Core.csproj" />
-    <ProjectReference Include="..\AlphaDev.Web.Bootstrap\AlphaDev.Web.Bootstrap.csproj" />
-  </ItemGroup>
 </Project>
