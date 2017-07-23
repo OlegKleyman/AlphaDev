@@ -19,7 +19,7 @@ namespace AlphaDev.Core.Tests.Unit
             const string testValue = "test content";
 
             var context = new MockBlogContext(nameof(GetLatestShouldReturnBlogWithContent));
-            context.Blogs.Add(new Data.Entities.Blog { Content = testValue});
+            context.Blogs.Add(new Data.Entities.Blog {Content = testValue});
             context.SaveChanges();
 
             var service = GetBlogService(context);
