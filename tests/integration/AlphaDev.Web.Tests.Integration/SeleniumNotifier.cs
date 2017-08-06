@@ -28,12 +28,12 @@ namespace AlphaDev.Web.Tests.Integration
 
         public void NotifyStepStart(IStepInfo step)
         {
-            TakeScreenshot(step, "before");
+            TakeScreenshot(step, "1");
         }
 
         public void NotifyStepFinished(IStepResult step)
         {
-            TakeScreenshot(step.Info, "after");
+            TakeScreenshot(step.Info, "2");
         }
 
         public void NotifyStepComment(IStepInfo step, string comment)
@@ -56,7 +56,7 @@ namespace AlphaDev.Web.Tests.Integration
                     RegexOptions.Compiled);
                 _screenshotTaker.GetScreenshot()
                     ?.SaveAsFile(
-                        $@"{screenshotsDirectoryName}/{_scenario.Name}{escapedStepFileName}{step.Number}{suffix}.png",
+                        $@"{screenshotsDirectoryName}/{_scenario.Name}{step.Number}{escapedStepFileName}{suffix}.png",
                         ScreenshotImageFormat.Png);
             }
         }
