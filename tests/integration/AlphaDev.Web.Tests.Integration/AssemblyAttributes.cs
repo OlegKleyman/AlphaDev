@@ -1,3 +1,3 @@
-﻿using LightBDD.XUnit2;
+﻿using AlphaDev.Web.Tests.Integration;
 
-[assembly: LightBddScope]
+[assembly: ConfiguredLightBddScope]

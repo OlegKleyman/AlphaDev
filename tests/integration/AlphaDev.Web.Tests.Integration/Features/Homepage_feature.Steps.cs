@@ -3,24 +3,20 @@ using System.Linq;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using FluentAssertions;
-using LightBDD.XUnit2;
 using Omego.Extensions.QueryableExtensions;
 using OpenQA.Selenium;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
 {
-    public partial class Homepage_feature : FeatureFixture, IClassFixture<SiteTester>, IDisposable
+    public partial class Homepage_feature : WebFeatureFixture, IDisposable
     {
         private readonly DatabaseFixture _databaseFixture;
-        private readonly SiteTester _siteTester;
         private readonly WebSite _webSite;
 
         public Homepage_feature(ITestOutputHelper output, SiteTester siteTester)
-            : base(output)
+            : base(output, siteTester)
         {
-            _siteTester = siteTester;
             _databaseFixture = new DatabaseFixture();
             _webSite = new WebSite();
 
@@ -56,17 +52,17 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void When_i_go_to_the_homepage()
         {
-            _siteTester.Driver.Navigate().GoToUrl(_webSite.Url);
+            SiteTester.Driver.Navigate().GoToUrl(_webSite.Url);
         }
 
         private void Then_it_should_load()
         {
-            _siteTester.Driver.Title.ShouldBeEquivalentTo("Home - AlphaDev");
+            SiteTester.Driver.Title.ShouldBeEquivalentTo("Home - AlphaDev");
         }
 
         private void Then_it_should_display_navigation_links()
         {
-            _siteTester.Driver.FindElements(By.CssSelector("ul.navbar-nav a"))
+            SiteTester.Driver.FindElements(By.CssSelector("ul.navbar-nav a"))
                 .Select(element => element.Text).ShouldBeEquivalentTo(new[] {"Posts", "About", "Contact"});
         }
 
@@ -74,15 +70,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             new
             {
-                Title = _siteTester.Driver.FindElement(
+                Title = SiteTester.Driver.FindElement(
                         By.CssSelector(
                             "div.blog .title h2"))
                     .Text,
-                Content = _siteTester.Driver.FindElement(
+                Content = SiteTester.Driver.FindElement(
                         By.CssSelector(
                             "div.blog .content"))
                     .Text,
-                Dates = _siteTester.Driver.FindElement(
+                Dates = SiteTester.Driver.FindElement(
                     By.CssSelector(
                         "div.blog .dates")).Text
             }.ShouldBeEquivalentTo(
@@ -107,7 +103,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_the_latest_blog_post_with_modification_date(bool modifiedState)
         {
-            var dates = _siteTester.Driver.FindElement(By.CssSelector("div.blog .dates")).Text;
+            var dates = SiteTester.Driver.FindElement(By.CssSelector("div.blog .dates")).Text;
 
             if (modifiedState) dates.Should().Contain("Modified");
             else dates.Should().NotContain("Modified");
@@ -120,7 +116,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_an_error()
         {
-            _siteTester.Driver.Title.ShouldBeEquivalentTo("Error - AlphaDev");
+            SiteTester.Driver.Title.ShouldBeEquivalentTo("Error - AlphaDev");
         }
 
         private void Then_an_error_should_be_logged()

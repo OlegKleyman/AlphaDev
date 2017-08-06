@@ -1,5 +1,5 @@
-using AlphaDev.Web.Models;
 using AlphaDev.Core;
+using AlphaDev.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlphaDev.Web.Controllers
@@ -24,6 +24,9 @@ namespace AlphaDev.Web.Controllers
             return View(nameof(Index), model);
         }
 
-        public IActionResult Error() => View(nameof(Error));
+        public IActionResult Error()
+        {
+            return View(nameof(Error));
+        }
     }
 }
