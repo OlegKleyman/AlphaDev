@@ -44,7 +44,7 @@ namespace AlphaDev.Web.Tests.Integration
         {
             if (_screenshotTaker != null)
             {
-                const string screenshotsDirectoryName = "screenshots";
+                const string screenshotsDirectoryName = "sout";
 
                 if (!Directory.Exists(screenshotsDirectoryName))
                 {
@@ -52,7 +52,7 @@ namespace AlphaDev.Web.Tests.Integration
                 }
 
                 var escapedStepFileName = Regex.Replace(step.Name.ToString(),
-                    $@"[{string.Join(string.Empty, Path.GetInvalidFileNameChars())}]", string.Empty,
+                    $@"[{string.Join(string.Empty, Path.GetInvalidFileNameChars())}\s]", string.Empty,
                     RegexOptions.Compiled);
                 _screenshotTaker.GetScreenshot()
                     ?.SaveAsFile(
