@@ -1,6 +1,7 @@
 using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.PhantomJS;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
@@ -8,11 +9,13 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
     {
         public SiteTester()
         {
-            var path = Environment.GetEnvironmentVariable("PATH");
+            const string pathEnvironmentVariableName = "PATH";
+            var path = Environment.GetEnvironmentVariable(pathEnvironmentVariableName);
 
-            Environment.SetEnvironmentVariable("PATH", path + ";.");
+            Environment.SetEnvironmentVariable(pathEnvironmentVariableName, path + ";.");
 
-            Driver = new FirefoxDriver();
+            Driver = new PhantomJSDriver();
+            Driver.Manage().Window.Maximize();
         }
 
         public IWebDriver Driver { get; set; }
