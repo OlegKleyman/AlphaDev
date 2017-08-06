@@ -42,11 +42,23 @@ namespace AlphaDev.Web.Tests.Integration
 
         private void TakeScreenshot(IStepInfo step, string suffix)
         {
-            var replace = Regex.Replace(step.Name.ToString(),
-                $@"[{string.Join(string.Empty, Path.GetInvalidFileNameChars())}]", string.Empty, RegexOptions.Compiled);
-            _screenshotTaker?.GetScreenshot()
-                ?.SaveAsFile($"{_scenario.Name}{replace}{step.Number}{suffix}.png",
-                    ScreenshotImageFormat.Png);
+            if (_screenshotTaker != null)
+            {
+                const string screenshotsDirectoryName = "screenshots";
+
+                if (!Directory.Exists(screenshotsDirectoryName))
+                {
+                    Directory.CreateDirectory(screenshotsDirectoryName);
+                }
+
+                var escapedStepFileName = Regex.Replace(step.Name.ToString(),
+                    $@"[{string.Join(string.Empty, Path.GetInvalidFileNameChars())}]", string.Empty,
+                    RegexOptions.Compiled);
+                _screenshotTaker.GetScreenshot()
+                    ?.SaveAsFile(
+                        $@"{screenshotsDirectoryName}/{_scenario.Name}{escapedStepFileName}{step.Number}{suffix}.png",
+                        ScreenshotImageFormat.Png);
+            }
         }
     }
 }
