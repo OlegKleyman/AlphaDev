@@ -10,7 +10,10 @@ namespace AlphaDev.Web.Tests.Integration
     public class SeleniumNotifier : IScenarioProgressNotifier
     {
         private readonly ITakesScreenshot _screenshotTaker;
-        private IScenarioInfo _scenario;
+        private string _scenarioName;
+
+        private static readonly Regex NameCleanser =
+            new Regex($@"[{string.Join(string.Empty, Path.GetInvalidFileNameChars())}|\s]", RegexOptions.Compiled);
 
         public SeleniumNotifier(ITakesScreenshot screenshotTaker)
         {
@@ -19,7 +22,7 @@ namespace AlphaDev.Web.Tests.Integration
 
         public void NotifyScenarioStart(IScenarioInfo scenario)
         {
-            _scenario = scenario;
+            _scenarioName = NameCleanser.Replace(scenario.Name.ToString(), string.Empty);
         }
 
         public void NotifyScenarioFinished(IScenarioResult scenario)
@@ -51,12 +54,11 @@ namespace AlphaDev.Web.Tests.Integration
                     Directory.CreateDirectory(screenshotsDirectoryName);
                 }
 
-                var escapedStepFileName = Regex.Replace(step.Name.ToString(),
-                    $@"[{string.Join(string.Empty, Path.GetInvalidFileNameChars())}|\s]", string.Empty,
-                    RegexOptions.Compiled);
+                var escapedStepFileName = NameCleanser.Replace(step.Name.ToString(), string.Empty);
+
                 _screenshotTaker.GetScreenshot()
                     ?.SaveAsFile(
-                        $@"{screenshotsDirectoryName}/{_scenario.Name}{step.Number}{escapedStepFileName}{suffix}.png",
+                        $@"{screenshotsDirectoryName}/{_scenarioName}{step.Number}{escapedStepFileName}{suffix}.png",
                         ScreenshotImageFormat.Png);
             }
         }
