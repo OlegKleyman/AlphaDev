@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Data.Sql.Contexts
 {
-    public sealed class BlogContext : Data.Contexts.BlogContext
+    public class BlogContext : Data.Contexts.BlogContext
     {
         private readonly string _connectionString;
 
@@ -12,13 +12,13 @@ namespace AlphaDev.Core.Data.Sql.Contexts
             _connectionString = connectionString;
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected sealed override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
                 _connectionString);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected sealed override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var entity = modelBuilder.Entity<Blog>();
 

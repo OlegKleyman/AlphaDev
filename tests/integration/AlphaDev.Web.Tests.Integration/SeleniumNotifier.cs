@@ -9,11 +9,11 @@ namespace AlphaDev.Web.Tests.Integration
 {
     public class SeleniumNotifier : IScenarioProgressNotifier
     {
-        private readonly ITakesScreenshot _screenshotTaker;
-        private string _scenarioName;
-
         private static readonly Regex NameCleanser =
             new Regex($@"[{string.Join(string.Empty, Path.GetInvalidFileNameChars())}|\s]", RegexOptions.Compiled);
+
+        private readonly ITakesScreenshot _screenshotTaker;
+        private string _scenarioName;
 
         public SeleniumNotifier(ITakesScreenshot screenshotTaker)
         {
@@ -50,9 +50,7 @@ namespace AlphaDev.Web.Tests.Integration
                 const string screenshotsDirectoryName = "sout";
 
                 if (!Directory.Exists(screenshotsDirectoryName))
-                {
                     Directory.CreateDirectory(screenshotsDirectoryName);
-                }
 
                 var escapedStepFileName = NameCleanser.Replace(step.Name.ToString(), string.Empty);
 
