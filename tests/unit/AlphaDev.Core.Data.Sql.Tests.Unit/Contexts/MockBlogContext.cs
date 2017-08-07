@@ -3,15 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
 {
-    public class MockBlogContext:BlogContext
+    public class MockBlogContext : BlogContext
     {
-        public MockBlogContext():base((string) "Server={server};Database={database}")
+        public MockBlogContext() : base("Server={server};Database={database}")
         {
         }
 
         public MockBlogContext(string connectionString) : base(connectionString)
         {
-            
         }
 
         public void OnModelCreatingProxy(ModelBuilder modelBuilder)
