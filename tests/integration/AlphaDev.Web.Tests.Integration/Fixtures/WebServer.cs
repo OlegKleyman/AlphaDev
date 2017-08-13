@@ -12,13 +12,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
-    public class WebSite : IDisposable
+    public class WebServer : IDisposable
     {
         private static readonly StringWriter LogWriter;
 
         private IWebHost _host;
 
-        static WebSite()
+        static WebServer()
         {
             const string logTraceListenerName = "alpha_dev_integration_log";
 

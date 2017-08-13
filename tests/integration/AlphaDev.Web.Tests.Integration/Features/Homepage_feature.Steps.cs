@@ -12,13 +12,13 @@ namespace AlphaDev.Web.Tests.Integration.Features
     public partial class Homepage_feature : WebFeatureFixture, IDisposable
     {
         private readonly DatabaseFixture _databaseFixture;
-        private readonly WebSite _webSite;
+        private readonly WebServer _webServer;
 
         public Homepage_feature(ITestOutputHelper output, SiteTester siteTester)
             : base(output, siteTester)
         {
             _databaseFixture = new DatabaseFixture();
-            _webSite = new WebSite();
+            _webServer = new WebServer();
 
             _databaseFixture.BlogContext.Blogs.AddRange(
                 new Blog
@@ -37,12 +37,12 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
             _databaseFixture.BlogContext.SaveChanges();
 
-            _webSite.Start(_databaseFixture.ConnectionString);
+            _webServer.Start(_databaseFixture.ConnectionString);
         }
 
         public void Dispose()
         {
-            _webSite?.Dispose();
+            _webServer?.Dispose();
             _databaseFixture?.Dispose();
         }
 
@@ -52,7 +52,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void When_i_go_to_the_homepage()
         {
-            SiteTester.Driver.Navigate().GoToUrl(_webSite.Url);
+            SiteTester.Driver.Navigate().GoToUrl(_webServer.Url);
         }
 
         private void Then_it_should_load()
@@ -121,7 +121,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_an_error_should_be_logged()
         {
-            _webSite.Log.Should().Contain("[Error] An unhandled exception has occurred");
+            _webServer.Log.Should().Contain("[Error] An unhandled exception has occurred");
         }
     }
 }
