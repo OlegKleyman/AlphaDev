@@ -43,21 +43,17 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         {
             var url = $"http://127.0.0.1:{GetOpenPort()}";
 
-            _host = new WebHostBuilder()
+            _host = new WebHostBuilder().ConfigureAppConfiguration(builder => builder.SetBasePath(Path.GetFullPath("."))
+                    .AddJsonFile("appsettings.json", true, true)
+
+                    .AddInMemoryCollection(new[]
+                    {
+                        new KeyValuePair<string, string>("connectionStrings:default",
+                            connectionString)
+                    }))
                 .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel()
                 .UseStartup<Startup>().UseUrls(url).UseSetting(WebHostDefaults.ApplicationKey,
-                    typeof(Program).GetTypeInfo().Assembly.FullName)
-                .ConfigureServices(
-                    services =>
-                    {
-                        services.AddSingleton<IConfigurationBuilder, IConfigurationBuilder>(
-                            provider => new ConfigurationBuilder().SetBasePath(Path.GetFullPath("."))
-                                .AddInMemoryCollection(new[]
-                                {
-                                    new KeyValuePair<string, string>("connectionStrings:default",
-                                        connectionString)
-                                }));
-                    }).Build();
+                    typeof(Program).GetTypeInfo().Assembly.FullName).Build();
 
             _host.Start();
 
