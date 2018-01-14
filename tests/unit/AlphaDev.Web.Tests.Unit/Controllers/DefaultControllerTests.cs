@@ -3,7 +3,7 @@ using AlphaDev.Core;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
 using FluentAssertions;
-using FluentAssertions.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Optional;
 using Xunit;
@@ -28,7 +28,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         [Fact]
         public void ErrorShouldReturnErrorView()
         {
-            GetDefaultController().Error().Should().BeViewResult().WithViewName("Error");
+            GetDefaultController().Error().Should().BeOfType<ViewResult>().Which.ViewName.ShouldBeEquivalentTo("Error");
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var controller = GetDefaultController();
 
-            controller.Index().Should().BeViewResult();
+            controller.Index().Should().BeOfType<ViewResult>();
         }
     }
 }
