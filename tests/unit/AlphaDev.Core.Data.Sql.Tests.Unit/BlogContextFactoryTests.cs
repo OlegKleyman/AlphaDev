@@ -24,7 +24,8 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
 
             // ReSharper disable once AssignNullToNotNullAttribute - null is allowed with this method, resharper is
             // bonkers.
-            factory.CreateDbContext(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.ConnectionString
+            factory.CreateDbContext(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject
+                .ConnectionString
                 .ShouldBeEquivalentTo("Data Source=(Test);");
         }
 
@@ -35,7 +36,8 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
 
             // ReSharper disable once AssignNullToNotNullAttribute - null is allowed with this method, resharper is
             // bonkers.
-            factory.CreateDbContext(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.ConnectionString
+            factory.CreateDbContext(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject
+                .ConnectionString
                 .ShouldBeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
         }
 
@@ -46,7 +48,8 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
 
             // ReSharper disable once AssignNullToNotNullAttribute - null is allowed with this method, resharper is
             // bonkers.
-            factory.CreateDbContext(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.ConnectionString
+            factory.CreateDbContext(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject
+                .ConnectionString
                 .ShouldBeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
         }
 
@@ -59,7 +62,8 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
 
             // ReSharper disable once AssignNullToNotNullAttribute - null is allowed with this method, resharper is
             // bonkers.
-            factory.CreateDbContext(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.ConnectionString
+            factory.CreateDbContext(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject
+                .ConnectionString
                 .ShouldBeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
         }
     }

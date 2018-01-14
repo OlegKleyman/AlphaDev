@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Sql.Contexts;
 using FluentAssertions;
