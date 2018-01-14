@@ -9,14 +9,15 @@ using AlphaDev.Web.Bootstrap;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Xunit;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
-    public class WebServer : IDisposable
+    public class WebServer
     {
         private static readonly StringWriter LogWriter;
 
-        private IWebHost _host;
+        private readonly IWebHost _host;
 
         static WebServer()
         {
@@ -34,22 +35,19 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             }
         }
 
-        public string Url { get; private set; }
+        public string Url { get; }
 
         public string Log => LogWriter.ToString();
 
-        public void Dispose()
-        {
-            LogWriter.GetStringBuilder().Clear();
-            _host?.Dispose();
-        }
-
-        public void Start(string connectionString)
+        public WebServer(string connectionString)
         {
             var url = $"http://127.0.0.1:{GetOpenPort()}";
 
             _host = new WebHostBuilder()
-                .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel().ConfigureServices(
+                .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel()
+                .UseStartup<Startup>().UseUrls(url).UseSetting(WebHostDefaults.ApplicationKey,
+                    typeof(Program).GetTypeInfo().Assembly.FullName)
+                .ConfigureServices(
                     services =>
                     {
                         services.AddSingleton<IConfigurationBuilder, IConfigurationBuilder>(
@@ -59,11 +57,16 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
                                     new KeyValuePair<string, string>("connectionStrings:default",
                                         connectionString)
                                 }));
-                    }).UseStartup<Startup>().UseUrls(url).UseSetting(WebHostDefaults.ApplicationKey,
-                    typeof(Program).GetTypeInfo().Assembly.FullName).Build();
+                    }).Build();
 
             _host.Start();
+
             Url = url;
+        }
+
+        public void Dispose()
+        {
+            _host?.Dispose();
         }
 
         private int GetOpenPort()
@@ -76,6 +79,11 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
                 return ((IPEndPoint) sock.LocalEndPoint).Port;
             }
+        }
+
+        public void ClearLog()
+        {
+            LogWriter.GetStringBuilder().Clear();
         }
     }
 }

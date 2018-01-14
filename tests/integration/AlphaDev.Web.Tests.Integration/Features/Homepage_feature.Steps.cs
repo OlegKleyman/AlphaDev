@@ -9,18 +9,12 @@ using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
 {
-    public partial class Homepage_feature : WebFeatureFixture, IDisposable
+    public partial class Homepage_feature : WebFeatureFixture
     {
-        private readonly DatabaseFixture _databaseFixture;
-        private readonly WebServer _webServer;
-
-        public Homepage_feature(ITestOutputHelper output, SiteTester siteTester)
-            : base(output, siteTester)
+        public Homepage_feature(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture)
+            : base(output, databaseWebServerFixture)
         {
-            _databaseFixture = new DatabaseFixture();
-            _webServer = new WebServer();
-
-            _databaseFixture.BlogContext.Blogs.AddRange(
+            DatabaseFixture.BlogContext.Blogs.AddRange(
                 new Blog
                 {
                     Content = "Content integration test1.",
@@ -35,15 +29,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                     Modified = new DateTime(2017, 7, 12)
                 });
 
-            _databaseFixture.BlogContext.SaveChanges();
-
-            _webServer.Start(_databaseFixture.ConnectionString);
-        }
-
-        public void Dispose()
-        {
-            _webServer?.Dispose();
-            _databaseFixture?.Dispose();
+            DatabaseFixture.BlogContext.SaveChanges();
         }
 
         private void Given_i_am_a_user()
@@ -52,37 +38,24 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void When_i_go_to_the_homepage()
         {
-            SiteTester.Driver.Navigate().GoToUrl(_webServer.Url);
+            SiteTester.HomePage.GoTo();
         }
 
         private void Then_it_should_load()
         {
-            SiteTester.Driver.Title.ShouldBeEquivalentTo("Home - AlphaDev");
+            SiteTester.HomePage.Title.ShouldBeEquivalentTo("Home - AlphaDev");
         }
 
         private void Then_it_should_display_navigation_links()
         {
-            SiteTester.Driver.FindElements(By.CssSelector("ul.navbar-nav a"))
-                .Select(element => element.Text).ShouldBeEquivalentTo(new[] {"Posts", "About", "Contact"});
+            SiteTester.HomePage.Navigation.ShouldBeEquivalentTo(new[] {"Posts", "About", "Contact"},
+                options => options.Including(info => info.SelectedMemberPath == "Text"));
         }
 
         private void Then_it_should_display_the_latest_blog_post()
         {
-            new
-            {
-                Title = SiteTester.Driver.FindElement(
-                        By.CssSelector(
-                            "div.blog .title h2"))
-                    .Text,
-                Content = SiteTester.Driver.FindElement(
-                        By.CssSelector(
-                            "div.blog .content"))
-                    .Text,
-                Dates = SiteTester.Driver.FindElement(
-                    By.CssSelector(
-                        "div.blog .dates")).Text
-            }.ShouldBeEquivalentTo(
-                _databaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).Select(blog => new
+            SiteTester.HomePage.LatestBlog.ShouldBeEquivalentTo(
+                DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).Select(blog => new
                     {
                         blog.Title,
                         blog.Content,
@@ -96,14 +69,14 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             var modified = modifiedState ? new DateTime(2017, 7, 12) : (DateTime?) null;
 
-            _databaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).First().Modified = modified;
+            DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).First().Modified = modified;
 
-            _databaseFixture.BlogContext.SaveChanges();
+            DatabaseFixture.BlogContext.SaveChanges();
         }
 
         private void Then_it_should_display_the_latest_blog_post_with_modification_date(bool modifiedState)
         {
-            var dates = SiteTester.Driver.FindElement(By.CssSelector("div.blog .dates")).Text;
+            var dates = SiteTester.HomePage.LatestBlog.Dates;
 
             if (modifiedState) dates.Should().Contain("Modified");
             else dates.Should().NotContain("Modified");
@@ -111,7 +84,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Given_the_website_has_a_problem()
         {
-            _databaseFixture.BlogContext.Database.EnsureDeleted();
+            DatabaseFixture.BlogContext.Database.EnsureDeleted();
         }
 
         private void Then_it_should_display_an_error()
@@ -121,7 +94,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_an_error_should_be_logged()
         {
-            _webServer.Log.Should().Contain("[Error] An unhandled exception has occurred");
+            Log.Should().Contain("[Error] An unhandled exception has occurred");
         }
     }
 }
