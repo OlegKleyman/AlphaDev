@@ -1,6 +1,5 @@
 ﻿using AlphaDev.Core.Data.Sql.Contexts;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 
 namespace AlphaDev.Core.Data.Sql

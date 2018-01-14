@@ -1,10 +1,8 @@
-﻿using System.IO;
-using System.Reflection;
+﻿using System.Reflection;
 using AlphaDev.Web.Bootstrap;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AlphaDev.Web
 {

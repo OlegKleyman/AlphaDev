@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using OpenQA.Selenium;
 
@@ -8,7 +7,6 @@ namespace AlphaDev.Web.Tests.Integration.Support
 {
     public abstract class WebPage
     {
-        public Uri BaseUrl { get; }
         protected readonly IWebDriver Driver;
 
         protected WebPage(IWebDriver driver, Uri baseUrl)
@@ -16,6 +14,8 @@ namespace AlphaDev.Web.Tests.Integration.Support
             BaseUrl = baseUrl;
             Driver = driver;
         }
+
+        public Uri BaseUrl { get; }
 
         public string Title => Driver.Title;
 

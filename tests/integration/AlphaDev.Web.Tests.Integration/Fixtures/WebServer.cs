@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,8 +7,6 @@ using System.Reflection;
 using AlphaDev.Web.Bootstrap;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
@@ -35,17 +32,12 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             }
         }
 
-        public string Url { get; }
-
-        public string Log => LogWriter.ToString();
-
         public WebServer(string connectionString)
         {
             var url = $"http://127.0.0.1:{GetOpenPort()}";
 
             _host = new WebHostBuilder().ConfigureAppConfiguration(builder => builder.SetBasePath(Path.GetFullPath("."))
                     .AddJsonFile("appsettings.json", true, true)
-
                     .AddInMemoryCollection(new[]
                     {
                         new KeyValuePair<string, string>("connectionStrings:default",
@@ -59,6 +51,10 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
             Url = url;
         }
+
+        public string Url { get; }
+
+        public string Log => LogWriter.ToString();
 
         public void Dispose()
         {

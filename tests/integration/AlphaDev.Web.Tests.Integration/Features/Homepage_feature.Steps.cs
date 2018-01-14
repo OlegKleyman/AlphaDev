@@ -4,7 +4,6 @@ using AlphaDev.Core.Data.Entities;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using FluentAssertions;
 using Omego.Extensions.QueryableExtensions;
-using OpenQA.Selenium;
 using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features

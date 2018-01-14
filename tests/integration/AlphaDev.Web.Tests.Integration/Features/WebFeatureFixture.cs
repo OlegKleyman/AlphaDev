@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using AlphaDev.Test.Integration.Core.Extensions;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using LightBDD.XUnit2;
 using Microsoft.EntityFrameworkCore;
@@ -12,11 +10,9 @@ namespace AlphaDev.Web.Tests.Integration.Features
     public class WebFeatureFixture : FeatureFixture, IClassFixture<DatabaseWebServerFixture>, IDisposable
     {
         private readonly WebServer _server;
-        protected DatabaseFixture DatabaseFixture { get; }
 
-        protected string Log => _server.Log;
-
-        protected WebFeatureFixture(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) : base(output)
+        protected WebFeatureFixture(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) :
+            base(output)
         {
             _server = databaseWebServerFixture.Server;
             DatabaseFixture = databaseWebServerFixture.DatabaseFixture;
@@ -24,6 +20,10 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
             SiteTester = databaseWebServerFixture.SiteTester;
         }
+
+        protected DatabaseFixture DatabaseFixture { get; }
+
+        protected string Log => _server.Log;
 
         public SiteTester SiteTester { get; }
 
