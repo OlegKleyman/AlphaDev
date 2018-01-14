@@ -14,33 +14,24 @@ namespace AlphaDev.Web.Bootstrap
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env, IConfigurationBuilder builder)
-        {
-            builder
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true).AddEnvironmentVariables();
-            Configuration = builder.Build();
-        }
-
-        public IConfigurationRoot Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            var config = services.BuildServiceProvider().GetService<IConfiguration>();
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<BlogContext, Core.Data.Sql.Contexts.BlogContext>(
-                provider => new Core.Data.Sql.Contexts.BlogContext(Configuration.GetConnectionString("default")));
+                provider => new Core.Data.Sql.Contexts.BlogContext(config.GetConnectionString("default")));
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
-            IApplicationLifetime lifetime, IServiceProvider provider)
+            IApplicationLifetime lifetime, IServiceProvider provider, IConfiguration configuration)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddConsole(configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            var logger = new LoggerConfiguration().ReadFrom.Configuration(Configuration).CreateLogger();
+            var logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
             loggerFactory.AddSerilog(logger);
 
             var blogContext = provider.GetService<BlogContext>();
