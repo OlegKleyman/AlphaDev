@@ -1,4 +1,5 @@
 using System;
+using Markdig;
 using OpenQA.Selenium;
 
 namespace AlphaDev.Web.Tests.Integration.Support
@@ -14,7 +15,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
                 "div.blog .title h2")).Text, Driver.FindElement(
                 By.CssSelector(
                     "div.blog .content"))
-            .Text, Driver.FindElement(
+            .GetAttribute("innerHTML").Trim(), Driver.FindElement(
             By.CssSelector(
                 "div.blog .dates")).Text);
 

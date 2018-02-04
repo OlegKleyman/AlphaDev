@@ -34,8 +34,19 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             Runner.RunScenario(
                 Given_i_am_a_user,
+                And_there_are_multiple_blog_posts_at_different_times,
                 When_i_go_to_the_homepage,
                 Then_it_should_display_the_latest_blog_post);
+        }
+
+        [Scenario]
+        public void Display_post_with_markdown_parsed_to_html()
+        {
+            Runner.RunScenario(
+                Given_i_am_a_user,
+                And_the_latest_blog_post_contains_markdown,
+                When_i_go_to_the_homepage,
+                Then_it_should_display__blog_post_with_markdown_parsed_to_html);
         }
 
         [Scenario]
@@ -45,6 +56,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             Runner.RunScenario(
                 Given_i_am_a_user,
+                And_there_are_multiple_blog_posts_at_different_times,
                 () => And_the_latest_blog_post_was(modifiedState),
                 When_i_go_to_the_homepage,
                 () => Then_it_should_display_the_latest_blog_post_with_modification_date(modifiedState));
