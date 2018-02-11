@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using FluentAssertions;
 using Markdig;
+using Omego.Extensions.EnumerableExtensions;
 using Omego.Extensions.QueryableExtensions;
+using Optional;
 using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
@@ -39,14 +42,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_the_latest_blog_post()
         {
             SiteTester.HomePage.LatestBlog.ShouldBeEquivalentTo(
-                DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).Select(blog => new
+                DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
                     {
-                        blog.Title,
-                        Content = Markdown.ToHtml(blog.Content, null).Trim(),
-                        Dates =
-                        $"Created: {blog.Created:D} Modified: {(blog.Modified.HasValue ? blog.Modified.Value.ToString("D") : string.Empty)}"
+                        Dates = new
+                        {
+                            Created = blog.Created.ToString(FullDateFormatString, CultureInfo.InvariantCulture)
+                        }
                     })
-                    .FirstOrThrow(new InvalidOperationException("No blogs found.")));
+                    .FirstOrThrow(new InvalidOperationException("No blogs found.")),
+                options => options.Including(post => post.Dates.Created));
         }
 
         private void And_the_latest_blog_post_was(bool modifiedState)
@@ -60,10 +64,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_the_latest_blog_post_with_modification_date(bool modifiedState)
         {
-            var dates = SiteTester.HomePage.LatestBlog.Dates;
-
-            if (modifiedState) dates.Should().Contain("Modified");
-            else dates.Should().NotContain("Modified");
+            SiteTester.HomePage.LatestBlog.Dates.Modified.HasValue.ShouldBeEquivalentTo(modifiedState);
         }
 
         private void Given_the_website_has_a_problem()
@@ -81,17 +82,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
             Log.Should().Contain("[Error] An unhandled exception has occurred");
         }
 
-        private void Then_it_should_display__blog_post_with_markdown_parsed_to_html()
+        private void Then_it_should_display_blog_post_with_markdown_parsed_to_html()
         {
             SiteTester.HomePage.LatestBlog.ShouldBeEquivalentTo(
-                DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).Select(blog => new
+                DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
                     {
-                        blog.Title,
-                        Content = Markdown.ToHtml(blog.Content, null).Trim(),
-                        Dates =
-                        $"Created: {blog.Created:D} Modified: {(blog.Modified.HasValue ? blog.Modified.Value.ToString("D") : string.Empty)}"
+                        Content = Markdown.ToHtml(blog.Content).Trim()
                     })
-                    .FirstOrThrow(new InvalidOperationException("No blogs found.")));
+                    .FirstOrThrow(new InvalidOperationException("No blogs found.")),
+                options => options.Including(post => post.Content));
         }
 
         private void And_the_latest_blog_post_contains_markdown()
@@ -126,6 +125,83 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 });
 
             DatabaseFixture.BlogContext.SaveChanges();
+        }
+
+        private void And_there_is_a_blog_post_with_single_digit_days()
+        {
+            DatabaseFixture.BlogContext.Blogs.Add(
+                new Blog
+                {
+                    Content = "Content integration test2.",
+                    Title = "Title integration test2.",
+                    Created = new DateTime(2017, 2, 1),
+                    Modified = new DateTime(2017, 7, 8)
+                });
+
+            DatabaseFixture.BlogContext.SaveChanges();
+        }
+
+        private void Then_it_should_display_two_digits_for_day_for_created()
+        {
+            SiteTester.HomePage.LatestBlog.Dates.Created.Should().MatchRegex(FullDateFormatRegularExpression);
+        }
+
+        private void And_it_should_display_two_digits_for_day_for_modified()
+        {
+            SiteTester.HomePage.LatestBlog.Dates.Modified
+                .ValueOr(() => throw new InvalidOperationException("No modified date found.")).Should()
+                .MatchRegex(FullDateFormatRegularExpression);
+        }
+
+        private void And_the_latest_blog_post_was_modified()
+        {
+            DatabaseFixture.BlogContext.Blogs.Add(
+                new Blog
+                {
+                    Content = "Content integration test2.",
+                    Title = "Title integration test2.",
+                    Created = new DateTime(2017, 2, 1),
+                    Modified = new DateTime(2017, 7, 8)
+                });
+
+            DatabaseFixture.BlogContext.SaveChanges();
+        }
+
+        private void Then_it_should_display_with_modification_date()
+        {
+            SiteTester.HomePage.LatestBlog.ShouldBeEquivalentTo(
+                DatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
+                    {
+                        Dates = new
+                        {
+                            Modified = blog.Modified.ToOption().FlatMap(time =>
+                                Option.Some(time.ToString(FullDateFormatString, CultureInfo.InvariantCulture)).NotNull())
+                        }
+                    })
+                    .FirstOrThrow(new InvalidOperationException("No blogs found.")), options => options.Including(post => post.Dates.Modified));
+        }
+
+        private void And_there_is_a_blog_post()
+        {
+            DatabaseFixture.BlogContext.Blogs.Add(
+                new Blog
+                {
+                    Content = "Content integration test2.",
+                    Title = "Title integration test2.",
+                    Created = new DateTime(2017, 2, 1),
+                    Modified = new DateTime(2017, 7, 8)
+                });
+
+            DatabaseFixture.BlogContext.SaveChanges();
+        }
+
+        private void Then_it_should_display_title()
+        {
+
+            SiteTester.HomePage.LatestBlog.ShouldBeEquivalentTo(
+                DatabaseFixture.BlogContext.Blogs
+                    .FirstOrThrow(new InvalidOperationException("No blogs found.")),
+                options => options.Including(post => post.Title));
         }
     }
 }
