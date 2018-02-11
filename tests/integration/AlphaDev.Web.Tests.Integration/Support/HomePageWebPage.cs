@@ -1,5 +1,4 @@
 using System;
-using Markdig;
 using OpenQA.Selenium;
 
 namespace AlphaDev.Web.Tests.Integration.Support

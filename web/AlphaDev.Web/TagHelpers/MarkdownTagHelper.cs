@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Markdig;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace AlphaDev.Web.TagHelpers
@@ -10,12 +9,13 @@ namespace AlphaDev.Web.TagHelpers
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var content = (output ?? throw new ArgumentNullException(nameof(output))).GetChildContentAsync(NullHtmlEncoder.Default)
+            var content = (output ?? throw new ArgumentNullException(nameof(output)))
+                .GetChildContentAsync(NullHtmlEncoder.Default)
                 .GetAwaiter().GetResult();
 
             output.Content.SetHtmlContent(Markdown.ToHtml(content.GetContent()));
 
-            output.TagName = String.Empty;
+            output.TagName = string.Empty;
 
             base.Process(context, output);
         }
