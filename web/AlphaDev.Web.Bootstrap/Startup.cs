@@ -34,35 +34,34 @@ namespace AlphaDev.Web.Bootstrap
             var logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
             loggerFactory.AddSerilog(logger);
 
-            var blogContext = provider.GetService<BlogContext>();
-
-            if (env.IsDevelopment())
+            using (var blogContext = provider.GetService<BlogContext>())
             {
-                blogContext.Database.EnsureDeleted();
+                if (env.IsDevelopment())
+                {
+                    blogContext.Database.EnsureDeleted();
 
-                app.UseDeveloperExceptionPage();
+                    app.UseDeveloperExceptionPage();
+                }
+                else
+                {
+                    app.UseExceptionHandler("/Default/Error");
+                }
+
+                blogContext.Database.Migrate();
+
+                if (env.IsDevelopment())
+                {
+                    blogContext.Blogs.Add(
+                        new Blog
+                        {
+                            Content = GetDevelopmentContent(),
+                            Title = "testing",
+                            Created = new DateTime(2016, 7, 7),
+                            Modified = new DateTime(2017, 7, 10)
+                        });
+                    blogContext.SaveChanges();
+                }
             }
-            else
-            {
-                app.UseExceptionHandler("/Default/Error");
-            }
-
-            blogContext.Database.Migrate();
-
-            if (env.IsDevelopment())
-            {
-                blogContext.Blogs.Add(
-                    new Blog
-                    {
-                        Content = GetDevelopmentContent(),
-                        Title = "testing",
-                        Created = new DateTime(2016, 7, 7),
-                        Modified = new DateTime(2017, 7, 10)
-                    });
-                blogContext.SaveChanges();
-            }
-
-            blogContext.Database.CloseConnection();
 
             app.UseStaticFiles();
 
