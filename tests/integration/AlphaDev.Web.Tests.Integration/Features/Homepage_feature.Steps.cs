@@ -95,50 +95,29 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void And_the_latest_blog_post_contains_markdown()
         {
-            DatabaseFixture.BlogContext.Blogs.AddRange(
-                new Blog
-                {
-                    Content = "Content integration `<test2>testing</test2>`.",
-                    Title = "Title integration test2.",
-                    Created = new DateTime(2017, 2, 1),
-                    Modified = new DateTime(2017, 7, 12)
-                });
+            var blog = DatabaseFixture.DefaultBlog;
+            blog.Content = "Content integration `<test2>testing</test2>`.";
 
-            DatabaseFixture.BlogContext.SaveChanges();
+            DatabaseFixture.Add(DatabaseFixture.BlogContext,
+                DatabaseFixture.DefaultBlog);
         }
 
         private void And_there_are_multiple_blog_posts_at_different_times()
         {
-            DatabaseFixture.BlogContext.Blogs.AddRange(
-                new Blog
-                {
-                    Content = "Content integration test1.",
-                    Title = "Title integration test1.",
-                    Created = new DateTime(2016, 1, 1)
-                },
-                new Blog
-                {
-                    Content = "Content integration test2.",
-                    Title = "Title integration test2.",
-                    Created = new DateTime(2017, 2, 1),
-                    Modified = new DateTime(2017, 7, 12)
-                });
+            var blogs = DatabaseFixture.DefaultBlogs;
+            blogs[0].Modified = null;
 
-            DatabaseFixture.BlogContext.SaveChanges();
+            DatabaseFixture.Add(DatabaseFixture.BlogContext,
+                DatabaseFixture.DefaultBlogs);
         }
 
         private void And_there_is_a_blog_post_with_single_digit_days()
         {
-            DatabaseFixture.BlogContext.Blogs.Add(
-                new Blog
-                {
-                    Content = "Content integration test2.",
-                    Title = "Title integration test2.",
-                    Created = new DateTime(2017, 2, 1),
-                    Modified = new DateTime(2017, 7, 8)
-                });
+            var blog = DatabaseFixture.DefaultBlog;
+            blog.Created = new DateTime(2017, 2, 1);
+            blog.Modified = new DateTime(2017, 7, 8);
 
-            DatabaseFixture.BlogContext.SaveChanges();
+            DatabaseFixture.Add(DatabaseFixture.BlogContext, blog);
         }
 
         private void Then_it_should_display_two_digits_for_day_for_created()
@@ -155,16 +134,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void And_the_latest_blog_post_was_modified()
         {
-            DatabaseFixture.BlogContext.Blogs.Add(
-                new Blog
-                {
-                    Content = "Content integration test2.",
-                    Title = "Title integration test2.",
-                    Created = new DateTime(2017, 2, 1),
-                    Modified = new DateTime(2017, 7, 8)
-                });
-
-            DatabaseFixture.BlogContext.SaveChanges();
+            DatabaseFixture.Add(DatabaseFixture.BlogContext, DatabaseFixture.DefaultBlog);
         }
 
         private void Then_it_should_display_with_modification_date()
@@ -183,16 +153,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void And_there_is_a_blog_post()
         {
-            DatabaseFixture.BlogContext.Blogs.Add(
-                new Blog
-                {
-                    Content = "Content integration test2.",
-                    Title = "Title integration test2.",
-                    Created = new DateTime(2017, 2, 1),
-                    Modified = new DateTime(2017, 7, 8)
-                });
-
-            DatabaseFixture.BlogContext.SaveChanges();
+            DatabaseFixture.Add(DatabaseFixture.BlogContext,
+                DatabaseFixture.DefaultBlog);
         }
 
         private void Then_it_should_display_title()
