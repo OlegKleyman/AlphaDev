@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using OpenQA.Selenium;
+using Optional;
 
 namespace AlphaDev.Web.Tests.Integration.Support
 {
@@ -14,9 +16,10 @@ namespace AlphaDev.Web.Tests.Integration.Support
                 "div.blog .title h2")).Text, Driver.FindElement(
                 By.CssSelector(
                     "div.blog .content"))
-            .GetAttribute("innerHTML").Trim(), Driver.FindElement(
+            .GetAttribute("innerHTML").Trim(), new BlogDate(Driver.FindElement(
             By.CssSelector(
-                "div.blog .dates")).Text);
+                "div.blog .dates .created-date")).Text, Option.Some(Driver.FindElements(By.CssSelector(
+            "div.blog .dates .modified-date")).FirstOrDefault()?.Text).NotNull()));
 
         public override WebPage GoTo()
         {
@@ -24,5 +27,17 @@ namespace AlphaDev.Web.Tests.Integration.Support
 
             return this;
         }
+    }
+
+    public class BlogDate
+    {
+        public BlogDate(string created, Option<string> modified)
+        {
+            Created = created;
+            Modified = modified;
+        }
+
+        public string Created { get; }
+        public Option<string> Modified { get; }
     }
 }

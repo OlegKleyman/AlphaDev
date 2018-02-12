@@ -5,6 +5,8 @@ namespace AlphaDev.Web.Models
 {
     public class DatesViewModel
     {
+        public const string LongDataFormat = "dddd, MMMM dd, yyyy";
+
         public DatesViewModel(DateTime created, Option<DateTime> modified)
         {
             Created = created;

@@ -40,13 +40,44 @@ namespace AlphaDev.Web.Tests.Integration.Features
         }
 
         [Scenario]
+        public void Display_dates_using_dd_for_day()
+        {
+            Runner.RunScenario(
+                Given_i_am_a_user,
+                And_there_is_a_blog_post_with_single_digit_days,
+                When_i_go_to_the_homepage,
+                Then_it_should_display_two_digits_for_day_for_created,
+                And_it_should_display_two_digits_for_day_for_modified);
+        }
+
+        [Scenario]
         public void Display_post_with_markdown_parsed_to_html()
         {
             Runner.RunScenario(
                 Given_i_am_a_user,
                 And_the_latest_blog_post_contains_markdown,
                 When_i_go_to_the_homepage,
-                Then_it_should_display__blog_post_with_markdown_parsed_to_html);
+                Then_it_should_display_blog_post_with_markdown_parsed_to_html);
+        }
+
+        [Scenario]
+        public void Display_post_with_modification_date()
+        {
+            Runner.RunScenario(
+                Given_i_am_a_user,
+                And_the_latest_blog_post_was_modified,
+                When_i_go_to_the_homepage,
+                Then_it_should_display_with_modification_date);
+        }
+
+        [Scenario]
+        public void Display_post_with_title()
+        {
+            Runner.RunScenario(
+                Given_i_am_a_user,
+                And_there_is_a_blog_post,
+                When_i_go_to_the_homepage,
+                Then_it_should_display_title);
         }
 
         [Scenario]
