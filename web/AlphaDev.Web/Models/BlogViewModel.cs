@@ -8,8 +8,8 @@ namespace AlphaDev.Web.Models
             Dates = dates;
         }
 
-        public DatesViewModel Dates { get; set; }
+        public DatesViewModel Dates { get; }
 
-        public string Content { get; set; }
+        public string Content { get; }
     }
 }
