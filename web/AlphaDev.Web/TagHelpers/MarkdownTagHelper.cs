@@ -13,7 +13,7 @@ namespace AlphaDev.Web.TagHelpers
                 .GetChildContentAsync(NullHtmlEncoder.Default)
                 .GetAwaiter().GetResult();
 
-            output.Content.SetHtmlContent(Markdown.ToHtml(content.GetContent()));
+            output.Content.SetHtmlContent(Markdown.ToHtml(content.GetContent().Trim()));
 
             output.TagName = string.Empty;
 
