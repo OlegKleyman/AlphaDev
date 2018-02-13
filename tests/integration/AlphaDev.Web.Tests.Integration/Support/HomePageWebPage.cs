@@ -21,16 +21,4 @@ namespace AlphaDev.Web.Tests.Integration.Support
                 "div.blog .dates .created-date")).Text, Option.Some(Driver.FindElements(By.CssSelector(
             "div.blog .dates .modified-date")).FirstOrDefault()?.Text).NotNull()));
     }
-
-    public class BlogDate
-    {
-        public BlogDate(string created, Option<string> modified)
-        {
-            Created = created;
-            Modified = modified;
-        }
-
-        public string Created { get; }
-        public Option<string> Modified { get; }
-    }
 }
