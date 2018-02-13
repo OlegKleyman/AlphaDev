@@ -20,13 +20,6 @@ namespace AlphaDev.Web.Tests.Integration.Support
             By.CssSelector(
                 "div.blog .dates .created-date")).Text, Option.Some(Driver.FindElements(By.CssSelector(
             "div.blog .dates .modified-date")).FirstOrDefault()?.Text).NotNull()));
-
-        public override WebPage GoTo()
-        {
-            Driver.Navigate().GoToUrl(BaseUrl);
-
-            return this;
-        }
     }
 
     public class BlogDate

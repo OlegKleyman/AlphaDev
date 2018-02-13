@@ -28,6 +28,11 @@ namespace AlphaDev.Web.Tests.Integration.Support
             }
         }
 
-        public abstract WebPage GoTo();
+        public virtual WebPage GoTo()
+        {
+            Driver.Navigate().GoToUrl(BaseUrl);
+
+            return this;
+        }
     }
 }
