@@ -1,7 +1,12 @@
 namespace AlphaDev.Web.Models
 {
-    public class PageViewModel
+    public abstract class PageViewModel
     {
-        public string Title { get; set; }
+        protected PageViewModel(string title)
+        {
+            Title = title;
+        }
+
+        public string Title { get; }
     }
 }

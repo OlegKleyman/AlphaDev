@@ -2,9 +2,8 @@ namespace AlphaDev.Web.Models
 {
     public class BlogViewModel : PageViewModel
     {
-        public BlogViewModel(string title, string content, DatesViewModel dates)
+        public BlogViewModel(string title, string content, DatesViewModel dates) : base(title)
         {
-            Title = title;
             Content = content;
             Dates = dates;
         }
