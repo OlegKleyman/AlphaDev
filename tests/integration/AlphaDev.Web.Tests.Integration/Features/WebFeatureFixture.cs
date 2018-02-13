@@ -21,6 +21,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
             DatabaseFixture.BlogContext.Database.Migrate();
 
             SiteTester = databaseWebServerFixture.SiteTester;
+            CommonSteps = new CommonSteps();
         }
 
         protected DatabaseFixture DatabaseFixture { get; }
@@ -28,6 +29,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         protected string Log => _server.Log;
 
         public SiteTester SiteTester { get; }
+        public CommonSteps CommonSteps { get; }
 
         public void Dispose()
         {

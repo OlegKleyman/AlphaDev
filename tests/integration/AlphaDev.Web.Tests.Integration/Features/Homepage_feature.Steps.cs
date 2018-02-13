@@ -19,10 +19,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
         }
 
-        private void Given_i_am_a_user()
-        {
-        }
-
         private void When_i_go_to_the_homepage()
         {
             SiteTester.HomePage.GoTo();
