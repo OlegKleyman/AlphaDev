@@ -1,6 +1,6 @@
 namespace AlphaDev.Web.Models
 {
-    public class BlogViewModel
+    public class BlogViewModel : PageViewModel
     {
         public BlogViewModel(string title, string content, DatesViewModel dates)
         {
@@ -8,8 +8,6 @@ namespace AlphaDev.Web.Models
             Content = content;
             Dates = dates;
         }
-
-        public string Title { get; set; }
 
         public DatesViewModel Dates { get; set; }
 
