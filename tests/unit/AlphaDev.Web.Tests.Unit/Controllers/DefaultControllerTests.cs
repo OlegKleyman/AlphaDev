@@ -15,7 +15,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         private DefaultController GetDefaultController()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetLatest().Returns(new Blog(null, null, default(Dates)));
+            blogService.GetLatest().Returns(new Blog(default(int), null, null, default(Dates)));
 
             return GetDefaultController(blogService);
         }
@@ -42,7 +42,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         [Fact]
         public void IndexShouldReturnBlogModelWithValuesSetFromTheBlogService()
         {
-            var blog = new Blog(
+            var blog = new Blog(123,
                 "title",
                 "content",
                 new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
@@ -53,7 +53,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetDefaultController(blogService);
 
             controller.Index().Model.ShouldBeEquivalentTo(
-                new {blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}});
+                new { blog.Id, blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}});
         }
 
         [Fact]

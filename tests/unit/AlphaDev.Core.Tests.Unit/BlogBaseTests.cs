@@ -13,6 +13,7 @@ namespace AlphaDev.Core.Tests.Unit
             BlogBase.Empty.ShouldBeEquivalentTo(
                 new
                 {
+                    Id = default(int),
                     Title = string.Empty,
                     Content = string.Empty,
                     Dates = new Dates(default(DateTime), Option.None<DateTime>())

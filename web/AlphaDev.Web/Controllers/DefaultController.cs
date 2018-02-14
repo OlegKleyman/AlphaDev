@@ -17,6 +17,7 @@ namespace AlphaDev.Web.Controllers
         {
             var blog = _blogService.GetLatest();
             var model = new BlogViewModel(
+                blog.Id,
                 blog.Title,
                 blog.Content,
                 new DatesViewModel(blog.Dates.Created, blog.Dates.Modified));

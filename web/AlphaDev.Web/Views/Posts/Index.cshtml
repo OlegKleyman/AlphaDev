@@ -1,7 +1,14 @@
-﻿
+﻿@model IEnumerable<AlphaDev.Web.Models.BlogViewModel>
+
 @{
     ViewBag.Title = "Posts";
 }
 
-<h2>View</h2>
+<h1 class="text-center">Posts</h1>
 
+<div class="blog container">
+    @foreach (var blog in Model)
+    {
+        @await Component.InvokeAsync("BlogPreview", new { blogViewModel = blog })
+    }
+</div>

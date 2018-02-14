@@ -14,6 +14,7 @@ namespace AlphaDev.Core
         public abstract string Content { get; }
 
         public static BlogBase Empty => EmptyBlogEntry.Value;
+        public abstract int Id { get; }
 
         private class EmptyBlog : BlogBase
         {
@@ -24,6 +25,7 @@ namespace AlphaDev.Core
             public override Dates Dates => EmptyDates;
 
             public override string Content => string.Empty;
+            public override int Id => default(int);
         }
     }
 }

@@ -1,0 +1,20 @@
+﻿@using NString
+@model AlphaDev.Web.Models.BlogViewModel
+    
+<div class="bubble">
+    <div class="text-center">
+        <h3 class="nomargin">@Model.Title</h3>
+        <div class="nomargin">
+            @await Component.InvokeAsync("Dates", new { Model.Dates.Created, Model.Dates.Modified })
+        </div>
+    </div>
+
+    <div class="blog-content">
+        <markdown>
+            @Model.Content?.Truncate(100)
+        </markdown>
+    </div>
+    <div>
+        <a asp-controller="Posts" asp-action="Index" asp-route-id="@Model.Id">View more...</a>
+    </div>
+</div>

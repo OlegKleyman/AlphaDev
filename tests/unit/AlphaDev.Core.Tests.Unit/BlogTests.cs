@@ -14,9 +14,11 @@ namespace AlphaDev.Core.Tests.Unit
 
             var title = "test title";
             var content = "test content";
+            var id = 123;
 
-            var blog = new Blog(title, content, dates);
+            var blog = new Blog(id, title, content, dates);
 
+            blog.Id.ShouldBeEquivalentTo(id);
             blog.Dates.ShouldBeEquivalentTo(dates);
             blog.Title.ShouldBeEquivalentTo(title);
             blog.Content.ShouldBeEquivalentTo(content);

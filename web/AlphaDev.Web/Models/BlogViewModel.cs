@@ -1,9 +1,13 @@
 namespace AlphaDev.Web.Models
 {
-    public class BlogViewModel : PageViewModel
+    public class BlogViewModel
     {
-        public BlogViewModel(string title, string content, DatesViewModel dates) : base(title)
+        public string Title { get; }
+
+        public BlogViewModel(int id, string title, string content, DatesViewModel dates)
         {
+            Id = id;
+            Title = title;
             Content = content;
             Dates = dates;
         }
@@ -11,5 +15,6 @@ namespace AlphaDev.Web.Models
         public DatesViewModel Dates { get; }
 
         public string Content { get; }
+        public int Id { get; set; }
     }
 }

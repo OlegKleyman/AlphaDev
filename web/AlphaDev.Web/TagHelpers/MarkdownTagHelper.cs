@@ -11,9 +11,9 @@ namespace AlphaDev.Web.TagHelpers
         {
             var content = (output ?? throw new ArgumentNullException(nameof(output)))
                 .GetChildContentAsync(NullHtmlEncoder.Default)
-                .GetAwaiter().GetResult();
+                ?.GetAwaiter().GetResult();
 
-            output.Content.SetHtmlContent(Markdown.ToHtml(content.GetContent().Trim()));
+            output.Content.SetHtmlContent(Markdown.ToHtml(content?.GetContent()?.Trim()));
 
             output.TagName = string.Empty;
 

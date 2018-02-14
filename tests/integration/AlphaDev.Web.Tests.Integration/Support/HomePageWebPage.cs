@@ -13,12 +13,12 @@ namespace AlphaDev.Web.Tests.Integration.Support
 
         public BlogPost LatestBlog => new BlogPost(Driver.FindElement(
             By.CssSelector(
-                "div.blog .title h2")).Text, Driver.FindElement(
+                ".blog .title h3")).Text, Driver.FindElement(
                 By.CssSelector(
-                    "div.blog .content"))
+                    ".blog .blog-content"))
             .GetAttribute("innerHTML").Trim(), new BlogDate(Driver.FindElement(
             By.CssSelector(
-                "div.blog .dates .created-date")).Text, Option.Some(Driver.FindElements(By.CssSelector(
-            "div.blog .dates .modified-date")).FirstOrDefault()?.Text).NotNull()));
+                ".blog .dates .created-date")).Text, Option.Some(Driver.FindElements(By.CssSelector(
+            ".blog .dates .modified-date")).FirstOrDefault()?.Text).NotNull()));
     }
 }
