@@ -59,6 +59,15 @@ namespace AlphaDev.Web.Bootstrap
                             Created = new DateTime(2016, 7, 7),
                             Modified = new DateTime(2017, 7, 10)
                         });
+
+                    blogContext.Blogs.Add(
+                        new Blog
+                        {
+                            Content = GetDevelopmentContent(),
+                            Title = "testing two",
+                            Created = new DateTime(2016, 7, 7),
+                            Modified = new DateTime(2017, 7, 10)
+                        });
                     blogContext.SaveChanges();
                 }
             }
@@ -71,12 +80,12 @@ namespace AlphaDev.Web.Bootstrap
         private string GetDevelopmentContent()
         {
             return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porttitor rutrum "
-                   + "tellus, a fermentum lacus congue eget. Interdum et malesuada fames ac ante ipsum primis "
-                   + "in faucibus. Proin imperdiet nisl ullamcorper nisi accumsan, in ultrices diam iaculis. "
                    + "\n\n```csharp\nusing Foo.Bar;\n\nnamespace Baz\n{\n    [Qux(\"...\")]\n    public class Quux : "
                    + "ICorge\n    {\n        public static Grault<Garply> Waldo(Fred plugh)\n        {\n            "
                    + "Console.WriteLine($\"Hello {plugh.ToString()}!\");\n            return new Grault<Garply>("
                    + "new int[] { 1, 2, 3 })\n        }\n    }\n}\n```\n"
+                   + "tellus, a fermentum lacus congue eget. Interdum et malesuada fames ac ante ipsum primis "
+                   + "in faucibus. Proin imperdiet nisl ullamcorper nisi accumsan, in ultrices diam iaculis. "
                    + "Interdum et malesuada fames ac ante ipsum "
                    + "primis in faucibus. Vestibulum sed pulvinar lorem. Maecenas eget sollicitudin odio. Sed "
                    + "mattis sem sit amet orci pharetra, at laoreet felis faucibus. Donec eleifend urna et "
