@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AlphaDev.Core.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
 using Optional;
 
 namespace AlphaDev.Core
@@ -25,6 +25,14 @@ namespace AlphaDev.Core
                     targetBlog.Content ?? string.Empty,
                     new Dates(targetBlog.Created, targetBlog.Modified.ToOption()))
                 : BlogBase.Empty;
+        }
+
+        public IEnumerable<BlogBase> GetAll()
+        {
+            return _context.Blogs.SomeNotNull().Match(blogs => blogs.Select(targetBlog => new Blog(targetBlog.Id,
+                targetBlog.Title ?? string.Empty,
+                targetBlog.Content ?? string.Empty,
+                new Dates(targetBlog.Created, targetBlog.Modified.ToOption()))), Enumerable.Empty<Blog>);
         }
     }
 }
