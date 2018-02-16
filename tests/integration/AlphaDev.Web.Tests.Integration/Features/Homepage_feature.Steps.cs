@@ -95,16 +95,17 @@ namespace AlphaDev.Web.Tests.Integration.Features
             blog.Content = "Content integration `<test2>testing</test2>`.";
 
             DatabaseFixture.BlogContext.AddRangeAndSave(
-                DatabaseFixture.DefaultBlog);
+                blog);
         }
 
         private void And_there_are_multiple_blog_posts_at_different_times()
         {
             var blogs = DatabaseFixture.DefaultBlogs;
-            blogs[0].Modified = null;
+            blogs[0].Created = DateTime.MinValue;
+            blogs[1].Created = DateTime.MaxValue;
 
             DatabaseFixture.BlogContext.AddRangeAndSave(
-                DatabaseFixture.DefaultBlogs);
+                blogs);
         }
 
         private void And_there_is_a_blog_post_with_single_digit_days()
