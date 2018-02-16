@@ -48,7 +48,7 @@ input[type="checkbox"].input-validation-error { border: 0 none; }
 
 .bubble div:first-of-type {
     margin-top: 4px;
-    background-color: #ccc;
+    background-color: #bbb;
     padding: 3px;
     -ms-border-radius: 25px;
     border-radius: 25px;
