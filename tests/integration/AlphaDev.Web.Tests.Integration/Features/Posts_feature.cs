@@ -39,7 +39,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 CommonSteps.Given_i_am_a_user,
                 And_there_are_multiple_posts,
                 When_i_go_to_the_posts_page,
-                Then_it_should_display_all_posts_ordered_by_date);
+                Then_it_should_display_all_posts_ordered_by_creation_date_descending);
         }
 
         [Scenario]

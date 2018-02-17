@@ -40,17 +40,10 @@ namespace AlphaDev.Web.Tests.Integration.Features
             SiteTester.Posts.Posts.Should().HaveSameCount(DatabaseFixture.BlogContext.Blogs);
         }
 
-        private void Then_it_should_display_all_posts_ordered_by_date()
+        private void Then_it_should_display_all_posts_ordered_by_creation_date_descending()
         {
-            SiteTester.Posts.Posts.ShouldBeEquivalentTo(
-                DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
-                    {
-                        Dates = new
-                        {
-                            Created = blog.Created.ToString(FullDateFormatString, CultureInfo.InvariantCulture)
-                        }
-                    }),
-                options => options.ExcludingMissingMembers());
+            SiteTester.Posts.Posts.Select(post => DateTime.Parse(post.Dates.Created)).Should()
+                .BeInDescendingOrder(createdDate => createdDate);
         }
 
         private void Then_it_should_display_all_posts_with_markdown_parsed_to_html()
@@ -72,19 +65,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 blogs[i].Content = $"Content integration `<test{i}>testing</test{i}>`.";
             }
             
-            DatabaseFixture.BlogContext.AddRangeAndSave(
-                blogs);
-        }
-
-        private void And_all_posts_were_modified()
-        {
-            var blogs = DatabaseFixture.DefaultBlogs;
-
-            for (var i = 0; i < blogs.Length; i++)
-            {
-                blogs[i].Modified = new DateTime(2018, 2, i + 1);
-            }
-
             DatabaseFixture.BlogContext.AddRangeAndSave(
                 blogs);
         }
@@ -113,19 +93,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 options => options.ExcludingMissingMembers());
         }
 
-        private void And_all_posts_were_not_modified()
-        {
-            var blogs = DatabaseFixture.DefaultBlogs;
-
-            foreach (var blog in blogs)
-            {
-                blog.Modified = null;
-            }
-
-            DatabaseFixture.BlogContext.AddRangeAndSave(
-                blogs);
-        }
-
         private void And_all_posts_were(ModifiedState modifiedState)
         {
             var blogs = DatabaseFixture.DefaultBlogs;
@@ -137,11 +104,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
             DatabaseFixture.BlogContext.AddRangeAndSave(
                 blogs);
-        }
-
-        private void Then_it_should_display_all_blog_post_with_(bool modifiedState)
-        {
-            throw new NotImplementedException();
         }
     }
 }

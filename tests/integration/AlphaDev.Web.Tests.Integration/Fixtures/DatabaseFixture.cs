@@ -41,7 +41,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             {
                 Content = "Content integration test1.",
                 Title = "Title integration test1.",
-                Created = new DateTime(2016, 1, 1),
+                Created = new DateTime(2014, 1, 1),
                 Modified = new DateTime(2016, 2, 1)
             },
             new Blog

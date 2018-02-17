@@ -1,5 +1,7 @@
-﻿using LightBDD.Framework;
+﻿using AlphaDev.Web.Tests.Integration.Support;
+using LightBDD.Framework;
 using LightBDD.Framework.Scenarios.Basic;
+using LightBDD.Framework.Scenarios.Extended;
 using LightBDD.XUnit2;
 using Xunit;
 
@@ -61,16 +63,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
         }
 
         [Scenario]
-        public void Display_post_with_modification_date()
-        {
-            Runner.RunScenario(
-                CommonSteps.Given_i_am_a_user,
-                And_the_latest_blog_post_was_modified,
-                When_i_go_to_the_homepage,
-                Then_it_should_display_with_modification_date);
-        }
-
-        [Scenario]
         public void Display_post_with_title()
         {
             Runner.RunScenario(
@@ -81,16 +73,16 @@ namespace AlphaDev.Web.Tests.Integration.Features
         }
 
         [Scenario]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void Display_modified_date_based_on_whether_was_modified_or_not(bool modifiedState)
+        [InlineData(ModifiedState.Modified)]
+        [InlineData(ModifiedState.NotModified)]
+        public void Display_modified_date_based_on_whether_was_modified_or_not(ModifiedState modifiedState)
         {
             Runner.RunScenario(
-                CommonSteps.Given_i_am_a_user,
-                And_there_are_multiple_blog_posts_at_different_times,
-                () => And_the_latest_blog_post_was(modifiedState),
-                When_i_go_to_the_homepage,
-                () => Then_it_should_display_the_latest_blog_post_with_modification_date(modifiedState));
+                _ => CommonSteps.Given_i_am_a_user(),
+                _ => And_there_are_multiple_blog_posts_at_different_times(),
+                _ => And_the_latest_blog_post_was(modifiedState),
+                _ => When_i_go_to_the_homepage(),
+                _ => Then_it_should_display_the_blog_with_a_modification_date_if_it_exists());
         }
 
         [Scenario]
