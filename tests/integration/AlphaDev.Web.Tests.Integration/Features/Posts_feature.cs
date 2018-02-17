@@ -73,5 +73,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 _ => When_i_go_to_the_posts_page(),
                 _ => Then_it_should_display_all_posts_with_modification_date_if_it_exists());
         }
+
+        [Scenario]
+        public void Posts_page_should_load_all_posts_with_a_navigation_link_to_the_entire_post()
+        {
+            Runner.RunScenario(
+                CommonSteps.Given_i_am_a_user,
+                And_there_are_multiple_posts,
+                When_i_go_to_the_posts_page,
+                Then_it_should_display_all_posts_with_a_navigation_link_to_the_entire_post);
+        }
     }
 }

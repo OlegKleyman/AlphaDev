@@ -21,7 +21,9 @@ namespace AlphaDev.Web.Tests.Integration.Support
                         element.FindElement(By.CssSelector(".blog-content")).GetAttribute("innerHTML").Trim(),
                         new BlogDate(element.FindElement(By.CssSelector(".created-date")).Text,
                             (element.FindElements(By.CssSelector(".modified-date")).FirstOrDefault()?.Text)
-                            .SomeNotNull())));
+                            .SomeNotNull()),
+                        new NavigationLink(element.FindElement(By.CssSelector(".navigation-link a"))
+                            .GetAttribute("href"))));
             }
         }
     }

@@ -105,5 +105,19 @@ namespace AlphaDev.Web.Tests.Integration.Features
             DatabaseFixture.BlogContext.AddRangeAndSave(
                 blogs);
         }
+
+        private void Then_it_should_display_all_posts_with_a_navigation_link_to_the_entire_post()
+        {
+            SiteTester.Posts.Posts.ShouldBeEquivalentTo(
+                DatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
+                {
+                    NavigationLink = new
+                    {
+                        Href = new Uri(SiteTester.Posts.BaseUrl,
+                            blog.Id.ToString(CultureInfo.InvariantCulture)).AbsoluteUri
+                    }
+                }),
+                options => options.ExcludingMissingMembers());
+        }
     }
 }

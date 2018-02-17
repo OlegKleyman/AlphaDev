@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AlphaDev.Web.Controllers
 {
+    [Route("posts")]
     public class PostsController : Controller
     {
         private readonly IBlogService _blogService;
@@ -16,7 +17,7 @@ namespace AlphaDev.Web.Controllers
         {
             _blogService = blogService;
         }
-
+        
         public ViewResult Index()
         {
             var blogs = _blogService.GetAll();
@@ -26,6 +27,12 @@ namespace AlphaDev.Web.Controllers
                 new DatesViewModel(blog.Dates.Created, blog.Dates.Modified))).OrderByDescending(viewModel => viewModel.Dates.Created);
 
             return View(nameof(Index), model);
+        }
+
+        [Route("{id}")]
+        public ViewResult Index(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
