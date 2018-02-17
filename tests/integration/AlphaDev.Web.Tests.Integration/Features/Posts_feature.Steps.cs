@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using AlphaDev.Core.Data.Entities;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using AlphaDev.Web.Tests.Integration.Support;
 using FluentAssertions;
-using LightBDD.Framework.Scenarios.Basic;
 using Markdig;
 using Omego.Extensions.DbContextExtensions;
-using Omego.Extensions.EnumerableExtensions;
 using Optional;
 using Xunit.Abstractions;
 
@@ -16,10 +13,11 @@ namespace AlphaDev.Web.Tests.Integration.Features
 {
     public partial class Posts_feature : WebFeatureFixture
     {
-        public Posts_feature(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) : base(output, databaseWebServerFixture)
+        public Posts_feature(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) : base(output,
+            databaseWebServerFixture)
         {
         }
-        
+
         private void When_i_go_to_the_posts_page()
         {
             SiteTester.Posts.GoTo();
@@ -50,9 +48,9 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             SiteTester.Posts.Posts.ShouldBeEquivalentTo(
                 DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
-                    {
-                        Content = Markdown.ToHtml(blog.Content).Trim()
-                    }),
+                {
+                    Content = Markdown.ToHtml(blog.Content).Trim()
+                }),
                 options => options.ExcludingMissingMembers());
         }
 
@@ -61,10 +59,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
             var blogs = DatabaseFixture.DefaultBlogs;
 
             for (var i = 0; i < blogs.Length; i++)
-            {
                 blogs[i].Content = $"Content integration `<test{i}>testing</test{i}>`.";
-            }
-            
+
             DatabaseFixture.BlogContext.AddRangeAndSave(
                 blogs);
         }
@@ -73,13 +69,13 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             SiteTester.Posts.Posts.ShouldBeEquivalentTo(
                 DatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
+                {
+                    Dates = new
                     {
-                        Dates = new
-                        {
-                            Modified = blog.Modified.ToOption().FlatMap(time =>
-                                Option.Some(time.ToString(FullDateFormatString, CultureInfo.InvariantCulture)))
-                        }
-                    }),
+                        Modified = blog.Modified.ToOption().FlatMap(time =>
+                            Option.Some(time.ToString(FullDateFormatString, CultureInfo.InvariantCulture)))
+                    }
+                }),
                 options => options.ExcludingMissingMembers());
         }
 
@@ -98,9 +94,9 @@ namespace AlphaDev.Web.Tests.Integration.Features
             var blogs = DatabaseFixture.DefaultBlogs;
 
             for (var i = 0; i < blogs.Length; i++)
-            {
-                blogs[i].Modified = modifiedState == ModifiedState.Modified ? new DateTime(2017, 7, i + 1) : (DateTime?)null;
-            }
+                blogs[i].Modified = modifiedState == ModifiedState.Modified
+                    ? new DateTime(2017, 7, i + 1)
+                    : (DateTime?) null;
 
             DatabaseFixture.BlogContext.AddRangeAndSave(
                 blogs);

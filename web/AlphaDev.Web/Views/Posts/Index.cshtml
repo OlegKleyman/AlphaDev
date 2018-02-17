@@ -9,6 +9,6 @@
 <div class="blog container">
     @foreach (var blog in Model)
     {
-        @await Component.InvokeAsync("BlogPreview", new { blogViewModel = blog })
+        @await Component.InvokeAsync("BlogPreview", new {blogViewModel = blog})
     }
 </div>

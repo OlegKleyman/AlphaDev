@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AlphaDev.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewComponents;
 
 namespace AlphaDev.Web.ViewComponents
 {
@@ -10,7 +9,7 @@ namespace AlphaDev.Web.ViewComponents
         public Task<IViewComponentResult> InvokeAsync(BlogViewModel blogViewModel)
         {
             return Task.Run(
-                () => (IViewComponentResult)View("BlogPreview", blogViewModel));
+                () => (IViewComponentResult) View("BlogPreview", blogViewModel));
         }
     }
 }

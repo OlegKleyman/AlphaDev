@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AlphaDev.Core.Data.Contexts;
-using Microsoft.EntityFrameworkCore;
 using Optional;
 
 namespace AlphaDev.Core

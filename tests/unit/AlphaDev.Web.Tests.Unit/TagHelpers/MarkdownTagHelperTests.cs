@@ -16,7 +16,8 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
         [InlineData("`test`", "<p><code>test</code></p>\n")]
         [InlineData("`<s>test</s>`", "<p><code>&lt;s&gt;test&lt;/s&gt;</code></p>\n")]
         [InlineData("\n   `<s>test</s>`", "<p><code>&lt;s&gt;test&lt;/s&gt;</code></p>\n")]
-        [InlineData("```csharp\n<s>test</s>\n```", "<pre><code class=\"language-csharp\">&lt;s&gt;test&lt;/s&gt;\n</code></pre>\n")]
+        [InlineData("```csharp\n<s>test</s>\n```",
+            "<pre><code class=\"language-csharp\">&lt;s&gt;test&lt;/s&gt;\n</code></pre>\n")]
         public void ProcessShouldConvertMarkdownToHtml(string markdown, string expected)
         {
             var sut = GetMarkdownTagHelper();
@@ -43,7 +44,8 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
         [InlineData("`test`", "<p><code>test</code></p>\n")]
         [InlineData("`<s>test</s>`", "<p><code>&lt;s&gt;test&lt;/s&gt;</code></p>\n")]
         [InlineData("\n   `<s>test</s>`", "<p><code>&lt;s&gt;test&lt;/s&gt;</code></p>\n")]
-        [InlineData("```csharp\n<s>test</s>\n```", "<pre><code class=\"language-csharp\">&lt;s&gt;test&lt;/s&gt;\n</code></pre>\n")]
+        [InlineData("```csharp\n<s>test</s>\n```",
+            "<pre><code class=\"language-csharp\">&lt;s&gt;test&lt;/s&gt;\n</code></pre>\n")]
         public async Task ProcessAsyncShouldConvertMarkdownToHtml(string markdown, string expected)
         {
             var sut = GetMarkdownTagHelper();

@@ -18,7 +18,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             Driver.Manage().Window.Maximize();
 
             HomePage = new HomePageWebPage(Driver, baseUrl);
-            Posts=new PostsWebPage(Driver, new Uri(baseUrl, "posts/"));
+            Posts = new PostsWebPage(Driver, new Uri(baseUrl, "posts/"));
         }
 
         public IWebDriver Driver { get; }

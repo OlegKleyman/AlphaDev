@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using AlphaDev.Core;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
@@ -28,28 +27,24 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void IndexShouldReturnBlogModelWithValuesSetFromTheBlogService()
+        public void IndexShouldReturnBlogModelAssignableToEnumerableOfBlogViewModel()
         {
-            var blog = new Blog(123,
-                "title",
-                "content",
-                new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
+            var blogs = new[]
+            {
+                new Blog(321, default(string), default(string),
+                    new Dates(new DateTime(2014, 1, 1), Option.None<DateTime>())),
+                new Blog(123,
+                    "title",
+                    "content",
+                    new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))))
+            };
 
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetAll().Returns(new[]{blog});
+            blogService.GetAll().Returns(blogs);
 
             var controller = GetPostsController(blogService);
 
-            controller.Index().Model.ShouldBeEquivalentTo(
-                new[] {new {blog.Id, blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}}});
-        }
-
-        [Fact]
-        public void IndexShouldReturnIndexView()
-        {
-            var controller = GetPostsController();
-
-            controller.Index().Should().BeOfType<ViewResult>();
+            controller.Index().Model.Should().BeAssignableTo<IEnumerable<BlogViewModel>>();
         }
 
         [Fact]
@@ -57,7 +52,8 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var blogs = new[]
             {
-                new Blog(321, default(string), default(string), new Dates(new DateTime(2014,1,1), Option.None<DateTime>())),
+                new Blog(321, default(string), default(string),
+                    new Dates(new DateTime(2014, 1, 1), Option.None<DateTime>())),
                 new Blog(123,
                     "title",
                     "content",
@@ -74,24 +70,28 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void IndexShouldReturnBlogModelAssignableToEnumerableOfBlogViewModel()
+        public void IndexShouldReturnBlogModelWithValuesSetFromTheBlogService()
         {
-            var blogs = new[]
-            {
-                new Blog(321, default(string), default(string), new Dates(new DateTime(2014,1,1), Option.None<DateTime>())),
-                new Blog(123,
-                    "title",
-                    "content",
-                    new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))))
-            };
+            var blog = new Blog(123,
+                "title",
+                "content",
+                new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
 
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetAll().Returns(blogs);
+            blogService.GetAll().Returns(new[] {blog});
 
             var controller = GetPostsController(blogService);
 
-            controller.Index().Model.Should().BeAssignableTo<IEnumerable<BlogViewModel>>();
+            controller.Index().Model.ShouldBeEquivalentTo(
+                new[] {new {blog.Id, blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}}});
         }
 
+        [Fact]
+        public void IndexShouldReturnIndexView()
+        {
+            var controller = GetPostsController();
+
+            controller.Index().Should().BeOfType<ViewResult>();
+        }
     }
 }
