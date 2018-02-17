@@ -65,7 +65,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         [Scenario]
         [InlineData(ModifiedState.Modified)]
         [InlineData(ModifiedState.NotModified)]
-        public void Display_modified_date_for_all_posts_based_on_whether_was(ModifiedState modifiedState)
+        public void Display_modified_date_for_posts_based_on_whether_was(ModifiedState modifiedState)
         {
             Runner.RunScenario(
                 _ => CommonSteps.Given_i_am_a_user(),

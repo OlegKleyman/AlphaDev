@@ -75,7 +75,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         [Scenario]
         [InlineData(ModifiedState.Modified)]
         [InlineData(ModifiedState.NotModified)]
-        public void Display_modified_date_based_on_whether_was_modified_or_not(ModifiedState modifiedState)
+        public void Display_modified_date_based_on_whether_was(ModifiedState modifiedState)
         {
             Runner.RunScenario(
                 _ => CommonSteps.Given_i_am_a_user(),
