@@ -40,7 +40,10 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
         {
             var sut = GetDisplayTagHelper();
 
-            async Task ProcessAsync() => await sut.ProcessAsync(null, null);
+            async Task ProcessAsync()
+            {
+                await sut.ProcessAsync(null, null);
+            }
 
             new Func<Task>(ProcessAsync).Should().Throw<ArgumentNullException>()
                 .WithMessage("Value cannot be null.\r\nParameter name: output");
@@ -60,7 +63,8 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             Action process = () => sut.Process(null, null);
 
-            process.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: output")
+            process.Should().Throw<ArgumentNullException>()
+                .WithMessage("Value cannot be null.\r\nParameter name: output")
                 .Which.ParamName.Should().BeEquivalentTo("output");
         }
     }

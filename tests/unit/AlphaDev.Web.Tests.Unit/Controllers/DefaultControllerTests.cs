@@ -28,7 +28,8 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         [Fact]
         public void ErrorShouldReturnErrorView()
         {
-            GetDefaultController().Error().Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("Error");
+            GetDefaultController().Error().Should().BeOfType<ViewResult>().Which.ViewName.Should()
+                .BeEquivalentTo("Error");
         }
 
         [Fact]
