@@ -25,7 +25,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_load()
         {
-            SiteTester.Posts.Title.ShouldBeEquivalentTo("Posts - AlphaDev");
+            SiteTester.Posts.Title.Should().BeEquivalentTo("Posts - AlphaDev");
         }
 
         private void And_there_are_multiple_posts()
@@ -46,7 +46,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_all_posts_with_markdown_parsed_to_html()
         {
-            SiteTester.Posts.Posts.ShouldBeEquivalentTo(
+            SiteTester.Posts.Posts.Should().BeEquivalentTo(
                 DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
                 {
                     Content = Markdown.ToHtml(blog.Content).Trim()
@@ -67,7 +67,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_all_posts_with_modification_date_if_it_exists()
         {
-            SiteTester.Posts.Posts.ShouldBeEquivalentTo(
+            SiteTester.Posts.Posts.Should().BeEquivalentTo(
                 DatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
                 {
                     Dates = new
@@ -81,7 +81,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_all_posts_with_a_title()
         {
-            SiteTester.Posts.Posts.ShouldBeEquivalentTo(
+            SiteTester.Posts.Posts.Should().BeEquivalentTo(
                 DatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
                 {
                     blog.Title
@@ -104,7 +104,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_all_posts_with_a_navigation_link_to_the_entire_post()
         {
-            SiteTester.Posts.Posts.ShouldBeEquivalentTo(
+            SiteTester.Posts.Posts.Should().BeEquivalentTo(
                 DatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
                 {
                     NavigationLink = new

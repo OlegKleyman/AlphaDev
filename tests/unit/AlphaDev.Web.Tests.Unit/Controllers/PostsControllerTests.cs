@@ -82,7 +82,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var controller = GetPostsController(blogService);
 
-            controller.Index().Model.ShouldBeEquivalentTo(
+            controller.Index().Model.Should().BeEquivalentTo(
                 new[] {new {blog.Id, blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}}});
         }
 

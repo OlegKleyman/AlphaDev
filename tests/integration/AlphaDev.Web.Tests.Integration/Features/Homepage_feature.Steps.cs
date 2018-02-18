@@ -27,18 +27,18 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_load()
         {
-            SiteTester.HomePage.Title.ShouldBeEquivalentTo("Home - AlphaDev");
+            SiteTester.HomePage.Title.Should().BeEquivalentTo("Home - AlphaDev");
         }
 
         private void Then_it_should_display_navigation_links()
         {
-            SiteTester.HomePage.Navigation.ShouldBeEquivalentTo(new[] {"Posts", "About", "Contact"},
-                options => options.Including(info => info.SelectedMemberPath == "Text"));
+            SiteTester.HomePage.Navigation.Select(element => element.Text).Should()
+                .BeEquivalentTo("Posts", "About", "Contact");
         }
 
         private void Then_it_should_display_the_latest_blog_post()
         {
-            SiteTester.HomePage.LatestBlog.ShouldBeEquivalentTo(
+            SiteTester.HomePage.LatestBlog.Should().BeEquivalentTo(
                 DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
                     {
                         Dates = new
@@ -61,7 +61,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_the_blog_with_a_modification_date_if_it_exists()
         {
-            SiteTester.HomePage.LatestBlog.ShouldBeEquivalentTo(
+            SiteTester.HomePage.LatestBlog.Should().BeEquivalentTo(
                 DatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
                 {
                     Dates = new
@@ -80,7 +80,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_an_error()
         {
-            SiteTester.Driver.Title.ShouldBeEquivalentTo("Error - AlphaDev");
+            SiteTester.Driver.Title.Should().BeEquivalentTo("Error - AlphaDev");
         }
 
         private void Then_an_error_should_be_logged()
@@ -90,7 +90,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_blog_post_with_markdown_parsed_to_html()
         {
-            SiteTester.HomePage.LatestBlog.ShouldBeEquivalentTo(
+            SiteTester.HomePage.LatestBlog.Should().BeEquivalentTo(
                 DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
                     {
                         Content = Markdown.ToHtml(blog.Content).Trim()
@@ -147,7 +147,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_title()
         {
-            SiteTester.HomePage.LatestBlog.ShouldBeEquivalentTo(
+            SiteTester.HomePage.LatestBlog.Should().BeEquivalentTo(
                 DatabaseFixture.BlogContext.Blogs
                     .FirstOrThrow(new InvalidOperationException("No blogs found.")),
                 options => options.Including(post => post.Title));

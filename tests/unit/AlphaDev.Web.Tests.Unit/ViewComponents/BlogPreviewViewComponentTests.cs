@@ -23,7 +23,7 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
 
             var result = (ViewViewComponentResult) await sut.InvokeAsync(null);
 
-            result.ViewName.ShouldBeEquivalentTo("BlogPreview");
+            result.ViewName.Should().BeEquivalentTo("BlogPreview");
         }
 
         [Fact]

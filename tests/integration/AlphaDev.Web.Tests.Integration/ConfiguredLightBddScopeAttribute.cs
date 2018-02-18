@@ -1,5 +1,4 @@
-﻿using System;
-using AlphaDev.Web.Tests.Integration.Features;
+﻿using AlphaDev.Web.Tests.Integration.Features;
 using LightBDD.Core.Configuration;
 using LightBDD.Framework.Notification;
 using LightBDD.Framework.Notification.Configuration;
@@ -15,10 +14,8 @@ namespace AlphaDev.Web.Tests.Integration
             var notifierConfig = configuration.Get<ScenarioProgressNotifierConfiguration>();
 
             notifierConfig
-                .UpdateNotifierProvider<FeatureFixture>(tester => new DelegatingScenarioProgressNotifier(new
-                        SeleniumNotifier((tester as WebFeatureFixture)?.SiteTester.Driver as ITakesScreenshot),
-                    ParallelProgressNotifierProvider.Default.CreateScenarioProgressNotifier(Console.WriteLine,
-                        tester.TestOutput.WriteLine)));
+                .AppendNotifierProviders<FeatureFixture>(tester => new DelegatingScenarioProgressNotifier(new
+                    SeleniumNotifier((tester as WebFeatureFixture)?.SiteTester.Driver as ITakesScreenshot)));
         }
     }
 }

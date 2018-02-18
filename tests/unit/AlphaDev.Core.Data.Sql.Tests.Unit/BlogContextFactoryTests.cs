@@ -26,7 +26,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
             // bonkers.
             factory.CreateDbContext(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject
                 .ConnectionString
-                .ShouldBeEquivalentTo("Data Source=(Test);");
+                .Should().BeEquivalentTo("Data Source=(Test);");
         }
 
         [Fact]
@@ -38,7 +38,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
             // bonkers.
             factory.CreateDbContext(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject
                 .ConnectionString
-                .ShouldBeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
+                .Should().BeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
             // bonkers.
             factory.CreateDbContext(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject
                 .ConnectionString
-                .ShouldBeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
+                .Should().BeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
             // bonkers.
             factory.CreateDbContext(null).Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject
                 .ConnectionString
-                .ShouldBeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
+                .Should().BeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
         }
     }
 }
