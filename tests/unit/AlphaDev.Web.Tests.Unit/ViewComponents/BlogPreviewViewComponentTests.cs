@@ -41,8 +41,8 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
         {
             var sut = BlogViewComponent();
 
-            var blogViewModel = new BlogViewModel(default(int), default(string), default(string),
-                new DatesViewModel(default(DateTime), Option.None<DateTime>()));
+            var blogViewModel = new BlogViewModel(default, default, default,
+                new DatesViewModel(default, Option.None<DateTime>()));
             var result = (BlogViewModel) ((ViewViewComponentResult) await sut.InvokeAsync(blogViewModel)).ViewData
                 .Model;
             result.Should().BeSameAs(blogViewModel);
@@ -53,9 +53,9 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
         {
             var sut = BlogViewComponent();
 
-            var result = (ViewViewComponentResult) await sut.InvokeAsync(new BlogViewModel(default(int),
-                default(string),
-                default(string), new DatesViewModel(default(DateTime), Option.None<DateTime>())));
+            var result = (ViewViewComponentResult) await sut.InvokeAsync(new BlogViewModel(default,
+                default,
+                default, new DatesViewModel(default, Option.None<DateTime>())));
 
             result.ViewData.Model.Should()
                 .BeOfType<BlogViewModel>();

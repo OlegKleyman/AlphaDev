@@ -22,7 +22,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
         {
             var sut = GetMarkdownTagHelper();
 
-            var tagHelperOutput = new TagHelperOutput(default(string), new TagHelperAttributeList(), (_, __) =>
+            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(), (_, __) =>
             {
                 var content = new DefaultTagHelperContent();
 
@@ -50,7 +50,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
         {
             var sut = GetMarkdownTagHelper();
 
-            var tagHelperOutput = new TagHelperOutput(default(string), new TagHelperAttributeList(), (_, __) =>
+            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(), (_, __) =>
             {
                 var content = new DefaultTagHelperContent();
 
@@ -77,7 +77,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
         {
             var sut = GetMarkdownTagHelper();
 
-            var tagHelperOutput = new TagHelperOutput(default(string), new TagHelperAttributeList(), (_, __) =>
+            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(), (_, __) =>
             {
                 var content = new DefaultTagHelperContent();
 

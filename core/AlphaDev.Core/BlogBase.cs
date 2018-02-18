@@ -18,14 +18,14 @@ namespace AlphaDev.Core
 
         private class EmptyBlog : BlogBase
         {
-            private static readonly Dates EmptyDates = new Dates(default(DateTime), Option.None<DateTime>());
+            private static readonly Dates EmptyDates = new Dates(default, Option.None<DateTime>());
 
             public override string Title => string.Empty;
 
             public override Dates Dates => EmptyDates;
 
             public override string Content => string.Empty;
-            public override int Id => default(int);
+            public override int Id => default;
         }
     }
 }

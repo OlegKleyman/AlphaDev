@@ -21,7 +21,7 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
         {
             var sut = GetDatesViewComponent();
 
-            var result = (ViewViewComponentResult) await sut.InvokeAsync(default(DateTime), Option.None<DateTime>());
+            var result = (ViewViewComponentResult) await sut.InvokeAsync(default, Option.None<DateTime>());
 
             result.ViewName.ShouldBeEquivalentTo("Dates");
         }
@@ -31,7 +31,7 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
         {
             var sut = GetDatesViewComponent();
 
-            var result = await sut.InvokeAsync(default(DateTime), Option.None<DateTime>());
+            var result = await sut.InvokeAsync(default, Option.None<DateTime>());
 
             result.Should().BeOfType<ViewViewComponentResult>();
         }
@@ -41,7 +41,7 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
         {
             var sut = GetDatesViewComponent();
 
-            var result = (ViewViewComponentResult) await sut.InvokeAsync(default(DateTime), Option.None<DateTime>());
+            var result = (ViewViewComponentResult) await sut.InvokeAsync(default, Option.None<DateTime>());
             result.ViewData.Model.Should()
                 .BeOfType<DatesViewModel>();
         }

@@ -16,7 +16,7 @@ namespace AlphaDev.Core.Tests.Unit
                     Id = default(int),
                     Title = string.Empty,
                     Content = string.Empty,
-                    Dates = new Dates(default(DateTime), Option.None<DateTime>())
+                    Dates = new Dates(default, Option.None<DateTime>())
                 });
         }
     }
