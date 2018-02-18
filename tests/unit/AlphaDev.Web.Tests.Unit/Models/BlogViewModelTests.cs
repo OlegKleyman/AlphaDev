@@ -11,7 +11,7 @@ namespace AlphaDev.Web.Tests.Unit.Models
         [Fact]
         public void ConstructorShouldSetProperties()
         {
-            var dates = new DatesViewModel(default(DateTime), Option.None<DateTime>());
+            var dates = new DatesViewModel(default, Option.None<DateTime>());
 
             var title = "test title";
             var content = "test content";

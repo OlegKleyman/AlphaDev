@@ -3,7 +3,7 @@ using Optional;
 
 namespace AlphaDev.Core
 {
-    public struct Dates
+    public readonly struct Dates
     {
         public Dates(DateTime created, Option<DateTime> modified)
         {
@@ -13,6 +13,6 @@ namespace AlphaDev.Core
 
         public DateTime Created { get; }
 
-        public Option<DateTime> Modified { get; set; }
+        public Option<DateTime> Modified { get; }
     }
 }

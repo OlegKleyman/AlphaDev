@@ -2,7 +2,7 @@
 {
     public class Blog : BlogBase
     {
-        public Blog(int id, string title, string content, Dates dates)
+        public Blog(int id, string title, string content, in Dates dates)
         {
             Id = id;
             Title = title;

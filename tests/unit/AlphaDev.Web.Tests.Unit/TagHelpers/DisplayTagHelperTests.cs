@@ -19,7 +19,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             var sut = GetDisplayTagHelper();
 
             sut.Value = value;
-            var tagHelperOutput = new TagHelperOutput(default(string), new TagHelperAttributeList(), (_, __) => null);
+            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(), (_, __) => null);
             tagHelperOutput.Content.Append("test");
             sut.Process(null, tagHelperOutput);
 

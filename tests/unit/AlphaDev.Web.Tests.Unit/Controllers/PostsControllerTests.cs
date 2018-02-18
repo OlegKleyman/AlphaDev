@@ -16,7 +16,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         private PostsController GetPostsController()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetLatest().Returns(new Blog(default(int), null, null, default(Dates)));
+            blogService.GetLatest().Returns(new Blog(default, null, null, default));
 
             return GetPostsController(blogService);
         }
@@ -31,7 +31,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var blogs = new[]
             {
-                new Blog(321, default(string), default(string),
+                new Blog(321, default, default,
                     new Dates(new DateTime(2014, 1, 1), Option.None<DateTime>())),
                 new Blog(123,
                     "title",
@@ -52,7 +52,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var blogs = new[]
             {
-                new Blog(321, default(string), default(string),
+                new Blog(321, default, default,
                     new Dates(new DateTime(2014, 1, 1), Option.None<DateTime>())),
                 new Blog(123,
                     "title",

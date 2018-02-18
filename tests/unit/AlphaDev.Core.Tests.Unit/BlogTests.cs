@@ -10,7 +10,7 @@ namespace AlphaDev.Core.Tests.Unit
         [Fact]
         public void ConstructorShouldSetProperties()
         {
-            var dates = new Dates(default(DateTime), Option.None<DateTime>());
+            var dates = new Dates(default, Option.None<DateTime>());
 
             var title = "test title";
             var content = "test content";
