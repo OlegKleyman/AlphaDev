@@ -22,10 +22,10 @@
   <ItemGroup>
     <PackageReference Include="CoreCompat.Selenium.WebDriver" Version="3.4.0-beta001" />
     <PackageReference Include="FluentAssertions" Version="5.1.1" />
-    <PackageReference Include="LightBDD.XUnit2" Version="2.3.3" />
+    <PackageReference Include="LightBDD.XUnit2" Version="2.3.4" />
     <PackageReference Include="Markdig" Version="0.14.9" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
-    <PackageReference Include="Omego.Extensions" Version="2.0.18" />
+    <PackageReference Include="Omego.Extensions" Version="2.0.19" />
     <PackageReference Include="Selenium.PhantomJS.WebDriver" Version="2.1.1" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
