@@ -36,7 +36,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             tagHelperOutput.Content.WriteTo(writer, HtmlEncoder.Default);
 
-            writer.ToString().ShouldBeEquivalentTo(expected);
+            writer.ToString().Should().BeEquivalentTo(expected);
         }
 
         [Theory]
@@ -64,7 +64,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             tagHelperOutput.Content.WriteTo(writer, HtmlEncoder.Default);
 
-            writer.ToString().ShouldBeEquivalentTo(expected);
+            writer.ToString().Should().BeEquivalentTo(expected);
         }
 
         private MarkdownTagHelper GetMarkdownTagHelper()
@@ -99,8 +99,8 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             Action process = () => sut.Process(null, null);
 
-            process.ShouldThrow<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: output")
-                .Which.ParamName.ShouldBeEquivalentTo("output");
+            process.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: output")
+                .Which.ParamName.Should().BeEquivalentTo("output");
         }
     }
 }

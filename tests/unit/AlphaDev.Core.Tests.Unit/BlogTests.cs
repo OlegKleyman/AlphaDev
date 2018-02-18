@@ -18,10 +18,10 @@ namespace AlphaDev.Core.Tests.Unit
 
             var blog = new Blog(id, title, content, dates);
 
-            blog.Id.ShouldBeEquivalentTo(id);
-            blog.Dates.ShouldBeEquivalentTo(dates);
-            blog.Title.ShouldBeEquivalentTo(title);
-            blog.Content.ShouldBeEquivalentTo(content);
+            blog.Id.Should().Be(id);
+            blog.Dates.Should().BeEquivalentTo(dates);
+            blog.Title.Should().BeEquivalentTo(title);
+            blog.Content.Should().BeEquivalentTo(content);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
 
             var context = new BlogContext($"Server={server};Database={database};");
 
-            context.Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.ShouldBeEquivalentTo(
+            context.Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.Should().BeEquivalentTo(
                 new {Database = database, DataSource = server},
                 options => options.Including(connection => connection.Database)
                     .Including(connection => connection.DataSource));
@@ -36,7 +36,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
             context.OnConfiguringProxy(builder);
 
             builder.Options.GetExtension<SqlServerOptionsExtension>().ConnectionString
-                .ShouldBeEquivalentTo(connectionString);
+                .Should().BeEquivalentTo(connectionString);
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
                 ModifiedNullable = blogMetaData.FindProperty("Modified").IsNullable,
                 ContentNullable = blogMetaData.FindProperty("Content").IsNullable,
                 TitleNullable = blogMetaData.FindProperty("Title").IsNullable
-            }.ShouldBeEquivalentTo(new
+            }.Should().BeEquivalentTo(new
             {
                 PrimaryKeyName = "Id",
                 CreatedDefaultValue = "GETUTCDATE()",

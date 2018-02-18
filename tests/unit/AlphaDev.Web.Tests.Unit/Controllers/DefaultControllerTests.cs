@@ -28,7 +28,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         [Fact]
         public void ErrorShouldReturnErrorView()
         {
-            GetDefaultController().Error().Should().BeOfType<ViewResult>().Which.ViewName.ShouldBeEquivalentTo("Error");
+            GetDefaultController().Error().Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("Error");
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var controller = GetDefaultController(blogService);
 
-            controller.Index().Model.ShouldBeEquivalentTo(
+            controller.Index().Model.Should().BeEquivalentTo(
                 new {blog.Id, blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}});
         }
 

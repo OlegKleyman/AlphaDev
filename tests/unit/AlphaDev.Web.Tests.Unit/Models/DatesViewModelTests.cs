@@ -16,8 +16,8 @@ namespace AlphaDev.Web.Tests.Unit.Models
 
             var dates = new DatesViewModel(created, modified);
 
-            dates.Created.ShouldBeEquivalentTo(created);
-            dates.Modified.ShouldBeEquivalentTo(modified);
+            dates.Created.Should().Be(created);
+            dates.Modified.Should().BeEquivalentTo(modified);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
 
             var result = (ViewViewComponentResult) await sut.InvokeAsync(default, Option.None<DateTime>());
 
-            result.ViewName.ShouldBeEquivalentTo("Dates");
+            result.ViewName.Should().BeEquivalentTo("Dates");
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
 
             var result = (DatesViewModel) ((ViewViewComponentResult) await sut.InvokeAsync(created, modified)).ViewData
                 .Model;
-            result.ShouldBeEquivalentTo(new {Created = created, Modified = modified});
+            result.Should().BeEquivalentTo(new {Created = created, Modified = modified});
         }
     }
 }

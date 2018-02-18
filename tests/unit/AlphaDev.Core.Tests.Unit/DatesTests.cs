@@ -15,8 +15,8 @@ namespace AlphaDev.Core.Tests.Unit
 
             var dates = new Dates(created, modified);
 
-            dates.Created.ShouldBeEquivalentTo(created);
-            dates.Modified.ShouldBeEquivalentTo(modified);
+            dates.Created.Should().Be(created);
+            dates.Modified.Should().BeEquivalentTo(modified);
         }
     }
 }

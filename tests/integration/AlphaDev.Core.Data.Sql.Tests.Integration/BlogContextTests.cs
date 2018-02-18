@@ -128,7 +128,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
                 context.SaveChanges();
 
                 GetTable("Blogs").Last()["Created"].Should().BeOfType<DateTime>().Which.Should()
-                    .BeCloseTo(DateTime.UtcNow, 1000).And.Subject.ShouldBeEquivalentTo(blog.Created);
+                    .BeCloseTo(DateTime.UtcNow, 1000).And.Be(blog.Created);
             }
         }
 
@@ -155,7 +155,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
                     blog => blog.GetType().GetProperties()
                         .ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(blog, null)));
 
-                GetTable("Blogs").ShouldBeEquivalentTo(blogsDictionary);
+                GetTable("Blogs").Should().BeEquivalentTo(blogsDictionary);
             }
         }
 
@@ -171,7 +171,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
 
                 context.SaveChanges();
 
-                GetTable("Blogs").First().ShouldBeEquivalentTo(
+                GetTable("Blogs").First().Should().BeEquivalentTo(
                     targetBlog.GetType().GetProperties().ToDictionary(
                         x => x.Name,
                         x => x.GetGetMethod().Invoke(targetBlog, null)));

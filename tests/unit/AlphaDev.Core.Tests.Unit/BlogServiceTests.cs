@@ -25,7 +25,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetAll().ShouldBeEquivalentTo(
+            service.GetAll().Should().BeEquivalentTo(
                 new[] {new {Dates = new {Created = testValue}}},
                 options => options.ExcludingMissingMembers());
         }
@@ -39,7 +39,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetAll().ShouldBeEquivalentTo(
+            service.GetAll().Should().BeEquivalentTo(
                 new[] {new {Content = string.Empty}},
                 options => options.ExcludingMissingMembers());
         }
@@ -53,7 +53,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetAll().ShouldBeEquivalentTo(
+            service.GetAll().Should().BeEquivalentTo(
                 new[] {new {Title = string.Empty}},
                 options => options.ExcludingMissingMembers());
         }
@@ -70,7 +70,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetAll().ShouldBeEquivalentTo(
+            service.GetAll().Should().BeEquivalentTo(
                 new[] {new {Dates = new {Modified = Option.Some(testValue)}}},
                 options => options.ExcludingMissingMembers());
         }
@@ -84,7 +84,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetAll().ShouldBeEquivalentTo(
+            service.GetAll().Should().BeEquivalentTo(
                 new[] {new {Dates = new {Modified = Option.None<DateTime>()}}},
                 options => options.ExcludingMissingMembers());
         }
@@ -100,7 +100,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetAll().ShouldBeEquivalentTo(
+            service.GetAll().Should().BeEquivalentTo(
                 new[] {new {Title = testValue}},
                 options => options.ExcludingMissingMembers());
         }
@@ -116,7 +116,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetAll().ShouldBeEquivalentTo(
+            service.GetAll().Should().BeEquivalentTo(
                 new[] {new {Content = "test content"}},
                 options => options.Including(info => Regex.IsMatch(info.SelectedMemberPath, @"\[.*\]\.Content")));
         }
@@ -140,7 +140,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().ShouldBeEquivalentTo(
+            service.GetLatest().Should().BeEquivalentTo(
                 new {Content = testValue},
                 options => options.Including(info => info.Content));
         }
@@ -156,7 +156,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().ShouldBeEquivalentTo(
+            service.GetLatest().Should().BeEquivalentTo(
                 new {Dates = new {Created = testValue}},
                 options => options.Including(info => info.Dates.Created));
         }
@@ -170,7 +170,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().ShouldBeEquivalentTo(
+            service.GetLatest().Should().BeEquivalentTo(
                 new {Content = string.Empty},
                 options => options.Including(info => info.Content));
         }
@@ -184,7 +184,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().ShouldBeEquivalentTo(
+            service.GetLatest().Should().BeEquivalentTo(
                 new {Title = string.Empty},
                 options => options.Including(info => info.Title));
         }
@@ -200,7 +200,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().ShouldBeEquivalentTo(
+            service.GetLatest().Should().BeEquivalentTo(
                 new {Dates = new {Modified = Option.Some(testValue)}},
                 options => options.Including(info => info.Dates.Modified));
         }
@@ -215,7 +215,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().ShouldBeEquivalentTo(
+            service.GetLatest().Should().BeEquivalentTo(
                 new {Dates = new {Modified = Option.None<DateTime>()}},
                 options => options.Including(info => info.Dates.Modified));
         }
@@ -231,7 +231,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().ShouldBeEquivalentTo(
+            service.GetLatest().Should().BeEquivalentTo(
                 new {Title = testValue},
                 options => options.Including(info => info.Title));
         }
@@ -257,7 +257,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().ShouldBeEquivalentTo(
+            service.GetLatest().Should().BeEquivalentTo(
                 new {Dates = new {Created = new DateTime(2017, 6, 20)}},
                 options => options.Including(info => info.Dates.Created));
         }

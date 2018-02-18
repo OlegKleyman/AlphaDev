@@ -10,7 +10,7 @@ namespace AlphaDev.Core.Tests.Unit
         [Fact]
         public void EmptyShouldReturnEmptyBlog()
         {
-            BlogBase.Empty.ShouldBeEquivalentTo(
+            BlogBase.Empty.Should().BeEquivalentTo(
                 new
                 {
                     Id = default(int),
