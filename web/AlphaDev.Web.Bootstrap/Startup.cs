@@ -51,23 +51,23 @@ namespace AlphaDev.Web.Bootstrap
 
                 if (env.IsDevelopment())
                 {
-                    blogContext.Blogs.Add(
-                        new Blog
-                        {
-                            Content = GetDevelopmentContent(),
-                            Title = "testing",
-                            Created = new DateTime(2016, 7, 7),
-                            Modified = new DateTime(2017, 7, 10)
-                        });
+                    //blogContext.Blogs.Add(
+                    //    new Blog
+                    //    {
+                    //        Content = GetDevelopmentContent(),
+                    //        Title = "testing",
+                    //        Created = new DateTime(2016, 7, 7),
+                    //        Modified = new DateTime(2017, 7, 10)
+                    //    });
 
-                    blogContext.Blogs.Add(
-                        new Blog
-                        {
-                            Content = GetDevelopmentContent(),
-                            Title = "testing two",
-                            Created = new DateTime(2016, 7, 7),
-                            Modified = new DateTime(2017, 7, 10)
-                        });
+                    //blogContext.Blogs.Add(
+                    //    new Blog
+                    //    {
+                    //        Content = GetDevelopmentContent(),
+                    //        Title = "testing two",
+                    //        Created = new DateTime(2016, 7, 7),
+                    //        Modified = new DateTime(2017, 7, 10)
+                    //    });
                     blogContext.SaveChanges();
                 }
             }

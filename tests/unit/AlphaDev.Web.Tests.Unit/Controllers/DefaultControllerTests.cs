@@ -38,7 +38,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var controller = GetDefaultController();
 
-            controller.Index().Model.Should().BeOfType<Option <BlogViewModel>>();
+            controller.Index().Model.Should().BeOfType<BlogViewModel>();
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var controller = GetDefaultController(blogService);
 
-            controller.Index().Model.Should().BeOfType<Option<BlogViewModel>>().Which.ValueOrFailure().Should().BeEquivalentTo(
+            controller.Index().Model.Should().BeEquivalentTo(
                 new {blog.Id, blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}});
         }
 
@@ -64,6 +64,16 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetDefaultController();
 
             controller.Index().Should().BeOfType<ViewResult>();
+        }
+
+        [Fact]
+        public void IndexShouldReturnWelcomeBlogViewModelIfNoBlogsExist()
+        {
+            var service = Substitute.For<IBlogService>();
+            var controller = GetDefaultController(service);
+
+            controller.Index().Model.Should().BeEquivalentTo(
+                BlogViewModel.Welcome);
         }
     }
 }

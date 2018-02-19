@@ -1,3 +1,4 @@
+using System;
 using AlphaDev.Core;
 using AlphaDev.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -16,13 +17,13 @@ namespace AlphaDev.Web.Controllers
 
         public ViewResult Index()
         {
-            var blog = _blogService.GetLatest().Map(blogBase => new BlogViewModel(
+            var view = _blogService.GetLatest().Map(blogBase => new BlogViewModel(
                 blogBase.Id,
                 blogBase.Title,
                 blogBase.Content,
                 new DatesViewModel(blogBase.Dates.Created, blogBase.Dates.Modified)));
-            
-            return View(nameof(Index), blog);
+
+            return View(nameof(Index), view.ValueOr(() => BlogViewModel.Welcome));
         }
 
         public IActionResult Error()

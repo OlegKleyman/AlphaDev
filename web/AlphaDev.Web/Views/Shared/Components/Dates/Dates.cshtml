@@ -1,14 +1,16 @@
-﻿@model AlphaDev.Web.Models.DatesViewModel
+﻿@using Microsoft.AspNetCore.Html
+@model AlphaDev.Web.Models.DatesViewModel
 
 <div class="text-center dates nomargin" style="font-size: 12px">
     <strong>Created:</strong>
     <span class="created-date">
-        @FormattableString.Invariant($"{Model.Created:dddd, MMMM dd, yyyy}")
+        @Html.DisplayFor(model => model.Created)
     </span>
+
     <display value="@Model.Modified.HasValue">
         <strong>Modified:</strong>
         <span class="modified-date">
-            @Model.Modified.Match(time => FormattableString.Invariant($"{time:dddd, MMMM dd, yyyy}"), () => string.Empty)
+            @Html.DisplayFor(model => model.Modified)
         </span>
     </display>
 </div>

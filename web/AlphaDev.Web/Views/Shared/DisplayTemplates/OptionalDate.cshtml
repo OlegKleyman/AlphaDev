@@ -1,0 +1,4 @@
+﻿@using System.Globalization
+@model Optional.Option<DateTime>
+
+@Model.Match(time => string.Format(CultureInfo.InvariantCulture, ViewData.ModelMetadata.DisplayFormatString, time), () => string.Empty)

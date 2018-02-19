@@ -1,5 +1,4 @@
-﻿@using Optional.Unsafe
-@model Optional.Option<AlphaDev.Web.Models.BlogViewModel>
+﻿@model AlphaDev.Web.Models.BlogViewModel
 
 @{
     ViewBag.Title = "Home";
@@ -8,7 +7,5 @@
 <h1 class="text-center">AlphaDev</h1>
 
 <div class="container">
-    <display value="@Model.HasValue">
-        @await Component.InvokeAsync("Blog", Model.ValueOrFailure())
-    </display>
+    @await Component.InvokeAsync("Blog", Model)
 </div>

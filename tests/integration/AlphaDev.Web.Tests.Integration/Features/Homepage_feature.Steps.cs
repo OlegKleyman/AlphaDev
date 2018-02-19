@@ -159,9 +159,31 @@ namespace AlphaDev.Web.Tests.Integration.Features
             DatabaseFixture.BlogContext.Blogs.RemoveRange(DatabaseFixture.BlogContext.Blogs);
         }
 
-        private void Then_it_should_not_display_any_blog_posts()
+        private void Then_it_should_display_welcome_post()
         {
-            SiteTester.HomePage.LatestBlog.HasValue.Should().BeFalse();
+            const string content = "<pre class=\" language-csharp\"><code class=\" language-csharp\">"+
+                                   "<span class=\"token keyword\">public</span> <span class=\"token keyword\">"+
+                                   "void</span> <span class=\"token function\">Main</span><span "+
+                                   "class=\"token punctuation\">(</span><span class=\"token punctuation\">)"+
+                                   "</span>\r\n<span class=\"token punctuation\">{</span>\r\n\t\tConsole"+
+                                   "<span class=\"token punctuation\">.</span><span class=\"token function\">"+
+                                   "Writeline</span><span class=\"token punctuation\">(</span><span "+
+                                   "class=\"token string\">\"Hello\"</span><span class=\"token punctuation\">)"+
+                                   "</span><span class=\"token punctuation\">;</span>\r\n<span "+
+                                   "class=\"token punctuation\">}</span>\r\n</code></pre>";
+
+            SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
+                new
+                {
+                    Title = "Welcome to my blog.",
+                    Content = content,
+                    Dates = new
+                    {
+                        Created = "Monday, January 01, 0001",
+                        Modified = Option.None<string>()
+                    }
+                }
+            );
         }
     }
 }
