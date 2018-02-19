@@ -4,8 +4,7 @@
     <div class="text-center title">
         <h3 class="nomargin">@Model.Title</h3>
 
-        @await Component.InvokeAsync("Dates", new {Model.Dates.Created, Model.Dates.Modified})
-
+        @Html.DisplayFor(model => model.Dates)
     </div>
 
     <div class="blog-content">
