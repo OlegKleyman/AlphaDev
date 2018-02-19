@@ -1,0 +1,14 @@
+﻿@model AlphaDev.Web.Models.BlogViewModel
+
+<div class="bubble blog">
+    <div class="text-center title">
+        <h3 class="nomargin">@Model.Title</h3>
+
+        @await Component.InvokeAsync("Dates", new {Model.Dates.Created, Model.Dates.Modified})
+
+    </div>
+
+    <div class="blog-content">
+        <markdown>@Model.Content</markdown>
+    </div>
+</div>

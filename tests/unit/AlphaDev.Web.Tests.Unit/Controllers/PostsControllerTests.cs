@@ -16,7 +16,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         private PostsController GetPostsController()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetLatest().Returns(new Blog(default, null, null, default));
+            blogService.GetLatest().Returns(((BlogBase)new Blog(default, null, null, default)).Some());
 
             return GetPostsController(blogService);
         }

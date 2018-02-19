@@ -9,27 +9,27 @@ using Xunit;
 
 namespace AlphaDev.Web.Tests.Unit.ViewComponents
 {
-    public class BlogPreviewViewComponentTests
+    public class BlogViewComponentTests
     {
-        private BlogPreviewViewComponent GetBlogPreviewViewComponent()
+        private BlogViewComponent GetBlogViewComponent()
         {
-            return new BlogPreviewViewComponent();
+            return new BlogViewComponent();
         }
 
         [Fact]
         public async Task InvokeAsyncShouldReturnBlogViewComponentResult()
         {
-            var sut = GetBlogPreviewViewComponent();
+            var sut = GetBlogViewComponent();
 
-            var result = (ViewViewComponentResult) await sut.InvokeAsync(null);
+            var result = (ViewViewComponentResult)await sut.InvokeAsync(null);
 
-            result.ViewName.Should().BeEquivalentTo("BlogPreview");
+            result.ViewName.Should().BeEquivalentTo("Blog");
         }
 
         [Fact]
         public async Task InvokeAsyncShouldReturnViewComponentResult()
         {
-            var sut = GetBlogPreviewViewComponent();
+            var sut = GetBlogViewComponent();
 
             var result = await sut.InvokeAsync(null);
 
@@ -39,11 +39,11 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
         [Fact]
         public async Task InvokeAsyncShouldReturnViewComponentResultWithBlogViewModelWithThePassedBlog()
         {
-            var sut = GetBlogPreviewViewComponent();
+            var sut = GetBlogViewComponent();
 
             var blogViewModel = new BlogViewModel(default, default, default,
                 new DatesViewModel(default, Option.None<DateTime>()));
-            var result = (BlogViewModel) ((ViewViewComponentResult) await sut.InvokeAsync(blogViewModel)).ViewData
+            var result = (BlogViewModel)((ViewViewComponentResult)await sut.InvokeAsync(blogViewModel)).ViewData
                 .Model;
             result.Should().BeSameAs(blogViewModel);
         }
@@ -51,9 +51,9 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
         [Fact]
         public async Task InvokeAsyncShouldReturnViewComponentResultWithBlogViewModel()
         {
-            var sut = GetBlogPreviewViewComponent();
+            var sut = GetBlogViewComponent();
 
-            var result = (ViewViewComponentResult) await sut.InvokeAsync(new BlogViewModel(default,
+            var result = (ViewViewComponentResult)await sut.InvokeAsync(new BlogViewModel(default,
                 default,
                 default, new DatesViewModel(default, Option.None<DateTime>())));
 

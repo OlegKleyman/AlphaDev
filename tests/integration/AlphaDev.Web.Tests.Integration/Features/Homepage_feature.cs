@@ -104,5 +104,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 When_i_go_to_the_homepage,
                 Then_an_error_should_be_logged);
         }
+
+        [Scenario]
+        public void Display_homepage_with_no_blog()
+        {
+            Runner.RunScenario(
+                CommonSteps.Given_i_am_a_user,
+                And_there_are_no_blog_posts,
+                When_i_go_to_the_homepage,
+                Then_it_should_not_display_any_blog_posts);
+        }
     }
 }

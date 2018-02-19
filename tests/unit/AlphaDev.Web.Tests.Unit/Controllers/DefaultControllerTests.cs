@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Optional;
+using Optional.Unsafe;
 using Xunit;
 
 namespace AlphaDev.Web.Tests.Unit.Controllers
@@ -15,7 +16,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         private DefaultController GetDefaultController()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetLatest().Returns(new Blog(default, null, null, default));
+            blogService.GetLatest().Returns(((BlogBase)new Blog(default, null, null, default)).Some());
 
             return GetDefaultController(blogService);
         }
@@ -37,23 +38,23 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var controller = GetDefaultController();
 
-            controller.Index().Model.Should().BeOfType<BlogViewModel>();
+            controller.Index().Model.Should().BeOfType<Option <BlogViewModel>>();
         }
 
         [Fact]
         public void IndexShouldReturnBlogModelWithValuesSetFromTheBlogService()
         {
-            var blog = new Blog(123,
+            BlogBase blog = new Blog(123,
                 "title",
                 "content",
                 new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
 
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetLatest().Returns(blog);
+            blogService.GetLatest().Returns(blog.Some());
 
             var controller = GetDefaultController(blogService);
 
-            controller.Index().Model.Should().BeEquivalentTo(
+            controller.Index().Model.Should().BeOfType<Option<BlogViewModel>>().Which.ValueOrFailure().Should().BeEquivalentTo(
                 new {blog.Id, blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}});
         }
 

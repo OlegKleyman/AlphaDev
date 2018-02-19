@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using AlphaDev.Core.Data.Contexts;
 using FluentAssertions;
 using Optional;
+using Optional.Unsafe;
 using Xunit;
 
 namespace AlphaDev.Core.Tests.Unit
@@ -140,7 +141,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().Should().BeEquivalentTo(
+            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
                 new {Content = testValue},
                 options => options.Including(info => info.Content));
         }
@@ -156,7 +157,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().Should().BeEquivalentTo(
+            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
                 new {Dates = new {Created = testValue}},
                 options => options.Including(info => info.Dates.Created));
         }
@@ -170,7 +171,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().Should().BeEquivalentTo(
+            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
                 new {Content = string.Empty},
                 options => options.Including(info => info.Content));
         }
@@ -184,7 +185,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().Should().BeEquivalentTo(
+            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
                 new {Title = string.Empty},
                 options => options.Including(info => info.Title));
         }
@@ -200,7 +201,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().Should().BeEquivalentTo(
+            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
                 new {Dates = new {Modified = Option.Some(testValue)}},
                 options => options.Including(info => info.Dates.Modified));
         }
@@ -215,7 +216,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().Should().BeEquivalentTo(
+            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
                 new {Dates = new {Modified = Option.None<DateTime>()}},
                 options => options.Including(info => info.Dates.Modified));
         }
@@ -231,7 +232,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().Should().BeEquivalentTo(
+            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
                 new {Title = testValue},
                 options => options.Including(info => info.Title));
         }
@@ -247,17 +248,17 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().Should().BeEquivalentTo(
+            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
                 new { Id = testValue },
                 options => options.Including(info => info.Id));
         }
 
         [Fact]
-        public void GetLatestShouldReturnEmptyBlogWhenNoBlogIsFound()
+        public void GetLatestShouldReturnNoBlogWhenNoBlogIsFound()
         {
-            var service = GetBlogService(new MockBlogContext(nameof(GetLatestShouldReturnEmptyBlogWhenNoBlogIsFound)));
+            var service = GetBlogService(new MockBlogContext(nameof(GetLatestShouldReturnNoBlogWhenNoBlogIsFound)));
 
-            service.GetLatest().Should().BeSameAs(BlogBase.Empty);
+            service.GetLatest().HasValue.Should().BeFalse();
         }
 
         [Fact]
@@ -273,7 +274,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().Should().BeEquivalentTo(
+            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
                 new {Dates = new {Created = new DateTime(2017, 6, 20)}},
                 options => options.Including(info => info.Dates.Created));
         }

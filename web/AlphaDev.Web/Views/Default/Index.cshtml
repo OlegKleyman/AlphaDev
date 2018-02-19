@@ -1,21 +1,14 @@
-﻿@model AlphaDev.Web.Models.BlogViewModel
+﻿@using Optional.Unsafe
+@model Optional.Option<AlphaDev.Web.Models.BlogViewModel>
 
 @{
     ViewBag.Title = "Home";
 }
 
 <h1 class="text-center">AlphaDev</h1>
+
 <div class="container">
-    <div class="bubble blog">
-        <div class="text-center title">
-            <h3 class="nomargin">@Model.Title</h3>
-
-            @await Component.InvokeAsync("Dates", new {Model.Dates.Created, Model.Dates.Modified})
-
-        </div>
-
-        <div class="blog-content">
-            <markdown>@Model.Content</markdown>
-        </div>
-    </div>
+    <display value="@Model.HasValue">
+        @await Component.InvokeAsync("Blog", Model.ValueOrFailure())
+    </display>
 </div>

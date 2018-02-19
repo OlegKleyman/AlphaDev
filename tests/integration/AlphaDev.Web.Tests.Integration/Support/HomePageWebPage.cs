@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using OpenQA.Selenium;
 using Optional;
+using Optional.Collections;
 
 namespace AlphaDev.Web.Tests.Integration.Support
 {
@@ -11,14 +12,22 @@ namespace AlphaDev.Web.Tests.Integration.Support
         {
         }
 
-        public BlogPost LatestBlog => new BlogPost(Driver.FindElement(
-            By.CssSelector(
-                ".blog .title h3")).Text, Driver.FindElement(
-                By.CssSelector(
-                    ".blog .blog-content"))
-            .GetAttribute("innerHTML").Trim(), new BlogDate(Driver.FindElement(
-            By.CssSelector(
-                ".blog .dates .created-date")).Text, Option.Some(Driver.FindElements(By.CssSelector(
-            ".blog .dates .modified-date")).FirstOrDefault()?.Text).NotNull()));
+        public Option <BlogPost > LatestBlog {
+            get
+            {
+                var blog = Driver.FindElements(By.ClassName("blog")).FirstOrNone().Map(element =>
+                    new BlogPost(element.FindElement(
+                        By.CssSelector(
+                            ".title h3")).Text, element.FindElement(
+                            By.CssSelector(
+                                ".blog-content"))
+                        .GetAttribute("innerHTML").Trim(), new BlogDate(element.FindElement(
+                        By.CssSelector(
+                            ".dates .created-date")).Text, Option.Some(element.FindElements(By.CssSelector(
+                        ".dates .modified-date")).FirstOrDefault()?.Text).NotNull())));
+
+                return blog;
+            }
+    } 
     }
 }

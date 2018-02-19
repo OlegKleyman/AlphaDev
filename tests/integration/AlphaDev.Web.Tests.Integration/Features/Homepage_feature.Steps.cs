@@ -9,6 +9,7 @@ using Omego.Extensions.DbContextExtensions;
 using Omego.Extensions.EnumerableExtensions;
 using Omego.Extensions.QueryableExtensions;
 using Optional;
+using Optional.Unsafe;
 using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
@@ -38,7 +39,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_the_latest_blog_post()
         {
-            SiteTester.HomePage.LatestBlog.Should().BeEquivalentTo(
+            SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
                 DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
                     {
                         Dates = new
@@ -61,7 +62,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_the_blog_with_a_modification_date_if_it_exists()
         {
-            SiteTester.HomePage.LatestBlog.Should().BeEquivalentTo(
+            SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
                 DatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
                 {
                     Dates = new
@@ -90,7 +91,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_blog_post_with_markdown_parsed_to_html()
         {
-            SiteTester.HomePage.LatestBlog.Should().BeEquivalentTo(
+            SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
                 DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
                     {
                         Content = Markdown.ToHtml(blog.Content).Trim()
@@ -129,12 +130,12 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_two_digits_for_day_for_created()
         {
-            SiteTester.HomePage.LatestBlog.Dates.Created.Should().MatchRegex(FullDateFormatRegularExpression);
+            SiteTester.HomePage.LatestBlog.ValueOrFailure().Dates.Created.Should().MatchRegex(FullDateFormatRegularExpression);
         }
 
         private void And_it_should_display_two_digits_for_day_for_modified()
         {
-            SiteTester.HomePage.LatestBlog.Dates.Modified
+            SiteTester.HomePage.LatestBlog.ValueOrFailure().Dates.Modified
                 .ValueOr(() => throw new InvalidOperationException("No modified date found.")).Should()
                 .MatchRegex(FullDateFormatRegularExpression);
         }
@@ -147,10 +148,20 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_title()
         {
-            SiteTester.HomePage.LatestBlog.Should().BeEquivalentTo(
+            SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
                 DatabaseFixture.BlogContext.Blogs
                     .FirstOrThrow(new InvalidOperationException("No blogs found.")),
                 options => options.Including(post => post.Title));
+        }
+
+        private void And_there_are_no_blog_posts()
+        {
+            DatabaseFixture.BlogContext.Blogs.RemoveRange(DatabaseFixture.BlogContext.Blogs);
+        }
+
+        private void Then_it_should_not_display_any_blog_posts()
+        {
+            SiteTester.HomePage.LatestBlog.HasValue.Should().BeFalse();
         }
     }
 }
