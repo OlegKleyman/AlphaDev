@@ -47,18 +47,25 @@ input[type="checkbox"].input-validation-error { border: 0 none; }
 }
 
 .bubble div:first-of-type {
+    -ms-border-radius: 25px;
     -ms-border-bottom-left-radius: 0;
     -ms-border-bottom-right-radius: 0;
-    -ms-border-radius: 25px;
     background-color: #bbb;
+    border-radius: 25px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    border-radius: 25px;
     margin-bottom: 0;
     margin-top: 4px;
     padding: 3px;
 }
 
 .nomargin { margin: 0 !important; }
+
+body .bubble .blog-content {
+    padding-top: 4px;
+}
+body .blog-content pre {
+    margin: 0;
+}
 
 .blog-content pre { overflow: hidden !important; }
