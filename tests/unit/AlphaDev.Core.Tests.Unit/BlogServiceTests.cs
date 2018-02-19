@@ -237,6 +237,22 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
+        public void GetLatestShouldReturnBlogWithId()
+        {
+            const int testValue = 1;
+
+            var context = new MockBlogContext(nameof(GetLatestShouldReturnBlogWithId));
+            context.Blogs.Add(new Data.Entities.Blog { Id = testValue});
+            context.SaveChanges();
+
+            var service = GetBlogService(context);
+
+            service.GetLatest().Should().BeEquivalentTo(
+                new { Id = testValue },
+                options => options.Including(info => info.Id));
+        }
+
+        [Fact]
         public void GetLatestShouldReturnEmptyBlogWhenNoBlogIsFound()
         {
             var service = GetBlogService(new MockBlogContext(nameof(GetLatestShouldReturnEmptyBlogWhenNoBlogIsFound)));
@@ -260,6 +276,111 @@ namespace AlphaDev.Core.Tests.Unit
             service.GetLatest().Should().BeEquivalentTo(
                 new {Dates = new {Created = new DateTime(2017, 6, 20)}},
                 options => options.Including(info => info.Dates.Created));
+        }
+
+        [Fact]
+        public void GetShouldReturnBlogWithCreatedDate()
+        {
+            const int id = 1;
+
+            var testValue = new DateTime(2017, 1, 1);
+
+            var context = new MockBlogContext(nameof(GetShouldReturnBlogWithCreatedDate));
+            context.Blogs.Add(new Data.Entities.Blog { Id = id, Created = new DateTime(2017, 1, 1) });
+            context.SaveChanges();
+
+            var service = GetBlogService(context);
+
+            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
+                new { Dates = new { Created = testValue } } ,
+                options => options.ExcludingMissingMembers());
+        }
+
+        [Fact]
+        public void GetShouldReturnBlogWithContent()
+        {
+            const int id = 1;
+
+            var testValue = "test";
+
+            var context = new MockBlogContext(nameof(GetShouldReturnBlogWithContent));
+            context.Blogs.Add(new Data.Entities.Blog { Id = id, Content = testValue});
+            context.SaveChanges();
+
+            var service = GetBlogService(context);
+
+            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
+                new { Content = testValue },
+                options => options.ExcludingMissingMembers());
+        }
+
+        [Fact]
+        public void GetShouldReturnBlogWithModificationDate()
+        {
+            const int id = 1;
+
+            var testValue = new DateTime(2017, 1, 1);
+
+            var context = new MockBlogContext(nameof(GetShouldReturnBlogWithModificationDate));
+            context.Blogs.Add(new Data.Entities.Blog { Id = id, Modified = new DateTime(2017, 1, 1) });
+            context.SaveChanges();
+
+            var service = GetBlogService(context);
+
+            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
+                new { Dates = new { Modified = testValue.Some() } },
+                options => options.ExcludingMissingMembers());
+        }
+
+        [Fact]
+        public void GetShouldReturnBlogWithNoModifiedDateWhenDbModifiedDateIsNull()
+        {
+            const int id = 1;
+
+            var context = new MockBlogContext(
+                nameof(GetShouldReturnBlogWithNoModifiedDateWhenDbModifiedDateIsNull));
+            context.Blogs.Add(new Data.Entities.Blog { Id = id, Modified = null });
+            context.SaveChanges();
+
+            var service = GetBlogService(context);
+
+            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
+                new { Dates = new { Modified = Option.None<DateTime>() } },
+                options => options.Including(info => info.Dates.Modified));
+        }
+
+        [Fact]
+        public void GetShouldReturnBlogWithTitle()
+        {
+            const int id = 1;
+
+            var testValue = "test";
+
+            var context = new MockBlogContext(nameof(GetShouldReturnBlogWithTitle));
+            context.Blogs.Add(new Data.Entities.Blog { Id = id, Title = testValue});
+            context.SaveChanges();
+
+            var service = GetBlogService(context);
+
+            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
+                new { Title = testValue },
+                options => options.ExcludingMissingMembers());
+        }
+
+        [Fact]
+        public void GetShouldReturnBlogWithId()
+        {
+            const int id = 1;
+
+            var context = new MockBlogContext(nameof(GetShouldReturnBlogWithId));
+            context.Blogs.Add(new Data.Entities.Blog { Id = id });
+            context.SaveChanges();
+
+            var service = GetBlogService(context);
+
+            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
+                new { Id = id },
+                options => options.ExcludingMissingMembers());
         }
     }
 }

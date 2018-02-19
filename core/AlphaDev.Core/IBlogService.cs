@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Optional;
 
 namespace AlphaDev.Core
 {
@@ -6,5 +7,6 @@ namespace AlphaDev.Core
     {
         BlogBase GetLatest();
         IEnumerable<BlogBase> GetAll();
+        Option<BlogBase> Get(int id);
     }
 }

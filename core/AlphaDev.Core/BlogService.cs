@@ -33,5 +33,12 @@ namespace AlphaDev.Core
                 targetBlog.Content ?? string.Empty,
                 new Dates(targetBlog.Created, targetBlog.Modified.ToOption()))), Enumerable.Empty<Blog>);
         }
+
+        public Option<BlogBase> Get(int id)
+        {
+            return _context.Blogs.Find(id).SomeNotNull().Map(blog =>
+                (BlogBase)new Blog(blog.Id, blog.Title, blog.Content,
+                    new Dates(blog.Created, blog.Modified.ToOption())));
+        }
     }
 }

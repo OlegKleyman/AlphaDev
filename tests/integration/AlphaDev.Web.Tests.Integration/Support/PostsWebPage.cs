@@ -26,5 +26,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
                             .GetAttribute("href"))));
             }
         }
+
+        public BlogPost Post { get; set; }
     }
 }

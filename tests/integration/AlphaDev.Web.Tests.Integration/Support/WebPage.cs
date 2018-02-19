@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using OpenQA.Selenium;
 
@@ -33,6 +34,11 @@ namespace AlphaDev.Web.Tests.Integration.Support
             Driver.Navigate().GoToUrl(BaseUrl);
 
             return this;
+        }
+
+        public void GoTo(int postId)
+        {
+            Driver.Navigate().GoToUrl(new Uri(BaseUrl, postId.ToString(CultureInfo.InvariantCulture)));
         }
     }
 }
