@@ -10,6 +10,8 @@ using Markdig;
 using Omego.Extensions.DbContextExtensions;
 using Omego.Extensions.EnumerableExtensions;
 using Optional;
+using Optional.Collections;
+using Optional.Unsafe;
 using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
@@ -98,6 +100,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_the_error_page_with_a_404_status()
         {
             SiteTester.Error.Status.Should().BeEquivalentTo("Error 404.");
+        }
+
+        private void Then_it_should_display_the_posts_menu_link_to_lead_to_all_posts()
+        {
+            var homePageNavigation = SiteTester.Posts.Navigation.ToList();
+            homePageNavigation.FirstOrNone(element => element.Text == "Posts")
+                .Map(element => new Uri(element.Href).AbsoluteUri).ValueOrFailure()
+                .Should().BeEquivalentTo(
+                    SiteTester.Posts.BaseUrl.AbsoluteUri.Trim('/') /* trim trailing forward slash(/) */);
         }
     }
 }
