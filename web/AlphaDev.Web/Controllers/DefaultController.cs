@@ -1,11 +1,14 @@
 using System;
 using AlphaDev.Core;
 using AlphaDev.Web.Models;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Optional;
 
 namespace AlphaDev.Web.Controllers
 {
+    [Route("/")]
+    [Route("default")]
     public class DefaultController : Controller
     {
         private readonly IBlogService _blogService;
@@ -26,9 +29,11 @@ namespace AlphaDev.Web.Controllers
             return View(nameof(Index), view.ValueOr(() => BlogViewModel.Welcome));
         }
 
-        public IActionResult Error()
+        [Route("error/{status}")]
+        public IActionResult Error(int status)
         {
-            return View(nameof(Error));
+            var error = new ErrorModel(status, "An error occurred while processing your request.");
+            return View(nameof(Error), error);
         }
     }
 }

@@ -3,6 +3,7 @@ using AlphaDev.Core;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
 using FluentAssertions;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Optional;
@@ -29,8 +30,30 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         [Fact]
         public void ErrorShouldReturnErrorView()
         {
-            GetDefaultController().Error().Should().BeOfType<ViewResult>().Which.ViewName.Should()
+            GetDefaultController().Error(default).Should().BeOfType<ViewResult>().Which.ViewName.Should()
                 .BeEquivalentTo("Error");
+        }
+
+        [Fact]
+        public void ErrorShouldReturnWithErrorModel()
+        {
+            GetDefaultController().Error(default).Should().BeOfType<ViewResult>().Which.Model.Should()
+                .BeOfType<ErrorModel>();
+        }
+
+        [Fact]
+        public void ErrorShouldReturnErrorModelWithErrorMessage()
+        {
+            GetDefaultController().Error(500).Should().BeOfType<ViewResult>().Which.Model.Should()
+                .BeOfType<ErrorModel>().Which.Message.Should()
+                .BeEquivalentTo("An error occurred while processing your request.");
+        }
+
+        [Fact]
+        public void ErrorShouldReturnErrorModelWithStatus()
+        {
+            GetDefaultController().Error(500).Should().BeOfType<ViewResult>().Which.Model.Should()
+                .BeOfType<ErrorModel>().Which.Status.Should().Be(500);
         }
 
         [Fact]

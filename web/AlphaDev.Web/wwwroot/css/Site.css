@@ -69,3 +69,7 @@ body .blog-content pre {
 }
 
 .blog-content pre { overflow: hidden !important; }
+
+.post {
+    margin-top: 30px;
+}

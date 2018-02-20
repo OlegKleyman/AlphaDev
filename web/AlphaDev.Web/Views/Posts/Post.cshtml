@@ -1,1 +1,5 @@
 ﻿@model AlphaDev.Web.Models.BlogViewModel
+
+<div class="container post">
+    @await Component.InvokeAsync("Blog", Model)
+</div>

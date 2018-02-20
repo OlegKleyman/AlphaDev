@@ -19,12 +19,14 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
             HomePage = new HomePageWebPage(Driver, baseUrl);
             Posts = new PostsWebPage(Driver, new Uri(baseUrl, "posts/"));
+            Error = new ErrorWebPage(Driver, new Uri(baseUrl, "error/"));
         }
 
         public IWebDriver Driver { get; }
 
         public HomePageWebPage HomePage { get; }
         public PostsWebPage Posts { get; }
+        public ErrorWebPage Error { get; }
 
         public void Dispose()
         {
