@@ -69,5 +69,14 @@ I want to view the post")]
                 _ => When_I_try_to_view_a_post_that_doesnt_exist(),
                 _ => Then_it_should_display_the_error_page_with_a_404_status());
         }
+
+        [Scenario]
+        public void Post_page_should_have_all_posts_menu_link_lead_to_all_posts_page()
+        {
+            Runner.RunScenario(
+                _ => CommonSteps.Given_i_am_a_user(),
+                _ => When_I_view_a_post_by_id(),
+                _ => Then_it_should_display_the_posts_menu_link_to_lead_to_all_posts());
+        }
     }
 }
