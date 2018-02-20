@@ -9,27 +9,27 @@ using Xunit;
 
 namespace AlphaDev.Web.Tests.Unit.ViewComponents
 {
-    public class BlogPreviewViewComponentTests
+    public class BlogViewComponentTests
     {
-        private BlogPreviewViewComponent GetBlogPreviewViewComponent()
+        private BlogViewComponent GetBlogViewComponent()
         {
-            return new BlogPreviewViewComponent();
+            return new BlogViewComponent();
         }
 
         [Fact]
         public async Task InvokeAsyncShouldReturnBlogViewComponentResult()
         {
-            var sut = GetBlogPreviewViewComponent();
+            var sut = GetBlogViewComponent();
 
             var result = (ViewViewComponentResult) await sut.InvokeAsync(null);
 
-            result.ViewName.Should().BeEquivalentTo("BlogPreview");
+            result.ViewName.Should().BeEquivalentTo("Blog");
         }
 
         [Fact]
         public async Task InvokeAsyncShouldReturnViewComponentResult()
         {
-            var sut = GetBlogPreviewViewComponent();
+            var sut = GetBlogViewComponent();
 
             var result = await sut.InvokeAsync(null);
 
@@ -39,7 +39,7 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
         [Fact]
         public async Task InvokeAsyncShouldReturnViewComponentResultWithBlogViewModel()
         {
-            var sut = GetBlogPreviewViewComponent();
+            var sut = GetBlogViewComponent();
 
             var result = (ViewViewComponentResult) await sut.InvokeAsync(new BlogViewModel(default,
                 default,
@@ -52,7 +52,7 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
         [Fact]
         public async Task InvokeAsyncShouldReturnViewComponentResultWithBlogViewModelWithThePassedBlog()
         {
-            var sut = GetBlogPreviewViewComponent();
+            var sut = GetBlogViewComponent();
 
             var blogViewModel = new BlogViewModel(default, default, default,
                 new DatesViewModel(default, Option.None<DateTime>()));

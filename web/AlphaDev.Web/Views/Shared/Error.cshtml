@@ -1,6 +1,8 @@
-﻿@{
+﻿@model AlphaDev.Web.Models.ErrorModel
+
+@{
     ViewData["Title"] = "Error";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<h1 class="text-danger">Error @(Html.DisplayFor(model => model.Status)).</h1>
+<h2 class="text-danger">@Html.DisplayFor(model => model.Message)</h2>

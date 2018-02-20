@@ -1,20 +1,22 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using Optional;
 
 namespace AlphaDev.Web.Models
 {
-    public class DatesViewModel
+    public struct DatesViewModel
     {
-        public const string LongDataFormat = "dddd, MMMM dd, yyyy";
-
         public DatesViewModel(DateTime created, Option<DateTime> modified)
         {
             Created = created;
             Modified = modified;
         }
 
+        [DisplayFormat(DataFormatString = "{0:dddd, MMMM dd, yyyy}")]
         public DateTime Created { get; }
 
+        [DisplayFormat(DataFormatString = "{0:dddd, MMMM dd, yyyy}")]
+        [UIHint("OptionalDate")]
         public Option<DateTime> Modified { get; }
     }
 }

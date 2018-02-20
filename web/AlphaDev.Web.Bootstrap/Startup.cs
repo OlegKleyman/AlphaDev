@@ -44,8 +44,10 @@ namespace AlphaDev.Web.Bootstrap
                 }
                 else
                 {
-                    app.UseExceptionHandler("/Default/Error");
+                    app.UseExceptionHandler("/Default/Error/500");
                 }
+
+                app.UseStatusCodePagesWithReExecute("/default/error/{0}");
 
                 blogContext.Database.Migrate();
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AlphaDev.Core;
 using AlphaDev.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -29,9 +28,18 @@ namespace AlphaDev.Web.Controllers
         }
 
         [Route("{id}")]
-        public ViewResult Index(int id)
+        public ActionResult Index(int id)
         {
-            throw new NotImplementedException();
+            var blog = _blogService.Get(id);
+
+            return blog.Map(foundBlog => new BlogViewModel(foundBlog.Id,
+                foundBlog.Title,
+                foundBlog.Content,
+                new DatesViewModel(foundBlog.Dates.Created, foundBlog.Dates.Modified))).Match(foundBlog =>
+            {
+                ViewBag.Title = foundBlog.Title;
+                return (ActionResult) View("Post", foundBlog);
+            }, NotFound);
         }
     }
 }

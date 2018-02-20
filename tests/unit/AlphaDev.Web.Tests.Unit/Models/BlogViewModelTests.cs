@@ -24,5 +24,23 @@ namespace AlphaDev.Web.Tests.Unit.Models
             blog.Title.Should().BeEquivalentTo(title);
             blog.Content.Should().BeEquivalentTo(content);
         }
+
+        [Fact]
+        public void WelcomeShouldReturnDefaultWelcomeBlogModelValues()
+        {
+            const string content = "```csharp\n" +
+                                   "public void Main()\n" +
+                                   "{\n" +
+                                   "\t\tConsole.Writeline(\"Hello\");\n" +
+                                   "}";
+
+            BlogViewModel.Welcome.Should().BeEquivalentTo(new
+            {
+                Id = default(int),
+                Title = "Welcome to my blog.",
+                Content = content,
+                Dates = default(DatesViewModel)
+            });
+        }
     }
 }

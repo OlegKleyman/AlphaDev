@@ -83,9 +83,8 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
                 content.SetHtmlContent(string.Empty);
                 return Task.FromResult<TagHelperContent>(content);
-            });
+            }) {TagName = "test"};
 
-            tagHelperOutput.TagName = "test";
 
             sut.Process(null, tagHelperOutput);
 

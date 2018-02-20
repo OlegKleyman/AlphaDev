@@ -1,11 +1,5 @@
 ﻿@model AlphaDev.Web.Models.BlogViewModel
 
-@{
-    ViewBag.Title = "Home";
-}
-
-<h1 class="text-center">AlphaDev</h1>
-
-<div class="container">
+<div class="container post">
     @await Component.InvokeAsync("Blog", Model)
 </div>
