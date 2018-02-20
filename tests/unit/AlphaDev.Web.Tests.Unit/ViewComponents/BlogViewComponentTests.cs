@@ -21,7 +21,7 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
         {
             var sut = GetBlogViewComponent();
 
-            var result = (ViewViewComponentResult)await sut.InvokeAsync(null);
+            var result = (ViewViewComponentResult) await sut.InvokeAsync(null);
 
             result.ViewName.Should().BeEquivalentTo("Blog");
         }
@@ -37,28 +37,28 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
         }
 
         [Fact]
+        public async Task InvokeAsyncShouldReturnViewComponentResultWithBlogViewModel()
+        {
+            var sut = GetBlogViewComponent();
+
+            var result = (ViewViewComponentResult) await sut.InvokeAsync(new BlogViewModel(default,
+                default,
+                default, new DatesViewModel(default, Option.None<DateTime>())));
+
+            result.ViewData.Model.Should()
+                .BeOfType<BlogViewModel>();
+        }
+
+        [Fact]
         public async Task InvokeAsyncShouldReturnViewComponentResultWithBlogViewModelWithThePassedBlog()
         {
             var sut = GetBlogViewComponent();
 
             var blogViewModel = new BlogViewModel(default, default, default,
                 new DatesViewModel(default, Option.None<DateTime>()));
-            var result = (BlogViewModel)((ViewViewComponentResult)await sut.InvokeAsync(blogViewModel)).ViewData
+            var result = (BlogViewModel) ((ViewViewComponentResult) await sut.InvokeAsync(blogViewModel)).ViewData
                 .Model;
             result.Should().BeSameAs(blogViewModel);
-        }
-
-        [Fact]
-        public async Task InvokeAsyncShouldReturnViewComponentResultWithBlogViewModel()
-        {
-            var sut = GetBlogViewComponent();
-
-            var result = (ViewViewComponentResult)await sut.InvokeAsync(new BlogViewModel(default,
-                default,
-                default, new DatesViewModel(default, Option.None<DateTime>())));
-
-            result.ViewData.Model.Should()
-                .BeOfType<BlogViewModel>();
         }
     }
 }

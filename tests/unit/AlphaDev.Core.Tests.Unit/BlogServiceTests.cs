@@ -191,6 +191,22 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
+        public void GetLatestShouldReturnBlogWithId()
+        {
+            const int testValue = 1;
+
+            var context = new MockBlogContext(nameof(GetLatestShouldReturnBlogWithId));
+            context.Blogs.Add(new Data.Entities.Blog {Id = testValue});
+            context.SaveChanges();
+
+            var service = GetBlogService(context);
+
+            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
+                new {Id = testValue},
+                options => options.Including(info => info.Id));
+        }
+
+        [Fact]
         public void GetLatestShouldReturnBlogWithModifiedDate()
         {
             var testValue = new DateTime(2017, 1, 1);
@@ -238,30 +254,6 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void GetLatestShouldReturnBlogWithId()
-        {
-            const int testValue = 1;
-
-            var context = new MockBlogContext(nameof(GetLatestShouldReturnBlogWithId));
-            context.Blogs.Add(new Data.Entities.Blog { Id = testValue});
-            context.SaveChanges();
-
-            var service = GetBlogService(context);
-
-            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
-                new { Id = testValue },
-                options => options.Including(info => info.Id));
-        }
-
-        [Fact]
-        public void GetLatestShouldReturnNoBlogWhenNoBlogIsFound()
-        {
-            var service = GetBlogService(new MockBlogContext(nameof(GetLatestShouldReturnNoBlogWhenNoBlogIsFound)));
-
-            service.GetLatest().HasValue.Should().BeFalse();
-        }
-
-        [Fact]
         public void GetLatestShouldReturnLatestBlog()
         {
             var context = new MockBlogContext(nameof(GetLatestShouldReturnLatestBlog));
@@ -280,21 +272,11 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void GetShouldReturnBlogWithCreatedDate()
+        public void GetLatestShouldReturnNoBlogWhenNoBlogIsFound()
         {
-            const int id = 1;
+            var service = GetBlogService(new MockBlogContext(nameof(GetLatestShouldReturnNoBlogWhenNoBlogIsFound)));
 
-            var testValue = new DateTime(2017, 1, 1);
-
-            var context = new MockBlogContext(nameof(GetShouldReturnBlogWithCreatedDate));
-            context.Blogs.Add(new Data.Entities.Blog { Id = id, Created = new DateTime(2017, 1, 1) });
-            context.SaveChanges();
-
-            var service = GetBlogService(context);
-
-            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
-                new { Dates = new { Created = testValue } } ,
-                options => options.ExcludingMissingMembers());
+            service.GetLatest().HasValue.Should().BeFalse();
         }
 
         [Fact]
@@ -305,13 +287,47 @@ namespace AlphaDev.Core.Tests.Unit
             var testValue = "test";
 
             var context = new MockBlogContext(nameof(GetShouldReturnBlogWithContent));
-            context.Blogs.Add(new Data.Entities.Blog { Id = id, Content = testValue});
+            context.Blogs.Add(new Data.Entities.Blog {Id = id, Content = testValue});
             context.SaveChanges();
 
             var service = GetBlogService(context);
 
             service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
-                new { Content = testValue },
+                new {Content = testValue},
+                options => options.ExcludingMissingMembers());
+        }
+
+        [Fact]
+        public void GetShouldReturnBlogWithCreatedDate()
+        {
+            const int id = 1;
+
+            var testValue = new DateTime(2017, 1, 1);
+
+            var context = new MockBlogContext(nameof(GetShouldReturnBlogWithCreatedDate));
+            context.Blogs.Add(new Data.Entities.Blog {Id = id, Created = new DateTime(2017, 1, 1)});
+            context.SaveChanges();
+
+            var service = GetBlogService(context);
+
+            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
+                new {Dates = new {Created = testValue}},
+                options => options.ExcludingMissingMembers());
+        }
+
+        [Fact]
+        public void GetShouldReturnBlogWithId()
+        {
+            const int id = 1;
+
+            var context = new MockBlogContext(nameof(GetShouldReturnBlogWithId));
+            context.Blogs.Add(new Data.Entities.Blog {Id = id});
+            context.SaveChanges();
+
+            var service = GetBlogService(context);
+
+            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
+                new {Id = id},
                 options => options.ExcludingMissingMembers());
         }
 
@@ -323,13 +339,13 @@ namespace AlphaDev.Core.Tests.Unit
             var testValue = new DateTime(2017, 1, 1);
 
             var context = new MockBlogContext(nameof(GetShouldReturnBlogWithModificationDate));
-            context.Blogs.Add(new Data.Entities.Blog { Id = id, Modified = new DateTime(2017, 1, 1) });
+            context.Blogs.Add(new Data.Entities.Blog {Id = id, Modified = new DateTime(2017, 1, 1)});
             context.SaveChanges();
 
             var service = GetBlogService(context);
 
             service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
-                new { Dates = new { Modified = testValue.Some() } },
+                new {Dates = new {Modified = testValue.Some()}},
                 options => options.ExcludingMissingMembers());
         }
 
@@ -340,13 +356,13 @@ namespace AlphaDev.Core.Tests.Unit
 
             var context = new MockBlogContext(
                 nameof(GetShouldReturnBlogWithNoModifiedDateWhenDbModifiedDateIsNull));
-            context.Blogs.Add(new Data.Entities.Blog { Id = id, Modified = null });
+            context.Blogs.Add(new Data.Entities.Blog {Id = id, Modified = null});
             context.SaveChanges();
 
             var service = GetBlogService(context);
 
             service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
-                new { Dates = new { Modified = Option.None<DateTime>() } },
+                new {Dates = new {Modified = Option.None<DateTime>()}},
                 options => options.Including(info => info.Dates.Modified));
         }
 
@@ -358,29 +374,13 @@ namespace AlphaDev.Core.Tests.Unit
             var testValue = "test";
 
             var context = new MockBlogContext(nameof(GetShouldReturnBlogWithTitle));
-            context.Blogs.Add(new Data.Entities.Blog { Id = id, Title = testValue});
+            context.Blogs.Add(new Data.Entities.Blog {Id = id, Title = testValue});
             context.SaveChanges();
 
             var service = GetBlogService(context);
 
             service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
-                new { Title = testValue },
-                options => options.ExcludingMissingMembers());
-        }
-
-        [Fact]
-        public void GetShouldReturnBlogWithId()
-        {
-            const int id = 1;
-
-            var context = new MockBlogContext(nameof(GetShouldReturnBlogWithId));
-            context.Blogs.Add(new Data.Entities.Blog { Id = id });
-            context.SaveChanges();
-
-            var service = GetBlogService(context);
-
-            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
-                new { Id = id },
+                new {Title = testValue},
                 options => options.ExcludingMissingMembers());
         }
     }

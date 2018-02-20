@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AlphaDev.Core;
 using AlphaDev.Web.Models;
 using Microsoft.AspNetCore.Mvc;

@@ -10,7 +10,6 @@ namespace AlphaDev.Web.Tests.Unit.Models
         public void ConstructorShouldSetProperties()
         {
             new ErrorModel(200, "test").Should().BeEquivalentTo(new {Status = 200, Message = "test"});
-
         }
     }
 }

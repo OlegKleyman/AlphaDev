@@ -29,10 +29,10 @@ namespace AlphaDev.Web.Tests.Unit.Models
         public void WelcomeShouldReturnDefaultWelcomeBlogModelValues()
         {
             const string content = "```csharp\n" +
-                          "public void Main()\n" +
-                          "{\n" +
-                          "\t\tConsole.Writeline(\"Hello\");\n" +
-                          "}";
+                                   "public void Main()\n" +
+                                   "{\n" +
+                                   "\t\tConsole.Writeline(\"Hello\");\n" +
+                                   "}";
 
             BlogViewModel.Welcome.Should().BeEquivalentTo(new
             {

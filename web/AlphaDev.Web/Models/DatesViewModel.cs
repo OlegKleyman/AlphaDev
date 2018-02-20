@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using AlphaDev.Core;
 using Optional;
 
 namespace AlphaDev.Web.Models

@@ -1,9 +1,6 @@
-using System;
 using AlphaDev.Core;
 using AlphaDev.Web.Models;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Optional;
 
 namespace AlphaDev.Web.Controllers
 {

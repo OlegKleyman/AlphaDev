@@ -3,11 +3,9 @@ using AlphaDev.Core;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
 using FluentAssertions;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Optional;
-using Optional.Unsafe;
 using Xunit;
 
 namespace AlphaDev.Web.Tests.Unit.Controllers
@@ -17,7 +15,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         private DefaultController GetDefaultController()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetLatest().Returns(((BlogBase)new Blog(default, null, null, default)).Some());
+            blogService.GetLatest().Returns(((BlogBase) new Blog(default, null, null, default)).Some());
 
             return GetDefaultController(blogService);
         }
@@ -25,20 +23,6 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         private DefaultController GetDefaultController(IBlogService blogService)
         {
             return new DefaultController(blogService);
-        }
-
-        [Fact]
-        public void ErrorShouldReturnErrorView()
-        {
-            GetDefaultController().Error(default).Should().BeOfType<ViewResult>().Which.ViewName.Should()
-                .BeEquivalentTo("Error");
-        }
-
-        [Fact]
-        public void ErrorShouldReturnWithErrorModel()
-        {
-            GetDefaultController().Error(default).Should().BeOfType<ViewResult>().Which.Model.Should()
-                .BeOfType<ErrorModel>();
         }
 
         [Fact]
@@ -54,6 +38,20 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             GetDefaultController().Error(500).Should().BeOfType<ViewResult>().Which.Model.Should()
                 .BeOfType<ErrorModel>().Which.Status.Should().Be(500);
+        }
+
+        [Fact]
+        public void ErrorShouldReturnErrorView()
+        {
+            GetDefaultController().Error(default).Should().BeOfType<ViewResult>().Which.ViewName.Should()
+                .BeEquivalentTo("Error");
+        }
+
+        [Fact]
+        public void ErrorShouldReturnWithErrorModel()
+        {
+            GetDefaultController().Error(default).Should().BeOfType<ViewResult>().Which.Model.Should()
+                .BeOfType<ErrorModel>();
         }
 
         [Fact]

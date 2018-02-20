@@ -9,7 +9,7 @@ namespace AlphaDev.Web.ViewComponents
         public Task<IViewComponentResult> InvokeAsync(BlogViewModel blogViewModel)
         {
             return Task.Run(
-                () => (IViewComponentResult)View("Blog", blogViewModel));
+                () => (IViewComponentResult) View("Blog", blogViewModel));
         }
     }
 }

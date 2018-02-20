@@ -27,16 +27,10 @@ namespace AlphaDev.Web.Tests.Integration.Support
             }
         }
 
-        public BlogPost Post
-        {
-            get
-            {
-                return new BlogPost(Driver.FindElement(By.CssSelector(".blog .title h3")).Text,
-                    Driver.FindElement(By.CssSelector(".blog .blog-content")).GetAttribute("innerHTML").Trim(),
-                    new BlogDate(Driver.FindElement(By.CssSelector(".blog .created-date")).Text,
-                        (Driver.FindElements(By.CssSelector(".blog .modified-date")).FirstOrDefault()?.Text)
-                        .SomeNotNull()));
-            }
-        }
+        public BlogPost Post => new BlogPost(Driver.FindElement(By.CssSelector(".blog .title h3")).Text,
+            Driver.FindElement(By.CssSelector(".blog .blog-content")).GetAttribute("innerHTML").Trim(),
+            new BlogDate(Driver.FindElement(By.CssSelector(".blog .created-date")).Text,
+                (Driver.FindElements(By.CssSelector(".blog .modified-date")).FirstOrDefault()?.Text)
+                .SomeNotNull()));
     }
 }

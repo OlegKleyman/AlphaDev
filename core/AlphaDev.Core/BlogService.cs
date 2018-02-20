@@ -17,10 +17,11 @@ namespace AlphaDev.Core
 
         public Option<BlogBase> GetLatest()
         {
-            return _context.Blogs.OrderByDescending(blog => blog.Created).FirstOrNone().Map(blog => (BlogBase)new Blog(blog.Id,
-                blog.Title ?? string.Empty,
-                blog.Content ?? string.Empty,
-                new Dates(blog.Created, blog.Modified.ToOption())));
+            return _context.Blogs.OrderByDescending(blog => blog.Created).FirstOrNone().Map(blog =>
+                (BlogBase) new Blog(blog.Id,
+                    blog.Title ?? string.Empty,
+                    blog.Content ?? string.Empty,
+                    new Dates(blog.Created, blog.Modified.ToOption())));
         }
 
         public IEnumerable<BlogBase> GetAll()
@@ -34,7 +35,7 @@ namespace AlphaDev.Core
         public Option<BlogBase> Get(int id)
         {
             return _context.Blogs.Find(id).SomeNotNull().Map(blog =>
-                (BlogBase)new Blog(blog.Id, blog.Title, blog.Content,
+                (BlogBase) new Blog(blog.Id, blog.Title, blog.Content,
                     new Dates(blog.Created, blog.Modified.ToOption())));
         }
     }

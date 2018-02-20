@@ -16,7 +16,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         private PostsController GetPostsController()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetLatest().Returns(((BlogBase)new Blog(default, null, null, default)).Some());
+            blogService.GetLatest().Returns(((BlogBase) new Blog(default, null, null, default)).Some());
 
             return GetPostsController(blogService);
         }
@@ -24,6 +24,17 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         private PostsController GetPostsController(IBlogService blogService)
         {
             return new PostsController(blogService);
+        }
+
+        [Fact]
+        public void IndexShouldReturn404StatusIfNoBlogFound()
+        {
+            var blogService = Substitute.For<IBlogService>();
+            var controller = GetPostsController(blogService);
+
+            blogService.Get(Arg.Any<int>()).Returns(Option.None<BlogBase>());
+
+            controller.Index(default).Should().BeOfType<NotFoundResult>().Which.StatusCode.Should().Be(404);
         }
 
         [Fact]
@@ -87,6 +98,24 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
+        public void IndexShouldReturnBlogModelWithValuesSetFromTheBlogService()
+        {
+            const int id = 123;
+            BlogBase blog = new Blog(id,
+                "title",
+                "content",
+                new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
+
+            var blogService = Substitute.For<IBlogService>();
+            blogService.Get(id).Returns(blog.Some());
+
+            var controller = GetPostsController(blogService);
+
+            controller.Index(id).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(
+                new {blog.Id, blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}});
+        }
+
+        [Fact]
         public void IndexShouldReturnIndexView()
         {
             var controller = GetPostsController();
@@ -121,39 +150,11 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var blogService = Substitute.For<IBlogService>();
             blogService.Get(id).Returns(Option.Some(blog));
-            
-            var controller = GetPostsController(blogService);
-
-            controller.Index(id).Should().BeOfType<ViewResult>().Which.ViewData["Title"].Should().BeEquivalentTo("title");
-        }
-
-        [Fact]
-        public void IndexShouldReturnBlogModelWithValuesSetFromTheBlogService()
-        {
-            const int id = 123;
-            BlogBase blog = new Blog(id,
-                "title",
-                "content",
-                new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
-
-            var blogService = Substitute.For<IBlogService>();
-            blogService.Get(id).Returns(blog.Some());
 
             var controller = GetPostsController(blogService);
 
-            controller.Index(id).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(
-                new {blog.Id, blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}});
-        }
-
-        [Fact]
-        public void IndexShouldReturn404StatusIfNoBlogFound()
-        {
-            var blogService = Substitute.For<IBlogService>();
-            var controller = GetPostsController(blogService);
-
-            blogService.Get(Arg.Any<int>()).Returns(Option.None<BlogBase>());
-
-            controller.Index(default).Should().BeOfType<NotFoundResult>().Which.StatusCode.Should().Be(404);
+            controller.Index(id).Should().BeOfType<ViewResult>().Which.ViewData["Title"].Should()
+                .BeEquivalentTo("title");
         }
     }
 }

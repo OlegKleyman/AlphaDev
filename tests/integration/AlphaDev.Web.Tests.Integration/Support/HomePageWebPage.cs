@@ -12,7 +12,8 @@ namespace AlphaDev.Web.Tests.Integration.Support
         {
         }
 
-        public Option <BlogPost > LatestBlog {
+        public Option<BlogPost> LatestBlog
+        {
             get
             {
                 var blog = Driver.FindElements(By.ClassName("blog")).FirstOrNone().Map(element =>
@@ -28,6 +29,6 @@ namespace AlphaDev.Web.Tests.Integration.Support
 
                 return blog;
             }
-    } 
+        }
     }
 }

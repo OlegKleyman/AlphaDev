@@ -21,9 +21,11 @@ namespace AlphaDev.Web.Models
 
         public static BlogViewModel Welcome => WelcomeBlogViewModel.Value;
 
-        private class WelcomeBlogViewModel:BlogViewModel
+        private class WelcomeBlogViewModel : BlogViewModel
         {
-            private static readonly Lazy<WelcomeBlogViewModel> Model = new Lazy<WelcomeBlogViewModel>(() => new WelcomeBlogViewModel());
+            private static readonly Lazy<WelcomeBlogViewModel> Model =
+                new Lazy<WelcomeBlogViewModel>(() => new WelcomeBlogViewModel());
+
             public static readonly WelcomeBlogViewModel Value = Model.Value;
 
             private WelcomeBlogViewModel() : base(default, "Welcome to my blog.",
@@ -31,7 +33,7 @@ namespace AlphaDev.Web.Models
                 "public void Main()\n" +
                 "{\n" +
                 "\t\tConsole.Writeline(\"Hello\");\n" +
-                "}", default )
+                "}", default)
             {
             }
         }

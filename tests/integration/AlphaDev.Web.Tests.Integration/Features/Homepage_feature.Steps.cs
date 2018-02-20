@@ -130,7 +130,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_two_digits_for_day_for_created()
         {
-            SiteTester.HomePage.LatestBlog.ValueOrFailure().Dates.Created.Should().MatchRegex(FullDateFormatRegularExpression);
+            SiteTester.HomePage.LatestBlog.ValueOrFailure().Dates.Created.Should()
+                .MatchRegex(FullDateFormatRegularExpression);
         }
 
         private void And_it_should_display_two_digits_for_day_for_modified()
@@ -161,15 +162,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_welcome_post()
         {
-            const string content = "<pre class=\" language-csharp\"><code class=\" language-csharp\">"+
-                                   "<span class=\"token keyword\">public</span> <span class=\"token keyword\">"+
-                                   "void</span> <span class=\"token function\">Main</span><span "+
-                                   "class=\"token punctuation\">(</span><span class=\"token punctuation\">)"+
-                                   "</span>\r\n<span class=\"token punctuation\">{</span>\r\n\t\tConsole"+
-                                   "<span class=\"token punctuation\">.</span><span class=\"token function\">"+
-                                   "Writeline</span><span class=\"token punctuation\">(</span><span "+
-                                   "class=\"token string\">\"Hello\"</span><span class=\"token punctuation\">)"+
-                                   "</span><span class=\"token punctuation\">;</span>\r\n<span "+
+            const string content = "<pre class=\" language-csharp\"><code class=\" language-csharp\">" +
+                                   "<span class=\"token keyword\">public</span> <span class=\"token keyword\">" +
+                                   "void</span> <span class=\"token function\">Main</span><span " +
+                                   "class=\"token punctuation\">(</span><span class=\"token punctuation\">)" +
+                                   "</span>\r\n<span class=\"token punctuation\">{</span>\r\n\t\tConsole" +
+                                   "<span class=\"token punctuation\">.</span><span class=\"token function\">" +
+                                   "Writeline</span><span class=\"token punctuation\">(</span><span " +
+                                   "class=\"token string\">\"Hello\"</span><span class=\"token punctuation\">)" +
+                                   "</span><span class=\"token punctuation\">;</span>\r\n<span " +
                                    "class=\"token punctuation\">}</span>\r\n</code></pre>";
 
             SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
