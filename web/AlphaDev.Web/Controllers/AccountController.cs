@@ -4,6 +4,8 @@ using AlphaDev.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Optional;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace AlphaDev.Web.Controllers
 {
@@ -25,19 +27,16 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public IActionResult Login(LoginViewModel model, string returnUrl = null)
         {
-            if (ModelState.IsValid)
+            return ModelState.SomeWhen(dictionary =>
+                dictionary.IsValid &&
+                _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false).GetAwaiter().GetResult() ==
+                SignInResult.Success).Match(dictionary => Redirect(returnUrl ?? "/"), () =>
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false);
-
-                if (result.Succeeded)
-                {
-                    return Redirect(returnUrl ?? "/");
-                }
-            }
-
-            return View("Login", model);
+                ModelState.AddModelError(string.Empty, "Invalid login");
+                return (IActionResult) View("Login", model);
+            });
         }
     }
 }

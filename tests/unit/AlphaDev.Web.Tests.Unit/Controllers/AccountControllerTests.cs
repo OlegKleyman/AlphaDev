@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
@@ -7,10 +9,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NSubstitute;
+using Optional;
+using Optional.Collections;
+using Optional.Unsafe;
 using Xunit;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -54,8 +60,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 Password = "pass"
             };
 
-            controller.Login(model).Should().BeOfType<Task<IActionResult>>().Which.GetAwaiter()
-                .GetResult().Should().BeOfType<ViewResult>().Which.ViewName.Should()
+            controller.Login(model).Should().BeOfType<ViewResult>().Which.ViewName.Should()
                 .BeEquivalentTo("Login");
         }
 
@@ -70,13 +75,12 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 Password = "pass"
             };
 
-            controller.Login(model).Should().BeOfType<Task<IActionResult>>().Which.GetAwaiter()
-                .GetResult().Should().BeOfType<ViewResult>().Which.Model.Should()
+            controller.Login(model).Should().BeOfType<ViewResult>().Which.Model.Should()
                 .BeEquivalentTo(model);
         }
 
         [Fact]
-        public async void LoginShouldReturnRedirectResultWhenTheLoginIsSuccessfull()
+        public void LoginShouldReturnRedirectResultWhenTheLoginIsSuccessfull()
         {
             var controller = GetAccountController();
 
@@ -86,12 +90,12 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 Password = "working"
             };
 
-            (await controller.Login(model).Should().BeOfType<Task<IActionResult>>().Which).Should()
+            controller.Login(model).Should()
                 .BeOfType<RedirectResult>();
         }
 
         [Fact]
-        public async void LoginShouldReturnRedirectToRootWhenNoRedirectUrlIsPassedResultWhenTheLoginIsSuccessfull()
+        public void LoginShouldReturnRedirectToRootWhenNoRedirectUrlIsPassedResultWhenTheLoginIsSuccessfull()
         {
             var controller = GetAccountController();
 
@@ -101,12 +105,12 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 Password = "working"
             };
 
-            (await controller.Login(model).Should().BeOfType<Task<IActionResult>>().Which).Should()
+            controller.Login(model).Should()
                 .BeOfType<RedirectResult>().Which.Url.Should().BeEquivalentTo("/");
         }
 
         [Fact]
-        public async void LoginShouldReturnRedirectToUrlThatIsPassedResultWhenTheLoginIsSuccessfull()
+        public void LoginShouldReturnRedirectToUrlThatIsPassedResultWhenTheLoginIsSuccessfull()
         {
             var controller = GetAccountController();
 
@@ -116,7 +120,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 Password = "working"
             };
 
-            (await controller.Login(model, "admin").Should().BeOfType<Task<IActionResult>>().Which).Should()
+            controller.Login(model, "admin").Should()
                 .BeOfType<RedirectResult>().Which.Url.Should().BeEquivalentTo("admin");
         }
 
@@ -133,8 +137,26 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 Password = "working"
             };
 
-            controller.Login(model).Should().BeOfType<Task<IActionResult>>().Which.GetAwaiter()
-                .GetResult().Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("Login");
+            controller.Login(model).Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("Login");
+        }
+
+        [Fact]
+        public void LoginShouldReturnLoginErrorOnInvalidLogin()
+        {
+            var controller = GetAccountController();
+
+            controller.ModelState.AddModelError("fail", "fail");
+
+            var model = new LoginViewModel
+            {
+                Username = "test",
+                Password = "pass"
+            };
+
+            controller.Login(model);
+
+            controller.ModelState.Should().Contain(pair => pair.Key == string.Empty).Which.Value?.Errors?.Should()
+                .Contain(error => error.ErrorMessage == "Invalid login");
         }
 
         private AccountController GetAccountController()
