@@ -63,7 +63,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_the_blog_with_a_modification_date_if_it_exists()
         {
             SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
-                DatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
+                DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
                 {
                     Dates = new
                     {
