@@ -41,6 +41,8 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
                     .AddInMemoryCollection(new[]
                     {
                         new KeyValuePair<string, string>("connectionStrings:default",
+                            connectionString),
+                        new KeyValuePair<string, string>("connectionStrings:defaultSecurity",
                             connectionString)
                     }))
                 .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel()
