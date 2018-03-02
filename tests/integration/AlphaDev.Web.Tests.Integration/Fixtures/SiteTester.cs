@@ -21,7 +21,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             Posts = new PostsWebPage(Driver, new Uri(baseUrl, "posts/"));
             Error = new ErrorWebPage(Driver, new Uri(baseUrl, "error/"));
             Admin = new AdminWebPage(Driver, new Uri(baseUrl, "admin/"));
-            Login = new LoginWebPage(Driver, new Uri(baseUrl, "login/"));
+            Login = new LoginWebPage(Driver, new Uri(baseUrl, "account/login/"));
         }
 
         public IWebDriver Driver { get; }

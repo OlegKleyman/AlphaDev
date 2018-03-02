@@ -1,8 +1,11 @@
 ﻿using System;
 using AlphaDev.Core;
+using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
+using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Core.Data.Contexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,9 +22,21 @@ namespace AlphaDev.Web.Bootstrap
         public void ConfigureServices(IServiceCollection services)
         {
             var config = services.BuildServiceProvider().GetService<IConfiguration>();
+
+            services.AddDbContext<ApplicationContext>(options =>
+                options.UseSqlServer(config.GetConnectionString("default")));
+
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<BlogContext, Core.Data.Sql.Contexts.BlogContext>(
                 provider => new Core.Data.Sql.Contexts.BlogContext(config.GetConnectionString("default")));
+            services.AddIdentity<User, IdentityRole>().AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<ApplicationContext>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/account/login";
+            });
+
             services.AddMvc();
         }
 
@@ -75,6 +90,8 @@ namespace AlphaDev.Web.Bootstrap
             }
 
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes => { routes.MapRoute("default", "{controller=Default}/{action=Index}/{id?}"); });
         }

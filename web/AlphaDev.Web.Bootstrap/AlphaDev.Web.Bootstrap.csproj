@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\core\AlphaDev.Core.Data.Account.Security.Sql\AlphaDev.Core.Data.Account.Security.Sql.csproj" />
     <ProjectReference Include="..\..\core\AlphaDev.Core.Data.Sql\AlphaDev.Core.Data.Sql.csproj" />
     <ProjectReference Include="..\..\core\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
     <ProjectReference Include="..\..\core\AlphaDev.Core\AlphaDev.Core.csproj" />
