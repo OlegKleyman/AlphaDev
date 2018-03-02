@@ -14,23 +14,15 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
     {
         private AdminController GetAdminController()
         {
-            var blogService = Substitute.For<IBlogService>();
-            blogService.GetLatest().Returns(((BlogBase) new Blog(default, null, null, default)).Some());
-
-            return GetAdminController(blogService);
-        }
-
-        private AdminController GetAdminController(IBlogService blogService)
-        {
             return new AdminController();
         }
 
         [Fact]
-        public void IndexShouldReturnIndexView()
+        public void IndexShouldReturnIndexViewResult()
         {
             var controller = GetAdminController();
 
-            controller.Index().Should().BeOfType<ViewResult>();
+            controller.Index().Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("Index");
         }
     }
 }
