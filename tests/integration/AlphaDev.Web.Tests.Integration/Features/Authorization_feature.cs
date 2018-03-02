@@ -5,7 +5,6 @@ using LightBDD.XUnit2;
 
 namespace AlphaDev.Web.Tests.Integration.Features
 {
-	[Label("FEAT-1")]
 	[FeatureDescription(
 @"In order to not allow everyone to access the admin area
 As a user
@@ -13,7 +12,7 @@ I want to only be allowed to access the admin area if I have the authority")]
 	public partial class Authorization_feature
 	{
 		[Scenario]
-		public void Template_basic_scenario()
+		public void Redirect_unauthenticated_users_to_login_page()
 		{
 			Runner.RunScenario(
 				_ => CommonSteps.Given_i_am_a_user(),
