@@ -40,7 +40,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_the_latest_blog_post()
         {
             SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
-                DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
                     {
                         Dates = new
                         {
@@ -55,15 +55,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             var modified = modifiedState == ModifiedState.Modified ? new DateTime(2017, 7, 12) : (DateTime?) null;
 
-            DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).First().Modified = modified;
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).First().Modified = modified;
 
-            DatabaseFixture.BlogContext.SaveChanges();
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.SaveChanges();
         }
 
         private void Then_it_should_display_the_blog_with_a_modification_date_if_it_exists()
         {
             SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
-                DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
                 {
                     Dates = new
                     {
@@ -76,7 +76,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Given_the_website_has_a_problem()
         {
-            DatabaseFixture.BlogContext.Database.EnsureDeleted();
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Database.EnsureDeleted();
         }
 
         private void Then_it_should_display_an_error()
@@ -92,7 +92,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_blog_post_with_markdown_parsed_to_html()
         {
             SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
-                DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
                     {
                         Content = Markdown.ToHtml(blog.Content).Trim()
                     })
@@ -102,30 +102,30 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void And_the_latest_blog_post_contains_markdown()
         {
-            var blog = DatabaseFixture.DefaultBlog;
+            var blog = BlogContextDatabaseFixture.DefaultBlog;
             blog.Content = "Content integration `<test2>testing</test2>`.";
 
-            DatabaseFixture.BlogContext.AddRangeAndSave(
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.AddRangeAndSave(
                 blog);
         }
 
         private void And_there_are_multiple_blog_posts_at_different_times()
         {
-            var blogs = DatabaseFixture.DefaultBlogs;
+            var blogs = BlogContextDatabaseFixture.DefaultBlogs;
             blogs[0].Created = DateTime.MinValue;
             blogs[1].Created = DateTime.MaxValue;
 
-            DatabaseFixture.BlogContext.AddRangeAndSave(
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.AddRangeAndSave(
                 blogs);
         }
 
         private void And_there_is_a_blog_post_with_single_digit_days()
         {
-            var blog = DatabaseFixture.DefaultBlog;
+            var blog = BlogContextDatabaseFixture.DefaultBlog;
             blog.Created = new DateTime(2017, 2, 1);
             blog.Modified = new DateTime(2017, 7, 8);
 
-            DatabaseFixture.BlogContext.AddRangeAndSave(blog);
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.AddRangeAndSave(blog);
         }
 
         private void Then_it_should_display_two_digits_for_day_for_created()
@@ -143,21 +143,21 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void And_there_is_a_blog_post()
         {
-            DatabaseFixture.BlogContext.AddRangeAndSave(
-                DatabaseFixture.DefaultBlog);
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.AddRangeAndSave(
+                BlogContextDatabaseFixture.DefaultBlog);
         }
 
         private void Then_it_should_display_title()
         {
             SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
-                DatabaseFixture.BlogContext.Blogs
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs
                     .FirstOrThrow(new InvalidOperationException("No blogs found.")),
                 options => options.Including(post => post.Title));
         }
 
         private void And_there_are_no_blog_posts()
         {
-            DatabaseFixture.BlogContext.Blogs.RemoveRange(DatabaseFixture.BlogContext.Blogs);
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.RemoveRange(DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs);
         }
 
         private void Then_it_should_display_welcome_post()

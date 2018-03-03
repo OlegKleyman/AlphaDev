@@ -15,9 +15,9 @@ I want to authenticate myself")]
 	    public void Login_page_should_load()
 	    {
 	        Runner.RunScenario(
-	            _ => CommonSteps.Given_i_am_a_user(),
-	            _ => When_I_go_to_the_login_page(),
-	            _ => Then_it_should_load());
+	            CommonSteps.Given_i_am_a_user,
+	            When_I_go_to_the_login_page,
+	            Then_it_should_load);
 	    }
 	}
 }

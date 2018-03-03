@@ -13,18 +13,19 @@ namespace AlphaDev.Web.Tests.Integration.Features
         protected const string FullDateFormatString = "dddd, MMMM dd, yyyy";
         private readonly WebServer _server;
 
+        protected DatabasesFixture DatabasesFixture { get; }
+
         protected WebFeatureFixture(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) :
             base(output)
         {
             _server = databaseWebServerFixture.Server;
-            DatabaseFixture = databaseWebServerFixture.DatabaseFixture;
-            DatabaseFixture.BlogContext.Database.Migrate();
+            DatabasesFixture = databaseWebServerFixture.DatabasesFixture;
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Database.Migrate();
+            DatabasesFixture.ApplicationContextDatabaseFixture.ApplicationContext.Database.Migrate();
 
             SiteTester = databaseWebServerFixture.SiteTester;
             CommonSteps = new CommonSteps();
         }
-
-        protected DatabaseFixture DatabaseFixture { get; }
 
         protected string Log => _server.Log;
 
@@ -33,8 +34,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         public void Dispose()
         {
-            DatabaseFixture.ResetDatabase();
-
+            DatabasesFixture.ResetDatabase();
             _server.ClearLog();
         }
     }

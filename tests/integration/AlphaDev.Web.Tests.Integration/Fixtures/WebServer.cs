@@ -1,11 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Web.Bootstrap;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
@@ -14,7 +18,8 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
     {
         private static readonly StringWriter LogWriter;
 
-        private readonly IWebHost _host;
+        private IWebHost _host;
+        private readonly Dictionary<string, string> _connectionStrings;
 
         static WebServer()
         {
@@ -32,19 +37,18 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             }
         }
 
-        public WebServer(string connectionString)
+        public WebServer(Dictionary<string, string> connectionStrings)
+        {
+            _connectionStrings = connectionStrings;
+        }
+
+        public IServiceProvider Start()
         {
             var url = $"http://127.0.0.1:{GetOpenPort()}";
 
             _host = new WebHostBuilder().ConfigureAppConfiguration(builder => builder.SetBasePath(Path.GetFullPath("."))
                     .AddJsonFile("appsettings.json", true, true)
-                    .AddInMemoryCollection(new[]
-                    {
-                        new KeyValuePair<string, string>("connectionStrings:default",
-                            connectionString),
-                        new KeyValuePair<string, string>("connectionStrings:defaultSecurity",
-                            connectionString)
-                    }))
+                    .AddInMemoryCollection(_connectionStrings.Select(pair => new KeyValuePair<string, string>($"connectionStrings:{pair.Key}", pair.Value))))
                 .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel()
                 .UseStartup<Startup>().UseUrls(url).UseSetting(WebHostDefaults.ApplicationKey,
                     typeof(Program).GetTypeInfo().Assembly.FullName).Build();
@@ -52,9 +56,11 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             _host.Start();
 
             Url = url;
+
+            return _host.Services;
         }
 
-        public string Url { get; }
+        public string Url { get; private set; }
 
         public string Log => LogWriter.ToString();
 
