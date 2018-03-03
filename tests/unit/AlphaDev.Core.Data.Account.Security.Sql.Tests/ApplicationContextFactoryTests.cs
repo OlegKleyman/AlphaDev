@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +18,7 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Tests
         public void CreateShouldReturnContextFactoryWithConnectionStringIfOnePresent()
         {
             var builder = new ConfigurationBuilder().AddInMemoryCollection(
-                new[] { new KeyValuePair<string, string>("connectionStrings:AlphaDevSecurity", "Data Source=(Test);") });
+                new[] {new KeyValuePair<string, string>("connectionStrings:AlphaDevSecurity", "Data Source=(Test);")});
 
             var factory = GetApplicationContextFactory(builder.Build());
 

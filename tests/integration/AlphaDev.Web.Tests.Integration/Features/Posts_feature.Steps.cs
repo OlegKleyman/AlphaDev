@@ -30,12 +30,14 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void And_there_are_multiple_posts()
         {
-            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.AddRangeAndSave(BlogContextDatabaseFixture.DefaultBlogs);
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.AddRangeAndSave(BlogContextDatabaseFixture
+                .DefaultBlogs);
         }
 
         private void Then_it_should_display_all_posts()
         {
-            SiteTester.Posts.Posts.Should().HaveSameCount(DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs);
+            SiteTester.Posts.Posts.Should()
+                .HaveSameCount(DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs);
         }
 
         private void Then_it_should_display_all_posts_ordered_by_creation_date_descending()
@@ -47,10 +49,11 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_all_posts_with_markdown_parsed_to_html()
         {
             SiteTester.Posts.Posts.Should().BeEquivalentTo(
-                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
-                {
-                    Content = Markdown.ToHtml(blog.Content).Trim()
-                }),
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created)
+                    .ToList().Select(blog => new
+                    {
+                        Content = Markdown.ToHtml(blog.Content).Trim()
+                    }),
                 options => options.ExcludingMissingMembers());
         }
 

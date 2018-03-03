@@ -13,8 +13,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
         protected const string FullDateFormatString = "dddd, MMMM dd, yyyy";
         private readonly WebServer _server;
 
-        protected DatabasesFixture DatabasesFixture { get; }
-
         protected WebFeatureFixture(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) :
             base(output)
         {
@@ -27,6 +25,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
             SiteTester = databaseWebServerFixture.SiteTester;
             CommonSteps = new CommonSteps(SiteTester, DatabasesFixture);
         }
+
+        protected DatabasesFixture DatabasesFixture { get; }
 
         protected string Log => _server.Log;
 

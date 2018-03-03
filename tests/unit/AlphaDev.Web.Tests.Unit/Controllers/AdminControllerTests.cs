@@ -1,11 +1,6 @@
-﻿using System;
-using AlphaDev.Core;
-using AlphaDev.Web.Controllers;
-using AlphaDev.Web.Models;
+﻿using AlphaDev.Web.Controllers;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using NSubstitute;
-using Optional;
 using Xunit;
 
 namespace AlphaDev.Web.Tests.Unit.Controllers

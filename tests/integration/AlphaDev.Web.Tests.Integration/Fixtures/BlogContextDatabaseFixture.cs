@@ -3,7 +3,6 @@ using System.Globalization;
 using System.IO;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Sql.Contexts;
-using AlphaDev.Test.Integration.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
@@ -19,7 +18,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
                     CultureInfo.InvariantCulture,
                     ConnectionString,
                     Directory.GetCurrentDirectory()));
-            
+
             BlogContext.Database.Migrate();
         }
 

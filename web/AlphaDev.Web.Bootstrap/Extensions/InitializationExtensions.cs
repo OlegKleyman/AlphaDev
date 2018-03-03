@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Core.Data.Contexts;
@@ -84,13 +82,9 @@ namespace AlphaDev.Web.Bootstrap.Extensions
             using (var scope = builder.ApplicationServices.CreateScope())
             {
                 if (scope.ServiceProvider.GetService<IHostingEnvironment>().IsDevelopment())
-                {
                     builder.UseDeveloperExceptionPage();
-                }
                 else
-                {
                     builder.UseExceptionHandler("/Default/Error/500");
-                }
             }
 
             return builder;
@@ -143,6 +137,5 @@ namespace AlphaDev.Web.Bootstrap.Extensions
                    + "lobortis nulla ac, pulvinar elit. Vivamus ullamcorper feugiat erat, in efficitur lacus "
                    + "euismod vitae.";
         }
-
     }
 }

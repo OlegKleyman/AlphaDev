@@ -4,14 +4,14 @@ namespace AlphaDev.Web.Tests.Integration.Features
 {
     public class CommonSteps
     {
-        public SiteTester SiteTester { get; }
-        public DatabasesFixture DatabasesFixture { get; }
-
         public CommonSteps(SiteTester siteTester, DatabasesFixture databasesFixture)
         {
             SiteTester = siteTester;
             DatabasesFixture = databasesFixture;
         }
+
+        public SiteTester SiteTester { get; }
+        public DatabasesFixture DatabasesFixture { get; }
 
         public void Given_i_am_a_user()
         {

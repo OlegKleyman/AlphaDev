@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Data.Account.Security.Sql.Contexts
 {
-    public class ApplicationContext: IdentityDbContext<User>
+    public class ApplicationContext : IdentityDbContext<User>
     {
         private readonly string _connectionString;
 

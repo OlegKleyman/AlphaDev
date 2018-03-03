@@ -17,7 +17,7 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Tests.Contexts
             var context = new ApplicationContext($"Server={server};Database={database};");
 
             context.Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.Should().BeEquivalentTo(
-                new { Database = database, DataSource = server },
+                new {Database = database, DataSource = server},
                 options => options.Including(connection => connection.Database)
                     .Including(connection => connection.DataSource));
         }

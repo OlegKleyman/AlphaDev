@@ -40,7 +40,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_the_latest_blog_post()
         {
             SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
-                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created)
+                    .ToList().Select(blog => new
                     {
                         Dates = new
                         {
@@ -55,7 +56,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             var modified = modifiedState == ModifiedState.Modified ? new DateTime(2017, 7, 12) : (DateTime?) null;
 
-            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).First().Modified = modified;
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created)
+                .First().Modified = modified;
 
             DatabasesFixture.BlogContextDatabaseFixture.BlogContext.SaveChanges();
         }
@@ -63,14 +65,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_the_blog_with_a_modification_date_if_it_exists()
         {
             SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
-                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
-                {
-                    Dates = new
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created)
+                    .ToList().Select(blog => new
                     {
-                        Modified = blog.Modified.ToOption().FlatMap(time =>
-                            Option.Some(time.ToString(FullDateFormatString, CultureInfo.InvariantCulture)))
-                    }
-                }).FirstOrThrow(new InvalidOperationException("No blogs found.")),
+                        Dates = new
+                        {
+                            Modified = blog.Modified.ToOption().FlatMap(time =>
+                                Option.Some(time.ToString(FullDateFormatString, CultureInfo.InvariantCulture)))
+                        }
+                    }).FirstOrThrow(new InvalidOperationException("No blogs found.")),
                 options => options.ExcludingMissingMembers());
         }
 
@@ -92,7 +95,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_blog_post_with_markdown_parsed_to_html()
         {
             SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
-                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created)
+                    .ToList().Select(blog => new
                     {
                         Content = Markdown.ToHtml(blog.Content).Trim()
                     })
@@ -157,7 +161,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void And_there_are_no_blog_posts()
         {
-            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.RemoveRange(DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs);
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.RemoveRange(DatabasesFixture
+                .BlogContextDatabaseFixture.BlogContext.Blogs);
         }
 
         private void Then_it_should_display_welcome_post()

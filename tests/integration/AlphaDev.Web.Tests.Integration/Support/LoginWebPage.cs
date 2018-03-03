@@ -5,7 +5,7 @@ using OpenQA.Selenium;
 
 namespace AlphaDev.Web.Tests.Integration.Support
 {
-    public class LoginWebPage:WebPage
+    public class LoginWebPage : WebPage
     {
         public LoginWebPage(IWebDriver driver, Uri baseUrl) : base(driver, baseUrl)
         {
@@ -26,6 +26,9 @@ namespace AlphaDev.Web.Tests.Integration.Support
         public IEnumerable<string> ValidationSummary =>
             Driver.FindElements(By.CssSelector("form div ul li")).Select(element => element.Text);
 
-        public void Submit() => Driver.FindElement(By.CssSelector("form div button")).Click();
+        public void Submit()
+        {
+            Driver.FindElement(By.CssSelector("form div button")).Click();
+        }
     }
 }

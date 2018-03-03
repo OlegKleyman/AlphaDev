@@ -17,18 +17,6 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         private readonly Dictionary<string, (string databaseName, string connectionString)> _databases =
             GetDatabases();
 
-        private static Dictionary<string, (string, string)> GetDatabases()
-        {
-            var @default = Guid.NewGuid().ToString("N");
-            var defaultSecurity = Guid.NewGuid().ToString("N");
-
-            return new Dictionary<string, (string, string)>
-            {
-                ["default"] = (@default, ConnectionStringTemplate + @default),
-                ["defaultSecurity"] = (defaultSecurity, ConnectionStringTemplate + defaultSecurity)
-            };
-        }
-
         public DatabasesFixture()
         {
             ConnectionStrings = _databases.ToDictionary(pair => pair.Key, pair => pair.Value.connectionString);
@@ -49,6 +37,18 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             ResetDatabase();
             BlogContextDatabaseFixture.Dispose();
             ApplicationContextDatabaseFixture.Dispose();
+        }
+
+        private static Dictionary<string, (string, string)> GetDatabases()
+        {
+            var @default = Guid.NewGuid().ToString("N");
+            var defaultSecurity = Guid.NewGuid().ToString("N");
+
+            return new Dictionary<string, (string, string)>
+            {
+                ["default"] = (@default, ConnectionStringTemplate + @default),
+                ["defaultSecurity"] = (defaultSecurity, ConnectionStringTemplate + defaultSecurity)
+            };
         }
 
         public void ResetDatabase()
@@ -77,12 +77,11 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
         public void SeedUser(UserManager<User> userManager)
         {
-            var result = userManager.CreateAsync(new User { UserName = "something@something.com" }, "H3ll04321!").GetAwaiter().GetResult();
+            var result = userManager.CreateAsync(new User {UserName = "something@something.com"}, "H3ll04321!")
+                .GetAwaiter().GetResult();
             if (result != IdentityResult.Success)
-            {
                 throw new InvalidOperationException(string.Join(Environment.NewLine,
                     result.Errors.Select(error => error.Description)));
-            }
         }
     }
 }

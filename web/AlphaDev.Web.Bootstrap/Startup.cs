@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using AlphaDev.Core;
+﻿using AlphaDev.Core;
 using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Core.Data.Contexts;
@@ -9,12 +7,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Serilog;
-using Blog = AlphaDev.Core.Data.Entities.Blog;
 
 namespace AlphaDev.Web.Bootstrap
 {
@@ -34,10 +28,7 @@ namespace AlphaDev.Web.Bootstrap
             services.AddIdentity<User, IdentityRole>().AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<IdentityDbContext<User>>();
 
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/account/login";
-            });
+            services.ConfigureApplicationCookie(options => { options.LoginPath = "/account/login"; });
 
             services.AddMvc();
         }

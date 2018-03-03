@@ -1,5 +1,4 @@
 ﻿using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
-using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 

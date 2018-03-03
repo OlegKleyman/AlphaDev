@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using AlphaDev.Core.Data.Account.Security.Sql.Entities;
+﻿using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -31,7 +30,8 @@ namespace AlphaDev.Web.Controllers
         {
             return ModelState.SomeWhen(dictionary =>
                 dictionary.IsValid &&
-                _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false).GetAwaiter().GetResult() ==
+                _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false).GetAwaiter()
+                    .GetResult() ==
                 SignInResult.Success).Match(dictionary => Redirect(returnUrl ?? "/"), () =>
             {
                 ModelState.AddModelError(string.Empty, "Invalid login");

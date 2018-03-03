@@ -65,7 +65,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_blog_post_with_markdown_parsed_to_html()
         {
-            SiteTester.Posts.Post.Content.Should().BeEquivalentTo(DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs
+            SiteTester.Posts.Post.Content.Should().BeEquivalentTo(DatabasesFixture.BlogContextDatabaseFixture
+                .BlogContext.Blogs
                 .OrderByDescending(blog => blog.Created).ToList().Select(blog => Markdown.ToHtml(blog.Content).Trim())
                 .FirstOrThrow(new InvalidOperationException("No blogs found.")));
         }
@@ -81,14 +82,16 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_the_blog_with_a_modification_date_if_it_exists()
         {
-            SiteTester.Posts.Post.Dates.Modified.Should().BeEquivalentTo(DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.Find(_postId)
+            SiteTester.Posts.Post.Dates.Modified.Should().BeEquivalentTo(DatabasesFixture.BlogContextDatabaseFixture
+                .BlogContext.Blogs.Find(_postId)
                 .Modified.ToOption().FlatMap(time =>
                     Option.Some(time.ToString(FullDateFormatString, CultureInfo.InvariantCulture))));
         }
 
         private void Then_it_should_display_the_created_date()
         {
-            SiteTester.Posts.Post.Dates.Created.Should().BeEquivalentTo(DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.Find(_postId)
+            SiteTester.Posts.Post.Dates.Created.Should().BeEquivalentTo(DatabasesFixture.BlogContextDatabaseFixture
+                .BlogContext.Blogs.Find(_postId)
                 .Created.ToString(FullDateFormatString, CultureInfo.InvariantCulture));
         }
 
