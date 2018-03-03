@@ -18,8 +18,6 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
                     CultureInfo.InvariantCulture,
                     ConnectionString,
                     Directory.GetCurrentDirectory()));
-
-            BlogContext.Database.Migrate();
         }
 
         public static Blog DefaultBlog => new Blog

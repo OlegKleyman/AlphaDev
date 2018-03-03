@@ -11,8 +11,6 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             ConnectionString = connectionString;
 
             ApplicationContext = new ApplicationContext(ConnectionString);
-
-            ApplicationContext.Database.Migrate();
         }
 
         public string ConnectionString { get; }
