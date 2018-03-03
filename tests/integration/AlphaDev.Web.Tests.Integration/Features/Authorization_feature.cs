@@ -17,7 +17,7 @@ I want to only be allowed to access the admin area if I have the authority")]
 			Runner.RunScenario(
 				_ => CommonSteps.Given_i_am_a_user(),
 				_ => And_I_am_not_logged_in(),
-				_=> When_I_visit_the_admin_area(),
+				_=> CommonSteps.When_I_visit_the_admin_area(),
 			    _=> Then_I_am_redirected_to_a_login_page());
 		}
 	}

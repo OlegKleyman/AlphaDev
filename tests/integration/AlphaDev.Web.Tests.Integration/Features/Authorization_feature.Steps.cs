@@ -18,11 +18,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
             
         }
 
-        private void When_I_visit_the_admin_area()
-        {
-            SiteTester.Admin.GoTo();
-        }
-
         private void Then_I_am_redirected_to_a_login_page()
         {
             SiteTester.Driver.Url.Should()

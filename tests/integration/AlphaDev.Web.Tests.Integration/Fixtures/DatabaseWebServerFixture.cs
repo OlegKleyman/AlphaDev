@@ -13,16 +13,13 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
             Server = new WebServer(DatabasesFixture.ConnectionStrings);
             var services = Server.Start();
-            var userManager = (UserManager<User>) services.GetService(typeof(UserManager<User>));
-            var result = userManager.CreateAsync(new User {UserName = "something@something.com"}, "H3ll04321!").GetAwaiter().GetResult();
-            if (result != IdentityResult.Success)
-            {
-                throw new InvalidOperationException(string.Join(Environment.NewLine,
-                    result.Errors.Select(error => error.Description)));
-            }
+
+            UserManager = (UserManager<User>) services.GetService(typeof(UserManager<User>));
 
             SiteTester = new SiteTester(new Uri(Server.Url));
         }
+
+        public UserManager<User> UserManager { get; }
 
         public DatabasesFixture DatabasesFixture { get; }
 

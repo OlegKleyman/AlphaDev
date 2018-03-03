@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Test.Integration.Core.Extensions;
+using Microsoft.AspNetCore.Identity;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
@@ -70,6 +72,16 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
                         command.ExecuteNonQuery();
                     }
                 }
+            }
+        }
+
+        public void SeedUser(UserManager<User> userManager)
+        {
+            var result = userManager.CreateAsync(new User { UserName = "something@something.com" }, "H3ll04321!").GetAwaiter().GetResult();
+            if (result != IdentityResult.Success)
+            {
+                throw new InvalidOperationException(string.Join(Environment.NewLine,
+                    result.Errors.Select(error => error.Description)));
             }
         }
     }

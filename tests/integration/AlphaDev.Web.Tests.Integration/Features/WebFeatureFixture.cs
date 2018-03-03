@@ -22,9 +22,10 @@ namespace AlphaDev.Web.Tests.Integration.Features
             DatabasesFixture = databaseWebServerFixture.DatabasesFixture;
             DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Database.Migrate();
             DatabasesFixture.ApplicationContextDatabaseFixture.ApplicationContext.Database.Migrate();
+            DatabasesFixture.SeedUser(databaseWebServerFixture.UserManager);
 
             SiteTester = databaseWebServerFixture.SiteTester;
-            CommonSteps = new CommonSteps();
+            CommonSteps = new CommonSteps(SiteTester, DatabasesFixture);
         }
 
         protected string Log => _server.Log;
