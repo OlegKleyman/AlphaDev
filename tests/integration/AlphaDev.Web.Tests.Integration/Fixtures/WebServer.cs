@@ -15,7 +15,6 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
     public class WebServer
     {
         private static readonly StringWriter LogWriter;
-        private readonly Dictionary<string, string> _connectionStrings;
 
         private IWebHost _host;
 
@@ -37,20 +36,11 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
         public WebServer(Dictionary<string, string> connectionStrings)
         {
-            _connectionStrings = connectionStrings;
-        }
-
-        public string Url { get; private set; }
-
-        public string Log => LogWriter.ToString();
-
-        public IServiceProvider Start()
-        {
             var url = $"http://127.0.0.1:{GetOpenPort()}";
 
             _host = new WebHostBuilder().ConfigureAppConfiguration(builder => builder.SetBasePath(Path.GetFullPath("."))
                     .AddJsonFile("appsettings.json", true, true)
-                    .AddInMemoryCollection(_connectionStrings.Select(pair =>
+                    .AddInMemoryCollection(connectionStrings.Select(pair =>
                         new KeyValuePair<string, string>($"connectionStrings:{pair.Key}", pair.Value))))
                 .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel()
                 .UseStartup<Startup>().UseUrls(url).UseSetting(WebHostDefaults.ApplicationKey,
@@ -59,9 +49,11 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             _host.Start();
 
             Url = url;
-
-            return _host.Services;
         }
+
+        public string Url { get; }
+
+        public string Log => LogWriter.ToString();
 
         public void Dispose()
         {
