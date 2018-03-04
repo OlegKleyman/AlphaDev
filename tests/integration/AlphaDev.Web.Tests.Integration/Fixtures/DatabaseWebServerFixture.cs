@@ -17,9 +17,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             Server = new WebServer(DatabasesFixture.ConnectionStrings);
             var services = Server.Start();
 
-            var b = (IApplicationBuilder)services.GetService(typeof(IApplicationBuilder));
-            _serviceScope = b.ApplicationServices.CreateScope();
-            UserManager = (UserManager<User>)_serviceScope.ServiceProvider.GetService(typeof(UserManager<User>));
+            //UserManager = (UserManager<User>)_serviceScope.ServiceProvider.GetService(typeof(UserManager<User>));
 
 
 
@@ -36,7 +34,6 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
         public void Dispose()
         {
-            _serviceScope.Dispose();
             SiteTester.Dispose();
             Server.Dispose();
             DatabasesFixture.Dispose();

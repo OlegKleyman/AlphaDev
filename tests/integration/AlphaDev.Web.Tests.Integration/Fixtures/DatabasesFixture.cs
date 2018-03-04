@@ -53,35 +53,52 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
         public void ResetDatabase()
         {
-            //ApplicationContextDatabaseFixture?.ApplicationContext.DetachAll();
-            //BlogContextDatabaseFixture?.BlogContext.DetachAll();
+            ApplicationContextDatabaseFixture?.ApplicationContext.DetachAll();
+            BlogContextDatabaseFixture?.BlogContext.DetachAll();
 
-            //using (var connection = new SqlConnection(ConnectionStringTemplate + "master"))
-            //{
-            //    using (var command = new SqlCommand())
-            //    {
-            //        command.Connection = connection;
+            using (var connection = new SqlConnection(ConnectionStringTemplate + "master"))
+            {
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
 
-            //        connection.Open();
-            //        foreach (var database in _databases)
-            //        {
-            //            command.CommandText =
-            //                string.Format(CultureInfo.InvariantCulture, Assets.DropDatabase,
-            //                    database.Value.databaseName);
+                    connection.Open();
+                    foreach (var database in _databases)
+                    {
+                        command.CommandText =
+                            string.Format(CultureInfo.InvariantCulture, Assets.DropDatabase,
+                                database.Value.databaseName);
 
-            //            command.ExecuteNonQuery();
-            //        }
-            //    }
-            //}
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
         }
 
-        public void SeedUser(UserManager<User> userManager)
+        public void SeedUser()
         {
-            var result = userManager.CreateAsync(new User {UserName = "something@something.com"}, "H3ll04321!")
-                .GetAwaiter().GetResult();
-            if (result != IdentityResult.Success)
-                throw new InvalidOperationException(string.Join(Environment.NewLine,
-                    result.Errors.Select(error => error.Description)));
+            //something@something.com"}, "H3ll04321!")
+            var user = new User
+            {
+                UserName = "something@something.com",
+                AccessFailedCount = default,
+                ConcurrencyStamp = "dda9cebb-c520-494c-b365-4823f1c0b938",
+                Email = "something@something.com",
+                EmailConfirmed = default,
+                LockoutEnabled = true,
+                Id = Guid.NewGuid().ToString("D"),
+                LockoutEnd = default,
+                NormalizedEmail = "SOMETHING@SOMETHING.COM",
+                NormalizedUserName = "SOMETHING@SOMETHING.COM",
+                PasswordHash = "AQAAAAEAACcQAAAAEC8J5oSDteONWmC4w/wTQj4ylVY+UnNjYWKgof2+VdMacVM2TbtW76DBx+Arx/1tzg==",
+                PhoneNumber = default,
+                PhoneNumberConfirmed = default,
+                SecurityStamp = "8c0df882-fdeb-4e71-a588-77ee702facce",
+                TwoFactorEnabled = default
+            };
+
+            ApplicationContextDatabaseFixture.ApplicationContext.Users.Add(user);
+            var g = ApplicationContextDatabaseFixture.ApplicationContext.SaveChanges();
         }
     }
 }
