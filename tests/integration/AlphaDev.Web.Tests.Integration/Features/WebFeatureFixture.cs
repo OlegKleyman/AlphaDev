@@ -12,18 +12,22 @@ namespace AlphaDev.Web.Tests.Integration.Features
         protected const string FullDateFormatRegularExpression = @"\w+,\s\w+\s\d{2},\s\d{4}";
         protected const string FullDateFormatString = "dddd, MMMM dd, yyyy";
         private readonly WebServer _server;
+        private static readonly object Syncroot = new object();
 
         protected WebFeatureFixture(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) :
             base(output)
         {
-            _server = databaseWebServerFixture.Server;
-            DatabasesFixture = databaseWebServerFixture.DatabasesFixture;
-            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Database.Migrate();
-            DatabasesFixture.ApplicationContextDatabaseFixture.ApplicationContext.Database.Migrate();
-            DatabasesFixture.SeedUser(databaseWebServerFixture.UserManager);
+            lock (Syncroot)
+            {
+                _server = databaseWebServerFixture.Server;
+                DatabasesFixture = databaseWebServerFixture.DatabasesFixture;
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Database.Migrate();
+                DatabasesFixture.ApplicationContextDatabaseFixture.ApplicationContext.Database.Migrate();
+                DatabasesFixture.SeedUser(databaseWebServerFixture.UserManager);
 
-            SiteTester = databaseWebServerFixture.SiteTester;
-            CommonSteps = new CommonSteps(SiteTester, DatabasesFixture);
+                SiteTester = databaseWebServerFixture.SiteTester;
+                CommonSteps = new CommonSteps(SiteTester, DatabasesFixture);
+            }
         }
 
         protected DatabasesFixture DatabasesFixture { get; }
