@@ -17,18 +17,16 @@ namespace AlphaDev.Web.Tests.Integration.Features
         protected WebFeatureFixture(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) :
             base(output)
         {
-            lock (Syncroot)
-            {
-                databaseWebServerFixture.Load();
-                _server = databaseWebServerFixture.Server;
-                DatabasesFixture = databaseWebServerFixture.DatabasesFixture;
-                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Database.Migrate();
-                DatabasesFixture.ApplicationContextDatabaseFixture.ApplicationContext.Database.Migrate();
-                DatabasesFixture.SeedUser(databaseWebServerFixture.UserManager);
+                //databaseWebServerFixture.Load();
+                //_server = databaseWebServerFixture.Server;
+                //DatabasesFixture = databaseWebServerFixture.DatabasesFixture;
+                //DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Database.Migrate();
+                //DatabasesFixture.ApplicationContextDatabaseFixture.ApplicationContext.Database.Migrate();
+                //DatabasesFixture.SeedUser(databaseWebServerFixture.UserManager);
 
-                SiteTester = databaseWebServerFixture.SiteTester;
-                CommonSteps = new CommonSteps(SiteTester, DatabasesFixture);
-            }
+                //SiteTester = databaseWebServerFixture.SiteTester;
+                //CommonSteps = new CommonSteps(SiteTester, DatabasesFixture);
+            
         }
 
         protected DatabasesFixture DatabasesFixture { get; }
