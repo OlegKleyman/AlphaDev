@@ -17,6 +17,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
         protected WebFeatureFixture(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) :
             base(output)
         {
+            lock (Syncroot)
+            {
                 databaseWebServerFixture.Load();
                 _server = databaseWebServerFixture.Server;
                 DatabasesFixture = databaseWebServerFixture.DatabasesFixture;
@@ -26,7 +28,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
                 SiteTester = databaseWebServerFixture.SiteTester;
                 CommonSteps = new CommonSteps(SiteTester, DatabasesFixture);
-            
+            }
         }
 
         protected DatabasesFixture DatabasesFixture { get; }
