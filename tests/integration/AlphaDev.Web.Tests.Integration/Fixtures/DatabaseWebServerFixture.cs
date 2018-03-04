@@ -8,29 +8,34 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
     {
         public DatabaseWebServerFixture()
         {
-            DatabasesFixture = new DatabasesFixture();
 
-            Server = new WebServer(DatabasesFixture.ConnectionStrings);
-            var services = Server.Start();
-
-            UserManager = (UserManager<User>) services.GetService(typeof(UserManager<User>));
-
-            SiteTester = new SiteTester(new Uri(Server.Url));
         }
 
-        public UserManager<User> UserManager { get; }
+        public UserManager<User> UserManager { get; private set; }
 
-        public DatabasesFixture DatabasesFixture { get; }
+        public DatabasesFixture DatabasesFixture { get; private set; }
 
-        public WebServer Server { get; }
+        public WebServer Server { get; private set; }
 
-        public SiteTester SiteTester { get; }
+        public SiteTester SiteTester { get; private set; }
 
         public void Dispose()
         {
             SiteTester.Dispose();
             Server.Dispose();
             DatabasesFixture.Dispose();
+        }
+
+        public void Load()
+        {
+            DatabasesFixture = new DatabasesFixture();
+
+            Server = new WebServer(DatabasesFixture.ConnectionStrings);
+            var services = Server.Start();
+
+            UserManager = (UserManager<User>)services.GetService(typeof(UserManager<User>));
+
+            SiteTester = new SiteTester(new Uri(Server.Url));
         }
     }
 }
