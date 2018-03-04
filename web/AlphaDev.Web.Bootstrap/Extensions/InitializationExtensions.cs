@@ -52,8 +52,12 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         {
             using (var scope = builder.ApplicationServices.CreateScope())
             {
-                scope.ServiceProvider.GetService<BlogContext>().Database.EnsureDeleted();
-                scope.ServiceProvider.GetService<IdentityDbContext<User>>().Database.EnsureDeleted();
+                if (scope.ServiceProvider.GetService<IHostingEnvironment>().IsDevelopment())
+                {
+                    scope.ServiceProvider.GetService<BlogContext>().Database.EnsureDeleted();
+                    scope.ServiceProvider.GetService<IdentityDbContext<User>>().Database.EnsureDeleted();
+                }
+
                 scope.ServiceProvider.GetService<BlogContext>().Database.Migrate();
                 scope.ServiceProvider.GetService<IdentityDbContext<User>>().Database.Migrate();
             }
