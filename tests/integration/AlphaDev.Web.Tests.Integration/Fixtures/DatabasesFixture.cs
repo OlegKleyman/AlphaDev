@@ -53,26 +53,26 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
         public void ResetDatabase()
         {
-            ApplicationContextDatabaseFixture?.ApplicationContext.DetachAll();
-            BlogContextDatabaseFixture?.BlogContext.DetachAll();
+            //ApplicationContextDatabaseFixture?.ApplicationContext.DetachAll();
+            //BlogContextDatabaseFixture?.BlogContext.DetachAll();
 
-            using (var connection = new SqlConnection(ConnectionStringTemplate + "master"))
-            {
-                using (var command = new SqlCommand())
-                {
-                    command.Connection = connection;
+            //using (var connection = new SqlConnection(ConnectionStringTemplate + "master"))
+            //{
+            //    using (var command = new SqlCommand())
+            //    {
+            //        command.Connection = connection;
 
-                    connection.Open();
-                    foreach (var database in _databases)
-                    {
-                        command.CommandText =
-                            string.Format(CultureInfo.InvariantCulture, Assets.DropDatabase,
-                                database.Value.databaseName);
+            //        connection.Open();
+            //        foreach (var database in _databases)
+            //        {
+            //            command.CommandText =
+            //                string.Format(CultureInfo.InvariantCulture, Assets.DropDatabase,
+            //                    database.Value.databaseName);
 
-                        command.ExecuteNonQuery();
-                    }
-                }
-            }
+            //            command.ExecuteNonQuery();
+            //        }
+            //    }
+            //}
         }
 
         public void SeedUser(UserManager<User> userManager)
