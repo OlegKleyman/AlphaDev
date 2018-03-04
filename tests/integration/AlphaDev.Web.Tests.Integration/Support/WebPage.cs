@@ -36,9 +36,9 @@ namespace AlphaDev.Web.Tests.Integration.Support
             return this;
         }
 
-        public void GoTo(int postId)
+        public void GoTo(int id)
         {
-            Driver.Navigate().GoToUrl(new Uri(BaseUrl, postId.ToString(CultureInfo.InvariantCulture)));
+            Driver.Navigate().GoToUrl(new Uri(BaseUrl, id.ToString(CultureInfo.InvariantCulture)));
         }
     }
 }

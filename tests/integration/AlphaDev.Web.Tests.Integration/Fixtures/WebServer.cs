@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -14,7 +16,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
     {
         private static readonly StringWriter LogWriter;
 
-        private readonly IWebHost _host;
+        private IWebHost _host;
 
         static WebServer()
         {
@@ -32,17 +34,14 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             }
         }
 
-        public WebServer(string connectionString)
+        public WebServer(Dictionary<string, string> connectionStrings)
         {
             var url = $"http://127.0.0.1:{GetOpenPort()}";
 
             _host = new WebHostBuilder().ConfigureAppConfiguration(builder => builder.SetBasePath(Path.GetFullPath("."))
                     .AddJsonFile("appsettings.json", true, true)
-                    .AddInMemoryCollection(new[]
-                    {
-                        new KeyValuePair<string, string>("connectionStrings:default",
-                            connectionString)
-                    }))
+                    .AddInMemoryCollection(connectionStrings.Select(pair =>
+                        new KeyValuePair<string, string>($"connectionStrings:{pair.Key}", pair.Value))))
                 .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel()
                 .UseStartup<Startup>().UseUrls(url).UseSetting(WebHostDefaults.ApplicationKey,
                     typeof(Program).GetTypeInfo().Assembly.FullName).Build();

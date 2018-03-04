@@ -30,12 +30,14 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void And_there_are_multiple_posts()
         {
-            DatabaseFixture.BlogContext.AddRangeAndSave(DatabaseFixture.DefaultBlogs);
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.AddRangeAndSave(BlogContextDatabaseFixture
+                .DefaultBlogs);
         }
 
         private void Then_it_should_display_all_posts()
         {
-            SiteTester.Posts.Posts.Should().HaveSameCount(DatabaseFixture.BlogContext.Blogs);
+            SiteTester.Posts.Posts.Should()
+                .HaveSameCount(DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs);
         }
 
         private void Then_it_should_display_all_posts_ordered_by_creation_date_descending()
@@ -47,28 +49,29 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_all_posts_with_markdown_parsed_to_html()
         {
             SiteTester.Posts.Posts.Should().BeEquivalentTo(
-                DatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created).ToList().Select(blog => new
-                {
-                    Content = Markdown.ToHtml(blog.Content).Trim()
-                }),
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created)
+                    .ToList().Select(blog => new
+                    {
+                        Content = Markdown.ToHtml(blog.Content).Trim()
+                    }),
                 options => options.ExcludingMissingMembers());
         }
 
         private void And_there_are_multiple_posts_with_markdown()
         {
-            var blogs = DatabaseFixture.DefaultBlogs;
+            var blogs = BlogContextDatabaseFixture.DefaultBlogs;
 
             for (var i = 0; i < blogs.Length; i++)
                 blogs[i].Content = $"Content integration `<test{i}>testing</test{i}>`.";
 
-            DatabaseFixture.BlogContext.AddRangeAndSave(
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.AddRangeAndSave(
                 blogs);
         }
 
         private void Then_it_should_display_all_posts_with_modification_date_if_it_exists()
         {
             SiteTester.Posts.Posts.Should().BeEquivalentTo(
-                DatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
                 {
                     Dates = new
                     {
@@ -82,7 +85,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_all_posts_with_a_title()
         {
             SiteTester.Posts.Posts.Should().BeEquivalentTo(
-                DatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
                 {
                     blog.Title
                 }),
@@ -91,21 +94,21 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void And_all_posts_were(ModifiedState modifiedState)
         {
-            var blogs = DatabaseFixture.DefaultBlogs;
+            var blogs = BlogContextDatabaseFixture.DefaultBlogs;
 
             for (var i = 0; i < blogs.Length; i++)
                 blogs[i].Modified = modifiedState == ModifiedState.Modified
                     ? new DateTime(2017, 7, i + 1)
                     : (DateTime?) null;
 
-            DatabaseFixture.BlogContext.AddRangeAndSave(
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.AddRangeAndSave(
                 blogs);
         }
 
         private void Then_it_should_display_all_posts_with_a_navigation_link_to_the_entire_post()
         {
             SiteTester.Posts.Posts.Should().BeEquivalentTo(
-                DatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
                 {
                     NavigationLink = new
                     {

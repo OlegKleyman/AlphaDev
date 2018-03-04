@@ -39,12 +39,12 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Given_there_is_a_blog_post(string title)
         {
-            var defaultBlog = DatabaseFixture.DefaultBlog;
+            var defaultBlog = BlogContextDatabaseFixture.DefaultBlog;
             defaultBlog.Title = title;
 
-            DatabaseFixture.BlogContext.AddRangeAndSave(defaultBlog);
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.AddRangeAndSave(defaultBlog);
 
-            var blog = DatabaseFixture.BlogContext.Blogs.FirstOrDefault().SomeNotNull()
+            var blog = DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.FirstOrDefault().SomeNotNull()
                 .ValueOr(() => throw new InvalidOperationException("No blogs found"));
 
             _postId = blog.Id;
@@ -60,12 +60,13 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_the_title()
         {
             SiteTester.Posts.Post.Title.Should()
-                .BeEquivalentTo(DatabaseFixture.BlogContext.Blogs.Find(_postId).Title);
+                .BeEquivalentTo(DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.Find(_postId).Title);
         }
 
         private void Then_it_should_display_blog_post_with_markdown_parsed_to_html()
         {
-            SiteTester.Posts.Post.Content.Should().BeEquivalentTo(DatabaseFixture.BlogContext.Blogs
+            SiteTester.Posts.Post.Content.Should().BeEquivalentTo(DatabasesFixture.BlogContextDatabaseFixture
+                .BlogContext.Blogs
                 .OrderByDescending(blog => blog.Created).ToList().Select(blog => Markdown.ToHtml(blog.Content).Trim())
                 .FirstOrThrow(new InvalidOperationException("No blogs found.")));
         }
@@ -74,21 +75,23 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             var modified = modifiedState == ModifiedState.Modified ? new DateTime(2017, 7, 12) : (DateTime?) null;
 
-            DatabaseFixture.BlogContext.Blogs.Find(_postId).Modified = modified;
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.Find(_postId).Modified = modified;
 
-            DatabaseFixture.BlogContext.SaveChanges();
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.SaveChanges();
         }
 
         private void Then_it_should_display_the_blog_with_a_modification_date_if_it_exists()
         {
-            SiteTester.Posts.Post.Dates.Modified.Should().BeEquivalentTo(DatabaseFixture.BlogContext.Blogs.Find(_postId)
+            SiteTester.Posts.Post.Dates.Modified.Should().BeEquivalentTo(DatabasesFixture.BlogContextDatabaseFixture
+                .BlogContext.Blogs.Find(_postId)
                 .Modified.ToOption().FlatMap(time =>
                     Option.Some(time.ToString(FullDateFormatString, CultureInfo.InvariantCulture))));
         }
 
         private void Then_it_should_display_the_created_date()
         {
-            SiteTester.Posts.Post.Dates.Created.Should().BeEquivalentTo(DatabaseFixture.BlogContext.Blogs.Find(_postId)
+            SiteTester.Posts.Post.Dates.Created.Should().BeEquivalentTo(DatabasesFixture.BlogContextDatabaseFixture
+                .BlogContext.Blogs.Find(_postId)
                 .Created.ToString(FullDateFormatString, CultureInfo.InvariantCulture));
         }
 

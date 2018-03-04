@@ -3,28 +3,21 @@ using System.Globalization;
 using System.IO;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Sql.Contexts;
-using AlphaDev.Test.Integration.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
-    public class DatabaseFixture : IDisposable
+    public class BlogContextDatabaseFixture : IDisposable
     {
-        public DatabaseFixture()
+        public BlogContextDatabaseFixture(string connectionString)
         {
-            ConnectionString =
-                $@"Data Source=(LocalDB)\MSSQLLocalDB;Integrated Security=True;MultipleActiveResultSets=true;Database={
-                        Guid.NewGuid()
-                    };";
+            ConnectionString = connectionString;
 
             BlogContext = new BlogContext(
                 string.Format(
                     CultureInfo.InvariantCulture,
                     ConnectionString,
                     Directory.GetCurrentDirectory()));
-
-            BlogContext.Database.EnsureDeleted();
-            BlogContext.Database.Migrate();
         }
 
         public static Blog DefaultBlog => new Blog
@@ -58,14 +51,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
         public void Dispose()
         {
-            BlogContext.Database.EnsureDeleted();
             BlogContext.Dispose();
-        }
-
-        public void ResetDatabase()
-        {
-            BlogContext.DetachAll();
-            BlogContext.Database.EnsureDeleted();
         }
     }
 }

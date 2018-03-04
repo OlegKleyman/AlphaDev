@@ -21,11 +21,11 @@
 
   <ItemGroup>
     <PackageReference Include="CoreCompat.Selenium.WebDriver" Version="3.4.0-beta001" />
-    <PackageReference Include="FluentAssertions" Version="5.1.1" />
-    <PackageReference Include="LightBDD.XUnit2" Version="2.3.4" />
+    <PackageReference Include="FluentAssertions" Version="5.1.2" />
+    <PackageReference Include="LightBDD.XUnit2" Version="2.3.5" />
     <PackageReference Include="Markdig" Version="0.14.9" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
-    <PackageReference Include="Omego.Extensions" Version="2.0.19" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.6.0" />
+    <PackageReference Include="Omego.Extensions" Version="2.0.20" />
     <PackageReference Include="Selenium.PhantomJS.WebDriver" Version="2.1.1" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
@@ -53,12 +53,35 @@
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Assets.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Assets.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Authentication_feature.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Features\Authentication_feature.Steps.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Features\Authorization_feature.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Features\Authorization_feature.Steps.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Features\Post_feature.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Features\Post_feature.Steps.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Assets.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Assets.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <!-- https://github.com/NuGet/Home/issues/4412. -->
   <Target Name="CopyDepsFiles" AfterTargets="Build" Condition="'$(TargetFramework)'!=''">

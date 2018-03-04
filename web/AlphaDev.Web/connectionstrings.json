@@ -1,6 +1,8 @@
 {
   "connectionStrings": {
     "default":
-      "Data Source=(LocalDB)\\MSSQLLocalDB;Integrated Security=True;MultipleActiveResultSets=true;Database=Alphadev;"
+      "Data Source=(LocalDB)\\MSSQLLocalDB;Integrated Security=True;MultipleActiveResultSets=true;Database=Alphadev;",
+    "defaultSecurity":
+      "Data Source=(LocalDB)\\MSSQLLocalDB;Integrated Security=True;MultipleActiveResultSets=true;Database=AlphadevSecurity;"
   }
 }

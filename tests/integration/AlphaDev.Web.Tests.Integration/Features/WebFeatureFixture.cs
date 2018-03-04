@@ -17,14 +17,16 @@ namespace AlphaDev.Web.Tests.Integration.Features
             base(output)
         {
             _server = databaseWebServerFixture.Server;
-            DatabaseFixture = databaseWebServerFixture.DatabaseFixture;
-            DatabaseFixture.BlogContext.Database.Migrate();
+            DatabasesFixture = databaseWebServerFixture.DatabasesFixture;
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Database.Migrate();
+            DatabasesFixture.ApplicationContextDatabaseFixture.ApplicationContext.Database.Migrate();
+            DatabasesFixture.SeedUser();
 
             SiteTester = databaseWebServerFixture.SiteTester;
-            CommonSteps = new CommonSteps();
+            CommonSteps = new CommonSteps(SiteTester, DatabasesFixture);
         }
 
-        protected DatabaseFixture DatabaseFixture { get; }
+        protected DatabasesFixture DatabasesFixture { get; }
 
         protected string Log => _server.Log;
 
@@ -33,8 +35,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         public void Dispose()
         {
-            DatabaseFixture.ResetDatabase();
-
+            DatabasesFixture.ResetDatabase();
             _server.ClearLog();
         }
     }

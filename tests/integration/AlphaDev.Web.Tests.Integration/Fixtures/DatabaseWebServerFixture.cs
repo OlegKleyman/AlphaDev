@@ -1,4 +1,6 @@
 ﻿using System;
+using AlphaDev.Core.Data.Account.Security.Sql.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
@@ -6,16 +8,16 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
     {
         public DatabaseWebServerFixture()
         {
-            DatabaseFixture = new DatabaseFixture();
+            DatabasesFixture = new DatabasesFixture();
 
-            Server = new WebServer(DatabaseFixture.ConnectionString);
+            Server = new WebServer(DatabasesFixture.ConnectionStrings);
 
             SiteTester = new SiteTester(new Uri(Server.Url));
         }
 
-        public WebServer Server { get; }
+        public DatabasesFixture DatabasesFixture { get; }
 
-        public DatabaseFixture DatabaseFixture { get; }
+        public WebServer Server { get; }
 
         public SiteTester SiteTester { get; }
 
@@ -23,7 +25,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         {
             SiteTester.Dispose();
             Server.Dispose();
-            DatabaseFixture.Dispose();
+            DatabasesFixture.Dispose();
         }
     }
 }
