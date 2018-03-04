@@ -17,7 +17,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         protected WebFeatureFixture(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) :
             base(output)
         {
-                //databaseWebServerFixture.Load();
+                databaseWebServerFixture.Load();
                 //_server = databaseWebServerFixture.Server;
                 //DatabasesFixture = databaseWebServerFixture.DatabasesFixture;
                 //DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Database.Migrate();
