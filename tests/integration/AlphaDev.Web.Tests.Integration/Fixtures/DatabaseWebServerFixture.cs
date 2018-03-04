@@ -1,29 +1,47 @@
 ﻿using System;
+using AlphaDev.Core.Data.Account.Security.Sql.Entities;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
     public class DatabaseWebServerFixture : IDisposable
     {
+        private readonly IServiceScope _serviceScope;
+
         public DatabaseWebServerFixture()
         {
-            DatabaseFixture = new DatabaseFixture();
+            DatabasesFixture = new DatabasesFixture();
 
-            Server = new WebServer(DatabaseFixture.ConnectionString);
+            Server = new WebServer(DatabasesFixture.ConnectionStrings);
+            var services = Server.Start();
+
+            //UserManager = (UserManager<User>)_serviceScope.ServiceProvider.GetService(typeof(UserManager<User>));
+
+
 
             SiteTester = new SiteTester(new Uri(Server.Url));
         }
 
-        public WebServer Server { get; }
+        public UserManager<User> UserManager { get; private set; }
 
-        public DatabaseFixture DatabaseFixture { get; }
+        public DatabasesFixture DatabasesFixture { get; private set; }
 
-        public SiteTester SiteTester { get; }
+        public WebServer Server { get; private set; }
+
+        public SiteTester SiteTester { get; private set; }
 
         public void Dispose()
         {
             SiteTester.Dispose();
             Server.Dispose();
-            DatabaseFixture.Dispose();
+            DatabasesFixture.Dispose();
+        }
+
+        public void Load()
+        {
+            
         }
     }
 }

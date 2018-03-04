@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -13,8 +15,9 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
     public class WebServer
     {
         private static readonly StringWriter LogWriter;
+        private readonly Dictionary<string, string> _connectionStrings;
 
-        private readonly IWebHost _host;
+        private IWebHost _host;
 
         static WebServer()
         {
@@ -32,17 +35,23 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             }
         }
 
-        public WebServer(string connectionString)
+        public WebServer(Dictionary<string, string> connectionStrings)
+        {
+            _connectionStrings = connectionStrings;
+        }
+
+        public string Url { get; private set; }
+
+        public string Log => LogWriter.ToString();
+
+        public IServiceProvider Start()
         {
             var url = $"http://127.0.0.1:{GetOpenPort()}";
 
             _host = new WebHostBuilder().ConfigureAppConfiguration(builder => builder.SetBasePath(Path.GetFullPath("."))
                     .AddJsonFile("appsettings.json", true, true)
-                    .AddInMemoryCollection(new[]
-                    {
-                        new KeyValuePair<string, string>("connectionStrings:default",
-                            connectionString)
-                    }))
+                    .AddInMemoryCollection(_connectionStrings.Select(pair =>
+                        new KeyValuePair<string, string>($"connectionStrings:{pair.Key}", pair.Value))))
                 .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel()
                 .UseStartup<Startup>().UseUrls(url).UseSetting(WebHostDefaults.ApplicationKey,
                     typeof(Program).GetTypeInfo().Assembly.FullName).Build();
@@ -50,11 +59,9 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             _host.Start();
 
             Url = url;
+
+            return _host.Services;
         }
-
-        public string Url { get; }
-
-        public string Log => LogWriter.ToString();
 
         public void Dispose()
         {
