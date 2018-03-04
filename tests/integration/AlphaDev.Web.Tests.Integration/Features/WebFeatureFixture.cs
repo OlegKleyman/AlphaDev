@@ -20,7 +20,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 databaseWebServerFixture.Load();
                 _server = databaseWebServerFixture.Server;
                 DatabasesFixture = databaseWebServerFixture.DatabasesFixture;
-                //DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Database.Migrate();
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Database.Migrate();
                 //DatabasesFixture.ApplicationContextDatabaseFixture.ApplicationContext.Database.Migrate();
                 //DatabasesFixture.SeedUser(databaseWebServerFixture.UserManager);
 
