@@ -35,7 +35,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         public void Dispose()
         {
-            DatabasesFixture.ResetDatabase();
+            DatabasesFixture.DatabaseManager.ResetDatabases();
             _server.ClearLog();
         }
     }

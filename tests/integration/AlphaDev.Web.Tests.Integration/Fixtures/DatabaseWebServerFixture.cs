@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using Microsoft.AspNetCore.Identity;
 
@@ -10,7 +11,9 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         {
             DatabasesFixture = new DatabasesFixture();
 
-            Server = new WebServer(DatabasesFixture.ConnectionStrings);
+            Server = new WebServer(
+                DatabasesFixture.DatabaseManager.ConnectionStrings.ToDictionary(pair => pair.Key,
+                    pair => pair.Value.connectionString));
 
             SiteTester = new SiteTester(new Uri(Server.Url));
         }

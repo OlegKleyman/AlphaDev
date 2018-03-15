@@ -13,11 +13,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         {
             ConnectionString = connectionString;
 
-            BlogContext = new BlogContext(
-                string.Format(
-                    CultureInfo.InvariantCulture,
-                    ConnectionString,
-                    Directory.GetCurrentDirectory()));
+            BlogContext = new BlogContext(ConnectionString);
         }
 
         public static Blog DefaultBlog => new Blog
