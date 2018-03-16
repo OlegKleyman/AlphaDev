@@ -12,8 +12,8 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             DatabasesFixture = new DatabasesFixture();
 
             Server = new WebServer(
-                DatabasesFixture.DatabaseManager.ConnectionStrings.ToDictionary(pair => pair.Key,
-                    pair => pair.Value.connectionString));
+                DatabasesFixture.DatabaseManager.Connections.ToDictionary(pair => pair.Key,
+                    pair => pair.Value.String));
 
             SiteTester = new SiteTester(new Uri(Server.Url));
         }

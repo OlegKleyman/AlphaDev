@@ -7,26 +7,25 @@ using System.Text;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
-    public class DatabaseManagerFixture
+    public class DatabaseManagerFixture : IDisposable
     {
-        string ConnectionStringTemplate =
+        private const string ConnectionStringTemplate =
             @"Data Source=(LocalDB)\MSSQLLocalDB;Integrated Security=True;MultipleActiveResultSets=true;Database=";
 
         private bool _disposed;
 
         public DatabaseManagerFixture()
         {
-            ConnectionStrings = new Dictionary<string, (string, string)>();
+            Connections = new Dictionary<string, DatabaseConnectionFixture>();
         }
 
-        public Dictionary<string, (string databaseName, string connectionString)> ConnectionStrings { get; }
-        public event Action OnReset;
+        public Dictionary<string, DatabaseConnectionFixture> Connections { get; }
 
-        public string Get(string key)
+        public DatabaseConnectionFixture Get(string key)
         {
             ThrowIfDisposed();
 
-            if (!ConnectionStrings.TryGetValue(key, out var connectionString))
+            if (!Connections.TryGetValue(key, out var targetConnection))
             {
                 var databaseName = Guid.NewGuid().ToString("N");
 
@@ -43,13 +42,11 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
                     }
                 }
 
-                var targetDatabaseConnectionString = ConnectionStringTemplate + databaseName;
-
-                ConnectionStrings.Add(key, (databaseName, targetDatabaseConnectionString));
-                connectionString.connectionString = targetDatabaseConnectionString;
+                targetConnection = new DatabaseConnectionFixture(databaseName);
+                Connections.Add(key, targetConnection);
             }
 
-            return connectionString.connectionString;
+            return targetConnection;
         }
 
         private void ThrowIfDisposed()
@@ -64,26 +61,9 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         {
             ThrowIfDisposed();
 
-            using (var connection = new SqlConnection(ConnectionStringTemplate + "master"))
+            foreach (var connection in Connections)
             {
-                using (var command = new SqlCommand())
-                {
-                    command.Connection = connection;
-
-                    connection.Open();
-                    command.CommandText = string.Join(Environment.NewLine,
-                        ConnectionStrings.Select(pair => string.Format(CultureInfo.InvariantCulture,
-                            Assets.DropDatabase, pair.Value.databaseName)));
-
-                    command.ExecuteNonQuery();
-                }
-            }
-
-            if (OnReset != null)
-            {
-                var cachedOnReset = OnReset;
-
-                cachedOnReset();
+                connection.Value.ResetDatabase();
             }
         }
 
@@ -91,7 +71,10 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         {
             if (!_disposed)
             {
-                ResetDatabases();
+                foreach (var connection in Connections)
+                {
+                    connection.Value.Dispose();
+                }
 
                 _disposed = true;
             }
