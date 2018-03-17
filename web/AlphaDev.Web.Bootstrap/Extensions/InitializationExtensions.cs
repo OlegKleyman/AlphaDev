@@ -86,9 +86,10 @@ namespace AlphaDev.Web.Bootstrap.Extensions
             using (var scope = builder.ApplicationServices.CreateScope())
             {
                 if (scope.ServiceProvider.GetService<IHostingEnvironment>().IsDevelopment())
+                {
                     builder.UseDeveloperExceptionPage();
-                else
-                    builder.UseExceptionHandler("/Default/Error/500");
+                }
+                else builder.UseExceptionHandler("/Default/Error/500");
             }
 
             return builder;
