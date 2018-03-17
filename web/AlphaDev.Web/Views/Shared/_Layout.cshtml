@@ -41,6 +41,11 @@
                 <li>
                     <a asp-area="" asp-controller="Info" asp-action="Contact">Contact</a>
                 </li>
+                <li>
+                    <display value="@User.Identity.IsAuthenticated">
+                        <a asp-area="" asp-controller="Posts" asp-action="Create">Create Post</a>
+                    </display>
+                </li>
             </ul>
         </div>
     </div>

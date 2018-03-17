@@ -24,7 +24,9 @@ namespace AlphaDev.Web.Tests.Integration.Support
         {
             get
             {
-                return Driver.FindElements(By.CssSelector("ul.navbar-nav a"))
+                var s = Driver.PageSource;
+                var readOnlyCollection = Driver.FindElements(By.CssSelector("ul.navbar-nav a"));
+                return readOnlyCollection
                     .Select(element => new AnchorElement(element.Text, element.GetAttribute("href")));
             }
         }

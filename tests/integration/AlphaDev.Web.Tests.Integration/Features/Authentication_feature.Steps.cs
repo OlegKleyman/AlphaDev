@@ -1,4 +1,5 @@
-﻿using AlphaDev.Web.Tests.Integration.Fixtures;
+﻿using System.Linq;
+using AlphaDev.Web.Tests.Integration.Fixtures;
 using FluentAssertions;
 using Xunit.Abstractions;
 
@@ -36,6 +37,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_I_should_be_redirected_back_to_the_admin_area()
         {
+            var s = SiteTester.Driver.PageSource;
             SiteTester.Driver.Url.Should()
                 .BeEquivalentTo(
                     SiteTester.Admin.BaseUrl
@@ -51,6 +53,12 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             SiteTester.Login.ValidationSummary.Should()
                 .BeEquivalentTo("The Username field is required.", "The Password field is required.");
+        }
+
+        private void Then_I_should_see_create_post_navigation_menu_link()
+        {
+            SiteTester.Admin.Navigation.Select(element => element.Text).Should()
+                .BeEquivalentTo("Posts", "About", "Contact", "Create Post");
         }
     }
 }
