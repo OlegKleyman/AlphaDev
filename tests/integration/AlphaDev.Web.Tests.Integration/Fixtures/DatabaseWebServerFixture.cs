@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AlphaDev.Core.Data.Account.Security.Sql.Entities;
-using Microsoft.AspNetCore.Identity;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {

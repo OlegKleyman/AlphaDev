@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
@@ -20,6 +17,16 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         }
 
         public Dictionary<string, DatabaseConnectionFixture> Connections { get; }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                foreach (var connection in Connections) connection.Value.Dispose();
+
+                _disposed = true;
+            }
+        }
 
         public DatabaseConnectionFixture Get(string key)
         {
@@ -51,33 +58,14 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
         private void ThrowIfDisposed()
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(GetType().FullName);
-            }
+            if (_disposed) throw new ObjectDisposedException(GetType().FullName);
         }
 
         public void ResetDatabases()
         {
             ThrowIfDisposed();
 
-            foreach (var connection in Connections)
-            {
-                connection.Value.ResetDatabase();
-            }
-        }
-
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                foreach (var connection in Connections)
-                {
-                    connection.Value.Dispose();
-                }
-
-                _disposed = true;
-            }
+            foreach (var connection in Connections) connection.Value.ResetDatabase();
         }
     }
 }

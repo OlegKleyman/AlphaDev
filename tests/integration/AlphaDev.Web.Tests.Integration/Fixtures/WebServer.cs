@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -16,7 +15,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
     {
         private static readonly StringWriter LogWriter;
 
-        private IWebHost _host;
+        private readonly IWebHost _host;
 
         static WebServer()
         {

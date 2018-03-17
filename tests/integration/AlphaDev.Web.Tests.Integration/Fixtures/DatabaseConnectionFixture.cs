@@ -6,10 +6,10 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
     public class DatabaseConnectionFixture : IDisposable
     {
-        private readonly string _database;
-
         private const string ConnectionStringTemplate =
             @"Data Source=(LocalDB)\MSSQLLocalDB;Integrated Security=True;MultipleActiveResultSets=true;Database=";
+
+        private readonly string _database;
 
         private bool _disposed;
 
@@ -29,6 +29,17 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         }
 
         public string String { get; }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                DeleteDatabases();
+
+                _disposed = true;
+            }
+        }
+
         public event Action Reset;
 
         protected virtual void OnReset()
@@ -69,16 +80,6 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         private void ThrowIfDisposed()
         {
             if (_disposed) throw new ObjectDisposedException(GetType().FullName);
-        }
-
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                DeleteDatabases();
-
-                _disposed = true;
-            }
         }
     }
 }

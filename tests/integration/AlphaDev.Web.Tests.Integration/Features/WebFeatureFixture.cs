@@ -1,7 +1,6 @@
 ﻿using System;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using LightBDD.XUnit2;
-using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
 

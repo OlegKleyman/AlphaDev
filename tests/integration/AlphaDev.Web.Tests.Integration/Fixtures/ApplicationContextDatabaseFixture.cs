@@ -25,6 +25,12 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
         public ApplicationContext ApplicationContext { get; }
 
+        public void Dispose()
+        {
+            ApplicationContext.Dispose();
+            _connection.Dispose();
+        }
+
         private void SeedUser()
         {
             var user = new User
@@ -48,12 +54,6 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
             ApplicationContext.Users.Add(user);
             ApplicationContext.SaveChanges();
-        }
-
-        public void Dispose()
-        {
-            ApplicationContext.Dispose();
-            _connection.Dispose();
         }
     }
 }

@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Globalization;
-using System.Linq;
-using AlphaDev.Core.Data.Account.Security.Sql.Entities;
-using AlphaDev.Test.Integration.Core.Extensions;
-using Microsoft.AspNetCore.Identity;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
@@ -19,7 +12,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             ApplicationContextDatabaseFixture =
                 new ApplicationContextDatabaseFixture(DatabaseManager.Get("defaultSecurity"));
         }
-        
+
         public BlogContextDatabaseFixture BlogContextDatabaseFixture { get; }
         public ApplicationContextDatabaseFixture ApplicationContextDatabaseFixture { get; }
         public DatabaseManagerFixture DatabaseManager { get; }
