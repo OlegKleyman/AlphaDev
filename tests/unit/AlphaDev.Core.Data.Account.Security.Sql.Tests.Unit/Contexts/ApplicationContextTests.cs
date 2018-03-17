@@ -4,7 +4,7 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace AlphaDev.Core.Data.Account.Security.Sql.Tests.Contexts
+namespace AlphaDev.Core.Data.Account.Security.Sql.Tests.Unit.Contexts
 {
     public class ApplicationContextTests
     {

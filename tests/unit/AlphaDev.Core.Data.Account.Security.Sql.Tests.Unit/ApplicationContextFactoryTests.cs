@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
-namespace AlphaDev.Core.Data.Account.Security.Sql.Tests
+namespace AlphaDev.Core.Data.Account.Security.Sql.Tests.Unit
 {
     public class ApplicationContextFactoryTests
     {
