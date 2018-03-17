@@ -14,12 +14,15 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         {
             _connection = connection;
             BlogContext = new BlogContext(connection.String);
+            Initialize();
 
-            connection.Reset += () =>
-            {
-                BlogContext.DetachAll();
-                BlogContext.Database.Migrate();
-            };
+            connection.Reset += Initialize;
+        }
+
+        private void Initialize()
+        {
+            BlogContext.DetachAll();
+            BlogContext.Database.Migrate();
         }
 
         public static Blog DefaultBlog => new Blog
