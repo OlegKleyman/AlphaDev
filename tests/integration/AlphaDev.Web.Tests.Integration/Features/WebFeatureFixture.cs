@@ -1,7 +1,6 @@
 ﻿using System;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using LightBDD.XUnit2;
-using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -18,9 +17,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             _server = databaseWebServerFixture.Server;
             DatabasesFixture = databaseWebServerFixture.DatabasesFixture;
-            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Database.Migrate();
-            DatabasesFixture.ApplicationContextDatabaseFixture.ApplicationContext.Database.Migrate();
-            DatabasesFixture.SeedUser();
 
             SiteTester = databaseWebServerFixture.SiteTester;
             CommonSteps = new CommonSteps(SiteTester, DatabasesFixture);
@@ -35,7 +31,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         public void Dispose()
         {
-            DatabasesFixture.ResetDatabase();
+            DatabasesFixture.DatabaseManager.ResetDatabases();
             _server.ClearLog();
         }
     }

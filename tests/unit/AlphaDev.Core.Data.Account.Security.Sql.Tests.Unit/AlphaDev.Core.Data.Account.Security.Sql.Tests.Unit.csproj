@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>AlphaDev.Core.Data.Account.Security.Sql.Tests.Unit</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

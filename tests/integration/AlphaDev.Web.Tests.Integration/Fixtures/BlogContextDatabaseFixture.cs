@@ -1,23 +1,25 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Sql.Contexts;
+using AlphaDev.Test.Integration.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
     public class BlogContextDatabaseFixture : IDisposable
     {
-        public BlogContextDatabaseFixture(string connectionString)
-        {
-            ConnectionString = connectionString;
+        private readonly DatabaseConnectionFixture _connection;
 
-            BlogContext = new BlogContext(
-                string.Format(
-                    CultureInfo.InvariantCulture,
-                    ConnectionString,
-                    Directory.GetCurrentDirectory()));
+        public BlogContextDatabaseFixture(DatabaseConnectionFixture connection)
+        {
+            _connection = connection;
+            BlogContext = new BlogContext(connection.String);
+
+            connection.Reset += () =>
+            {
+                BlogContext.DetachAll();
+                BlogContext.Database.Migrate();
+            };
         }
 
         public static Blog DefaultBlog => new Blog
@@ -47,11 +49,11 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         };
 
         public BlogContext BlogContext { get; }
-        public string ConnectionString { get; }
 
         public void Dispose()
         {
             BlogContext.Dispose();
+            _connection.Dispose();
         }
     }
 }

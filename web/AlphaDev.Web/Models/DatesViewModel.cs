@@ -6,16 +6,18 @@ namespace AlphaDev.Web.Models
 {
     public struct DatesViewModel
     {
+        private const string DateDisplayFormat = "{0:dddd, MMMM dd, yyyy}";
+
         public DatesViewModel(DateTime created, Option<DateTime> modified)
         {
             Created = created;
             Modified = modified;
         }
 
-        [DisplayFormat(DataFormatString = "{0:dddd, MMMM dd, yyyy}")]
+        [DisplayFormat(DataFormatString = DateDisplayFormat)]
         public DateTime Created { get; }
 
-        [DisplayFormat(DataFormatString = "{0:dddd, MMMM dd, yyyy}")]
+        [DisplayFormat(DataFormatString = DateDisplayFormat)]
         [UIHint("OptionalDate")]
         public Option<DateTime> Modified { get; }
     }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -16,7 +15,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
     {
         private static readonly StringWriter LogWriter;
 
-        private IWebHost _host;
+        private readonly IWebHost _host;
 
         static WebServer()
         {
@@ -40,8 +39,8 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
             _host = new WebHostBuilder().ConfigureAppConfiguration(builder => builder.SetBasePath(Path.GetFullPath("."))
                     .AddJsonFile("appsettings.json", true, true)
-                    .AddInMemoryCollection(connectionStrings.Select(pair =>
-                        new KeyValuePair<string, string>($"connectionStrings:{pair.Key}", pair.Value))))
+                    .AddInMemoryCollection(connectionStrings.ToDictionary(pair => $"connectionStrings:{pair.Key}",
+                        pair => pair.Value)))
                 .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel()
                 .UseStartup<Startup>().UseUrls(url).UseSetting(WebHostDefaults.ApplicationKey,
                     typeof(Program).GetTypeInfo().Assembly.FullName).Build();
