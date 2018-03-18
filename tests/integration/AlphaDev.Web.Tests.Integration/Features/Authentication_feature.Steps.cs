@@ -37,7 +37,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_I_should_be_redirected_back_to_the_admin_area()
         {
-            var s = SiteTester.Driver.PageSource;
             SiteTester.Driver.Url.Should()
                 .BeEquivalentTo(
                     SiteTester.Admin.BaseUrl

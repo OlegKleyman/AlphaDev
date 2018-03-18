@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using OpenQA.Selenium;
@@ -24,9 +25,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
         {
             get
             {
-                var s = Driver.PageSource;
-                var readOnlyCollection = Driver.FindElements(By.CssSelector("ul.navbar-nav a"));
-                return readOnlyCollection
+                return Driver.FindElements(By.CssSelector("ul.navbar-nav a"))
                     .Select(element => new AnchorElement(element.Text, element.GetAttribute("href")));
             }
         }
