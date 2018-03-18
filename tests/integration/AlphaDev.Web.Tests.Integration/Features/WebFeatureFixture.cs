@@ -20,6 +20,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
             SiteTester = databaseWebServerFixture.SiteTester;
             CommonSteps = new CommonSteps(SiteTester, DatabasesFixture);
+            SiteTester.Driver.Manage().Cookies.DeleteAllCookies();
         }
 
         protected DatabasesFixture DatabasesFixture { get; }

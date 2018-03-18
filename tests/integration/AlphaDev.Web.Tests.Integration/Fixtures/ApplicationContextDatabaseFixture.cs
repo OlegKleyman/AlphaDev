@@ -14,13 +14,9 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         {
             _connection = connection;
             ApplicationContext = new ApplicationContext(connection.String);
+            Initialize();
 
-            connection.Reset += () =>
-            {
-                ApplicationContext.DetachAll();
-                ApplicationContext.Database.Migrate();
-                SeedUser();
-            };
+            connection.Reset += Initialize;
         }
 
         public ApplicationContext ApplicationContext { get; }
@@ -29,6 +25,13 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         {
             ApplicationContext.Dispose();
             _connection.Dispose();
+        }
+
+        private void Initialize()
+        {
+            ApplicationContext.DetachAll();
+            ApplicationContext.Database.Migrate();
+            SeedUser();
         }
 
         private void SeedUser()
