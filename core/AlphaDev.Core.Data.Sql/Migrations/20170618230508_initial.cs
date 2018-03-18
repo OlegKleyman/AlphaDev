@@ -17,7 +17,7 @@ namespace AlphaDev.Core.Data.Sql.Migrations
                         SqlServerValueGenerationStrategy.IdentityColumn),
                     Content = table.Column<string>(nullable: false),
                     Created =
-                    table.Column<DateTime>(nullable: false, defaultValueSql: "GETUTCDATE()"),
+                        table.Column<DateTime>(nullable: false, defaultValueSql: "GETUTCDATE()"),
                     Title = table.Column<string>(nullable: false)
                 },
                 constraints: table => { table.PrimaryKey("PK_Blogs", x => x.Id); });

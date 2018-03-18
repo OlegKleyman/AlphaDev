@@ -28,7 +28,7 @@ I want to authenticate myself")]
                 When_I_successfully_login,
                 Then_I_should_be_redirected_back_to_the_admin_area);
         }
-        
+
         [Scenario]
         public void Login_page_should_show_validation_errors_when_required_fields_are_not_filled()
         {

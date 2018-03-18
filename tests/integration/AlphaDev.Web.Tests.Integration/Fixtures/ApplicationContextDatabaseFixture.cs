@@ -19,19 +19,19 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             connection.Reset += Initialize;
         }
 
-        private void Initialize()
-        {
-            ApplicationContext.DetachAll();
-            ApplicationContext.Database.Migrate();
-            SeedUser();
-        }
-
         public ApplicationContext ApplicationContext { get; }
 
         public void Dispose()
         {
             ApplicationContext.Dispose();
             _connection.Dispose();
+        }
+
+        private void Initialize()
+        {
+            ApplicationContext.DetachAll();
+            ApplicationContext.Database.Migrate();
+            SeedUser();
         }
 
         private void SeedUser()

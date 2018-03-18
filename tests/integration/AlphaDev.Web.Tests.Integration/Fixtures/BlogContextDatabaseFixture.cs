@@ -19,12 +19,6 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             connection.Reset += Initialize;
         }
 
-        private void Initialize()
-        {
-            BlogContext.DetachAll();
-            BlogContext.Database.Migrate();
-        }
-
         public static Blog DefaultBlog => new Blog
         {
             Content = "Content integration test2.",
@@ -57,6 +51,12 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         {
             BlogContext.Dispose();
             _connection.Dispose();
+        }
+
+        private void Initialize()
+        {
+            BlogContext.DetachAll();
+            BlogContext.Database.Migrate();
         }
     }
 }
