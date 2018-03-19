@@ -10,6 +10,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
     {
         public PostsWebPage(IWebDriver driver, Uri baseUrl) : base(driver, baseUrl)
         {
+            Create = new CreateWebPage(Driver, new Uri(BaseUrl, "create"));
         }
 
         public IEnumerable<BlogPost> Posts
@@ -32,5 +33,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
             new BlogDate(Driver.FindElement(By.CssSelector(".blog .created-date")).Text,
                 (Driver.FindElements(By.CssSelector(".blog .modified-date")).FirstOrDefault()?.Text)
                 .SomeNotNull()));
+
+        public CreateWebPage Create { get; }
     }
 }
