@@ -1,5 +1,6 @@
 using System;
 using OpenQA.Selenium;
+using Optional.Collections;
 
 namespace AlphaDev.Web.Tests.Integration.Support
 {
@@ -21,9 +22,16 @@ namespace AlphaDev.Web.Tests.Integration.Support
             set => Driver.FindElement(By.Id("Title")).SendKeys(value);
         }
 
+        public string Preview => Driver.FindElement(By.ClassName("md-preview")).GetAttribute("innerHTML").Trim();
+
         public void Submit()
         {
             Driver.FindElement(By.ClassName("btn-success")).Click();
+        }
+
+        public void TogglePreview()
+        {
+            Driver.FindElement(By.ClassName("btn-primary")).Click();
         }
     }
 }

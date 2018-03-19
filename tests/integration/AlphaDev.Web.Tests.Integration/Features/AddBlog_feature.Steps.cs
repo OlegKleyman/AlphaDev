@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using AlphaDev.Web.Tests.Integration.Fixtures;
+using AlphaDev.Web.Tests.Integration.Support;
 using FluentAssertions;
 using LightBDD.Framework;
 using LightBDD.XUnit2;
+using Markdig;
 using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
@@ -36,6 +38,22 @@ namespace AlphaDev.Web.Tests.Integration.Features
 	    private void And_am_on_the_create_blog_page()
 	    {
 	        SiteTester.Posts.Create.GoTo();
+	    }
+
+	    private void And_I_entered_markdown_content()
+	    {
+	        SiteTester.Posts.Create.Content = _addedBlogContent = "```\ntest\n```";
+	    }
+
+	    private void When_I_preview_the_content()
+	    {
+	        SiteTester.Posts.Create.TogglePreview();
+	    }
+
+	    private void Then_it_should_be_rendered_to_html()
+	    {
+	        SiteTester.Posts.Create.Preview.Should()
+	            .BeEquivalentTo(Markdown.ToHtml(_addedBlogContent).Replace("\n", "\r\n").Trim());
 	    }
 	}
 }
