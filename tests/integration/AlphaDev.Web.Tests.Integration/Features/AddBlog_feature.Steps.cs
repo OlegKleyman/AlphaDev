@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using AlphaDev.Web.Tests.Integration.Support;
 using FluentAssertions;
 using LightBDD.Framework;
+using LightBDD.Framework.Scenarios.Basic;
 using LightBDD.XUnit2;
 using Markdig;
 using Xunit.Abstractions;
@@ -18,10 +21,22 @@ namespace AlphaDev.Web.Tests.Integration.Features
 	    {
 	    }
 
-	    private void When_I_submit_a_blog()
+	    private void When_I_fill_in_required_fields()
 	    {
+	        var ht = SiteTester.Driver.PageSource;
 	        SiteTester.Posts.Create.BlogTitle = _addedBlogTitle = "test";
 	        SiteTester.Posts.Create.Content = _addedBlogContent = "testing";
+        }
+
+	    private CompositeStep When_I_save_a_blog()
+	    {
+	        return CompositeStep.DefineNew()
+	            .AddSteps(When_I_fill_in_required_fields, When_I_click_save).Build();
+
+	    }
+
+        private void When_I_save()
+	    {
 	        SiteTester.Posts.Create.Submit();
 	    }
 
@@ -54,6 +69,22 @@ namespace AlphaDev.Web.Tests.Integration.Features
 	    {
 	        SiteTester.Posts.Create.Preview.Should()
 	            .BeEquivalentTo(Markdown.ToHtml(_addedBlogContent).Replace("\n", "\r\n").Trim());
+	    }
+
+	    private void When_I_click_save()
+	    {
+	        SiteTester.Posts.Create.Submit();
+        }
+
+	    private void Then_it_should_display_errors_under_the_required_fields_not_filled_in()
+	    {
+	        SiteTester.Posts.Create.PageErrors.Should()
+	            .BeEquivalentTo("The Title field is required.", "The Content field is required.");
+	    }
+
+	    private void Then_I_should_be_redirected_to_the_post()
+	    {
+	        SiteTester.Driver.Url.Should().MatchRegex(Regex.Escape(SiteTester.Posts.BaseUrl.AbsoluteUri) + @"\d+$");
 	    }
 	}
 }

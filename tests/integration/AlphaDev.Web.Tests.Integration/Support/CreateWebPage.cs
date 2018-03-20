@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using OpenQA.Selenium;
 using Optional.Collections;
 
@@ -23,6 +25,11 @@ namespace AlphaDev.Web.Tests.Integration.Support
         }
 
         public string Preview => Driver.FindElement(By.ClassName("md-preview")).GetAttribute("innerHTML").Trim();
+
+        public IEnumerable<string> PageErrors
+        {
+            get { return Driver.FindElements(By.CssSelector("span[id$=\"-error\"]")).Select(element => element.Text); }
+        }
 
         public void Submit()
         {
