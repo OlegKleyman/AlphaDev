@@ -7,7 +7,9 @@ using System.Net.Sockets;
 using System.Reflection;
 using AlphaDev.Web.Bootstrap;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
@@ -37,13 +39,17 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         {
             var url = $"http://127.0.0.1:{GetOpenPort()}";
 
-            _host = new WebHostBuilder().ConfigureAppConfiguration(builder => builder.SetBasePath(Path.GetFullPath("."))
+            _host = new WebHostBuilder()
+                .ConfigureAppConfiguration(builder => builder
+                    .SetBasePath(Path.GetFullPath("."))
                     .AddJsonFile("appsettings.json", true, true)
                     .AddInMemoryCollection(connectionStrings.ToDictionary(pair => $"connectionStrings:{pair.Key}",
                         pair => pair.Value)))
                 .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel()
-                .UseStartup<Startup>().UseUrls(url).UseSetting(WebHostDefaults.ApplicationKey,
-                    typeof(Program).GetTypeInfo().Assembly.FullName).Build();
+                .UseStartup<Startup>()
+                .UseUrls(url)
+                .UseSetting(WebHostDefaults.ApplicationKey, typeof(Program).GetTypeInfo().Assembly.FullName)
+                .Build();
 
             _host.Start();
 
