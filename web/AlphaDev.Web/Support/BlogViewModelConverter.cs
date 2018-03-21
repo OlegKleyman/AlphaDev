@@ -8,6 +8,11 @@ namespace AlphaDev.Web.Support
 {
     public class BlogViewModelConverter : JsonConverter
     {
+        private static readonly Lazy<BlogViewModelConverter> Singleton = new Lazy<BlogViewModelConverter>(() => new BlogViewModelConverter());
+        public static BlogViewModelConverter Default => Singleton.Value;
+
+        private BlogViewModelConverter() { }
+
         public override bool CanConvert(Type objectType)
         {
             return (objectType == typeof(BlogViewModel));

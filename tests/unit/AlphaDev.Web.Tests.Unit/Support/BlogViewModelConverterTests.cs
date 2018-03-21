@@ -179,7 +179,13 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
         private BlogViewModelConverter GetBlogViewModelConverter()
         {
-            return new BlogViewModelConverter();
+            return BlogViewModelConverter.Default;
+        }
+
+        [Fact]
+        public void DefaultShouldReturnSingletonInstance()
+        {
+            BlogViewModelConverter.Default.Should().BeSameAs(BlogViewModelConverter.Default);
         }
 
         private class BlogViewModelConverterTestsTheories

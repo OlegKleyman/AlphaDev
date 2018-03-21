@@ -38,7 +38,7 @@ namespace AlphaDev.Web.Controllers
         {
             return (TempData?["Model"])
                 .SomeNotNull()
-                .Map(o => JsonConvert.DeserializeObject<BlogViewModel>(o.ToString()))
+                .Map(o => JsonConvert.DeserializeObject<BlogViewModel>(o.ToString(), BlogViewModelConverter.Default))
                 .Else(() =>
                     _blogService.Get(id)
                         .Map(foundBlog => new BlogViewModel(foundBlog.Id,
@@ -63,7 +63,7 @@ namespace AlphaDev.Web.Controllers
         {
             var added = _blogService.Add(new Blog(post.Title, post.Content));
             TempData["Model"] = JsonConvert.SerializeObject(new BlogViewModel(added.Id, added.Title, added.Content,
-                new DatesViewModel(added.Dates.Created, added.Dates.Modified)));
+                new DatesViewModel(added.Dates.Created, added.Dates.Modified)), BlogViewModelConverter.Default);
 
             return RedirectToAction(nameof(Index), new { id = added.Id });
         }

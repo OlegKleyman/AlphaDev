@@ -27,14 +27,6 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
         private PostsController GetPostsController(IBlogService blogService)
         {
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
-            {
-                Converters = new List<JsonConverter>
-                {
-                    new BlogViewModelConverter()
-                }
-            };
-
             return new PostsController(blogService);
         }
 
@@ -180,7 +172,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetPostsController(Substitute.For<IBlogService>());
             controller.TempData = new TempDataDictionary(new DefaultHttpContext(), Substitute.For<ITempDataProvider>())
             {
-                ["Model"] = JsonConvert.SerializeObject(blog, new BlogViewModelConverter())
+                ["Model"] = JsonConvert.SerializeObject(blog, BlogViewModelConverter.Default)
             };
 
             controller.Index(default).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(
@@ -198,7 +190,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetPostsController(Substitute.For<IBlogService>());
             controller.TempData = new TempDataDictionary(new DefaultHttpContext(), Substitute.For<ITempDataProvider>())
             {
-                ["Model"] = JsonConvert.SerializeObject(blog, new BlogViewModelConverter())
+                ["Model"] = JsonConvert.SerializeObject(blog, BlogViewModelConverter.Default)
             };
 
             controller.Index(default).Should().BeOfType<ViewResult>().Which.ViewData["Title"].Should()
