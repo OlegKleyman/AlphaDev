@@ -1,7 +1,11 @@
 using System;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace AlphaDev.Web.Models
 {
+    [Serializable]
     public class BlogViewModel
     {
         public BlogViewModel(int id, string title, string content, DatesViewModel dates)

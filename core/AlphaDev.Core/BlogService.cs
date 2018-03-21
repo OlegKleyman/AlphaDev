@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AlphaDev.Core.Data.Contexts;
 using Optional;
@@ -37,6 +38,11 @@ namespace AlphaDev.Core
             return _context.Blogs.Find(id).SomeNotNull().Map(blog =>
                 (BlogBase) new Blog(blog.Id, blog.Title, blog.Content,
                     new Dates(blog.Created, blog.Modified.ToOption())));
+        }
+
+        public BlogBase Add(BlogBase blog)
+        {
+            throw new NotImplementedException();
         }
     }
 }
