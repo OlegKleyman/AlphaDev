@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AlphaDev.Core.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
 using Optional;
 using Optional.Collections;
 
@@ -42,7 +43,19 @@ namespace AlphaDev.Core
 
         public BlogBase Add(BlogBase blog)
         {
-            throw new NotImplementedException();
+            var entity = new Data.Entities.Blog
+            {
+                Title = blog.Title,
+                Content = blog.Content
+            };
+
+            var entry = _context.Blogs.Add(entity);
+            _context.SaveChanges();
+
+            if (entry.State != EntityState.Unchanged) throw new InvalidOperationException("Unable to save changes");
+
+            return new Blog(entity.Id, entity.Title, entity.Content,
+                new Dates(entity.Created, entity.Modified.ToOption()));
         }
     }
 }

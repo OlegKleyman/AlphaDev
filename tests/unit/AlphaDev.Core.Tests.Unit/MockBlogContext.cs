@@ -12,6 +12,8 @@ namespace AlphaDev.Core.Tests.Unit
             _testName = testName;
         }
 
+        public bool Fail { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseInMemoryDatabase(_testName);
@@ -19,6 +21,11 @@ namespace AlphaDev.Core.Tests.Unit
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+        }
+
+        public override int SaveChanges()
+        {
+            return Fail ? 0 : base.SaveChanges();
         }
     }
 }
