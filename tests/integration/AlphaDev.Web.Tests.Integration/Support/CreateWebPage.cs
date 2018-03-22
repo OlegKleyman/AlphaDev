@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenQA.Selenium;
-using Optional.Collections;
 
 namespace AlphaDev.Web.Tests.Integration.Support
 {
-    public class CreateWebPage:WebPage
+    public class CreateWebPage : WebPage
     {
         public CreateWebPage(IWebDriver driver, Uri baseUrl) : base(driver, baseUrl)
         {

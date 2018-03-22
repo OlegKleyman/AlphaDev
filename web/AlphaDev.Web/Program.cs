@@ -1,13 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using AlphaDev.Web.Bootstrap;
-using AlphaDev.Web.Support;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Rest.Serialization;
-using Newtonsoft.Json;
 
 namespace AlphaDev.Web
 {

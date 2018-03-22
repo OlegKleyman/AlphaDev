@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\core\AlphaDev.Core.Data.Account.Security.Sql\AlphaDev.Core.Data.Account.Security.Sql.csproj" />
     <ProjectReference Include="..\..\..\core\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
     <ProjectReference Include="..\..\..\web\AlphaDev.Web\AlphaDev.Web.csproj" />
     <ProjectReference Include="..\..\core\AlphaDev.Test.Core\AlphaDev.Test.Core.csproj" />

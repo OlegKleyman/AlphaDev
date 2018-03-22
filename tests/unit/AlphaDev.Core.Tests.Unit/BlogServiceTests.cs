@@ -2,13 +2,6 @@
 using System.Text.RegularExpressions;
 using AlphaDev.Core.Data.Contexts;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using NSubstitute;
 using Optional;
 using Optional.Unsafe;
 using Xunit;
@@ -20,6 +13,46 @@ namespace AlphaDev.Core.Tests.Unit
         private BlogService GetBlogService(BlogContext context)
         {
             return new BlogService(context ?? new MockBlogContext("default"));
+        }
+
+        [Fact]
+        public void AddShouldReturnBlog()
+        {
+            var context = new MockBlogContext(nameof(AddShouldReturnBlog));
+            var service = GetBlogService(context);
+
+            const string title = "title";
+            const string content = "content";
+
+            var blog = new Blog(title, content);
+            var addedBlog = service.Add(blog);
+
+            addedBlog.Should().BeEquivalentTo(new
+            {
+                Title = title,
+                Content = content,
+                Dates = new {Created = default(DateTime), Modified = Option.None<DateTime>()}
+            }, options => options.ExcludingMissingMembers());
+
+            // Id gets auto generated and never reset. Not going to investigate further
+            // on how to fix this.
+            addedBlog.Id.Should().NotBe(0);
+        }
+
+        [Fact]
+        public void AddShouldShouldThrowInvalidOperationExceptionWhenUnableToAddBlog()
+        {
+            var context =
+                new MockBlogContext(nameof(AddShouldShouldThrowInvalidOperationExceptionWhenUnableToAddBlog))
+                {
+                    Fail = true
+                };
+
+            var service = GetBlogService(context);
+
+            Action add = () => service.Add(new Blog(null, null));
+
+            add.Should().Throw<InvalidOperationException>().WithMessage("Unable to save changes");
         }
 
         [Fact]
@@ -389,46 +422,6 @@ namespace AlphaDev.Core.Tests.Unit
             service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
                 new {Title = testValue},
                 options => options.ExcludingMissingMembers());
-        }
-
-        [Fact]
-        public void AddShouldReturnBlog()
-        {
-            var context = new MockBlogContext(nameof(AddShouldReturnBlog));
-            var service = GetBlogService(context);
-
-            const string title = "title";
-            const string content = "content";
-
-            var blog = new Blog(title,content);
-            var addedBlog = service.Add(blog);
-
-            addedBlog.Should().BeEquivalentTo(new
-            {
-                Title = title,
-                Content = content,
-                Dates = new {Created = default(DateTime), Modified = Option.None<DateTime>()}
-            }, options => options.ExcludingMissingMembers());
-
-            // Id gets auto generated and never reset. Not going to investigate further
-            // on how to fix this.
-            addedBlog.Id.Should().NotBe(0);
-        }
-
-        [Fact]
-        public void AddShouldShouldThrowInvalidOperationExceptionWhenUnableToAddBlog()
-        {
-            var context =
-                new MockBlogContext(nameof(AddShouldShouldThrowInvalidOperationExceptionWhenUnableToAddBlog))
-                {
-                    Fail = true
-                };
-
-            var service = GetBlogService(context);
-
-            Action add = () => service.Add(new Blog(null, null));
-
-            add.Should().Throw<InvalidOperationException>().WithMessage("Unable to save changes");
         }
     }
 }

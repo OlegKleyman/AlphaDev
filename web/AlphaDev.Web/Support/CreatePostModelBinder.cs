@@ -9,7 +9,7 @@ namespace AlphaDev.Web.Support
     {
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            if(bindingContext == null) throw new ArgumentNullException(nameof(bindingContext));
+            if (bindingContext == null) throw new ArgumentNullException(nameof(bindingContext));
 
             var title = bindingContext.ValueProvider?.GetValue("Title").FirstValue;
             var content = bindingContext.ValueProvider?.GetValue("Content").FirstValue;

@@ -7,9 +7,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using AlphaDev.Web.Bootstrap;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {

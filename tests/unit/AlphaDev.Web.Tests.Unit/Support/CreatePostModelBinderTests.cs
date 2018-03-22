@@ -1,7 +1,6 @@
 ﻿using System;
 using AlphaDev.Web.Support;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
 using NSubstitute;
@@ -11,6 +10,18 @@ namespace AlphaDev.Web.Tests.Unit.Support
 {
     public class CreatePostModelBinderTests
     {
+        private static DefaultModelBindingContext GetContext()
+        {
+            var context = new DefaultModelBindingContext();
+
+            return context;
+        }
+
+        private CreatePostModelBinder GetCreatePostModelBinder()
+        {
+            return new CreatePostModelBinder();
+        }
+
         [Fact]
         public void BindModelAsyncShouldSetModelWithTitleAndContent()
         {
@@ -37,7 +48,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
             binder.BindModelAsync(context).GetAwaiter().OnCompleted(() =>
             {
-                context.Result.Model.Should().BeEquivalentTo(new { Title = string.Empty, Content = string.Empty });
+                context.Result.Model.Should().BeEquivalentTo(new {Title = string.Empty, Content = string.Empty});
             });
         }
 
@@ -50,7 +61,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
             binder.BindModelAsync(context).GetAwaiter().OnCompleted(() =>
             {
-                context.Result.Model.Should().BeEquivalentTo(new { Title = string.Empty, Content = string.Empty });
+                context.Result.Model.Should().BeEquivalentTo(new {Title = string.Empty, Content = string.Empty});
             });
         }
 
@@ -62,18 +73,6 @@ namespace AlphaDev.Web.Tests.Unit.Support
             bindModelAsync.Should().Throw<ArgumentNullException>()
                 .WithMessage("Value cannot be null.\r\nParameter name: bindingContext").Which.ParamName.Should()
                 .BeEquivalentTo("bindingContext");
-        }
-
-        private static DefaultModelBindingContext GetContext()
-        {
-            var context = new DefaultModelBindingContext();
-
-            return context;
-        }
-
-        private CreatePostModelBinder GetCreatePostModelBinder()
-        {
-            return new CreatePostModelBinder();
         }
     }
 }

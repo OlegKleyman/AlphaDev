@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AlphaDev.Core;
 using AlphaDev.Web.Models;
 using AlphaDev.Web.Support;
@@ -65,7 +64,7 @@ namespace AlphaDev.Web.Controllers
             TempData["Model"] = JsonConvert.SerializeObject(new BlogViewModel(added.Id, added.Title, added.Content,
                 new DatesViewModel(added.Dates.Created, added.Dates.Modified)), BlogViewModelConverter.Default);
 
-            return RedirectToAction(nameof(Index), new { id = added.Id });
+            return RedirectToAction(nameof(Index), new {id = added.Id});
         }
     }
 }
