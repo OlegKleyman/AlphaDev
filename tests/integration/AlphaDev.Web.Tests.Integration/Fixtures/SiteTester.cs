@@ -16,7 +16,6 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             Environment.SetEnvironmentVariable(pathEnvironmentVariableName, path + ";.");
 
             var options = new ChromeOptions();
-            options.AddArguments("--headless");
             Driver = new ChromeDriver(options);
             Driver.Manage().Window.Maximize();
 
