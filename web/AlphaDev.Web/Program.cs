@@ -12,7 +12,8 @@ namespace AlphaDev.Web
         {
             WebHost.CreateDefaultBuilder().UseStartup<Startup>()
                 .ConfigureAppConfiguration(builder => builder.AddJsonFile("connectionstrings.json", true, true))
-                .UseSetting(WebHostDefaults.ApplicationKey, typeof(Program).GetTypeInfo().Assembly.FullName).Build()
+                .UseSetting(WebHostDefaults.ApplicationKey, typeof(Program).GetTypeInfo().Assembly.FullName)
+                .Build()
                 .Run();
         }
     }

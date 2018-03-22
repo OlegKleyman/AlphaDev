@@ -5,6 +5,8 @@
     "jquery": "2.2.4",
     "jquery-validation": "1.16.0",
     "jquery-validation-unobtrusive": "3.2.6",
-    "bootstrap": "v3.3.7"
+    "bootstrap": "v3.3.7",
+    "marked": "v0.3.17",
+    "bootstrap-markdown": "v2.10.0"
   }
 }

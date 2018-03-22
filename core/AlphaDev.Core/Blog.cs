@@ -10,6 +10,12 @@
             Dates = dates;
         }
 
+        public Blog(string title, string content)
+        {
+            Title = title;
+            Content = content;
+        }
+
         public override string Title { get; }
 
         public override Dates Dates { get; }

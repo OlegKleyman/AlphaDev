@@ -21,5 +21,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             SiteTester.Admin.GoTo();
         }
+
+        public void Given_I_have_logged_in()
+        {
+            SiteTester.Login.GoTo();
+
+            SiteTester.Login.Username = "something@something.com";
+            SiteTester.Login.Password = "H3ll04321!";
+
+            SiteTester.Login.Submit();
+        }
     }
 }

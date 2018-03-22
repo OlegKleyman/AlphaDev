@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using AlphaDev.Core;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
+using AlphaDev.Web.Support;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Newtonsoft.Json;
 using NSubstitute;
 using Optional;
 using Xunit;
@@ -24,6 +28,55 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         private PostsController GetPostsController(IBlogService blogService)
         {
             return new PostsController(blogService);
+        }
+
+        [Fact]
+        public void CreateShouldRouteIdArgument()
+        {
+            var controller = GetPostsController(Substitute.For<IBlogService>());
+
+            controller.TempData = new TempDataDictionary(new DefaultHttpContext(), Substitute.For<ITempDataProvider>());
+
+            var post = new CreatePostViewModel("title", "content");
+
+            controller.Create(post).Should().BeOfType<RedirectToActionResult>().Which.RouteValues.Should()
+                .ContainKey("id").WhichValue.Should().BeEquivalentTo(default(int));
+        }
+
+        [Fact]
+        public void CreateShouldRouteToIndexAction()
+        {
+            var controller = GetPostsController(Substitute.For<IBlogService>());
+
+            controller.TempData = new TempDataDictionary(new DefaultHttpContext(), Substitute.For<ITempDataProvider>());
+
+            var post = new CreatePostViewModel("title", "content");
+
+            controller.Create(post).Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should()
+                .BeEquivalentTo("Index");
+        }
+
+        [Fact]
+        public void CreateShouldSetTempDataWithModelFromDatastoreWhenTempDataIsNotNull()
+        {
+            var blogService = Substitute.For<IBlogService>();
+            var blog = Substitute.For<BlogBase>();
+            blog.Id.Returns(1);
+            blog.Title.Returns("title");
+            blog.Content.Returns("content");
+            blog.Dates.Returns(new Dates(new DateTime(2000, 1, 1), Option.Some(new DateTime(2018, 3, 18))));
+
+            blogService.Add(Arg.Any<BlogBase>()).Returns(blog);
+
+            var controller = GetPostsController(blogService);
+
+            controller.TempData = new TempDataDictionary(new DefaultHttpContext(), Substitute.For<ITempDataProvider>());
+
+            var post = new CreatePostViewModel("title", "content");
+            controller.Create(post);
+
+            controller.TempData.Should().ContainKey("Model").WhichValue.Should().BeEquivalentTo(
+                "{\"Id\":1,\"Title\":\"title\",\"Content\":\"content\",\"Dates\":{\"Created\":\"2000-01-01T00:00:00\",\"Modified\":\"2018-03-18T00:00:00\"}}");
         }
 
         [Fact]
@@ -98,7 +151,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void IndexShouldReturnBlogModelWithValuesSetFromTheBlogService()
+        public void IndexShouldReturnBlogModelWithValuesSetFromTheBlogServiceWhenTempDataOrModelDontExist()
         {
             const int id = 123;
             BlogBase blog = new Blog(id,
@@ -121,6 +174,24 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetPostsController();
 
             controller.Index().Should().BeOfType<ViewResult>();
+        }
+
+        [Fact]
+        public void IndexShouldReturnPostViewModelFromSerializedTempDataWhenItExists()
+        {
+            var blog = new BlogViewModel(default,
+                "title",
+                "content",
+                new DatesViewModel(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
+
+            var controller = GetPostsController(Substitute.For<IBlogService>());
+            controller.TempData = new TempDataDictionary(new DefaultHttpContext(), Substitute.For<ITempDataProvider>())
+            {
+                ["Model"] = JsonConvert.SerializeObject(blog, BlogViewModelConverter.Default)
+            };
+
+            controller.Index(default).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(
+                new {blog.Id, blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}});
         }
 
         [Fact]
@@ -155,6 +226,24 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             controller.Index(id).Should().BeOfType<ViewResult>().Which.ViewData["Title"].Should()
                 .BeEquivalentTo("title");
+        }
+
+        [Fact]
+        public void IndexShouldReturnTitleFromSerializedTempDataWhenItExists()
+        {
+            var blog = new BlogViewModel(default,
+                "title",
+                "content",
+                new DatesViewModel(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
+
+            var controller = GetPostsController(Substitute.For<IBlogService>());
+            controller.TempData = new TempDataDictionary(new DefaultHttpContext(), Substitute.For<ITempDataProvider>())
+            {
+                ["Model"] = JsonConvert.SerializeObject(blog, BlogViewModelConverter.Default)
+            };
+
+            controller.Index(default).Should().BeOfType<ViewResult>().Which.ViewData["Title"].Should()
+                .BeEquivalentTo(blog.Title);
         }
     }
 }
