@@ -11,7 +11,7 @@ As an administrator
 I want to have a web page where I can create a blog post")]
     public partial class AddBlog_feature
     {
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Create_a_blog_post()
         {
             Runner.RunScenario(
@@ -21,7 +21,7 @@ I want to have a web page where I can create a blog post")]
                 _ => Then_it_should_be_saved_in_the_datastore());
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Preview_blog_post()
         {
             Runner.RunScenario(
@@ -42,7 +42,7 @@ I want to have a web page where I can create a blog post")]
                 Then_it_should_display_errors_under_the_required_fields_not_filled_in);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void After_adding_a_post_I_should_be_redirected_to_it()
         {
             Runner.RunScenario(

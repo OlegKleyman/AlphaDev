@@ -10,7 +10,7 @@ As a user
 I want to authenticate myself")]
     public partial class Authentication_feature
     {
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Login_page_should_load()
         {
             Runner.RunScenario(
@@ -19,7 +19,7 @@ I want to authenticate myself")]
                 Then_it_should_load);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Login_page_should_redirect_back_to_protected_page_after_successful_login()
         {
             Runner.RunScenario(
@@ -29,7 +29,7 @@ I want to authenticate myself")]
                 Then_I_should_be_redirected_back_to_the_admin_area);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Login_page_should_show_validation_errors_when_required_fields_are_not_filled()
         {
             Runner.RunScenario(
@@ -39,7 +39,7 @@ I want to authenticate myself")]
                 Then_it_should_display_errors_for_the_required_field);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Authenticated_users_should_see_create_post_link()
         {
             Runner.RunScenario(

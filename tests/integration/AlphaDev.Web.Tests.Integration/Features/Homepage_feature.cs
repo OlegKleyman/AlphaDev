@@ -13,7 +13,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
           I want to interact with the homepage")]
     public partial class Homepage_feature
     {
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Load_homepage()
         {
             Runner.RunScenario(
@@ -22,7 +22,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 Then_it_should_load);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Display_nav()
         {
             Runner.RunScenario(
@@ -31,7 +31,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 Then_it_should_display_navigation_links);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Display_latest_post()
         {
             Runner.RunScenario(
@@ -41,7 +41,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 Then_it_should_display_the_latest_blog_post);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Display_dates_using_dd_for_day()
         {
             Runner.RunScenario(
@@ -52,7 +52,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 And_it_should_display_two_digits_for_day_for_modified);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Display_post_with_markdown_parsed_to_html()
         {
             Runner.RunScenario(
@@ -62,7 +62,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 Then_it_should_display_blog_post_with_markdown_parsed_to_html);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Display_post_with_title()
         {
             Runner.RunScenario(
@@ -72,7 +72,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 Then_it_should_display_title);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         [InlineData(ModifiedState.Modified)]
         [InlineData(ModifiedState.NotModified)]
         public void Display_modified_date_based_on_whether_was(ModifiedState modifiedState)
@@ -85,7 +85,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 _ => Then_it_should_display_the_blog_with_a_modification_date_if_it_exists());
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Display_error_page()
         {
             Runner.RunScenario(
@@ -95,7 +95,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 Then_it_should_display_an_error);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Website_should_log_errors()
         {
             Runner.RunScenario(
@@ -105,7 +105,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 Then_an_error_should_be_logged);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Display_homepage_with_welcome_post_if_no_posts_exist()
         {
             Runner.RunScenario(

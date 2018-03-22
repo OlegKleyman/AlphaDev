@@ -12,7 +12,7 @@ As a user
 I want to view the post")]
     public partial class Post_feature
     {
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Posts_page_should_load_single_post_when_viewing_by_id()
         {
             Runner.RunScenario(
@@ -21,7 +21,7 @@ I want to view the post")]
                 _ => Then_it_should_load_the_page());
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Posts_page_should_display_title()
         {
             Runner.RunScenario(
@@ -30,7 +30,7 @@ I want to view the post")]
                 _ => Then_it_should_display_the_title());
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Display_post_with_markdown_parsed_to_html()
         {
             Runner.RunScenario(
@@ -39,7 +39,7 @@ I want to view the post")]
                 _ => Then_it_should_display_blog_post_with_markdown_parsed_to_html());
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         [InlineData(ModifiedState.Modified)]
         [InlineData(ModifiedState.NotModified)]
         public void Display_modified_date_based_on_whether_was(ModifiedState modifiedState)
@@ -52,7 +52,7 @@ I want to view the post")]
                 _ => Then_it_should_display_the_blog_with_a_modification_date_if_it_exists());
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Posts_page_should_display_created_date()
         {
             Runner.RunScenario(
@@ -61,7 +61,7 @@ I want to view the post")]
                 _ => Then_it_should_display_the_created_date());
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Posts_page_should_display_404_status_when_blog_is_not_found()
         {
             Runner.RunScenario(
@@ -70,7 +70,7 @@ I want to view the post")]
                 _ => Then_it_should_display_the_error_page_with_a_404_status());
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Post_page_should_have_all_posts_menu_link_lead_to_all_posts_page()
         {
             Runner.RunScenario(

@@ -13,7 +13,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
           I want to interact with the posts page")]
     public partial class Posts_feature
     {
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Posts_page_should_load()
         {
             Runner.RunScenario(
@@ -22,7 +22,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 Then_it_should_load);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Posts_page_should_load_all_posts()
         {
             Runner.RunScenario(
@@ -32,7 +32,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 Then_it_should_display_all_posts);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Posts_page_should_load_all_posts_ordered_by_creation_date_descending()
         {
             Runner.RunScenario(
@@ -42,7 +42,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 Then_it_should_display_all_posts_ordered_by_creation_date_descending);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Posts_page_should_load_all_posts_with_markdown_parsed_to_html()
         {
             Runner.RunScenario(
@@ -52,7 +52,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 Then_it_should_display_all_posts_with_markdown_parsed_to_html);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Posts_page_should_load_all_posts_with_a_title()
         {
             Runner.RunScenario(
@@ -62,7 +62,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 Then_it_should_display_all_posts_with_a_title);
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         [InlineData(ModifiedState.Modified)]
         [InlineData(ModifiedState.NotModified)]
         public void Display_modified_date_for_posts_based_on_whether_was(ModifiedState modifiedState)
@@ -74,7 +74,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 _ => Then_it_should_display_all_posts_with_modification_date_if_it_exists());
         }
 
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Posts_page_should_load_all_posts_with_a_navigation_link_to_the_entire_post()
         {
             Runner.RunScenario(

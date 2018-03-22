@@ -10,7 +10,7 @@ As a user
 I want to only be allowed to access the admin area if I have the authority")]
     public partial class Authorization_feature
     {
-        [Scenario]
+        [Scenario][IgnoreScenario("dfsdgdfs")]
         public void Redirect_unauthenticated_users_to_login_page()
         {
             Runner.RunScenario(
