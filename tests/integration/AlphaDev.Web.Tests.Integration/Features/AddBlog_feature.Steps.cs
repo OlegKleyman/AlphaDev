@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using FluentAssertions;
@@ -70,11 +71,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void When_I_click_save()
         {
+            Console.WriteLine(SiteTester.Driver.PageSource);
+            System.Threading.Thread.Sleep(30000);
+            Console.WriteLine(SiteTester.Driver.PageSource);
             SiteTester.Posts.Create.Submit();
         }
 
         private void Then_it_should_display_errors_under_the_required_fields_not_filled_in()
         {
+            System.Threading.Thread.Sleep(10000);
             SiteTester.Posts.Create.PageErrors.Should()
                 .BeEquivalentTo("The Title field is required.", "The Content field is required.");
         }
