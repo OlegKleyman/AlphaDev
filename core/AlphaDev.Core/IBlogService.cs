@@ -8,5 +8,6 @@ namespace AlphaDev.Core
         Option<BlogBase> GetLatest();
         IEnumerable<BlogBase> GetAll();
         Option<BlogBase> Get(int id);
+        BlogBase Add(BlogBase blog);
     }
 }

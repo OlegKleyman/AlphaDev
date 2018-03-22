@@ -2,6 +2,7 @@ using System;
 
 namespace AlphaDev.Web.Models
 {
+    [Serializable]
     public class BlogViewModel
     {
         public BlogViewModel(int id, string title, string content, DatesViewModel dates)

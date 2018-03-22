@@ -25,7 +25,7 @@
     <PackageReference Include="LightBDD.XUnit2" Version="2.3.5" />
     <PackageReference Include="Markdig" Version="0.14.9" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.6.0" />
-    <PackageReference Include="Omego.Extensions" Version="2.0.20" />
+    <PackageReference Include="Omego.Extensions" Version="2.0.21" />
     <PackageReference Include="Selenium.PhantomJS.WebDriver" Version="2.1.1" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\core\AlphaDev.Core.Data.Account.Security.Sql\AlphaDev.Core.Data.Account.Security.Sql.csproj" />
     <ProjectReference Include="..\..\..\core\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
     <ProjectReference Include="..\..\..\web\AlphaDev.Web\AlphaDev.Web.csproj" />
     <ProjectReference Include="..\..\core\AlphaDev.Test.Core\AlphaDev.Test.Core.csproj" />
@@ -57,6 +58,12 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Assets.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Features\AddBlog_feature.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Features\AddBlog_feature.Steps.cs">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Update="Features\Authentication_feature.cs">
       <SubType>Code</SubType>
