@@ -1,6 +1,7 @@
 using System;
 using AlphaDev.Web.Tests.Integration.Support;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.PhantomJS;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
@@ -14,7 +15,10 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 
             Environment.SetEnvironmentVariable(pathEnvironmentVariableName, path + ";.");
 
-            Driver = new PhantomJSDriver();
+            var options = new ChromeOptions();
+            options.AddArguments("headless");
+
+            Driver = new ChromeDriver(options);
             Driver.Manage().Window.Maximize();
 
             HomePage = new HomePageWebPage(Driver, baseUrl);
