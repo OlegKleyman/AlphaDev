@@ -245,5 +245,28 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             controller.Index(default).Should().BeOfType<ViewResult>().Which.ViewData["Title"].Should()
                 .BeEquivalentTo(blog.Title);
         }
+
+        [Fact]
+        public void CreateShouldReturnCreateViewWhenModelStateIsInvalid()
+        {
+            var controller = GetPostsController(Substitute.For<IBlogService>());
+
+            controller.ModelState.AddModelError("test", "test");
+
+            controller.Create(default).Should().BeOfType<ViewResult>().Which.ViewName.Should()
+                .BeEquivalentTo("Create");
+        }
+
+        [Fact]
+        public void CreateShouldReturnViewWithSameModelWhenModelStateIsInvalid()
+        {
+            var controller = GetPostsController(Substitute.For<IBlogService>());
+
+            controller.ModelState.AddModelError("test", "test");
+
+            var post = new CreatePostViewModel("title", "content");
+
+            controller.Create(post).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(post);
+        }
     }
 }
