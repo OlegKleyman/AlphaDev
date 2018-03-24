@@ -108,8 +108,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_the_posts_menu_link_to_lead_to_all_posts()
         {
             var homePageNavigation = SiteTester.Posts.Navigation.ToList();
-            homePageNavigation.FirstOrNone(element => element.Text == "Posts")
-                .Map(element => new Uri(element.Href).AbsoluteUri).ValueOrFailure()
+            homePageNavigation.FirstOrNone(element => element is AnchorElement && element.Text == "Posts")
+                .Map(element => new Uri(((AnchorElement)element).Href).AbsoluteUri).ValueOrFailure()
                 .Should().BeEquivalentTo(
                     SiteTester.Posts.BaseUrl.AbsoluteUri.Trim('/') /* trim trailing forward slash(/) */);
         }

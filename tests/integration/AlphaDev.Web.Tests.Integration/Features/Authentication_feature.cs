@@ -48,5 +48,14 @@ I want to authenticate myself")]
                 When_I_successfully_login,
                 Then_I_should_see_create_post_navigation_menu_link);
         }
+
+        [Scenario]
+        public void Authenticated_users_should_see_logout_option()
+        {
+            Runner.RunScenario(
+                CommonSteps.Given_i_am_a_user,
+                CommonSteps.Given_I_have_logged_in,
+                Then_I_should_see_logout_option);
+        }
     }
 }

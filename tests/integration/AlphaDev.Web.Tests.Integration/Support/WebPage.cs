@@ -20,14 +20,9 @@ namespace AlphaDev.Web.Tests.Integration.Support
 
         public string Title => Driver.Title;
 
-        public IEnumerable<AnchorElement> Navigation
-        {
-            get
-            {
-                return Driver.FindElements(By.CssSelector("ul.navbar-nav a"))
-                    .Select(element => new AnchorElement(element.Text, element.GetAttribute("href")));
-            }
-        }
+        public IEnumerable<NavigationElement> Navigation => Driver
+            .FindElements(By.CssSelector("div.navbar-collapse a, div.navbar-collapse button"))
+            .Select(NavigationElement.FromWebElement);
 
         public virtual WebPage GoTo()
         {

@@ -18,7 +18,8 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             var options = new ChromeOptions();
             options.AddArguments("headless");
 
-            Driver = new ChromeDriver(options);
+            Driver = new ChromeDriver(ChromeDriverService.CreateDefaultService(".", "chromedriver.exe"), options);
+
             Driver.Manage().Window.Maximize();
 
             HomePage = new HomePageWebPage(Driver, baseUrl);

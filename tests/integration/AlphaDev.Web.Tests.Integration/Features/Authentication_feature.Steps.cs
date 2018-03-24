@@ -57,7 +57,12 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_I_should_see_create_post_navigation_menu_link()
         {
             SiteTester.Admin.Navigation.Select(element => element.Text).Should()
-                .BeEquivalentTo("Posts", "About", "Contact", "Create Post");
+                .Contain("Create Post");
+        }
+
+        private void Then_I_should_see_logout_option()
+        {
+            SiteTester.Login.Navigation.Select(element => element.Text).Should().Contain("Logout");
         }
     }
 }

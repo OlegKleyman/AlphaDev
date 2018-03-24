@@ -24,6 +24,16 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         public void Given_I_have_logged_in()
         {
+            Login();
+        }
+
+        public void When_I_logged_in()
+        {
+            Login();
+        }
+
+        private void Login()
+        {
             SiteTester.Login.GoTo();
 
             SiteTester.Login.Username = "something@something.com";
