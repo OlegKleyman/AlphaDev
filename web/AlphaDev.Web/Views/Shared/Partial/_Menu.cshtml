@@ -24,4 +24,13 @@
             </li>
         </display>
     </ul>
+    <display value="@User.Identity.IsAuthenticated">
+        <form asp-controller="Account" asp-action="Logout" method="post" class="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+                </li>
+            </ul>
+        </form>
+    </display>
 </div>
