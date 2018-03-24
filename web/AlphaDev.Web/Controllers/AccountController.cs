@@ -1,4 +1,5 @@
-﻿using AlphaDev.Core.Data.Account.Security.Sql.Entities;
+﻿using System.Threading.Tasks;
+using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -26,17 +27,16 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
-            return ModelState.SomeWhen(dictionary =>
-                dictionary.IsValid &&
-                _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false).GetAwaiter()
-                    .GetResult() ==
-                SignInResult.Success).Match(dictionary => Redirect(returnUrl ?? "/"), () =>
-            {
-                ModelState.AddModelError(string.Empty, "Invalid login");
-                return (IActionResult) View("Login", model);
-            });
+            var signIn = await _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false);
+
+            return ModelState.SomeWhen(dictionary => dictionary.IsValid && signIn == SignInResult.Success).Match(
+                dictionary => Redirect(returnUrl ?? "/"), () =>
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login");
+                    return (IActionResult) View("Login", model);
+                });
         }
     }
 }
