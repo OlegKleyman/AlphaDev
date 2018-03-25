@@ -1,14 +1,14 @@
+using OpenQA.Selenium;
+
 namespace AlphaDev.Web.Tests.Integration.Support
 {
-    public class AnchorElement
+    public class AnchorElement : NavigationElement
     {
-        public AnchorElement(string text, string href)
+        public AnchorElement(IWebElement element) : base(element)
         {
-            Text = text;
-            Href = href;
+            Href = element.GetAttribute("href");
         }
 
-        public string Text { get; }
         public string Href { get; }
     }
 }

@@ -60,11 +60,14 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         public ActionResult Create(CreatePostViewModel post)
         {
-            var added = _blogService.Add(new Blog(post.Title, post.Content));
-            TempData["Model"] = JsonConvert.SerializeObject(new BlogViewModel(added.Id, added.Title, added.Content,
-                new DatesViewModel(added.Dates.Created, added.Dates.Modified)), BlogViewModelConverter.Default);
-
-            return RedirectToAction(nameof(Index), new {id = added.Id});
+            return ModelState
+                .SomeWhen(dictionary => dictionary.IsValid)
+                .Map(dictionary => _blogService.Add(new Blog(post.Title, post.Content)))
+                .MatchSomeContinue(blog => TempData["Model"] = JsonConvert.SerializeObject(new BlogViewModel(blog.Id,
+                    blog.Title, blog.Content,
+                    new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)), BlogViewModelConverter.Default))
+                .Map(blog => (ActionResult) RedirectToAction(nameof(Index), new {id = blog.Id}))
+                .ValueOr(View(nameof(Create), post));
         }
     }
 }

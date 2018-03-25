@@ -1,9 +1,12 @@
-﻿using AlphaDev.Core.Data.Account.Security.Sql.Entities;
+﻿using System.Threading.Tasks;
+using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Omego.Extensions.OptionExtensions;
 using Optional;
+using Option = Optional.Option;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace AlphaDev.Web.Controllers
@@ -26,17 +29,27 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
-            return ModelState.SomeWhen(dictionary =>
-                dictionary.IsValid &&
-                _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false).GetAwaiter()
-                    .GetResult() ==
-                SignInResult.Success).Match(dictionary => Redirect(returnUrl ?? "/"), () =>
+            var result = Option.None<IActionResult>();
+
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Invalid login");
-                return (IActionResult) View("Login", model);
-            });
+                result = (await _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false))
+                    .SomeWhen(signInResult => signInResult == SignInResult.Success)
+                    .Map(signInResult => (IActionResult) Redirect(returnUrl ?? "/"))
+                    .MatchNoneContinue(() => ModelState.AddModelError(string.Empty, "Invalid login"));
+            }
+
+            return result.ValueOr(() => View("Login", model));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return RedirectToAction("Index", "Default");
         }
     }
 }
