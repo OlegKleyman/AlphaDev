@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Omego.Extensions.OptionExtensions;
 using Optional;
+using Option = Optional.Option;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace AlphaDev.Web.Controllers
@@ -30,13 +31,13 @@ namespace AlphaDev.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
-            var result = Optional.Option.None<IActionResult>();
+            var result = Option.None<IActionResult>();
 
             if (ModelState.IsValid)
             {
                 result = (await _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false))
                     .SomeWhen(signInResult => signInResult == SignInResult.Success)
-                    .Map(signInResult => (IActionResult)Redirect(returnUrl ?? "/"))
+                    .Map(signInResult => (IActionResult) Redirect(returnUrl ?? "/"))
                     .MatchNoneContinue(() => ModelState.AddModelError(string.Empty, "Invalid login"));
             }
 

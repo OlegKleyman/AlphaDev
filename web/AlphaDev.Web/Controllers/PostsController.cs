@@ -63,9 +63,10 @@ namespace AlphaDev.Web.Controllers
             return ModelState
                 .SomeWhen(dictionary => dictionary.IsValid)
                 .Map(dictionary => _blogService.Add(new Blog(post.Title, post.Content)))
-                .MatchSomeContinue(blog => TempData["Model"] = JsonConvert.SerializeObject(new BlogViewModel(blog.Id, blog.Title, blog.Content,
+                .MatchSomeContinue(blog => TempData["Model"] = JsonConvert.SerializeObject(new BlogViewModel(blog.Id,
+                    blog.Title, blog.Content,
                     new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)), BlogViewModelConverter.Default))
-                .Map(blog => (ActionResult)RedirectToAction(nameof(Index), new {id = blog.Id}))
+                .Map(blog => (ActionResult) RedirectToAction(nameof(Index), new {id = blog.Id}))
                 .ValueOr(View(nameof(Create), post));
         }
     }

@@ -109,7 +109,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             var homePageNavigation = SiteTester.Posts.Navigation.ToList();
             homePageNavigation.FirstOrNone(element => element is AnchorElement && element.Text == "Posts")
-                .Map(element => new Uri(((AnchorElement)element).Href).AbsoluteUri).ValueOrFailure()
+                .Map(element => new Uri(((AnchorElement) element).Href).AbsoluteUri).ValueOrFailure()
                 .Should().BeEquivalentTo(
                     SiteTester.Posts.BaseUrl.AbsoluteUri.Trim('/') /* trim trailing forward slash(/) */);
         }
