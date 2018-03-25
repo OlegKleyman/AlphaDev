@@ -18,6 +18,16 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
     {
         private AccountController GetAccountController()
         {
+            return GetAccountController(GetMockSignInManager());
+        }
+
+        private AccountController GetAccountController(SignInManager<User> signInManager)
+        {
+            return new AccountController(signInManager);
+        }
+
+        private static SignInManager<User> GetMockSignInManager()
+        {
             var userManager = Substitute.For<UserManager<User>>(
                 Substitute.For<IUserStore<User>, IUserPasswordStore<User>>(),
                 Substitute.For<IOptions<IdentityOptions>>(),
@@ -35,7 +45,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             signInManager.PasswordSignInAsync(Arg.Any<string>(), "working", Arg.Any<bool>(), Arg.Any<bool>())
                 .Returns(Task.FromResult(SignInResult.Success));
 
-            return new AccountController(signInManager);
+            return signInManager;
         }
 
         [Fact]
@@ -196,6 +206,29 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             (await controller.Login(model)).Should()
                 .BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(model);
+        }
+
+        [Fact]
+        public async void LogoutShouldRedirectToIndexActionInDefaultController()
+        {
+            var controller = GetAccountController();
+
+            var result = (await controller.Logout()).Should().BeOfType<RedirectToActionResult>().Which;
+
+            result.ActionName.Should().BeEquivalentTo("Index");
+            result.ControllerName.Should().BeEquivalentTo("Default");
+        }
+
+        [Fact]
+        public async void LogoutShouldLogoutUser()
+        {
+            var signInManager = GetMockSignInManager();
+            
+            var controller = GetAccountController(signInManager);
+
+            await controller.Logout();
+
+            await signInManager.Received().SignOutAsync();
         }
     }
 }

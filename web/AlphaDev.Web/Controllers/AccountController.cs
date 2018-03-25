@@ -42,5 +42,13 @@ namespace AlphaDev.Web.Controllers
 
             return result.ValueOr(() => View("Login", model));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return RedirectToAction("Index", "Default");
+        }
     }
 }
