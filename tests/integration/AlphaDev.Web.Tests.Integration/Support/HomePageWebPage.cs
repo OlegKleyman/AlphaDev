@@ -30,5 +30,10 @@ namespace AlphaDev.Web.Tests.Integration.Support
                 return blog;
             }
         }
+
+        public void DeleteBlog()
+        {
+            Driver.FindElement(By.CssSelector(".blog button.delete")).Click();
+        }
     }
 }

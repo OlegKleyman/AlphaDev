@@ -1,4 +1,7 @@
-﻿using AlphaDev.Web.Tests.Integration.Fixtures;
+﻿using System.Collections.Generic;
+using AlphaDev.Core.Data.Entities;
+using AlphaDev.Web.Tests.Integration.Fixtures;
+using Omego.Extensions.DbContextExtensions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
 {
@@ -8,6 +11,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             SiteTester = siteTester;
             DatabasesFixture = databasesFixture;
+            Data = new Dictionary<string, object>();
         }
 
         public SiteTester SiteTester { get; }
@@ -40,6 +44,32 @@ namespace AlphaDev.Web.Tests.Integration.Features
             SiteTester.Login.Password = "H3ll04321!";
 
             SiteTester.Login.Submit();
+        }
+
+        public void And_I_am_on_the_blog_posts_page()
+        {
+            var blog = (Blog)Data["AddedBlog"];
+            SiteTester.Posts.GoTo(blog.Id);
+        }
+
+        public void Given_there_is_a_blog_post()
+        {
+            var blog = BlogContextDatabaseFixture.DefaultBlog;
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.AddRangeAndSave(blog);
+            Data.Add("AddedBlog", blog);
+        }
+
+        public Dictionary<string, object> Data { get; }
+
+        public void And_I_am_on_the_homepage()
+        {
+            SiteTester.HomePage.GoTo();
+        }
+
+        public void And_I_am_on_the_blog_post_page()
+        {
+            var blog = (Blog)Data["AddedBlog"];
+            SiteTester.Posts.GoTo(blog.Id);
         }
     }
 }

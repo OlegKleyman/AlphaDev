@@ -78,6 +78,12 @@
     <Compile Update="Features\Authorization_feature.Steps.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Features\DeleteBlog_feature.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Features\DeleteBlog_feature.Steps.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Features\Post_feature.cs">
       <SubType>Code</SubType>
     </Compile>
