@@ -52,8 +52,6 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var controller = GetAccountController();
 
-            controller.ModelState.AddModelError("fail", "fail");
-
             var model = new LoginViewModel
             {
                 Username = "test",
@@ -172,6 +170,32 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             controller.Login("test").Should().BeOfType<ViewResult>().Which.ViewData["ReturnUrl"].Should()
                 .BeEquivalentTo("test");
+        }
+
+        [Fact]
+        public async void LoginShouldReturnLoginViewWhenModelIsInvalid()
+        {
+            var controller = GetAccountController();
+            controller.ModelState.AddModelError("test", "error");
+
+            (await controller.Login(new LoginViewModel())).Should()
+                .BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("Login");
+        }
+
+        [Fact]
+        public async void LoginShouldReturnLoginViewModelWhenModelIsInvalid()
+        {
+            var controller = GetAccountController();
+            controller.ModelState.AddModelError("test", "error");
+
+            var model = new LoginViewModel
+            {
+                Username = "test",
+                Password = "working"
+            };
+
+            (await controller.Login(model)).Should()
+                .BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(model);
         }
     }
 }
