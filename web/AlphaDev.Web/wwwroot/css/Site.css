@@ -1,6 +1,7 @@
 ﻿body {
     padding-bottom: 20px;
     padding-top: 50px;
+    min-width: 320px;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -14,21 +15,35 @@
 
 input,
 select,
-textarea { max-width: 280px; }
+textarea {
+    max-width: 280px;
+}
 
 /* styles for validation helpers */
 
-.field-validation-error { color: #b94a48; }
+.field-validation-error {
+    color: #b94a48;
+}
 
-.field-validation-valid { display: none; }
+.field-validation-valid {
+    display: none;
+}
 
-input.input-validation-error { border: 1px solid #b94a48; }
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
 
-input[type="checkbox"].input-validation-error { border: 0 none; }
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
 
-.validation-summary-errors { color: #b94a48; }
+.validation-summary-errors {
+    color: #b94a48;
+}
 
-.validation-summary-valid { display: none; }
+.validation-summary-valid {
+    display: none;
+}
 
 .bubble div:not(:first-of-type) {
     background-color: #ddd;
@@ -59,13 +74,21 @@ input[type="checkbox"].input-validation-error { border: 0 none; }
     padding: 3px;
 }
 
-.nomargin { margin: 0 !important; }
+.nomargin {
+    margin: 0 !important;
+}
 
-body .bubble .blog-content { padding-top: 4px; }
+body .bubble .blog-content {
+    padding-top: 4px;
+}
 
-body .blog-content pre { margin: 0; }
+body .blog-content pre {
+    margin: 0;
+}
 
-.post { margin-top: 30px; }
+.post {
+    margin-top: 30px;
+}
 
 .blogEditor {
     max-width: 100%;
@@ -80,4 +103,10 @@ body .blog-content pre { margin: 0; }
 .bubble form {
     margin-right: 10px;
     margin-top: 10px;
+}
+
+@media screen and (min-width: 531px) {
+    br.smartBreak {
+        display: none;
+    }
 }
