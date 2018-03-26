@@ -17,6 +17,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
         public SiteTester SiteTester { get; }
         public DatabasesFixture DatabasesFixture { get; }
 
+        public Dictionary<string, object> Data { get; }
+
         public void Given_i_am_a_user()
         {
         }
@@ -48,7 +50,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         public void And_I_am_on_the_blog_posts_page()
         {
-            var blog = (Blog)Data["AddedBlog"];
+            var blog = (Blog) Data["AddedBlog"];
             SiteTester.Posts.GoTo(blog.Id);
         }
 
@@ -59,8 +61,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
             Data.Add("AddedBlog", blog);
         }
 
-        public Dictionary<string, object> Data { get; }
-
         public void And_I_am_on_the_homepage()
         {
             SiteTester.HomePage.GoTo();
@@ -68,7 +68,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         public void And_I_am_on_the_blog_post_page()
         {
-            var blog = (Blog)Data["AddedBlog"];
+            var blog = (Blog) Data["AddedBlog"];
             SiteTester.Posts.GoTo(blog.Id);
         }
     }

@@ -56,6 +56,39 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
+        public void DeleteShouldDeleteBlog()
+        {
+            var context = new MockBlogContext(nameof(DeleteShouldDeleteBlog));
+            var entity = new Data.Entities.Blog {Id = 1};
+            context.Blogs.Add(entity);
+            context.SaveChanges();
+
+            var service = GetBlogService(context);
+
+            service.Delete(entity.Id);
+
+            context.Blogs.Should().NotContain(blog => blog.Id == entity.Id);
+        }
+
+        [Fact]
+        public void DeleteShouldThrowInvalidOperationExceptionWhenUnableToDeleteBlog()
+        {
+            var context = new MockBlogContext(nameof(DeleteShouldThrowInvalidOperationExceptionWhenUnableToDeleteBlog));
+
+            var entity = new Data.Entities.Blog {Id = 1};
+            context.Blogs.Add(entity);
+            context.SaveChanges();
+
+            context.Fail = true;
+
+            var service = GetBlogService(context);
+
+            Action delete = () => service.Delete(entity.Id);
+
+            delete.Should().Throw<InvalidOperationException>().WithMessage("Unable to delete");
+        }
+
+        [Fact]
         public void GetAllShouldReturnBlogsWithCreatedDate()
         {
             var testValue = new DateTime(2017, 1, 1);
@@ -422,39 +455,6 @@ namespace AlphaDev.Core.Tests.Unit
             service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
                 new {Title = testValue},
                 options => options.ExcludingMissingMembers());
-        }
-
-        [Fact]
-        public void DeleteShouldDeleteBlog()
-        {
-            var context = new MockBlogContext(nameof(DeleteShouldDeleteBlog));
-            var entity = new Data.Entities.Blog { Id = 1 };
-            context.Blogs.Add(entity);
-            context.SaveChanges();
-
-            var service = GetBlogService(context);
-
-            service.Delete(entity.Id);
-
-            context.Blogs.Should().NotContain(blog => blog.Id == entity.Id);
-        }
-
-        [Fact]
-        public void DeleteShouldThrowInvalidOperationExceptionWhenUnableToDeleteBlog()
-        {
-            var context = new MockBlogContext(nameof(DeleteShouldThrowInvalidOperationExceptionWhenUnableToDeleteBlog));
-
-            var entity = new Data.Entities.Blog { Id = 1 };
-            context.Blogs.Add(entity);
-            context.SaveChanges();
-
-            context.Fail = true;
-
-            var service = GetBlogService(context);
-
-            Action delete = () => service.Delete(entity.Id);
-
-            delete.Should().Throw<InvalidOperationException>().WithMessage("Unable to delete");
         }
     }
 }
