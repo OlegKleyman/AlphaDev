@@ -1,12 +1,13 @@
 ﻿@model AlphaDev.Web.Models.DatesViewModel
 
-<div class="text-center dates nomargin" style="font-size: 12px">
+<div class="text-center dates nomargin" style="font-size: 12px;">
     <strong>Created:</strong>
     <span class="created-date">
         @Html.DisplayFor(model => model.Created)
     </span>
 
     <display value="@Model.Modified.HasValue">
+        <br class="smartBreak"/>
         <strong>Modified:</strong>
         <span class="modified-date">
             @Html.DisplayFor(model => model.Modified)
