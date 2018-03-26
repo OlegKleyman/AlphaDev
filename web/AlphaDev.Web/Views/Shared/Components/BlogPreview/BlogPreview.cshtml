@@ -2,12 +2,7 @@
 @model AlphaDev.Web.Models.BlogViewModel
 
 <div class="bubble">
-    <div class="text-center title">
-        <h3 class="nomargin">@Model.Title</h3>
-        <div class="nomargin">
-            @Html.DisplayFor(model => model.Dates)
-        </div>
-    </div>
+    @Html.Partial("Partial/_BlogHeader", Model)
 
     <div class="blog-content">
         <markdown>
