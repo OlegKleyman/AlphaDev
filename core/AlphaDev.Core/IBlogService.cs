@@ -9,5 +9,6 @@ namespace AlphaDev.Core
         IEnumerable<BlogBase> GetAll();
         Option<BlogBase> Get(int id);
         BlogBase Add(BlogBase blog);
+        void Delete(int id);
     }
 }

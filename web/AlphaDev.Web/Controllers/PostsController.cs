@@ -69,5 +69,15 @@ namespace AlphaDev.Web.Controllers
                 .Map(blog => (ActionResult) RedirectToAction(nameof(Index), new {id = blog.Id}))
                 .ValueOr(View(nameof(Create), post));
         }
+
+        [Authorize]
+        [Route("delete")]
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            _blogService.Delete(id);
+
+            return RedirectToAction("Index");
+        }
     }
 }

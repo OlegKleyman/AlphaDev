@@ -57,5 +57,14 @@ namespace AlphaDev.Core
             return new Blog(entity.Id, entity.Title, entity.Content,
                 new Dates(entity.Created, entity.Modified.ToOption()));
         }
+
+        public void Delete(int id)
+        {
+            var entry = _context.Blogs.Remove(_context.Blogs.Find(id));
+
+            _context.SaveChanges();
+
+            if (entry.State != EntityState.Detached) throw new InvalidOperationException("Unable to delete");
+        }
     }
 }

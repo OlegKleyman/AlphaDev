@@ -268,5 +268,27 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             controller.Index(default).Should().BeOfType<ViewResult>().Which.ViewData["Title"].Should()
                 .BeEquivalentTo(blog.Title);
         }
+
+        [Fact]
+        public void DeleteShouldRedirectTlDefaultIndexAction()
+        {
+            var controller = GetPostsController(Substitute.For<IBlogService>());
+
+            var result = controller.Delete(default).Should().BeOfType<RedirectToActionResult>();
+            result.Which.ActionName.Should().BeEquivalentTo("Index");
+            result.Which.RouteValues.Should().BeNull();
+        }
+
+        [Fact]
+        public void DeleteShouldDeleteBlogWithMatchingId()
+        {
+            var service = Substitute.For<IBlogService>();
+            var controller = GetPostsController(service);
+
+            const int id = 10;
+            controller.Delete(id);
+
+            service.Received().Delete(id);
+        }
     }
 }
