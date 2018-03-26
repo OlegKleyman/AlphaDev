@@ -1,0 +1,14 @@
+﻿@model AlphaDev.Web.Models.BlogViewModel
+
+<div class="text-center title">
+    <display value="@User.Identity.IsAuthenticated">
+        <form asp-controller="Posts" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="pull-right">
+            <button class="btn-xs btn-danger delete" style="">
+                x
+            </button>
+        </form>
+    </display>
+    <h3 class="nomargin">@Html.DisplayFor(model => model.Title)</h3>
+
+    @Html.DisplayFor(model => model.Dates)
+</div>
