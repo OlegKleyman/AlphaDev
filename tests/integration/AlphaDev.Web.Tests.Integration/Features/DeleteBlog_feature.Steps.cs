@@ -8,8 +8,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
 {
     public partial class DeleteBlog_feature : WebFeatureFixture
     {
-        private Blog _blog;
-
         public DeleteBlog_feature(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) : base(
             output, databaseWebServerFixture)
         {
@@ -33,11 +31,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_should_be_directed_to_the_posts_page()
         {
             SiteTester.Driver.Url.Should().BeEquivalentTo(SiteTester.Posts.BaseUrl.AbsoluteUri.Trim('/'));
-        }
-
-        private void And_I_am_on_the_blog_posts_page()
-        {
-            SiteTester.Posts.GoTo(_blog.Id);
         }
     }
 }

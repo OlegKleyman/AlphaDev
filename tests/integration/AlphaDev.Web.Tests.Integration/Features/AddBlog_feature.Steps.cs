@@ -21,7 +21,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void When_I_fill_in_required_fields()
         {
-            var ht = SiteTester.Driver.PageSource;
             SiteTester.Posts.Create.BlogTitle = _addedBlogTitle = "test";
             SiteTester.Posts.Create.Content = _addedBlogContent = "testing";
         }
@@ -30,11 +29,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             return CompositeStep.DefineNew()
                 .AddSteps(When_I_fill_in_required_fields, When_I_click_save).Build();
-        }
-
-        private void When_I_save()
-        {
-            SiteTester.Posts.Create.Submit();
         }
 
         private void Then_it_should_be_saved_in_the_datastore()
