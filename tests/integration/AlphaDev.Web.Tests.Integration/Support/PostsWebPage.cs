@@ -11,6 +11,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
         public PostsWebPage(IWebDriver driver, Uri baseUrl) : base(driver, baseUrl)
         {
             Create = new CreateWebPage(Driver, new Uri(BaseUrl, "create"));
+            Edit = new EditWebPage(Driver, new Uri(BaseUrl, "edit"));
         }
 
         public IEnumerable<BlogPost> Posts
@@ -35,5 +36,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
                 .SomeNotNull()));
 
         public CreateWebPage Create { get; }
+
+        public EditWebPage Edit { get; }
     }
 }

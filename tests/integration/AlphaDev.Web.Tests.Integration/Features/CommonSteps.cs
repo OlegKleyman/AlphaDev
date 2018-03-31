@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Web.Tests.Integration.Fixtures;
+using FluentAssertions;
 using Omego.Extensions.DbContextExtensions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
@@ -61,6 +62,11 @@ namespace AlphaDev.Web.Tests.Integration.Features
             Data.Add("AddedBlog", blog);
         }
 
+        public void And_there_is_a_blog_post()
+        {
+            Given_there_is_a_blog_post();
+        }
+
         public void And_I_am_on_the_homepage()
         {
             SiteTester.HomePage.GoTo();
@@ -70,6 +76,11 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             var blog = (Blog) Data["AddedBlog"];
             SiteTester.Posts.GoTo(blog.Id);
+        }
+
+        public void Then_it_should_display_the_error_page_with_a_404()
+        {
+            SiteTester.Error.Status.Should().BeEquivalentTo("Error 404.");
         }
     }
 }
