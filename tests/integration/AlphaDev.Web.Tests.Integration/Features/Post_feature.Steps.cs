@@ -100,11 +100,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
             SiteTester.Posts.GoTo(1000);
         }
 
-        private void Then_it_should_display_the_error_page_with_a_404_status()
-        {
-            SiteTester.Error.Status.Should().BeEquivalentTo("Error 404.");
-        }
-
         private void Then_it_should_display_the_posts_menu_link_to_lead_to_all_posts()
         {
             var homePageNavigation = SiteTester.Posts.Navigation.ToList();

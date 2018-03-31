@@ -67,7 +67,7 @@ I want to view the post")]
             Runner.RunScenario(
                 _ => CommonSteps.Given_i_am_a_user(),
                 _ => When_I_try_to_view_a_post_that_doesnt_exist(),
-                _ => Then_it_should_display_the_error_page_with_a_404_status());
+                _ => CommonSteps.Then_it_should_display_the_error_page_with_a_404());
         }
 
         [Scenario]
