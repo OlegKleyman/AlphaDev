@@ -5,22 +5,32 @@ using OpenQA.Selenium;
 
 namespace AlphaDev.Web.Tests.Integration.Support
 {
-    public class CreateWebPage : WebPage
+    public class BlogEditorWebPage : WebPage
     {
-        public CreateWebPage(IWebDriver driver, Uri baseUrl) : base(driver, baseUrl)
+        public BlogEditorWebPage(IWebDriver driver, Uri baseUrl) : base(driver, baseUrl)
         {
         }
 
         public string Content
         {
             get => Driver.FindElement(By.Id("Content")).Text;
-            set => Driver.FindElement(By.Id("Content")).SendKeys(value);
+            set
+            {
+                var content = Driver.FindElement(By.Id("Content"));
+                content.Clear();
+                content.SendKeys(value);
+            }
         }
 
         public string BlogTitle
         {
             get => Driver.FindElement(By.Id("Title")).Text;
-            set => Driver.FindElement(By.Id("Title")).SendKeys(value);
+            set
+            {
+                var title = Driver.FindElement(By.Id("Title"));
+                title.Clear();
+                title.SendKeys(value);
+            }
         }
 
         public string Preview => Driver.FindElement(By.ClassName("md-preview")).GetAttribute("innerHTML").Trim();
