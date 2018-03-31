@@ -35,5 +35,10 @@ namespace AlphaDev.Web.Tests.Integration.Support
         {
             Driver.FindElement(By.CssSelector(".blog button.delete")).Click();
         }
+
+        public void EditBlog()
+        {
+            Driver.FindElement(By.CssSelector("a[href*=\"/posts/edit/\"]")).Click();
+        }
     }
 }

@@ -60,6 +60,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Assets.resx</DependentUpon>
     </Compile>
+    <Compile Update="Features\EditBlog_feature.Steps.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Features\EditBlog_feature.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Features\AddBlog_feature.cs">
       <SubType>Code</SubType>
     </Compile>

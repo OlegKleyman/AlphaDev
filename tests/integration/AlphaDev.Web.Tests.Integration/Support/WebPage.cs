@@ -33,7 +33,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
 
         public void GoTo(int id)
         {
-            Driver.Navigate().GoToUrl(new Uri(BaseUrl, id.ToString(CultureInfo.InvariantCulture)));
+            Driver.Navigate().GoToUrl($"{BaseUrl.AbsoluteUri}/{id}");
         }
     }
 }
