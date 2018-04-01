@@ -95,12 +95,21 @@ body .blog-content pre {
     height: 450px;
 }
 
-.bubble form button {
+.bubble form button, .bubble .edit {
     background-color: #777;
     border: solid 1px #555;
 }
 
-.bubble form {
+.bubble form button.delete:hover {
+    background-color: #f00;
+}
+
+.bubble a.edit:hover {
+    background-color: #00f;
+    border-color: #00f;
+}
+
+.bubble form, .bubble .edit {
     margin-right: 10px;
     margin-top: 10px;
 }
