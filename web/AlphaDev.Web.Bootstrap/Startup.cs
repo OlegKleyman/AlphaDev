@@ -23,6 +23,7 @@ namespace AlphaDev.Web.Bootstrap
             services.AddScoped<IdentityDbContext<User>, ApplicationContext>(provider =>
                 new ApplicationContext(config.GetConnectionString("defaultSecurity")));
             services.AddScoped<IBlogService, BlogService>();
+            services.AddScoped<IDateProvider, DateProvider>();
             services.AddScoped<BlogContext, Core.Data.Sql.Contexts.BlogContext>(
                 provider => new Core.Data.Sql.Contexts.BlogContext(config.GetConnectionString("default")));
             services.AddIdentity<User, IdentityRole>().AddDefaultTokenProviders()

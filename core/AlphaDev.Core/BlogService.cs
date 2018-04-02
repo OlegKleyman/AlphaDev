@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using AlphaDev.Core.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Omego.Extensions.OptionExtensions;
 using Optional;
 using Optional.Collections;
+using Z.EntityFramework.Plus;
 
 namespace AlphaDev.Core
 {
     public class BlogService : IBlogService
     {
         private readonly BlogContext _context;
+        private readonly IDateProvider _dateProvider;
 
-        public BlogService(BlogContext context)
+        public BlogService(BlogContext context, IDateProvider dateProvider)
         {
             _context = context;
+            _dateProvider = dateProvider;
         }
 
         public Option<BlogBase> GetLatest()
@@ -60,11 +64,31 @@ namespace AlphaDev.Core
 
         public void Delete(int id)
         {
-            var entry = _context.Blogs.Remove(_context.Blogs.Find(id));
+            _context.Blogs.Find(id)
+                .SomeNotNull()
+                .MatchNoneContinue(() => throw new InvalidOperationException($"Blog ID {id} not found"))
+                .Map(blog => _context.Blogs.Remove(blog))
+                .MatchSomeContinue(blog => _context.SaveChanges())
+                .Filter(entry => entry.State == EntityState.Detached)
+                .MatchNone(() => throw new InvalidOperationException("Unable to delete"));
+        }
 
-            _context.SaveChanges();
-
-            if (entry.State != EntityState.Detached) throw new InvalidOperationException("Unable to delete");
+        public void Edit(int id, Action<BlogEditArguments> edit)
+        {
+            _context.Blogs.Find(id)
+                .SomeNotNull()
+                .MatchNoneContinue(() => throw new InvalidOperationException($"Blog with ID {id} was not found"))
+                .Map(blog => new{Blog = blog, Arguments = new BlogEditArguments()})
+                .MatchSomeContinue(match =>
+                {
+                    edit(match.Arguments);
+                    match.Blog.Content = match.Arguments.Content;
+                    match.Blog.Title = match.Arguments.Title;
+                    match.Blog.Modified = _dateProvider.UtcNow;
+                    _context.SaveChanges();
+                })
+                .Filter(match => _context.Entry(match.Blog).State == EntityState.Unchanged)
+                .MatchNone(() => throw new InvalidOperationException("Inconsistent change count on update"));
         }
     }
 }

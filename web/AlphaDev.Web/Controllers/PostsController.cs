@@ -71,13 +71,40 @@ namespace AlphaDev.Web.Controllers
         }
 
         [Authorize]
-        [Route("delete")]
+        [Route("delete/{id}")]
         [HttpPost]
         public IActionResult Delete(int id)
         {
             _blogService.Delete(id);
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index), new {id = (object)null});
+        }
+
+        [Authorize]
+        [Route("edit/{id}")]
+        public IActionResult Edit(int id)
+        {
+            return _blogService
+                .Get(id)
+                .Map(b => new EditPostViewModel(b.Title, b.Content,
+                    new DatesViewModel(b.Dates.Created, b.Dates.Modified)))
+                .Match(model => (IActionResult) View(nameof(Edit), model), NotFound);
+        }
+
+        [Authorize]
+        [Route("edit/{id}")]
+        [HttpPost]
+        public IActionResult Edit(int id, EditPostViewModel model)
+        {
+            return ModelState
+                .SomeWhen(dictionary => dictionary.IsValid)
+                .MatchSomeContinue(dictionary => _blogService.Edit(id, arguments =>
+                {
+                    arguments.Content = model.Content;
+                    arguments.Title = model.Title;
+                }))
+                .Map(dictionary => (IActionResult)RedirectToAction(nameof(Index)))
+                .ValueOr(View(nameof(Edit), model));
         }
     }
 }
