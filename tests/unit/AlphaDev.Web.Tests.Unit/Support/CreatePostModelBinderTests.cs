@@ -12,9 +12,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
     {
         private static DefaultModelBindingContext GetContext()
         {
-            var context = new DefaultModelBindingContext();
-
-            return context;
+            return new DefaultModelBindingContext();
         }
 
         private CreatePostModelBinder GetCreatePostModelBinder()
