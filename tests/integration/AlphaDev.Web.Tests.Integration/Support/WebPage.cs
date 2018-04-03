@@ -33,7 +33,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
 
         public void GoTo(int id)
         {
-            Driver.Navigate().GoToUrl($"{BaseUrl.AbsoluteUri}/{id}");
+            Driver.Navigate().GoToUrl($"{BaseUrl.AbsoluteUri.Trim('/')}/{id}");
         }
     }
 }

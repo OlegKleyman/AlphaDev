@@ -517,7 +517,7 @@ namespace AlphaDev.Core.Tests.Unit
             context.SaveChanges();
 
             var service = GetBlogService(context);
-            _dateProvider.Now.Returns(new DateTime(2018, 1, 2));
+            _dateProvider.UtcNow.Returns(new DateTime(2018, 1, 2));
 
             service.Edit(entity.Id, arguments =>
             {

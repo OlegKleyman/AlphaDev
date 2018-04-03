@@ -1,0 +1,22 @@
+﻿using System;
+using FluentAssertions;
+using Xunit;
+
+namespace AlphaDev.Core.Tests.Integration
+{
+    public class DateProviderTests
+    {
+        [Fact]
+        public void UtcNowShouldReturnCurrentTimeInUtc()
+        {
+            var provider = GetDateProvider();
+
+            provider.UtcNow.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(.5));
+        }
+
+        private DateProvider GetDateProvider()
+        {
+            return new DateProvider();
+        }
+    }
+}

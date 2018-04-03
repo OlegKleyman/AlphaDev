@@ -20,8 +20,6 @@ namespace AlphaDev.Web.Tests.Unit.Extensions
         {
             var target = Option.None<string>();
             var helper = Substitute.For<IHtmlHelper<object>>();
-            helper.DisplayFor(Arg.Any<Expression<Func<object, string>>>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Any<object>()).Returns(new StringHtmlContent("test"));
 
             var content = helper.DisplayFor(target);
 
@@ -39,6 +37,33 @@ namespace AlphaDev.Web.Tests.Unit.Extensions
                 Arg.Any<object>()).Returns(new StringHtmlContent("test"));
 
             var content = helper.DisplayFor(target);
+
+            var writer = new StringWriter();
+            content.WriteTo(writer, HtmlEncoder.Default);
+            writer.ToString().Should().BeEquivalentTo("test");
+        }
+
+        [Fact]
+        public void HiddenShouldReturnEmptyHtmlContentWhenOptionIsNone()
+        {
+            var target = Option.None<string>();
+            var helper = Substitute.For<IHtmlHelper<object>>();
+
+            var content = HtmlHelperOptionExtensions.Hidden(helper, default, target, default);
+
+            var writer = new StringWriter();
+            content.WriteTo(writer, HtmlEncoder.Default);
+            writer.ToString().Should().BeEquivalentTo(string.Empty);
+        }
+
+        [Fact]
+        public void HiddenShouldReturnFormattedHtmlContentWhenOptionIsNotEmpty()
+        {
+            var target = Option.Some("test");
+            var helper = Substitute.For<IHtmlHelper<object>>();
+            helper.Hidden("test", "test", Arg.Any<object>()).Returns(new StringHtmlContent("test"));
+
+            var content = HtmlHelperOptionExtensions.Hidden(helper, "test", target, default);
 
             var writer = new StringWriter();
             content.WriteTo(writer, HtmlEncoder.Default);
