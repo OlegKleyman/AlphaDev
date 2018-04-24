@@ -1,4 +1,6 @@
 ﻿@model AlphaDev.Web.Models.CreatePostViewModel
+
+
 @{
     ViewBag.Title = "Create Post";
 }
@@ -8,26 +10,17 @@
     <link href="~/lib/bootstrap-markdown/css/bootstrap-markdown.min.css" rel="stylesheet"/>
 }
 
-<h1 class="text-center">Create Post</h1>
-
 <form id="createForm" method="post">
+    <div class="text-center">
+        <span asp-validation-for="Title" class="text-danger"></span>
+        <label asp-for="Title"></label> - <input asp-for="Title" value="@Model?.Title" class="form-control titleInput" />
+    </div>
+
     <div class="col-lg-12">
         <div>
-            <div>
-                <label asp-for="Title"></label>
-            </div>
-            <div>
-                <span asp-validation-for="Title" class="text-danger"></span>
-                <input asp-for="Title" class="form-control"/>
-            </div>
-        </div>
-        <div>
             <span asp-validation-for="Content" class="text-danger"></span>
-
             <textarea asp-for="Content" class="blogEditor"></textarea>
         </div>
-
-
     </div>
 </form>
 
