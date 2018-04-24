@@ -13,7 +13,7 @@ namespace AlphaDev.Web.Support
         {
             if (bindingContext == null) throw new ArgumentNullException(nameof(bindingContext));
 
-            if (!DateTime.TryParse(bindingContext.ValueProvider?.GetValue("Created").FirstValue, out DateTime created))
+            if (!DateTime.TryParse(bindingContext.ValueProvider?.GetValue("Dates.Created").FirstValue, out DateTime created))
             {
                 bindingContext.ModelState.AddModelError("NoCreatedDate", "No created date found");
                 bindingContext.Result = ModelBindingResult.Failed();

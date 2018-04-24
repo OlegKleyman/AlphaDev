@@ -34,7 +34,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
             context.ValueProvider = Substitute.For<IValueProvider>();
             context.ValueProvider.GetValue("Title").Returns(new ValueProviderResult(new StringValues("title")));
             context.ValueProvider.GetValue("Content").Returns(new ValueProviderResult(new StringValues("content")));
-            context.ValueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
+            context.ValueProvider.GetValue("Dates.Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
             await binder.BindModelAsync(context);
             context.Result.Model.Should().BeEquivalentTo(new { Title = "title", Content = "content" }, options => options.ExcludingMissingMembers());
         }
@@ -46,7 +46,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
             var context = GetContext();
             context.ValueProvider = Substitute.For<IValueProvider>();
-            context.ValueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
+            context.ValueProvider.GetValue("Dates.Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
 
             await binder.BindModelAsync(context);
 
@@ -63,7 +63,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
             var context = GetContext();
             context.ValueProvider = Substitute.For<IValueProvider>();
-            context.ValueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
+            context.ValueProvider.GetValue("Dates.Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
             context.ValueProvider.GetValue("Modified").Returns(new ValueProviderResult(new StringValues("2/1/2018")));
             await binder.BindModelAsync(context);
             context.Result.Model.Should().BeEquivalentTo(new
@@ -79,7 +79,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
             var context = GetContext();
             context.ValueProvider = Substitute.For<IValueProvider>();
-            context.ValueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
+            context.ValueProvider.GetValue("Dates.Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
 
             binder.BindModelAsync(context).GetAwaiter().OnCompleted(() =>
             {
@@ -117,7 +117,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
             var context = GetContext();
 
             context.ValueProvider = Substitute.For<IValueProvider>();
-            context.ValueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("invalid")));
+            context.ValueProvider.GetValue("Dates.Created").Returns(new ValueProviderResult(new StringValues("invalid")));
 
             await binder.BindModelAsync(context);
 
