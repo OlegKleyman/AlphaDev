@@ -114,6 +114,11 @@ body .blog-content pre {
     margin-top: 10px;
 }
 
+.titleInput {
+    display: inline;
+}
+}
+
 @media screen and (min-width: 531px) {
     br.smartBreak {
         display: none;
