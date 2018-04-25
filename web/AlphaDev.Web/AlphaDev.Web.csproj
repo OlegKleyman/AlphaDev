@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
     <PackageReference Include="NString" Version="1.2.0" />
+    <PackageReference Include="TagHelperPack" Version="0.1.0-ci-30" />
   </ItemGroup>
 
   <ItemGroup>
