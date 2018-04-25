@@ -104,7 +104,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_I_should_be_redirected_to_the_post()
         {
             var blog = (Blog)CommonSteps.Data["AddedBlog"];
-            SiteTester.Driver.Url.Should().MatchRegex($"{Regex.Escape(SiteTester.Posts.BaseUrl.AbsoluteUri)}edit/{blog.Id}$");
+            SiteTester.Driver.Url.Should().MatchRegex($"{Regex.Escape(SiteTester.Posts.BaseUrl.AbsoluteUri)}{blog.Id}$");
         }
 
         private void And_I_try_to_edit_a_blog_post_that_doesnt_exist()
