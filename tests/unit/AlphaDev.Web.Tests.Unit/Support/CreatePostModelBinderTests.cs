@@ -10,14 +10,20 @@ namespace AlphaDev.Web.Tests.Unit.Support
 {
     public class CreatePostModelBinderTests
     {
-        private static DefaultModelBindingContext GetContext()
+        private static PrefixModelBindingContext GetContext(IValueProvider valueProvider)
         {
-            return new DefaultModelBindingContext();
+            var context = new DefaultModelBindingContext
+            {
+                ModelState = new ModelStateDictionary(),
+                ValueProvider = valueProvider ?? Substitute.For<IValueProvider>()
+            };
+
+            return new PrefixModelBindingContext(context, default);
         }
 
-        private CreatePostModelBinder GetCreatePostModelBinder()
+        private MockCreatePostModelBinder GetCreatePostModelBinder()
         {
-            return new CreatePostModelBinder();
+            return new MockCreatePostModelBinder();
         }
 
         [Fact]
@@ -25,15 +31,16 @@ namespace AlphaDev.Web.Tests.Unit.Support
         {
             var binder = GetCreatePostModelBinder();
 
-            var context = GetContext();
-            context.ValueProvider = Substitute.For<IValueProvider>();
-            context.ValueProvider.GetValue("Title").Returns(new ValueProviderResult(new StringValues("title")));
-            context.ValueProvider.GetValue("Content").Returns(new ValueProviderResult(new StringValues("content")));
+            var valueProvider = Substitute.For<IValueProvider>();
 
-            binder.BindModelAsync(context).GetAwaiter().OnCompleted(() =>
-            {
-                context.Result.Model.Should().BeEquivalentTo(new {Title = "title", Content = "content"});
-            });
+            valueProvider.GetValue("Title").Returns(new ValueProviderResult(new StringValues("title")));
+            valueProvider.GetValue("Content").Returns(new ValueProviderResult(new StringValues("content")));
+
+            var context = GetContext(valueProvider);
+
+            binder.BindModelMock(context);
+
+            context.Result.Model.Should().BeEquivalentTo(new { Title = "title", Content = "content" });
         }
 
         [Fact]
@@ -41,13 +48,11 @@ namespace AlphaDev.Web.Tests.Unit.Support
         {
             var binder = GetCreatePostModelBinder();
 
-            var context = GetContext();
-            context.ValueProvider = Substitute.For<IValueProvider>();
+            var context = GetContext(Substitute.For<IValueProvider>());
 
-            binder.BindModelAsync(context).GetAwaiter().OnCompleted(() =>
-            {
-                context.Result.Model.Should().BeEquivalentTo(new {Title = string.Empty, Content = string.Empty});
-            });
+            binder.BindModelMock(context);
+
+            context.Result.Model.Should().BeEquivalentTo(new { Title = string.Empty, Content = string.Empty });
         }
 
         [Fact]
@@ -55,22 +60,18 @@ namespace AlphaDev.Web.Tests.Unit.Support
         {
             var binder = GetCreatePostModelBinder();
 
-            var context = GetContext();
+            var context = GetContext(default);
 
-            binder.BindModelAsync(context).GetAwaiter().OnCompleted(() =>
-            {
-                context.Result.Model.Should().BeEquivalentTo(new {Title = string.Empty, Content = string.Empty});
-            });
+            binder.BindModelMock(context);
+            context.Result.Model.Should().BeEquivalentTo(new { Title = string.Empty, Content = string.Empty });
         }
 
-        [Fact]
-        public void BindModelAsyncShouldThrowArgumentNullExceptionWhenContextIsNull()
+        public class MockCreatePostModelBinder : CreatePostModelBinder
         {
-            var binder = GetCreatePostModelBinder();
-            Action bindModelAsync = () => binder.BindModelAsync(null);
-            bindModelAsync.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null.\r\nParameter name: bindingContext").Which.ParamName.Should()
-                .BeEquivalentTo("bindingContext");
+            public void BindModelMock(PrefixModelBindingContext context)
+            {
+                BindModel(context);
+            }
         }
     }
 }

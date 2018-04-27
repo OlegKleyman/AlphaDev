@@ -7,34 +7,30 @@ using Optional;
 
 namespace AlphaDev.Web.Support
 {
-    public class EditPostModelBinder : IModelBinder
+    public class EditPostModelBinder : PrefixModelBinder
     {
-        public Task BindModelAsync(ModelBindingContext bindingContext)
+        protected override void BindModel(PrefixModelBindingContext context)
         {
-            if (bindingContext == null) throw new ArgumentNullException(nameof(bindingContext));
-
-            if (!DateTime.TryParse(bindingContext.ValueProvider?.GetValue("Created").FirstValue, out DateTime created))
+            if (!DateTime.TryParse(context.GetValue("Created").FirstValue, out DateTime created))
             {
-                bindingContext.ModelState.AddModelError("NoCreatedDate", "No created date found");
-                bindingContext.Result = ModelBindingResult.Failed();
+                context.ModelState.AddModelError("NoCreatedDate", "No created date found");
+                context.Result = ModelBindingResult.Failed();
             }
             else
             {
-                var title = bindingContext.ValueProvider?.GetValue("Title").FirstValue;
-                var content = bindingContext.ValueProvider?.GetValue("Content").FirstValue;
+                var title = context.GetValue("Title").FirstValue;
+                var content = context.GetValue("Content").FirstValue;
 
                 var modified = DateTime
-                    .TryParse(bindingContext.ValueProvider?.GetValue("Modified").FirstValue, out DateTime modDate)
+                    .TryParse(context.GetValue("Modified").FirstValue, out DateTime modDate)
                     .SomeWhen(isValidDate => isValidDate)
                     .Map(b => modDate);
 
                 var model = new EditPostViewModel(title ?? string.Empty, content ?? string.Empty,
                     new DatesViewModel(created, modified));
 
-                bindingContext.Result = ModelBindingResult.Success(model);
+                context.Result = ModelBindingResult.Success(model);
             }
-
-            return Task.CompletedTask;
         }
     }
 }

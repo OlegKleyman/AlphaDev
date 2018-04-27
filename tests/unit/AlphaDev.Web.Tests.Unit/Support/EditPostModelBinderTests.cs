@@ -12,43 +12,50 @@ namespace AlphaDev.Web.Tests.Unit.Support
 {
     public class EditPostModelBinderTests
     {
-        private static DefaultModelBindingContext GetContext()
+        private static PrefixModelBindingContext GetContext(IValueProvider valueProvider)
         {
-            return new DefaultModelBindingContext
+            var context = new DefaultModelBindingContext
             {
-                ModelState = new ModelStateDictionary()
+                ModelState = new ModelStateDictionary(),
+                ValueProvider = valueProvider ?? Substitute.For<IValueProvider>()
             };
+
+            return new PrefixModelBindingContext(context, default);
         }
 
-        private EditPostModelBinder GetEditPostModelBinder()
+        private EditPostModelBinderMock GetEditPostModelBinder()
         {
-            return new EditPostModelBinder();
+            return new EditPostModelBinderMock();
         }
 
         [Fact]
-        public async void BindModelAsyncShouldSetModelWithTitleAndContent()
+        public void BindModelShouldSetModelWithTitleAndContent()
         {
             var binder = GetEditPostModelBinder();
 
-            var context = GetContext();
-            context.ValueProvider = Substitute.For<IValueProvider>();
-            context.ValueProvider.GetValue("Title").Returns(new ValueProviderResult(new StringValues("title")));
-            context.ValueProvider.GetValue("Content").Returns(new ValueProviderResult(new StringValues("content")));
-            context.ValueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
-            await binder.BindModelAsync(context);
+            var valueProvider = Substitute.For<IValueProvider>();
+            
+            valueProvider.GetValue("Title").Returns(new ValueProviderResult(new StringValues("title")));
+            valueProvider.GetValue("Content").Returns(new ValueProviderResult(new StringValues("content")));
+            valueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
+
+            var context = GetContext(valueProvider);
+
+            binder.BindModelMock(context);
             context.Result.Model.Should().BeEquivalentTo(new { Title = "title", Content = "content" }, options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public async void BindModelAsyncShouldSetModelWithoutModificationDateWhenItIsMissing()
+        public void BindModelShouldSetModelWithoutModificationDateWhenItIsMissing()
         {
             var binder = GetEditPostModelBinder();
 
-            var context = GetContext();
-            context.ValueProvider = Substitute.For<IValueProvider>();
-            context.ValueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
+            var valueProvider = Substitute.For<IValueProvider>();
+            valueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
 
-            await binder.BindModelAsync(context);
+            var context = GetContext(valueProvider);
+
+            binder.BindModelMock(context);
 
             context.Result.Model.Should().BeEquivalentTo(new
             {
@@ -57,15 +64,17 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [Fact]
-        public async void BindModelAsyncShouldSetModelWithModificationDateWhenItExists()
+        public void BindModelShouldSetModelWithModificationDateWhenItExists()
         {
             var binder = GetEditPostModelBinder();
 
-            var context = GetContext();
-            context.ValueProvider = Substitute.For<IValueProvider>();
-            context.ValueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
-            context.ValueProvider.GetValue("Modified").Returns(new ValueProviderResult(new StringValues("2/1/2018")));
-            await binder.BindModelAsync(context);
+            var valueProvider = Substitute.For<IValueProvider>();
+            valueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
+            valueProvider.GetValue("Modified").Returns(new ValueProviderResult(new StringValues("2/1/2018")));
+
+            var context = GetContext(valueProvider);
+
+            binder.BindModelMock(context);
             context.Result.Model.Should().BeEquivalentTo(new
             {
                 Dates = new DatesViewModel(new DateTime(2018, 1, 1), Option.Some(new DateTime(2018,2,1)))
@@ -73,55 +82,52 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [Fact]
-        public void BindModelAsyncShouldSetModelWithTitleAndContentEmptyWhenNoValuesExists()
+        public void BindModelShouldSetModelWithTitleAndContentEmptyWhenNoValuesExists()
         {
             var binder = GetEditPostModelBinder();
 
-            var context = GetContext();
-            context.ValueProvider = Substitute.For<IValueProvider>();
-            context.ValueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
+            var valueProvider = Substitute.For<IValueProvider>();
+            valueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("1/1/2018")));
 
-            binder.BindModelAsync(context).GetAwaiter().OnCompleted(() =>
+            var context = GetContext(valueProvider);
+
+            binder.BindModelMock(context);
+            context.Result.Model.Should().BeEquivalentTo(new { Title = string.Empty, Content = string.Empty });
+        }
+
+        [Fact]
+        public void BindModelShouldSetModelStateErrorWhenNoCreatedDateExists()
+        {
+            var binder = GetEditPostModelBinder();
+
+            var context = GetContext(default);
+
+            binder.BindModelMock(context);
+
+            context.ModelState["NoCreatedDate"].Errors[0].ErrorMessage.Should().BeEquivalentTo("No created date found");
+        }
+
+        [Fact]
+        public void BindModelShouldSetModelStateErrorWhenCreatedDateIsNotValidExists()
+        {
+            var binder = GetEditPostModelBinder();
+
+            var valueProvider = Substitute.For<IValueProvider>();
+            valueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("invalid")));
+
+            var context = GetContext(valueProvider);
+
+            binder.BindModelMock(context);
+
+            context.ModelState["NoCreatedDate"].Errors[0].ErrorMessage.Should().BeEquivalentTo("No created date found");
+        }
+
+        public class EditPostModelBinderMock : EditPostModelBinder
+        {
+            public void BindModelMock(PrefixModelBindingContext context)
             {
-                context.Result.Model.Should().BeEquivalentTo(new { Title = string.Empty, Content = string.Empty });
-            });
-        }
-
-        [Fact]
-        public void BindModelAsyncShouldThrowArgumentNullExceptionWhenContextIsNull()
-        {
-            var binder = GetEditPostModelBinder();
-            Action bindModelAsync = () => binder.BindModelAsync(null);
-            bindModelAsync.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null.\r\nParameter name: bindingContext").Which.ParamName.Should()
-                .BeEquivalentTo("bindingContext");
-        }
-
-        [Fact]
-        public async void BindModelAsyncShouldSetModelStateErrorWhenNoCreatedDateExists()
-        {
-            var binder = GetEditPostModelBinder();
-
-            var context = GetContext();
-
-            await binder.BindModelAsync(context);
-
-            context.ModelState["NoCreatedDate"].Errors[0].ErrorMessage.Should().BeEquivalentTo("No created date found");
-        }
-
-        [Fact]
-        public async void BindModelAsyncShouldSetModelStateErrorWhenCreatedDateIsNotValidExists()
-        {
-            var binder = GetEditPostModelBinder();
-
-            var context = GetContext();
-
-            context.ValueProvider = Substitute.For<IValueProvider>();
-            context.ValueProvider.GetValue("Created").Returns(new ValueProviderResult(new StringValues("invalid")));
-
-            await binder.BindModelAsync(context);
-
-            context.ModelState["NoCreatedDate"].Errors[0].ErrorMessage.Should().BeEquivalentTo("No created date found");
+                BindModel(context);
+            }
         }
     }
 }
