@@ -13,10 +13,15 @@ namespace AlphaDev.Web.Tests.Integration.Support
 
         public string Content
         {
-            get => Driver.FindElement(By.Id("Content")).Text;
+            get
+            {
+                var prefix = Driver.FindElement(By.Name("prefix")).GetAttribute("value");
+                return Driver.FindElement(By.Id($"{prefix}_Content")).Text;
+            }
             set
             {
-                var content = Driver.FindElement(By.Id("Content"));
+                var prefix = Driver.FindElement(By.Name("prefix")).GetAttribute("value");
+                var content = Driver.FindElement(By.Id($"{prefix}_Content"));
                 content.Clear();
                 content.SendKeys(value);
             }
@@ -24,10 +29,15 @@ namespace AlphaDev.Web.Tests.Integration.Support
 
         public string BlogTitle
         {
-            get => Driver.FindElement(By.Id("Title")).Text;
+            get
+            {
+                var prefix = Driver.FindElement(By.Name("prefix")).GetAttribute("value");
+                return Driver.FindElement(By.Id($"{prefix}_Title")).Text;
+            }
             set
             {
-                var title = Driver.FindElement(By.Id("Title"));
+                var prefix = Driver.FindElement(By.Name("prefix")).GetAttribute("value");
+                var title = Driver.FindElement(By.Id($"{prefix}_Title"));
                 title.Clear();
                 title.SendKeys(value);
             }
