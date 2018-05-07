@@ -3,13 +3,7 @@
 @model EditPostViewModel
 
 @{
-    Layout = "_BlogEditorLayout";
     ViewBag.Title = "Edit";
 }
 
-<partial name="_BlogEditor" model="@(new BlogEditorViewModel
-                                     {
-                                         Dates = Model.Dates.Some(),
-                                         Content = Model.Content,
-                                         Title = Model.Title
-                                     })"/>
+<blog-editor model="@(new BlogEditorViewModel(Model.SomeNotNull().Map(model => model.Dates), Model?.Content, Model?.Title))" />

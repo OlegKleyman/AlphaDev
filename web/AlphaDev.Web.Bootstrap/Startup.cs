@@ -20,6 +20,7 @@ namespace AlphaDev.Web.Bootstrap
         {
             var config = services.BuildServiceProvider().GetService<IConfiguration>();
 
+            services.AddSingleton<IPrefixGenerator, PrefixGenerator>();
             services.AddScoped<IdentityDbContext<User>, ApplicationContext>(provider =>
                 new ApplicationContext(config.GetConnectionString("defaultSecurity")));
             services.AddScoped<IBlogService, BlogService>();
