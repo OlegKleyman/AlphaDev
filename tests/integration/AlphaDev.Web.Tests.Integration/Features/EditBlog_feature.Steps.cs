@@ -51,7 +51,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void And_I_entered_markdown_content()
         {
-            var blog = (Blog)CommonSteps.Data["AddedBlog"];
+            var blog = (Blog) CommonSteps.Data["AddedBlog"];
             SiteTester.Posts.Edit.Content = _blogContent = blog.Content + "\n```\ntest\n```";
         }
 
@@ -84,14 +84,14 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_I_should_be_directed_to_the_edit_page_of_that_blog()
         {
-            var blog = (Blog)CommonSteps.Data["AddedBlog"];
+            var blog = (Blog) CommonSteps.Data["AddedBlog"];
             SiteTester.Driver.Url.Should()
                 .MatchRegex($@"{Regex.Escape(SiteTester.Posts.Edit.BaseUrl.AbsoluteUri)}/{blog.Id}");
         }
 
         private void And_am_editing_the_blog()
         {
-            var blog = (Blog)CommonSteps.Data["AddedBlog"];
+            var blog = (Blog) CommonSteps.Data["AddedBlog"];
             SiteTester.Posts.Edit.GoTo(blog.Id);
         }
 
@@ -103,8 +103,9 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_I_should_be_redirected_to_the_post()
         {
-            var blog = (Blog)CommonSteps.Data["AddedBlog"];
-            SiteTester.Driver.Url.Should().MatchRegex($"{Regex.Escape(SiteTester.Posts.BaseUrl.AbsoluteUri)}{blog.Id}$");
+            var blog = (Blog) CommonSteps.Data["AddedBlog"];
+            SiteTester.Driver.Url.Should()
+                .MatchRegex($"{Regex.Escape(SiteTester.Posts.BaseUrl.AbsoluteUri)}{blog.Id}$");
         }
 
         private void And_I_try_to_edit_a_blog_post_that_doesnt_exist()

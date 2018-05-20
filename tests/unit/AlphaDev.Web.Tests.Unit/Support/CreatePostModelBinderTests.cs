@@ -1,5 +1,4 @@
-﻿using System;
-using AlphaDev.Web.Support;
+﻿using AlphaDev.Web.Support;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
@@ -26,6 +25,14 @@ namespace AlphaDev.Web.Tests.Unit.Support
             return new MockCreatePostModelBinder();
         }
 
+        public class MockCreatePostModelBinder : CreatePostModelBinder
+        {
+            public void BindModelMock(PrefixModelBindingContext context)
+            {
+                BindModel(context);
+            }
+        }
+
         [Fact]
         public void BindModelAsyncShouldSetModelWithTitleAndContent()
         {
@@ -40,7 +47,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
             binder.BindModelMock(context);
 
-            context.Result.Model.Should().BeEquivalentTo(new { Title = "title", Content = "content" });
+            context.Result.Model.Should().BeEquivalentTo(new {Title = "title", Content = "content"});
         }
 
         [Fact]
@@ -52,7 +59,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
             binder.BindModelMock(context);
 
-            context.Result.Model.Should().BeEquivalentTo(new { Title = string.Empty, Content = string.Empty });
+            context.Result.Model.Should().BeEquivalentTo(new {Title = string.Empty, Content = string.Empty});
         }
 
         [Fact]
@@ -63,15 +70,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
             var context = GetContext(default);
 
             binder.BindModelMock(context);
-            context.Result.Model.Should().BeEquivalentTo(new { Title = string.Empty, Content = string.Empty });
-        }
-
-        public class MockCreatePostModelBinder : CreatePostModelBinder
-        {
-            public void BindModelMock(PrefixModelBindingContext context)
-            {
-                BindModel(context);
-            }
+            context.Result.Model.Should().BeEquivalentTo(new {Title = string.Empty, Content = string.Empty});
         }
     }
 }

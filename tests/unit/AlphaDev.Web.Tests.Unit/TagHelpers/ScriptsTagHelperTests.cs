@@ -12,6 +12,11 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 {
     public class ScriptsTagHelperTests
     {
+        private ScriptsTagHelper GetScriptsTagHelper()
+        {
+            return new ScriptsTagHelper();
+        }
+
         [Fact]
         public void ContextShouldGetAndSetViewContext()
         {
@@ -20,28 +25,6 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             var context = new ViewContext();
             helper.Context = context;
             helper.Context.Should().Be(context);
-        }
-
-        [Fact]
-        public void ProcessShouldSetContentToScriptTagsFromHashSet()
-        {
-            var helper = GetScriptsTagHelper();
-
-            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
-                (_, __) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
-
-            helper.Context = new ViewContext
-            {
-                ViewData = {["AllScripts"] = new HashSet<string>(new[] {"test"})}
-            };
-
-            helper.Process(null, tagHelperOutput);
-
-            var writer = new StringWriter();
-
-            tagHelperOutput.Content.WriteTo(writer, HtmlEncoder.Default);
-
-            writer.ToString().Should().BeEquivalentTo("<script src=\"test\"></script>");
         }
 
         [Fact]
@@ -69,9 +52,26 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             writer.ToString().Should().BeEquivalentTo("test");
         }
 
-        private ScriptsTagHelper GetScriptsTagHelper()
+        [Fact]
+        public void ProcessShouldSetContentToScriptTagsFromHashSet()
         {
-            return new ScriptsTagHelper();
+            var helper = GetScriptsTagHelper();
+
+            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
+                (_, __) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
+
+            helper.Context = new ViewContext
+            {
+                ViewData = {["AllScripts"] = new HashSet<string>(new[] {"test"})}
+            };
+
+            helper.Process(null, tagHelperOutput);
+
+            var writer = new StringWriter();
+
+            tagHelperOutput.Content.WriteTo(writer, HtmlEncoder.Default);
+
+            writer.ToString().Should().BeEquivalentTo("<script src=\"test\"></script>");
         }
     }
 }

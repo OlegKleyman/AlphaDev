@@ -6,13 +6,15 @@ namespace AlphaDev.Web.Extensions
 {
     public static class HtmlHelperOptionExtensions
     {
-        public static IHtmlContent DisplayFor<TModel, TResult>(this IHtmlHelper<TModel> htmlHelper, Option<TResult> option)
+        public static IHtmlContent DisplayFor<TModel, TResult>(this IHtmlHelper<TModel> htmlHelper,
+            Option<TResult> option)
         {
             return option.Map(result => htmlHelper.DisplayFor(model => result))
                 .ValueOr(() => htmlHelper.Raw(string.Empty));
         }
 
-        public static IHtmlContent Hidden<TModel, TResult>(this IHtmlHelper<TModel> htmlHelper, string expression, Option<TResult> option, object htmlAttributes)
+        public static IHtmlContent Hidden<TModel, TResult>(this IHtmlHelper<TModel> htmlHelper, string expression,
+            Option<TResult> option, object htmlAttributes)
         {
             return option.Map(result => htmlHelper.Hidden(expression, result, htmlAttributes))
                 .ValueOr(() => htmlHelper.Raw(string.Empty));

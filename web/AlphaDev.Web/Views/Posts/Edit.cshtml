@@ -1,9 +1,9 @@
 ﻿@using AlphaDev.Web.Models
 @using Optional
-@model EditPostViewModel
+@model AlphaDev.Web.Models.EditPostViewModel
 
 @{
     ViewBag.Title = "Edit";
 }
 
-<blog-editor model="@(new BlogEditorViewModel(Model.SomeNotNull().Map(model => model.Dates), Model?.Content, Model?.Title))" />
+<blog-editor model="@(new BlogEditorViewModel(Model.SomeNotNull().Map(model => model.Dates), Model?.Content, Model?.Title))"/>

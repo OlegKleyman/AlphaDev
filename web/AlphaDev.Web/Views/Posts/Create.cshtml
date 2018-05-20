@@ -1,10 +1,9 @@
-﻿
-@using AlphaDev.Web.Models
+﻿@using AlphaDev.Web.Models
 @using Optional
-@model CreatePostViewModel
+@model AlphaDev.Web.Models.CreatePostViewModel
 
 @{
     ViewBag.Title = "Create Post";
 }
 
-<blog-editor model="@(new BlogEditorViewModel(Option.None<DatesViewModel>(), Model?.Content, Model?.Title))" />
+<blog-editor model="@(new BlogEditorViewModel(Option.None<DatesViewModel>(), Model?.Content, Model?.Title))"/>

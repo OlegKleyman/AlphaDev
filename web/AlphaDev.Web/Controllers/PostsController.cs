@@ -77,7 +77,7 @@ namespace AlphaDev.Web.Controllers
         {
             _blogService.Delete(id);
 
-            return RedirectToAction(nameof(Index), new {id = (object)null});
+            return RedirectToAction(nameof(Index), new {id = (object) null});
         }
 
         [Authorize]
@@ -103,7 +103,7 @@ namespace AlphaDev.Web.Controllers
                     arguments.Content = model.Content;
                     arguments.Title = model.Title;
                 }))
-                .Map(dictionary => (IActionResult)RedirectToAction(nameof(Index)))
+                .Map(dictionary => (IActionResult) RedirectToAction(nameof(Index)))
                 .ValueOr(View(nameof(Edit), model));
         }
     }

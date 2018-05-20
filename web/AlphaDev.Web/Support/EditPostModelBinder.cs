@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
 using AlphaDev.Web.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Omego.Extensions.OptionExtensions;
 using Optional;
 
 namespace AlphaDev.Web.Support

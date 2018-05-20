@@ -1,24 +1,12 @@
 ﻿using System;
 using AlphaDev.Web.Models;
 using FluentAssertions;
-using Optional;
 using Xunit;
 
 namespace AlphaDev.Web.Tests.Unit.Models
 {
     public class EditPostViewModelTests
     {
-        [Fact]
-        public void PostConstructorShouldSetProperties()
-        {
-            const string title = "title";
-            const string content = "content";
-
-            var model = new EditPostViewModel(title, content, default);
-
-            model.Should().BeEquivalentTo(new {Title = title, Content = content});
-        }
-
         [Fact]
         public void GetConstructorShouldSetProperties()
         {
@@ -28,7 +16,18 @@ namespace AlphaDev.Web.Tests.Unit.Models
 
             var model = new EditPostViewModel(title, content, dates);
 
-            model.Should().BeEquivalentTo(new { Title = title, Content = content, Dates = dates });
+            model.Should().BeEquivalentTo(new {Title = title, Content = content, Dates = dates});
+        }
+
+        [Fact]
+        public void PostConstructorShouldSetProperties()
+        {
+            const string title = "title";
+            const string content = "content";
+
+            var model = new EditPostViewModel(title, content, default);
+
+            model.Should().BeEquivalentTo(new {Title = title, Content = content});
         }
     }
 }
