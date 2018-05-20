@@ -6,18 +6,17 @@ using NSubstitute;
 using Optional;
 using Optional.Unsafe;
 using Xunit;
-using Z.EntityFramework.Plus;
 
 namespace AlphaDev.Core.Tests.Unit
 {
     public class BlogServiceTests
     {
-        private readonly IDateProvider _dateProvider;
-
         public BlogServiceTests()
         {
             _dateProvider = Substitute.For<IDateProvider>();
         }
+
+        private readonly IDateProvider _dateProvider;
 
         private BlogService GetBlogService(BlogContext context)
         {
@@ -107,6 +106,79 @@ namespace AlphaDev.Core.Tests.Unit
             Action delete = () => service.Delete(default);
 
             delete.Should().Throw<InvalidOperationException>().WithMessage("Blog ID 0 not found");
+        }
+
+        [Fact]
+        public void EditShouldEditBlogTitleAndContentInDataStore()
+        {
+            var context = new MockBlogContext(nameof(EditShouldEditBlogTitleAndContentInDataStore));
+
+            var entity = new Data.Entities.Blog();
+            context.Blogs.Add(entity);
+            context.SaveChanges();
+
+            var service = GetBlogService(context);
+
+            const string title = "title";
+            const string content = "content";
+
+            service.Edit(entity.Id, arguments =>
+            {
+                arguments.Title = title;
+                arguments.Content = content;
+            });
+
+            context.Blogs.Find(entity.Id).Should().BeEquivalentTo(
+                new
+                {
+                    entity.Content,
+                    entity.Title
+                }, options => options.ExcludingMissingMembers());
+        }
+
+        [Fact]
+        public void EditShouldSetCurrentDateFromDateProvider()
+        {
+            var context = new MockBlogContext(nameof(EditShouldSetCurrentDateFromDateProvider));
+
+            var entity = new Data.Entities.Blog();
+            context.Blogs.Add(entity);
+            context.SaveChanges();
+
+            var service = GetBlogService(context);
+            _dateProvider.UtcNow.Returns(new DateTime(2018, 1, 2));
+
+            service.Edit(entity.Id, arguments => { });
+
+            context.Blogs.Find(entity.Id).Modified.Should().Be(new DateTime(2018, 1, 2));
+        }
+
+        [Fact]
+        public void EditShouldThrowInvalidOperationExceptionWhenBlogWasNotFound()
+        {
+            var context = new MockBlogContext(nameof(EditShouldThrowInvalidOperationExceptionWhenBlogWasNotModified));
+
+            var service = GetBlogService(context);
+
+            Action edit = () => service.Edit(default, arguments => { });
+
+            edit.Should().Throw<InvalidOperationException>().WithMessage("Blog with ID 0 was not found");
+        }
+
+        [Fact]
+        public void EditShouldThrowInvalidOperationExceptionWhenBlogWasNotModified()
+        {
+            var context = new MockBlogContext(nameof(EditShouldThrowInvalidOperationExceptionWhenBlogWasNotModified));
+            var entity = new Data.Entities.Blog();
+            context.Blogs.Add(entity);
+            context.SaveChanges();
+            context.Fail = true;
+
+            var service = GetBlogService(context);
+
+            Action edit = () => service.Edit(entity.Id, arguments => { });
+
+            edit.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count on update");
         }
 
         [Fact]
@@ -476,84 +548,6 @@ namespace AlphaDev.Core.Tests.Unit
             service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
                 new {Title = testValue},
                 options => options.ExcludingMissingMembers());
-        }
-
-        [Fact]
-        public void EditShouldEditBlogTitleAndContentInDataStore()
-        {
-            var context = new MockBlogContext(nameof(EditShouldEditBlogTitleAndContentInDataStore));
-            BatchUpdateManager.InMemoryDbContextFactory = () => context;
-
-            var entity = new Data.Entities.Blog();
-            context.Blogs.Add(entity);
-            context.SaveChanges();
-
-            var service = GetBlogService(context);
-
-            const string title = "title";
-            const string content = "content";
-
-            service.Edit(entity.Id, arguments =>
-            {
-                arguments.Title = title;
-                arguments.Content = content;
-            });
-
-            context.Blogs.Find(entity.Id).Should().BeEquivalentTo(
-                new
-                {
-                    entity.Content,
-                    entity.Title
-                }, options => options.ExcludingMissingMembers());
-        }
-
-        [Fact]
-        public void EditShouldSetCurrentDateFromDateProvider()
-        {
-            var context = new MockBlogContext(nameof(EditShouldSetCurrentDateFromDateProvider));
-
-            var entity = new Data.Entities.Blog();
-            context.Blogs.Add(entity);
-            context.SaveChanges();
-
-            var service = GetBlogService(context);
-            _dateProvider.UtcNow.Returns(new DateTime(2018, 1, 2));
-
-            service.Edit(entity.Id, arguments =>
-            {
-            });
-
-            context.Blogs.Find(entity.Id).Modified.Should().Be(new DateTime(2018, 1, 2));
-        }
-
-        [Fact]
-        public void EditShouldThrowInvalidOperationExceptionWhenBlogWasNotModified()
-        {
-            var context = new MockBlogContext(nameof(EditShouldThrowInvalidOperationExceptionWhenBlogWasNotModified));
-            var entity = new Data.Entities.Blog();
-            context.Blogs.Add(entity);
-            context.SaveChanges();
-            context.Fail = true;
-
-            var service = GetBlogService(context);
-
-            Action edit = () => service.Edit(entity.Id, arguments =>
-            {
-            });
-
-            edit.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count on update");
-        }
-
-        [Fact]
-        public void EditShouldThrowInvalidOperationExceptionWhenBlogWasNotFound()
-        {
-            var context = new MockBlogContext(nameof(EditShouldThrowInvalidOperationExceptionWhenBlogWasNotModified));
-
-            var service = GetBlogService(context);
-
-            Action edit = () => service.Edit(default, arguments => { });
-
-            edit.Should().Throw<InvalidOperationException>().WithMessage("Blog with ID 0 was not found");
         }
     }
 }
