@@ -1,15 +1,13 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace AlphaDev.Core.Tests.Unit
 {
     public class PrefixGeneratorTests
     {
-        [Fact]
-        public void GenerateShouldGeneratePrefixStartingWithLetterg()
+        private PrefixGenerator GetPrefixGenerator()
         {
-            GetPrefixGenerator().Generate().Should().StartWith("g");
+            return new PrefixGenerator();
         }
 
         [Fact]
@@ -18,9 +16,10 @@ namespace AlphaDev.Core.Tests.Unit
             GetPrefixGenerator().Generate().Should().MatchRegex("^g[a-f0-9]{32}$");
         }
 
-        private PrefixGenerator GetPrefixGenerator()
+        [Fact]
+        public void GenerateShouldGeneratePrefixStartingWithLetterg()
         {
-            return new PrefixGenerator();
+            GetPrefixGenerator().Generate().Should().StartWith("g");
         }
     }
 }

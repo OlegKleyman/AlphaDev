@@ -51,8 +51,8 @@ I want to have a an edit icon on every blog post that leads me to edit a blog")]
         {
             Runner.RunScenario(
                 _ => CommonSteps.Given_I_have_logged_in(),
-                _=>CommonSteps.And_there_is_a_blog_post(),
-                _=>And_am_editing_the_blog(),
+                _ => CommonSteps.And_there_is_a_blog_post(),
+                _ => And_am_editing_the_blog(),
                 _ => When_I_save_a_blog(),
                 _ => Then_I_should_be_redirected_to_the_post());
         }

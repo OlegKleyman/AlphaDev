@@ -125,6 +125,98 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
+        public void EditShouldEditPostWithModelData()
+        {
+            var blogService = Substitute.For<IBlogService>();
+            var editArguments = new BlogEditArguments();
+
+            blogService.Edit(1, Arg.Invoke(editArguments));
+            var controller = GetPostsController(blogService);
+
+            var post = new EditPostViewModel("title", "content", default);
+            controller.Edit(1, post);
+
+            editArguments.Should().BeEquivalentTo(new {post.Content, post.Title});
+        }
+
+        [Fact]
+        public void EditShouldReturnEditViewWhenBlogIsFound()
+        {
+            var blogService = Substitute.For<IBlogService>();
+            blogService.Get(Arg.Any<int>()).Returns(Option.Some(Substitute.For<BlogBase>()));
+
+            var controller = GetPostsController(blogService);
+
+            controller.Edit(default)
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should().BeEquivalentTo("Edit");
+        }
+
+        [Fact]
+        public void EditShouldReturnEditViewWhenModelStateIsInvalid()
+        {
+            var controller = GetPostsController(Substitute.For<IBlogService>());
+
+            controller.ModelState.AddModelError("test", "test");
+
+            var post = new EditPostViewModel("title", "content", new DatesViewModel());
+
+            controller.Edit(default, post).Should().BeOfType<ViewResult>().Which.ViewName.Should()
+                .BeEquivalentTo("Edit");
+        }
+
+        [Fact]
+        public void EditShouldReturnEditViewWithModelWhenBlogIsFound()
+        {
+            var blog = Substitute.For<BlogBase>();
+            blog.Id.Returns(default(int));
+            blog.Content.Returns("content");
+            blog.Title.Returns("title");
+            blog.Dates.Returns(default(Dates));
+
+            var blogService = Substitute.For<IBlogService>();
+            blogService.Get(Arg.Any<int>()).Returns(Option.Some(blog));
+
+            var controller = GetPostsController(blogService);
+
+            controller
+                .Edit(default)
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeEquivalentTo(
+                    new
+                    {
+                        Title = "title",
+                        Content = "content",
+                        Dates = new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)
+                    });
+        }
+
+        [Fact]
+        public void EditShouldReturnViewWithSameModelWhenModelStateIsInvalid()
+        {
+            var controller = GetPostsController(Substitute.For<IBlogService>());
+
+            controller.ModelState.AddModelError("test", "test");
+
+            var post = new EditPostViewModel("title", "content", new DatesViewModel());
+
+            controller.Edit(default, post).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(post);
+        }
+
+        [Fact]
+        public void EditShouldRouteToIndexAction()
+        {
+            var controller = GetPostsController(Substitute.For<IBlogService>());
+
+            controller.Edit(default, Arg.Any<EditPostViewModel>())
+                .Should().BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should().BeEquivalentTo("Index");
+        }
+
+        [Fact]
         public void IndexShouldReturn404StatusIfNoBlogFound()
         {
             var blogService = Substitute.For<IBlogService>();
@@ -289,98 +381,6 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             controller.Index(default).Should().BeOfType<ViewResult>().Which.ViewData["Title"].Should()
                 .BeEquivalentTo(blog.Title);
-        }
-
-        [Fact]
-        public void EditShouldReturnEditViewWhenBlogIsFound()
-        {
-            var blogService = Substitute.For<IBlogService>();
-            blogService.Get(Arg.Any<int>()).Returns(Option.Some(Substitute.For<BlogBase>()));
-
-            var controller = GetPostsController(blogService);
-
-            controller.Edit(default)
-                .Should()
-                .BeOfType<ViewResult>()
-                .Which.ViewName.Should().BeEquivalentTo("Edit");
-        }
-
-        [Fact]
-        public void EditShouldReturnEditViewWithModelWhenBlogIsFound()
-        {
-            var blog = Substitute.For<BlogBase>();
-            blog.Id.Returns(default(int));
-            blog.Content.Returns("content");
-            blog.Title.Returns("title");
-            blog.Dates.Returns(default(Dates));
-
-            var blogService = Substitute.For<IBlogService>();
-            blogService.Get(Arg.Any<int>()).Returns(Option.Some(blog));
-
-            var controller = GetPostsController(blogService);
-
-            controller
-                .Edit(default)
-                .Should()
-                .BeOfType<ViewResult>()
-                .Which.Model.Should()
-                .BeEquivalentTo(
-                    new
-                    {
-                        Title = "title",
-                        Content = "content",
-                        Dates = new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)
-                    });
-        }
-
-        [Fact]
-        public void EditShouldReturnViewWithSameModelWhenModelStateIsInvalid()
-        {
-            var controller = GetPostsController(Substitute.For<IBlogService>());
-
-            controller.ModelState.AddModelError("test", "test");
-
-            var post = new EditPostViewModel("title", "content", new DatesViewModel());
-
-            controller.Edit(default, post).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(post);
-        }
-
-        [Fact]
-        public void EditShouldReturnEditViewWhenModelStateIsInvalid()
-        {
-            var controller = GetPostsController(Substitute.For<IBlogService>());
-
-            controller.ModelState.AddModelError("test", "test");
-
-            var post = new EditPostViewModel("title", "content", new DatesViewModel());
-
-            controller.Edit(default, post).Should().BeOfType<ViewResult>().Which.ViewName.Should()
-                .BeEquivalentTo("Edit");
-        }
-
-        [Fact]
-        public void EditShouldRouteToIndexAction()
-        {
-            var controller = GetPostsController(Substitute.For<IBlogService>());
-
-            controller.Edit(default, Arg.Any<EditPostViewModel>())
-                .Should().BeOfType<RedirectToActionResult>()
-                .Which.ActionName.Should().BeEquivalentTo("Index");
-        }
-
-        [Fact]
-        public void EditShouldEditPostWithModelData()
-        {
-            var blogService = Substitute.For<IBlogService>();
-            var editArguments = new BlogEditArguments();
-
-            blogService.Edit(1, Arg.Invoke(editArguments));
-            var controller = GetPostsController(blogService);
-
-            var post = new EditPostViewModel("title", "content", default);
-            controller.Edit(1, post);
-
-            editArguments.Should().BeEquivalentTo(new {post.Content, post.Title});
         }
     }
 }

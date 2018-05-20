@@ -10,33 +10,33 @@ namespace AlphaDev.Web.Tests.Unit.Support
 {
     public class PrefixModelBindingContextTests
     {
+        private PrefixModelBindingContext GetPrefixModelBindingContext()
+        {
+            return GetPrefixModelBindingContext(GetContext(), default);
+        }
+
+        private static DefaultModelBindingContext GetContext()
+        {
+            return new DefaultModelBindingContext
+            {
+                ModelState = new ModelStateDictionary()
+            };
+        }
+
+        private PrefixModelBindingContext GetPrefixModelBindingContext(ModelBindingContext context, string prefix)
+        {
+            return new PrefixModelBindingContext(context, prefix);
+        }
+
         [Fact]
         public void ConstructorShouldThrowArgumentNullExceptionWhenBindingContextIsNull()
         {
-           Action constructor = () =>  new PrefixModelBindingContext(null, default);
+            Action constructor = () => new PrefixModelBindingContext(null, default);
 
             constructor.Should()
                 .Throw<ArgumentNullException>()
                 .Which.ParamName.Should()
                 .BeEquivalentTo("bindingContext");
-        }
-
-        [Fact]
-        public void ModelStateShouldReturnModelStateStateDictionary()
-        {
-            var context = GetContext();
-            context.ModelState.AddModelError("test", string.Empty);
-
-            var binder = GetPrefixModelBindingContext(context, default);
-            binder.ModelState.ContainsKey("test").Should().BeTrue();
-        }
-
-        [Fact]
-        public void ResultShouldGetAndSetModelBindingResult()
-        {
-            var binder = GetPrefixModelBindingContext();
-            binder.Result = ModelBindingResult.Success(default);
-            binder.Result.Should().Be(ModelBindingResult.Success(default));
         }
 
         [Fact]
@@ -73,22 +73,22 @@ namespace AlphaDev.Web.Tests.Unit.Support
             getValue.Should().Throw<InvalidOperationException>().WithMessage("ValueProvider is null");
         }
 
-        private PrefixModelBindingContext GetPrefixModelBindingContext()
+        [Fact]
+        public void ModelStateShouldReturnModelStateStateDictionary()
         {
-            return GetPrefixModelBindingContext(GetContext(), default);
+            var context = GetContext();
+            context.ModelState.AddModelError("test", string.Empty);
+
+            var binder = GetPrefixModelBindingContext(context, default);
+            binder.ModelState.ContainsKey("test").Should().BeTrue();
         }
 
-        private static DefaultModelBindingContext GetContext()
+        [Fact]
+        public void ResultShouldGetAndSetModelBindingResult()
         {
-            return new DefaultModelBindingContext
-            {
-                ModelState = new ModelStateDictionary()
-            };
-        }
-
-        private PrefixModelBindingContext GetPrefixModelBindingContext(ModelBindingContext context, string prefix)
-        {
-            return new PrefixModelBindingContext(context, prefix);
+            var binder = GetPrefixModelBindingContext();
+            binder.Result = ModelBindingResult.Success(default);
+            binder.Result.Should().Be(ModelBindingResult.Success(default));
         }
     }
 }

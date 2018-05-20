@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Omego.Extensions.OptionExtensions;
 using Optional;
 using Optional.Collections;
-using Z.EntityFramework.Plus;
 
 namespace AlphaDev.Core
 {
@@ -78,7 +77,7 @@ namespace AlphaDev.Core
             _context.Blogs.Find(id)
                 .SomeNotNull()
                 .MatchNoneContinue(() => throw new InvalidOperationException($"Blog with ID {id} was not found"))
-                .Map(blog => new{Blog = blog, Arguments = new BlogEditArguments()})
+                .Map(blog => new {Blog = blog, Arguments = new BlogEditArguments()})
                 .MatchSomeContinue(match =>
                 {
                     edit(match.Arguments);

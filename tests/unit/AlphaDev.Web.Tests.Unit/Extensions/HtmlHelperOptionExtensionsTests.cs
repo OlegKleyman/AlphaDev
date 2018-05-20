@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq.Expressions;
-using System.Text;
 using System.Text.Encodings.Web;
 using AlphaDev.Web.Extensions;
 using FluentAssertions;

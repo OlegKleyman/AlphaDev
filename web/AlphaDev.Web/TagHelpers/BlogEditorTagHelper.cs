@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AlphaDev.Core;
 using AlphaDev.Web.Models;
@@ -14,8 +13,8 @@ namespace AlphaDev.Web.TagHelpers
     public class BlogEditorTagHelper : TagHelper
     {
         private readonly IHtmlHelper _htmlHelper;
-        private readonly IUrlHelperFactory _urlHelperFactory;
         private readonly IPrefixGenerator _prefixGenerator;
+        private readonly IUrlHelperFactory _urlHelperFactory;
 
         public BlogEditorTagHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory,
             IPrefixGenerator prefixGenerator)
@@ -25,9 +24,13 @@ namespace AlphaDev.Web.TagHelpers
             _prefixGenerator = prefixGenerator;
         }
 
+        public BlogEditorViewModel Model { get; set; }
+
+        [ViewContext] public ViewContext Context { get; set; }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            ((IViewContextAware)_htmlHelper).Contextualize(Context);
+            ((IViewContextAware) _htmlHelper).Contextualize(Context);
 
             output.TagName = string.Empty;
             var urlHelper = _urlHelperFactory.GetUrlHelper(Context);
@@ -44,7 +47,7 @@ namespace AlphaDev.Web.TagHelpers
 
         private void SetReferencedLinks(IUrlHelper urlHelper)
         {
-            var links = (HashSet<string>)(Context.ViewData["AllLinks"] ?? new HashSet<string>());
+            var links = (HashSet<string>) (Context.ViewData["AllLinks"] ?? new HashSet<string>());
             links.Add(urlHelper.Content("~/lib/bootstrap-markdown/css/bootstrap-markdown.min.css"));
             Context.ViewData["AllLinks"] = links;
         }
@@ -71,10 +74,6 @@ namespace AlphaDev.Web.TagHelpers
             scripts.Add(urlHelper.Content("~/lib/bootstrap-markdown/js/bootstrap-markdown.js"));
             Context.ViewData["AllScripts"] = scripts;
         }
-
-        public BlogEditorViewModel Model { get; set; }
-        [ViewContext]
-        public ViewContext Context { get; set; }
 
         public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
