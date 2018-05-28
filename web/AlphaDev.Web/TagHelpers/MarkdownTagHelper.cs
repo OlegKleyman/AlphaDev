@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Markdig;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -7,7 +8,7 @@ namespace AlphaDev.Web.TagHelpers
 {
     public class MarkdownTagHelper : TagHelper
     {
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override void Process(TagHelperContext context, [CanBeNull] TagHelperOutput output)
         {
             var content = (output ?? throw new ArgumentNullException(nameof(output)))
                 .GetChildContentAsync(NullHtmlEncoder.Default)
@@ -20,7 +21,7 @@ namespace AlphaDev.Web.TagHelpers
             base.Process(context, output);
         }
 
-        public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override Task ProcessAsync(TagHelperContext context, [CanBeNull] TagHelperOutput output)
         {
             return Task.Run(() => Process(context, output));
         }

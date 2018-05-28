@@ -1,4 +1,5 @@
 using AlphaDev.Core.Data.Entities;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Data.Sql.Contexts
@@ -12,13 +13,13 @@ namespace AlphaDev.Core.Data.Sql.Contexts
             _connectionString = connectionString;
         }
 
-        protected sealed override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected sealed override void OnConfiguring([NotNull] DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
                 _connectionString);
         }
 
-        protected sealed override void OnModelCreating(ModelBuilder modelBuilder)
+        protected sealed override void OnModelCreating([NotNull] ModelBuilder modelBuilder)
         {
             var entity = modelBuilder.Entity<Blog>();
 

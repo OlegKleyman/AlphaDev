@@ -1,4 +1,5 @@
 ﻿using AlphaDev.Core.Data.Account.Security.Sql.Entities;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,7 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Contexts
             _connectionString = connectionString;
         }
 
-        protected sealed override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected sealed override void OnConfiguring([NotNull] DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
                 _connectionString);

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -10,9 +11,9 @@ namespace AlphaDev.Web.TagHelpers
 {
     public class LinksTagHelper : TagHelper
     {
-        [ViewContext] public ViewContext Context { get; set; }
+        [ViewContext] public ViewContext Context { [CanBeNull] get; [NotNull] set; }
 
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override void Process(TagHelperContext context, [NotNull] TagHelperOutput output)
         {
             var links = (HashSet<string>) (Context?.ViewData["AllLinks"] ?? new HashSet<string>());
             var inlineStyles = (HashSet<string>) (Context?.ViewData["InlineStyles"] ?? new HashSet<string>());
@@ -27,7 +28,7 @@ namespace AlphaDev.Web.TagHelpers
                 .MatchSome(s => output.Content.AppendHtml(s));
         }
 
-        public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override Task ProcessAsync(TagHelperContext context, [NotNull] TagHelperOutput output)
         {
             return Task.Run(() => Process(context, output));
         }

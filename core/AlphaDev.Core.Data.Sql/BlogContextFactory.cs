@@ -1,4 +1,5 @@
 ﻿using AlphaDev.Core.Data.Sql.Contexts;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
@@ -17,6 +18,7 @@ namespace AlphaDev.Core.Data.Sql
             _config = config;
         }
 
+        [NotNull]
         public BlogContext CreateDbContext(string[] args)
         {
             return new BlogContext(

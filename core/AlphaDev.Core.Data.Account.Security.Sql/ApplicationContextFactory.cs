@@ -1,4 +1,5 @@
 ﻿using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
@@ -17,6 +18,7 @@ namespace AlphaDev.Core.Data.Account.Security.Sql
             _config = config;
         }
 
+        [NotNull]
         public ApplicationContext CreateDbContext(string[] args)
         {
             return new ApplicationContext(

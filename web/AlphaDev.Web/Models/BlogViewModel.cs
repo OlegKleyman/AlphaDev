@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 
 namespace AlphaDev.Web.Models
 {
@@ -20,6 +21,7 @@ namespace AlphaDev.Web.Models
         public string Content { get; }
         public int Id { get; set; }
 
+        [NotNull]
         public static BlogViewModel Welcome => WelcomeBlogViewModel.Value;
 
         private class WelcomeBlogViewModel : BlogViewModel
@@ -27,7 +29,7 @@ namespace AlphaDev.Web.Models
             private static readonly Lazy<WelcomeBlogViewModel> Model =
                 new Lazy<WelcomeBlogViewModel>(() => new WelcomeBlogViewModel());
 
-            public static readonly WelcomeBlogViewModel Value = Model.Value;
+            [NotNull] public static readonly WelcomeBlogViewModel Value = Model.Value;
 
             private WelcomeBlogViewModel() : base(default, "Welcome to my blog.",
                 "```csharp\n" +

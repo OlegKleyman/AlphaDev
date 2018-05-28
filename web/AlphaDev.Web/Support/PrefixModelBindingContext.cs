@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AlphaDev.Web.Support
@@ -8,7 +9,7 @@ namespace AlphaDev.Web.Support
         private readonly ModelBindingContext _bindingContext;
         private readonly string _prefix;
 
-        public PrefixModelBindingContext(ModelBindingContext bindingContext, string prefix)
+        public PrefixModelBindingContext([CanBeNull] ModelBindingContext bindingContext, string prefix)
         {
             _bindingContext = bindingContext ?? throw new ArgumentNullException(nameof(bindingContext));
             _prefix = prefix;

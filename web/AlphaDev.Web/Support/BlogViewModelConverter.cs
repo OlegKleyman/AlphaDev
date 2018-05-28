@@ -1,5 +1,6 @@
 using System;
 using AlphaDev.Web.Models;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Optional;
@@ -15,6 +16,7 @@ namespace AlphaDev.Web.Support
         {
         }
 
+        [NotNull]
         public static BlogViewModelConverter Default => Singleton.Value;
 
         public override bool CanWrite => true;
@@ -24,6 +26,7 @@ namespace AlphaDev.Web.Support
             return (objectType == typeof(BlogViewModel));
         }
 
+        [NotNull]
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
             JsonSerializer serializer)
         {
@@ -36,8 +39,7 @@ namespace AlphaDev.Web.Support
 
             var title = loadedObject["Title"].SomeNotNull().Map(token => token.ToString()).ValueOr(string.Empty);
             var content = loadedObject["Content"].SomeNotNull().Map(token => token.ToString()).ValueOr(string.Empty);
-            ;
-
+            
             var dateToken = loadedObject["Dates"] ??
                             throw new ArgumentException("Dates field is missing.", nameof(reader));
 
@@ -54,13 +56,14 @@ namespace AlphaDev.Web.Support
             return result;
         }
 
-        private static string GetKeyValue(JToken token, string key)
+        [NotNull]
+        private static string GetKeyValue([NotNull] JToken token, string key)
         {
             return
                 $"{key} {token[key].SomeNotNull().Filter(jToken => jToken.HasValues).Map(jToken => jToken.ToString()).ValueOr("[NULL]")}";
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson([NotNull] JsonWriter writer, [NotNull] object value, [NotNull] JsonSerializer serializer)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
             if (value == null) throw new ArgumentNullException(nameof(value));

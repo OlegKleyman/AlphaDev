@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace AlphaDev.Web.TagHelpers
@@ -8,13 +9,12 @@ namespace AlphaDev.Web.TagHelpers
     {
         public bool Value { get; set; } = true;
 
-        public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override Task ProcessAsync(TagHelperContext context, [CanBeNull] TagHelperOutput output)
         {
-            return Task.Run(
-                () => Process(context, output));
+            return Task.Run(() => Process(context, output));
         }
 
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override void Process(TagHelperContext context, [CanBeNull] TagHelperOutput output)
         {
             if (output == null) throw new ArgumentNullException(nameof(output));
 
