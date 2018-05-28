@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using Optional;
 
 namespace AlphaDev.Core
@@ -20,11 +21,11 @@ namespace AlphaDev.Core
         {
             private static readonly Dates EmptyDates = new Dates(default, Option.None<DateTime>());
 
-            public override string Title => string.Empty;
+            [NotNull] public override string Title => string.Empty;
 
             public override Dates Dates => EmptyDates;
 
-            public override string Content => string.Empty;
+            [NotNull] public override string Content => string.Empty;
             public override int Id => default;
         }
     }

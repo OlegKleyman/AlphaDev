@@ -1,5 +1,6 @@
 ﻿using System;
 using AlphaDev.Web.Models;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Optional;
 
@@ -7,7 +8,7 @@ namespace AlphaDev.Web.Support
 {
     public class EditPostModelBinder : PrefixModelBinder
     {
-        protected override void BindModel(PrefixModelBindingContext context)
+        protected override void BindModel([NotNull] PrefixModelBindingContext context)
         {
             if (!DateTime.TryParse(context.GetValue("Created").FirstValue, out DateTime created))
             {

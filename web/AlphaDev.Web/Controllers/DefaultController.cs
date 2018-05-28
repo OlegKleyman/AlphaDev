@@ -1,5 +1,6 @@
 using AlphaDev.Core;
 using AlphaDev.Web.Models;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlphaDev.Web.Controllers
@@ -10,10 +11,7 @@ namespace AlphaDev.Web.Controllers
     {
         private readonly IBlogService _blogService;
 
-        public DefaultController(IBlogService blogService)
-        {
-            _blogService = blogService;
-        }
+        public DefaultController([NotNull] IBlogService blogService) => _blogService = blogService;
 
         public ViewResult Index()
         {

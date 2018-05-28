@@ -18,6 +18,7 @@ namespace AlphaDev.Web.Models
         public DateTime Created { get; }
 
         [DisplayFormat(DataFormatString = DateDisplayFormat)]
+        // ReSharper disable once Mvc.TemplateNotResolved  - it exists
         [UIHint("OptionalDate")]
         public Option<DateTime> Modified { get; }
     }

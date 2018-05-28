@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AlphaDev.Core;
 using AlphaDev.Web.Models;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -16,6 +17,7 @@ namespace AlphaDev.Web.TagHelpers
         private readonly IPrefixGenerator _prefixGenerator;
         private readonly IUrlHelperFactory _urlHelperFactory;
 
+        // ReSharper disable once NotNullMemberIsNotInitialized - Initialized by the framework
         public BlogEditorTagHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory,
             IPrefixGenerator prefixGenerator)
         {
@@ -26,9 +28,11 @@ namespace AlphaDev.Web.TagHelpers
 
         public BlogEditorViewModel Model { get; set; }
 
-        [ViewContext] public ViewContext Context { get; set; }
+        [NotNull]
+        [ViewContext]
+        public ViewContext Context { get; set; }
 
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override void Process(TagHelperContext context, [NotNull] TagHelperOutput output)
         {
             ((IViewContextAware) _htmlHelper).Contextualize(Context);
 
@@ -41,11 +45,12 @@ namespace AlphaDev.Web.TagHelpers
 
             SetInlineScripts();
 
+            // ReSharper disable once Mvc.PartialViewNotResolved - it exists
             var content = _htmlHelper.PartialAsync("_BlogEditor", Model, Context.ViewData).GetAwaiter().GetResult();
             output.Content.SetHtmlContent(content);
         }
 
-        private void SetReferencedLinks(IUrlHelper urlHelper)
+        private void SetReferencedLinks([NotNull] IUrlHelper urlHelper)
         {
             var links = (HashSet<string>) (Context.ViewData["AllLinks"] ?? new HashSet<string>());
             links.Add(urlHelper.Content("~/lib/bootstrap-markdown/css/bootstrap-markdown.min.css"));
@@ -67,7 +72,7 @@ namespace AlphaDev.Web.TagHelpers
                                                 </script>";
         }
 
-        private void SetReferencedScripts(IUrlHelper urlHelper)
+        private void SetReferencedScripts([NotNull] IUrlHelper urlHelper)
         {
             var scripts = (HashSet<string>) (Context.ViewData["AllScripts"] ?? new HashSet<string>());
             scripts.Add(urlHelper.Content("~/lib/marked/marked.min.js"));
@@ -75,7 +80,7 @@ namespace AlphaDev.Web.TagHelpers
             Context.ViewData["AllScripts"] = scripts;
         }
 
-        public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override Task ProcessAsync(TagHelperContext context, [NotNull] TagHelperOutput output)
         {
             return Task.Run(() => Process(context, output));
         }

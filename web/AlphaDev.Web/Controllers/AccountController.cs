@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Web.Models;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,12 +16,12 @@ namespace AlphaDev.Web.Controllers
     {
         private readonly SignInManager<User> _signInManager;
 
-        public AccountController(SignInManager<User> signInManager)
+        public AccountController([NotNull] SignInManager<User> signInManager)
         {
             _signInManager = signInManager;
         }
 
-        public ViewResult Login(string returnUrl = null)
+        public ViewResult Login([CanBeNull] string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             return View("Login", new LoginViewModel());
@@ -29,13 +30,13 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login([CanBeNull] LoginViewModel model, [CanBeNull] string returnUrl = null)
         {
             var result = Option.None<IActionResult>();
 
             if (ModelState.IsValid)
             {
-                result = (await _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false))
+                result = (await _signInManager.PasswordSignInAsync(model?.Username, model?.Password, false, false))
                     .SomeWhen(signInResult => signInResult == SignInResult.Success)
                     .Map(signInResult => (IActionResult) Redirect(returnUrl ?? "/"))
                     .MatchNoneContinue(() => ModelState.AddModelError(string.Empty, "Invalid login"));

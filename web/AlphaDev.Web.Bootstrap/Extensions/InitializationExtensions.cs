@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Entities;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -17,7 +18,8 @@ namespace AlphaDev.Web.Bootstrap.Extensions
 {
     public static class InitializationExtensions
     {
-        public static IApplicationBuilder UseDevelopmentBlogs(this IApplicationBuilder builder)
+        [NotNull]
+        public static IApplicationBuilder UseDevelopmentBlogs([NotNull] this IApplicationBuilder builder)
         {
             using (var scope = builder.ApplicationServices.CreateScope())
             {
@@ -48,7 +50,8 @@ namespace AlphaDev.Web.Bootstrap.Extensions
             return builder;
         }
 
-        public static IApplicationBuilder UseAllDatabaseMigrations(this IApplicationBuilder builder)
+        [NotNull]
+        public static IApplicationBuilder UseAllDatabaseMigrations([NotNull] this IApplicationBuilder builder)
         {
             using (var scope = builder.ApplicationServices.CreateScope())
             {
@@ -65,7 +68,8 @@ namespace AlphaDev.Web.Bootstrap.Extensions
             return builder;
         }
 
-        public static IApplicationBuilder UseLoggerSettings(this IApplicationBuilder builder)
+        [NotNull]
+        public static IApplicationBuilder UseLoggerSettings([NotNull] this IApplicationBuilder builder)
         {
             using (var scope = builder.ApplicationServices.CreateScope())
             {
@@ -81,7 +85,8 @@ namespace AlphaDev.Web.Bootstrap.Extensions
             return builder;
         }
 
-        public static IApplicationBuilder UseExceptionHandling(this IApplicationBuilder builder)
+        [NotNull]
+        public static IApplicationBuilder UseExceptionHandling([NotNull] this IApplicationBuilder builder)
         {
             using (var scope = builder.ApplicationServices.CreateScope())
             {
@@ -95,7 +100,8 @@ namespace AlphaDev.Web.Bootstrap.Extensions
             return builder;
         }
 
-        public static async Task<IApplicationBuilder> UseDevelopmentUser(this IApplicationBuilder builder)
+        [ItemNotNull]
+        public static async Task<IApplicationBuilder> UseDevelopmentUser([NotNull] this IApplicationBuilder builder)
         {
             using (var scope = builder.ApplicationServices.CreateScope())
             {
@@ -114,6 +120,7 @@ namespace AlphaDev.Web.Bootstrap.Extensions
             return builder;
         }
 
+        [NotNull]
         private static string GetDevelopmentContent()
         {
             return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porttitor rutrum "

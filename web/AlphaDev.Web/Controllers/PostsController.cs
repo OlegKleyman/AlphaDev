@@ -2,6 +2,7 @@
 using AlphaDev.Core;
 using AlphaDev.Web.Models;
 using AlphaDev.Web.Support;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -15,10 +16,7 @@ namespace AlphaDev.Web.Controllers
     {
         private readonly IBlogService _blogService;
 
-        public PostsController(IBlogService blogService)
-        {
-            _blogService = blogService;
-        }
+        public PostsController([NotNull] IBlogService blogService) => _blogService = blogService;
 
         public ViewResult Index()
         {
@@ -58,11 +56,11 @@ namespace AlphaDev.Web.Controllers
         [Authorize]
         [Route("create")]
         [HttpPost]
-        public ActionResult Create(CreatePostViewModel post)
+        public ActionResult Create([CanBeNull] CreatePostViewModel post)
         {
             return ModelState
                 .SomeWhen(dictionary => dictionary.IsValid)
-                .Map(dictionary => _blogService.Add(new Blog(post.Title, post.Content)))
+                .Map(dictionary => _blogService.Add(new Blog(post?.Title, post?.Content)))
                 .MatchSomeContinue(blog => TempData["Model"] = JsonConvert.SerializeObject(new BlogViewModel(blog.Id,
                     blog.Title, blog.Content,
                     new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)), BlogViewModelConverter.Default))
@@ -94,14 +92,14 @@ namespace AlphaDev.Web.Controllers
         [Authorize]
         [Route("edit/{id}")]
         [HttpPost]
-        public IActionResult Edit(int id, EditPostViewModel model)
+        public IActionResult Edit(int id, [CanBeNull] EditPostViewModel model)
         {
             return ModelState
                 .SomeWhen(dictionary => dictionary.IsValid)
                 .MatchSomeContinue(dictionary => _blogService.Edit(id, arguments =>
                 {
-                    arguments.Content = model.Content;
-                    arguments.Title = model.Title;
+                    arguments.Content = model?.Content;
+                    arguments.Title = model?.Title;
                 }))
                 .Map(dictionary => (IActionResult) RedirectToAction(nameof(Index)))
                 .ValueOr(View(nameof(Edit), model));

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AlphaDev.Core.Data.Contexts;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Omego.Extensions.OptionExtensions;
 using Optional;
@@ -14,7 +15,7 @@ namespace AlphaDev.Core
         private readonly BlogContext _context;
         private readonly IDateProvider _dateProvider;
 
-        public BlogService(BlogContext context, IDateProvider dateProvider)
+        public BlogService([NotNull] BlogContext context, [NotNull] IDateProvider dateProvider)
         {
             _context = context;
             _dateProvider = dateProvider;
@@ -44,7 +45,8 @@ namespace AlphaDev.Core
                     new Dates(blog.Created, blog.Modified.ToOption())));
         }
 
-        public BlogBase Add(BlogBase blog)
+        [NotNull]
+        public BlogBase Add([NotNull] BlogBase blog)
         {
             var entity = new Data.Entities.Blog
             {

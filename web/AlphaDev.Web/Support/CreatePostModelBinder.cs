@@ -1,11 +1,12 @@
 ﻿using AlphaDev.Web.Models;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AlphaDev.Web.Support
 {
     public class CreatePostModelBinder : PrefixModelBinder
     {
-        protected override void BindModel(PrefixModelBindingContext context)
+        protected override void BindModel([NotNull] PrefixModelBindingContext context)
         {
             var title = context.GetValue("Title").FirstValue;
             var content = context.GetValue("Content").FirstValue;
