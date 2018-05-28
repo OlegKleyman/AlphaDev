@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AlphaDev.Web.Models;
 using AlphaDev.Web.ViewComponents;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Optional;
 using Xunit;
@@ -11,6 +12,7 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
 {
     public class BlogPreviewViewComponentTests
     {
+        [NotNull]
         private BlogPreviewViewComponent GetBlogPreviewViewComponent()
         {
             return new BlogPreviewViewComponent();

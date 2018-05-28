@@ -4,6 +4,7 @@ using System.Linq;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using AlphaDev.Web.Tests.Integration.Support;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Markdig;
 using Omego.Extensions.DbContextExtensions;
 using Optional;
@@ -11,6 +12,7 @@ using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
 {
+    [UsedImplicitly]
     public partial class Posts_feature : WebFeatureFixture
     {
         public Posts_feature(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) : base(output,

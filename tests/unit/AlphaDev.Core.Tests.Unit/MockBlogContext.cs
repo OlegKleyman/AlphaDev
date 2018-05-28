@@ -1,4 +1,5 @@
 using AlphaDev.Core.Data.Contexts;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Tests.Unit
@@ -14,7 +15,7 @@ namespace AlphaDev.Core.Tests.Unit
 
         public bool Fail { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring([NotNull] DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseInMemoryDatabase(_testName);
         }

@@ -5,6 +5,7 @@ using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
 using AlphaDev.Web.Support;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -17,6 +18,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 {
     public class PostsControllerTests
     {
+        [NotNull]
         private PostsController GetPostsController()
         {
             var blogService = Substitute.For<IBlogService>();
@@ -25,7 +27,8 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             return GetPostsController(blogService);
         }
 
-        private PostsController GetPostsController(IBlogService blogService)
+        [NotNull]
+        private PostsController GetPostsController([NotNull] IBlogService blogService)
         {
             return new PostsController(blogService);
         }

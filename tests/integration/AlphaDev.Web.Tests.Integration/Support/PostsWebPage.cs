@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using OpenQA.Selenium;
 using Optional;
 
@@ -14,6 +15,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
             Edit = new BlogEditorWebPage(Driver, new Uri(BaseUrl, "edit"));
         }
 
+        [NotNull]
         public IEnumerable<BlogPost> Posts
         {
             get
@@ -29,6 +31,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
             }
         }
 
+        [NotNull]
         public BlogPost Post => new BlogPost(Driver.FindElement(By.CssSelector(".blog .title h3")).Text,
             Driver.FindElement(By.CssSelector(".blog .blog-content")).GetAttribute("innerHTML").Trim(),
             new BlogDate(Driver.FindElement(By.CssSelector(".blog .created-date")).Text,

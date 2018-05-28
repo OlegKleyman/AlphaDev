@@ -2,6 +2,7 @@
 using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Test.Integration.Core.Extensions;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
@@ -10,7 +11,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
     {
         private readonly DatabaseConnectionFixture _connection;
 
-        public ApplicationContextDatabaseFixture(DatabaseConnectionFixture connection)
+        public ApplicationContextDatabaseFixture([NotNull] DatabaseConnectionFixture connection)
         {
             _connection = connection;
             ApplicationContext = new ApplicationContext(connection.String);

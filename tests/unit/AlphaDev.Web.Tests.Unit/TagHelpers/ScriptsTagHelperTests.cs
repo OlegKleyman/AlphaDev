@@ -4,6 +4,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using AlphaDev.Web.TagHelpers;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
@@ -12,6 +13,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 {
     public class ScriptsTagHelperTests
     {
+        [NotNull]
         private ScriptsTagHelper GetScriptsTagHelper()
         {
             return new ScriptsTagHelper();

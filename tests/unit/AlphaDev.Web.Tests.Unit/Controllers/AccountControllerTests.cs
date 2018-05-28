@@ -3,6 +3,7 @@ using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,16 +17,19 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 {
     public class AccountControllerTests
     {
+        [NotNull]
         private AccountController GetAccountController()
         {
             return GetAccountController(GetMockSignInManager());
         }
 
-        private AccountController GetAccountController(SignInManager<User> signInManager)
+        [NotNull]
+        private AccountController GetAccountController([NotNull] SignInManager<User> signInManager)
         {
             return new AccountController(signInManager);
         }
 
+        [NotNull]
         private static SignInManager<User> GetMockSignInManager()
         {
             var userManager = Substitute.For<UserManager<User>>(

@@ -2,6 +2,7 @@
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Test.Integration.Core.Extensions;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
@@ -10,7 +11,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
     {
         private readonly DatabaseConnectionFixture _connection;
 
-        public BlogContextDatabaseFixture(DatabaseConnectionFixture connection)
+        public BlogContextDatabaseFixture([NotNull] DatabaseConnectionFixture connection)
         {
             _connection = connection;
             BlogContext = new BlogContext(connection.String);

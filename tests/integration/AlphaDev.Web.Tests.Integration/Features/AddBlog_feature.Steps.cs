@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using FluentAssertions;
+using JetBrains.Annotations;
 using LightBDD.Framework;
 using LightBDD.Framework.Scenarios.Basic;
 using Markdig;
@@ -9,6 +10,7 @@ using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
 {
+    [UsedImplicitly]
     public partial class AddBlog_feature : WebFeatureFixture
     {
         private string _addedBlogContent;
@@ -25,6 +27,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
             SiteTester.Posts.Create.Content = _addedBlogContent = "testing";
         }
 
+        [UsedImplicitly]
         private CompositeStep When_I_save_a_blog()
         {
             return CompositeStep.DefineNew()

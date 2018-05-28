@@ -6,6 +6,7 @@ using System.Linq;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Sql.Contexts;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Xunit;
@@ -62,6 +63,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             }
         }
 
+        [NotNull]
         private BlogContext GetBlogContext()
         {
             var context = new BlogContext(_connectionString);
@@ -72,6 +74,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             return context;
         }
 
+        [ItemNotNull]
         private IEnumerable<IDictionary<string, object>> GetTable(string tableName)
         {
             using (var connection = new SqlConnection(_connectionString))

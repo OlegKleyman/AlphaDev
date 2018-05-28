@@ -1,4 +1,5 @@
 using AlphaDev.Core.Data.Sql.Contexts;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
@@ -13,12 +14,12 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
         {
         }
 
-        public void OnModelCreatingProxy(ModelBuilder modelBuilder)
+        public void OnModelCreatingProxy([NotNull] ModelBuilder modelBuilder)
         {
             OnModelCreating(modelBuilder);
         }
 
-        public void OnConfiguringProxy(DbContextOptionsBuilder builder)
+        public void OnConfiguringProxy([NotNull] DbContextOptionsBuilder builder)
         {
             OnConfiguring(builder);
         }

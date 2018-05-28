@@ -4,6 +4,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using AlphaDev.Web.TagHelpers;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -30,6 +31,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             writer.ToString().Should().BeEquivalentTo(value ? "test" : string.Empty);
         }
 
+        [NotNull]
         private DisplayTagHelper GetDisplayTagHelper()
         {
             return new DisplayTagHelper();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using OpenQA.Selenium;
 
 namespace AlphaDev.Web.Tests.Integration.Support
@@ -23,6 +24,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
             set => Driver.FindElement(By.Id("Password")).SendKeys(value);
         }
 
+        [NotNull]
         public IEnumerable<string> ValidationSummary =>
             Driver.FindElements(By.CssSelector("form div ul li")).Select(element => element.Text);
 

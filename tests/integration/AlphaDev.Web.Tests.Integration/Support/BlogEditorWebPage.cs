@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using OpenQA.Selenium;
 
 namespace AlphaDev.Web.Tests.Integration.Support
@@ -45,6 +46,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
 
         public string Preview => Driver.FindElement(By.ClassName("md-preview")).GetAttribute("innerHTML").Trim();
 
+        [NotNull]
         public IEnumerable<string> PageErrors
         {
             get { return Driver.FindElements(By.CssSelector("span[id$=\"-error\"]")).Select(element => element.Text); }

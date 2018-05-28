@@ -4,6 +4,7 @@ using System.IO;
 using AlphaDev.Web.Models;
 using AlphaDev.Web.Support;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using NSubstitute;
 using Optional;
@@ -71,6 +72,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
                 .Which.ParamName.Should().BeEquivalentTo(expectedParamName);
         }
 
+        [NotNull]
         private BlogViewModelConverter GetBlogViewModelConverter()
         {
             return BlogViewModelConverter.Default;
@@ -122,6 +124,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
                     }
                 };
 
+            [NotNull]
             private static JsonReader Serialize<T>(T target)
             {
                 var reader = new StringReader(JsonConvert.SerializeObject(target));

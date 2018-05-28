@@ -1,10 +1,12 @@
 ﻿using FluentAssertions;
+using JetBrains.Annotations;
 using Xunit;
 
 namespace AlphaDev.Core.Tests.Unit
 {
     public class PrefixGeneratorTests
     {
+        [NotNull]
         private PrefixGenerator GetPrefixGenerator()
         {
             return new PrefixGenerator();

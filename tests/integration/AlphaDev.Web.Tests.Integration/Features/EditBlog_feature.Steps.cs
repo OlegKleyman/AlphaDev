@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using FluentAssertions;
+using JetBrains.Annotations;
 using LightBDD.Framework;
 using LightBDD.Framework.Scenarios.Basic;
 using Markdig;
@@ -10,10 +10,10 @@ using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
 {
+    [UsedImplicitly]
     public partial class EditBlog_feature : WebFeatureFixture
     {
         private string _blogContent;
-        private string _blogTitle;
 
         public EditBlog_feature(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) : base(
             output, databaseWebServerFixture)
@@ -24,29 +24,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             var blog = (Blog) CommonSteps.Data["AddedBlog"];
 
-            SiteTester.Posts.Edit.BlogTitle = _blogTitle = blog.Title + "test";
+            SiteTester.Posts.Edit.BlogTitle = blog.Title + "test";
             SiteTester.Posts.Edit.Content = _blogContent = blog.Content + "testing";
         }
 
+        [UsedImplicitly]
         private CompositeStep When_I_save_a_blog()
         {
             return CompositeStep.DefineNew()
                 .AddSteps(When_I_fill_in_required_fields, When_I_click_save).Build();
-        }
-
-        private void When_I_save()
-        {
-            SiteTester.Posts.Edit.Submit();
-        }
-
-        private void Then_it_should_be_saved_in_the_datastore()
-        {
-            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.LastOrDefault().Should()
-                .BeEquivalentTo(new
-                {
-                    Title = _blogTitle,
-                    Content = _blogContent
-                }, options => options.ExcludingMissingMembers());
         }
 
         private void And_I_entered_markdown_content()
@@ -97,7 +83,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void And_I_empty_all_required_fields()
         {
-            SiteTester.Posts.Edit.BlogTitle = _blogTitle = string.Empty;
+            SiteTester.Posts.Edit.BlogTitle = string.Empty;
             SiteTester.Posts.Edit.Content = _blogContent = string.Empty;
         }
 

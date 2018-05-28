@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using LightBDD.Core.Metadata;
 using LightBDD.Core.Notification;
 using LightBDD.Core.Results;
@@ -20,7 +21,7 @@ namespace AlphaDev.Web.Tests.Integration
             _screenshotTaker = screenshotTaker;
         }
 
-        public void NotifyScenarioStart(IScenarioInfo scenario)
+        public void NotifyScenarioStart([NotNull] IScenarioInfo scenario)
         {
             _scenarioName = NameCleanser.Replace(scenario.Name.ToString(), string.Empty);
         }
@@ -34,7 +35,7 @@ namespace AlphaDev.Web.Tests.Integration
             TakeScreenshot(step, "1");
         }
 
-        public void NotifyStepFinished(IStepResult step)
+        public void NotifyStepFinished([NotNull] IStepResult step)
         {
             TakeScreenshot(step.Info, "2");
         }

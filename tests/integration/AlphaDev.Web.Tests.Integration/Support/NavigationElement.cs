@@ -1,11 +1,12 @@
 using System;
+using JetBrains.Annotations;
 using OpenQA.Selenium;
 
 namespace AlphaDev.Web.Tests.Integration.Support
 {
     public class NavigationElement
     {
-        public NavigationElement(IWebElement element)
+        public NavigationElement([NotNull] IWebElement element)
         {
             Text = element.Text;
             Click = element.Click;
@@ -15,7 +16,8 @@ namespace AlphaDev.Web.Tests.Integration.Support
 
         public string Text { get; }
 
-        public static NavigationElement FromWebElement(IWebElement element)
+        [NotNull]
+        public static NavigationElement FromWebElement([NotNull] IWebElement element)
         {
             NavigationElement realizedElement;
 

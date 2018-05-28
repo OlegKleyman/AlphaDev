@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Xunit;
@@ -9,6 +10,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
 {
     public class BlogContextFactoryTests
     {
+        [NotNull]
         private BlogContextFactory GetBlogContextFactory(IConfigurationRoot config)
         {
             return new BlogContextFactory(config);
