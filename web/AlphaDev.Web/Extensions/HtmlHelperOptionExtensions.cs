@@ -14,7 +14,8 @@ namespace AlphaDev.Web.Extensions
                 .ValueOr(() => htmlHelper.Raw(string.Empty));
         }
 
-        public static IHtmlContent Hidden<TModel, TResult>([NotNull] this IHtmlHelper<TModel> htmlHelper, string expression,
+        public static IHtmlContent Hidden<TModel, TResult>([NotNull] this IHtmlHelper<TModel> htmlHelper,
+            string expression,
             Option<TResult> option, object htmlAttributes)
         {
             return option.Map(result => htmlHelper.Hidden(expression, result, htmlAttributes))

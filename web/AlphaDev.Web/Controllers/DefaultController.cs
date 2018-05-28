@@ -11,7 +11,10 @@ namespace AlphaDev.Web.Controllers
     {
         private readonly IBlogService _blogService;
 
-        public DefaultController([NotNull] IBlogService blogService) => _blogService = blogService;
+        public DefaultController([NotNull] IBlogService blogService)
+        {
+            _blogService = blogService;
+        }
 
         public ViewResult Index()
         {

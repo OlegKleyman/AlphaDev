@@ -27,7 +27,8 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [NotNull]
-        private PrefixModelBindingContext GetPrefixModelBindingContext([NotNull] ModelBindingContext context, string prefix)
+        private PrefixModelBindingContext GetPrefixModelBindingContext([NotNull] ModelBindingContext context,
+            string prefix)
         {
             return new PrefixModelBindingContext(context, prefix);
         }

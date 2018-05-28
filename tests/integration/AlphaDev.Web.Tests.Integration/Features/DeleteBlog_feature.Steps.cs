@@ -10,7 +10,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
     [UsedImplicitly]
     public partial class DeleteBlog_feature : WebFeatureFixture
     {
-        public DeleteBlog_feature([NotNull] ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) : base(
+        public DeleteBlog_feature([NotNull] ITestOutputHelper output,
+            DatabaseWebServerFixture databaseWebServerFixture) : base(
             output, databaseWebServerFixture)
         {
             output.WriteLine("Given I have logged in");
