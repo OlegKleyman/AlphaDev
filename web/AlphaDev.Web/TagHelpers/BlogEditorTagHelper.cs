@@ -28,9 +28,7 @@ namespace AlphaDev.Web.TagHelpers
 
         public BlogEditorViewModel Model { get; set; }
 
-        [NotNull]
-        [ViewContext]
-        public ViewContext Context { get; set; }
+        [NotNull] [ViewContext] public ViewContext Context { get; set; }
 
         public override void Process(TagHelperContext context, [NotNull] TagHelperOutput output)
         {

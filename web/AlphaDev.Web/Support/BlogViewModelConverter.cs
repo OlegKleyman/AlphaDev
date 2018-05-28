@@ -16,14 +16,13 @@ namespace AlphaDev.Web.Support
         {
         }
 
-        [NotNull]
-        public static BlogViewModelConverter Default => Singleton.Value;
+        [NotNull] public static BlogViewModelConverter Default => Singleton.Value;
 
         public override bool CanWrite => true;
 
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(BlogViewModel));
+            return objectType == typeof(BlogViewModel);
         }
 
         [NotNull]
@@ -39,7 +38,7 @@ namespace AlphaDev.Web.Support
 
             var title = loadedObject["Title"].SomeNotNull().Map(token => token.ToString()).ValueOr(string.Empty);
             var content = loadedObject["Content"].SomeNotNull().Map(token => token.ToString()).ValueOr(string.Empty);
-            
+
             var dateToken = loadedObject["Dates"] ??
                             throw new ArgumentException("Dates field is missing.", nameof(reader));
 
@@ -63,7 +62,8 @@ namespace AlphaDev.Web.Support
                 $"{key} {token[key].SomeNotNull().Filter(jToken => jToken.HasValues).Map(jToken => jToken.ToString()).ValueOr("[NULL]")}";
         }
 
-        public override void WriteJson([NotNull] JsonWriter writer, [NotNull] object value, [NotNull] JsonSerializer serializer)
+        public override void WriteJson([NotNull] JsonWriter writer, [NotNull] object value,
+            [NotNull] JsonSerializer serializer)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
             if (value == null) throw new ArgumentNullException(nameof(value));

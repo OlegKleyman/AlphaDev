@@ -10,7 +10,7 @@ namespace AlphaDev.Web.Support
     {
         protected override void BindModel([NotNull] PrefixModelBindingContext context)
         {
-            if (!DateTime.TryParse(context.GetValue("Created").FirstValue, out DateTime created))
+            if (!DateTime.TryParse(context.GetValue("Created").FirstValue, out var created))
             {
                 context.ModelState.AddModelError("NoCreatedDate", "No created date found");
                 context.Result = ModelBindingResult.Failed();
@@ -21,7 +21,7 @@ namespace AlphaDev.Web.Support
                 var content = context.GetValue("Content").FirstValue;
 
                 var modified = DateTime
-                    .TryParse(context.GetValue("Modified").FirstValue, out DateTime modDate)
+                    .TryParse(context.GetValue("Modified").FirstValue, out var modDate)
                     .SomeWhen(isValidDate => isValidDate)
                     .Map(b => modDate);
 

@@ -1,7 +1,7 @@
 ﻿body {
+    min-width: 320px;
     padding-bottom: 20px;
     padding-top: 50px;
-    min-width: 320px;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -15,35 +15,21 @@
 
 input,
 select,
-textarea {
-    max-width: 280px;
-}
+textarea { max-width: 280px; }
 
 /* styles for validation helpers */
 
-.field-validation-error {
-    color: #b94a48;
-}
+.field-validation-error { color: #b94a48; }
 
-.field-validation-valid {
-    display: none;
-}
+.field-validation-valid { display: none; }
 
-input.input-validation-error {
-    border: 1px solid #b94a48;
-}
+input.input-validation-error { border: 1px solid #b94a48; }
 
-input[type="checkbox"].input-validation-error {
-    border: 0 none;
-}
+input[type="checkbox"].input-validation-error { border: 0 none; }
 
-.validation-summary-errors {
-    color: #b94a48;
-}
+.validation-summary-errors { color: #b94a48; }
 
-.validation-summary-valid {
-    display: none;
-}
+.validation-summary-valid { display: none; }
 
 .bubble div:not(:first-of-type) {
     background-color: #ddd;
@@ -62,37 +48,29 @@ input[type="checkbox"].input-validation-error {
 }
 
 .bubble div:first-of-type {
-    -ms-border-radius: 25px;
     -ms-border-bottom-left-radius: 0;
     -ms-border-bottom-right-radius: 0;
+    -ms-border-radius: 25px;
     background-color: #bbb;
-    border-radius: 25px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    border-radius: 25px;
     margin-bottom: 0;
     margin-top: 4px;
     padding: 3px;
 }
 
-.nomargin {
-    margin: 0 !important;
-}
+.nomargin { margin: 0 !important; }
 
-body .bubble .blog-content {
-    padding-top: 4px;
-}
+body .bubble .blog-content { padding-top: 4px; }
 
-body .blog-content pre {
-    margin: 0;
-}
+body .blog-content pre { margin: 0; }
 
-.post {
-    margin-top: 30px;
-}
+.post { margin-top: 30px; }
 
 .blogEditor {
-    max-width: 100%;
     height: 450px;
+    max-width: 100%;
 }
 
 .bubble form button, .bubble .edit {
@@ -100,9 +78,7 @@ body .blog-content pre {
     border: solid 1px #555;
 }
 
-.bubble form button.delete:hover {
-    background-color: #f00;
-}
+.bubble form button.delete:hover { background-color: #f00; }
 
 .bubble a.edit:hover {
     background-color: #00f;
@@ -114,12 +90,8 @@ body .blog-content pre {
     margin-top: 10px;
 }
 
-.titleInput {
-    display: inline;
-}
+.titleInput { display: inline; }
 
 @media screen and (min-width: 531px) {
-    br.smartBreak {
-        display: none;
-    }
+    br.smartBreak { display: none; }
 }
