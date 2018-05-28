@@ -1,6 +1,7 @@
 ﻿using System;
 using AlphaDev.Web.Support;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
 using NSubstitute;
@@ -10,11 +11,13 @@ namespace AlphaDev.Web.Tests.Unit.Support
 {
     public class PrefixModelBindingContextTests
     {
+        [NotNull]
         private PrefixModelBindingContext GetPrefixModelBindingContext()
         {
             return GetPrefixModelBindingContext(GetContext(), default);
         }
 
+        [NotNull]
         private static DefaultModelBindingContext GetContext()
         {
             return new DefaultModelBindingContext
@@ -23,7 +26,8 @@ namespace AlphaDev.Web.Tests.Unit.Support
             };
         }
 
-        private PrefixModelBindingContext GetPrefixModelBindingContext(ModelBindingContext context, string prefix)
+        [NotNull]
+        private PrefixModelBindingContext GetPrefixModelBindingContext([NotNull] ModelBindingContext context, string prefix)
         {
             return new PrefixModelBindingContext(context, prefix);
         }
@@ -31,6 +35,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         [Fact]
         public void ConstructorShouldThrowArgumentNullExceptionWhenBindingContextIsNull()
         {
+            // ReSharper disable once ObjectCreationAsStatement - just testing constructor
             Action constructor = () => new PrefixModelBindingContext(null, default);
 
             constructor.Should()

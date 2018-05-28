@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Xunit;
@@ -9,6 +10,7 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Tests.Unit
 {
     public class ApplicationContextFactoryTests
     {
+        [NotNull]
         private ApplicationContextFactory GetApplicationContextFactory(IConfigurationRoot config)
         {
             return new ApplicationContextFactory(config);

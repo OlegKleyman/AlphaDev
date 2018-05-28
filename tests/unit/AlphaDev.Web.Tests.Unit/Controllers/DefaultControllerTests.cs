@@ -3,6 +3,7 @@ using AlphaDev.Core;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Optional;
@@ -12,6 +13,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 {
     public class DefaultControllerTests
     {
+        [NotNull]
         private DefaultController GetDefaultController()
         {
             var blogService = Substitute.For<IBlogService>();
@@ -20,7 +22,8 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             return GetDefaultController(blogService);
         }
 
-        private DefaultController GetDefaultController(IBlogService blogService)
+        [NotNull]
+        private DefaultController GetDefaultController([NotNull] IBlogService blogService)
         {
             return new DefaultController(blogService);
         }

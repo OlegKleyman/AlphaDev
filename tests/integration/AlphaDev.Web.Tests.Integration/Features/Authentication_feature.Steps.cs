@@ -1,10 +1,12 @@
 ﻿using System.Linq;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
 {
+    [UsedImplicitly]
     public partial class Authentication_feature : WebFeatureFixture
     {
         public Authentication_feature(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) :

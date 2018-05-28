@@ -1,5 +1,6 @@
 ﻿using System;
 using AlphaDev.Web.Tests.Integration.Fixtures;
+using JetBrains.Annotations;
 using LightBDD.XUnit2;
 using Xunit;
 using Xunit.Abstractions;
@@ -12,7 +13,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         protected const string FullDateFormatString = "dddd, MMMM dd, yyyy";
         private readonly WebServer _server;
 
-        protected WebFeatureFixture(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) :
+        protected WebFeatureFixture(ITestOutputHelper output, [NotNull] DatabaseWebServerFixture databaseWebServerFixture) :
             base(output)
         {
             _server = databaseWebServerFixture.Server;

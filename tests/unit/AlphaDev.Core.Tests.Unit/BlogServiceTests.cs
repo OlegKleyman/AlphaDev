@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using AlphaDev.Core.Data.Contexts;
 using FluentAssertions;
+using JetBrains.Annotations;
 using NSubstitute;
 using Optional;
 using Optional.Unsafe;
@@ -18,7 +19,8 @@ namespace AlphaDev.Core.Tests.Unit
 
         private readonly IDateProvider _dateProvider;
 
-        private BlogService GetBlogService(BlogContext context)
+        [NotNull]
+        private BlogService GetBlogService([CanBeNull] BlogContext context)
         {
             return new BlogService(context ?? new MockBlogContext("default"), _dateProvider);
         }

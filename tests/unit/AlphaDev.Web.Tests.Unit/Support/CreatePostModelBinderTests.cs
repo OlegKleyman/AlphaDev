@@ -1,5 +1,6 @@
 ﻿using AlphaDev.Web.Support;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
 using NSubstitute;
@@ -9,7 +10,8 @@ namespace AlphaDev.Web.Tests.Unit.Support
 {
     public class CreatePostModelBinderTests
     {
-        private static PrefixModelBindingContext GetContext(IValueProvider valueProvider)
+        [NotNull]
+        private static PrefixModelBindingContext GetContext([CanBeNull] IValueProvider valueProvider)
         {
             var context = new DefaultModelBindingContext
             {
@@ -20,6 +22,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
             return new PrefixModelBindingContext(context, default);
         }
 
+        [NotNull]
         private MockCreatePostModelBinder GetCreatePostModelBinder()
         {
             return new MockCreatePostModelBinder();
@@ -27,7 +30,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
         public class MockCreatePostModelBinder : CreatePostModelBinder
         {
-            public void BindModelMock(PrefixModelBindingContext context)
+            public void BindModelMock([NotNull] PrefixModelBindingContext context)
             {
                 BindModel(context);
             }

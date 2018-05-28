@@ -1,4 +1,5 @@
 ﻿using AlphaDev.Web.Tests.Integration.Features;
+using JetBrains.Annotations;
 using LightBDD.Core.Configuration;
 using LightBDD.Framework.Notification;
 using LightBDD.Framework.Notification.Configuration;
@@ -9,7 +10,7 @@ namespace AlphaDev.Web.Tests.Integration
 {
     public class ConfiguredLightBddScopeAttribute : LightBddScopeAttribute
     {
-        protected override void OnConfigure(LightBddConfiguration configuration)
+        protected override void OnConfigure([NotNull] LightBddConfiguration configuration)
         {
             var notifierConfig = configuration.Get<ScenarioProgressNotifierConfiguration>();
 

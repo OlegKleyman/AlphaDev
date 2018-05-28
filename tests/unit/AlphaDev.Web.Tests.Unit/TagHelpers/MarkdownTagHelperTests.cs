@@ -4,6 +4,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using AlphaDev.Web.TagHelpers;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -22,13 +23,8 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
         {
             var sut = GetMarkdownTagHelper();
 
-            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(), (_, __) =>
-            {
-                var content = new DefaultTagHelperContent();
-
-                content.SetHtmlContent(markdown);
-                return Task.FromResult<TagHelperContent>(content);
-            });
+            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
+                (_, __) => Task.FromResult(new DefaultTagHelperContent().SetHtmlContent(markdown)));
 
             sut.Process(null, tagHelperOutput);
 
@@ -50,13 +46,8 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
         {
             var sut = GetMarkdownTagHelper();
 
-            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(), (_, __) =>
-            {
-                var content = new DefaultTagHelperContent();
-
-                content.SetHtmlContent(markdown);
-                return Task.FromResult<TagHelperContent>(content);
-            });
+            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
+                (_, __) => Task.FromResult(new DefaultTagHelperContent().SetHtmlContent(markdown)));
 
             await sut.ProcessAsync(null, tagHelperOutput);
 
@@ -67,6 +58,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             writer.ToString().Should().BeEquivalentTo(expected);
         }
 
+        [NotNull]
         private MarkdownTagHelper GetMarkdownTagHelper()
         {
             return new MarkdownTagHelper();
@@ -77,13 +69,11 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
         {
             var sut = GetMarkdownTagHelper();
 
-            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(), (_, __) =>
+            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
+                (_, __) => Task.FromResult(new DefaultTagHelperContent().SetHtmlContent(string.Empty)))
             {
-                var content = new DefaultTagHelperContent();
-
-                content.SetHtmlContent(string.Empty);
-                return Task.FromResult<TagHelperContent>(content);
-            }) {TagName = "test"};
+                TagName = "test"
+            };
 
 
             sut.Process(null, tagHelperOutput);

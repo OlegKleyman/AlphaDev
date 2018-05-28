@@ -4,6 +4,7 @@ using System.Linq;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using AlphaDev.Web.Tests.Integration.Support;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Markdig;
 using Omego.Extensions.DbContextExtensions;
 using Omego.Extensions.EnumerableExtensions;
@@ -14,6 +15,7 @@ using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
 {
+    [UsedImplicitly]
     public partial class Homepage_feature : WebFeatureFixture
     {
         public Homepage_feature(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture)
@@ -120,7 +122,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
             blogs[1].Created = DateTime.MaxValue;
 
             DatabasesFixture.BlogContextDatabaseFixture.BlogContext.AddRangeAndSave(
-                blogs);
+                // avoid co-variant conversion
+                blogs.Select(blog => (object) blog).ToArray());
         }
 
         private void And_there_is_a_blog_post_with_single_digit_days()

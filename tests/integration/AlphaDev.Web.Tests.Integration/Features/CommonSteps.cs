@@ -34,11 +34,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
             Login();
         }
 
-        public void When_I_logged_in()
-        {
-            Login();
-        }
-
         private void Login()
         {
             SiteTester.Login.GoTo();

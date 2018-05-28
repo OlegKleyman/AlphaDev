@@ -4,6 +4,7 @@ using System.Linq;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using AlphaDev.Web.Tests.Integration.Support;
 using FluentAssertions;
+using JetBrains.Annotations;
 using LightBDD.Framework;
 using LightBDD.Framework.Scenarios.Extended;
 using Markdig;
@@ -16,6 +17,7 @@ using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
 {
+    [UsedImplicitly]
     public partial class Post_feature : WebFeatureFixture
     {
         private int? _postId;

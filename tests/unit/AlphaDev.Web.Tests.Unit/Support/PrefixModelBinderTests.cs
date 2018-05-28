@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AlphaDev.Web.Support;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
 using NSubstitute;
@@ -11,6 +12,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 {
     public class PrefixModelBinderTests
     {
+        [NotNull]
         private static DefaultModelBindingContext GetContext()
         {
             return new DefaultModelBindingContext

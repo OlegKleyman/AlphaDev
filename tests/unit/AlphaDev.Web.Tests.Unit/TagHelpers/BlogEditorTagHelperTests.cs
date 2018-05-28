@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AlphaDev.Core;
 using AlphaDev.Web.TagHelpers;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,12 +19,14 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 {
     public class BlogEditorTagHelperTests
     {
+        [NotNull]
         private BlogEditorTagHelper GetBlogEditorTagHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory,
             IPrefixGenerator prefixGenerator)
         {
             return new BlogEditorTagHelper(htmlHelper, urlHelperFactory, prefixGenerator);
         }
 
+        [NotNull]
         private BlogEditorTagHelper GetBlogEditorTagHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory)
         {
             return GetBlogEditorTagHelper(htmlHelper, urlHelperFactory, Substitute.For<IPrefixGenerator>());
@@ -104,6 +107,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             var helper = GetBlogEditorTagHelper(htmlHelper, urlHelperFactory);
             helper.Context = new ViewContext();
 
+            // ReSharper disable once Mvc.PartialViewNotResolved - it exists
             htmlHelper.PartialAsync("_BlogEditor", Arg.Any<object>(), helper.Context.ViewData)
                 .Returns(Task.FromResult((IHtmlContent) new StringHtmlContent("test")));
 

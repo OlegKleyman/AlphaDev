@@ -1,11 +1,13 @@
 ﻿using System;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Xunit;
 
 namespace AlphaDev.Core.Tests.Integration
 {
     public class DateProviderTests
     {
+        [NotNull]
         private DateProvider GetDateProvider()
         {
             return new DateProvider();

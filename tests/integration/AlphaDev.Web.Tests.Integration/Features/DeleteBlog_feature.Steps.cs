@@ -2,13 +2,15 @@
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
 {
+    [UsedImplicitly]
     public partial class DeleteBlog_feature : WebFeatureFixture
     {
-        public DeleteBlog_feature(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) : base(
+        public DeleteBlog_feature([NotNull] ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) : base(
             output, databaseWebServerFixture)
         {
             output.WriteLine("Given I have logged in");
