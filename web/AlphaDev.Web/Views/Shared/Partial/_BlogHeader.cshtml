@@ -3,11 +3,11 @@
 <div class="text-center title">
     <display value="@User.Identity.IsAuthenticated">
         <form asp-controller="Posts" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="pull-right">
-            <button class="btn-xs btn-danger delete">
+            <button class="btn-xs btn-danger delete actionText">
                 x
             </button>
         </form>
-        <a asp-action="Edit" asp-controller="Posts" asp-route-id="@Model.Id" class="btn-xs btn-danger edit pull-right">
+        <a asp-action="Edit" asp-controller="Posts" asp-route-id="@Model.Id" class="btn-xs btn-danger edit pull-right actionText">
             ~
         </a>
     </display>
