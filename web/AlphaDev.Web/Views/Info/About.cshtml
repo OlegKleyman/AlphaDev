@@ -1,0 +1,23 @@
+﻿@model IEnumerable<AlphaDev.Web.Models.BlogViewModel>
+
+@{
+    ViewBag.Title = "About";
+}
+
+<h1 class="text-center">About</h1>
+
+<div class="container">
+    <div class="bubble">
+        <div class="text-center" style="min-height: 40px;">
+            <display value="true">
+                <a asp-action="Edit" asp-controller="Info" class="btn-xs btn-danger edit pull-right actionText">
+                    ~
+                </a>
+            </display>
+            <h3 class="nomargin bubbleTitle">About</h3>
+        </div>
+        <div>
+            testing
+        </div>
+    </div>
+</div>

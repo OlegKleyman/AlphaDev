@@ -27,8 +27,11 @@ namespace AlphaDev.Web.Bootstrap
                 new ApplicationContext(config.GetConnectionString("defaultSecurity")));
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<IDateProvider, DateProvider>();
+            var connectionString = config.GetConnectionString("default");
             services.AddScoped<BlogContext, Core.Data.Sql.Contexts.BlogContext>(
-                provider => new Core.Data.Sql.Contexts.BlogContext(config.GetConnectionString("default")));
+                provider => new Core.Data.Sql.Contexts.BlogContext(connectionString));
+            services.AddScoped<InformationContext, Core.Data.Sql.Contexts.InformationContext>(
+                provider => new Core.Data.Sql.Contexts.InformationContext(connectionString));
             services.AddIdentity<User, IdentityRole>().AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<IdentityDbContext<User>>();
 
@@ -46,6 +49,7 @@ namespace AlphaDev.Web.Bootstrap
                 .UseStatusCodePagesWithReExecute("/default/error/{0}")
                 .UseAllDatabaseMigrations()
                 .UseDevelopmentBlogs()
+                .UseDevelopmentInformation()
                 .UseDevelopmentUser().GetAwaiter().GetResult()
                 .UseStaticFiles()
                 .UseAuthentication()

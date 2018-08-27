@@ -26,6 +26,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             Error = new ErrorWebPage(Driver, new Uri(baseUrl, "error/"));
             Admin = new AdminWebPage(Driver, new Uri(baseUrl, "admin/"));
             Login = new LoginWebPage(Driver, new Uri(baseUrl, "account/login/"));
+            About = new AboutWebPage(Driver, baseUrl);
         }
 
         public IWebDriver Driver { get; }
@@ -35,6 +36,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         public ErrorWebPage Error { get; }
         public AdminWebPage Admin { get; }
         public LoginWebPage Login { get; }
+        public AboutWebPage About { get; }
 
         public void Dispose()
         {

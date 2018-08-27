@@ -86,8 +86,8 @@ body .blog-content pre { margin: 0; }
 }
 
 .bubble form, .bubble .edit {
+    transform: translate(-10%, 15%);
     margin-right: 10px;
-    margin-top: 10px;
 }
 
 .bubble .actionText {
@@ -95,6 +95,7 @@ body .blog-content pre { margin: 0; }
 }
 
 .titleInput { display: inline; }
+.bubbleTitle { padding-top: 3px; }
 
 @media screen and (min-width: 531px) {
     br.smartBreak { display: none; }

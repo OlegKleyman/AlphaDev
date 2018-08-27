@@ -51,6 +51,30 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         }
 
         [NotNull]
+        public static IApplicationBuilder UseDevelopmentInformation([NotNull] this IApplicationBuilder builder)
+        {
+            using (var scope = builder.ApplicationServices.CreateScope())
+            {
+                if (scope.ServiceProvider.GetService<IHostingEnvironment>().IsDevelopment())
+                {
+                    var context = scope.ServiceProvider.GetService<InformationContext>();
+
+                    context.Database.ExecuteSqlCommand("TRUNCATE TABLE Abouts");
+                    context.Abouts.AddRange(
+                        new About
+                        {
+                            Value = GetDevelopmentContent(),
+                            ChangedOn = new DateTime(2016, 7, 7)
+                        });
+
+                    context.SaveChanges();
+                }
+            }
+
+            return builder;
+        }
+
+        [NotNull]
         public static IApplicationBuilder UseAllDatabaseMigrations([NotNull] this IApplicationBuilder builder)
         {
             using (var scope = builder.ApplicationServices.CreateScope())
@@ -58,10 +82,12 @@ namespace AlphaDev.Web.Bootstrap.Extensions
                 if (scope.ServiceProvider.GetService<IHostingEnvironment>().IsDevelopment())
                 {
                     scope.ServiceProvider.GetService<BlogContext>().Database.EnsureDeleted();
+                    scope.ServiceProvider.GetService<InformationContext>().Database.EnsureDeleted();
                     scope.ServiceProvider.GetService<IdentityDbContext<User>>().Database.EnsureDeleted();
                 }
 
                 scope.ServiceProvider.GetService<BlogContext>().Database.Migrate();
+                scope.ServiceProvider.GetService<InformationContext>().Database.Migrate();
                 scope.ServiceProvider.GetService<IdentityDbContext<User>>().Database.Migrate();
             }
 

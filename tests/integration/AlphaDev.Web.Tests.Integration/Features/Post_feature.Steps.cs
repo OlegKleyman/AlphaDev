@@ -23,7 +23,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private int? _postId;
         private string _title;
 
-        public Post_feature(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) : base(output,
+        public Post_feature(ITestOutputHelper output, [NotNull] DatabaseWebServerFixture databaseWebServerFixture) : base(output,
             databaseWebServerFixture)
         {
         }
