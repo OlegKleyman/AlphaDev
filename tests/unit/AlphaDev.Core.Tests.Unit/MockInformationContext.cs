@@ -1,14 +1,13 @@
 using AlphaDev.Core.Data.Contexts;
-using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Tests.Unit
 {
-    public class MockBlogContext : BlogContext
+    public class MockInformationContext : InformationContext
     {
         private readonly string _testName;
 
-        public MockBlogContext(string testName) : base(null)
+        public MockInformationContext(string testName) : base(null)
         {
             _testName = testName;
         }

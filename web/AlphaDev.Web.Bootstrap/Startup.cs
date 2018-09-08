@@ -1,7 +1,10 @@
 ﻿using AlphaDev.Core;
+using AlphaDev.Core.Data.Account.Security.Sql;
 using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
-using AlphaDev.Core.Data.Contexts;
+using AlphaDev.Core.Data.Sql;
+using AlphaDev.Core.Data.Sql.Contexts;
+using AlphaDev.Core.Data.Sql.Support;
 using AlphaDev.Web.Bootstrap.Extensions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using BlogContext = AlphaDev.Core.Data.Contexts.BlogContext;
 
 namespace AlphaDev.Web.Bootstrap
 {
@@ -21,23 +25,22 @@ namespace AlphaDev.Web.Bootstrap
         public void ConfigureServices(IServiceCollection services)
         {
             var config = services.BuildServiceProvider().GetService<IConfiguration>();
-
-            services.AddSingleton<IPrefixGenerator, PrefixGenerator>();
-            services.AddScoped<IdentityDbContext<User>, ApplicationContext>(provider =>
-                new ApplicationContext(config.GetConnectionString("defaultSecurity")));
-            services.AddScoped<IBlogService, BlogService>();
-            services.AddScoped<IDateProvider, DateProvider>();
-            var connectionString = config.GetConnectionString("default");
-            services.AddScoped<BlogContext, Core.Data.Sql.Contexts.BlogContext>(
-                provider => new Core.Data.Sql.Contexts.BlogContext(connectionString));
-            services.AddScoped<InformationContext, Core.Data.Sql.Contexts.InformationContext>(
-                provider => new Core.Data.Sql.Contexts.InformationContext(connectionString));
-            services.AddIdentity<User, IdentityRole>().AddDefaultTokenProviders()
+            var securitySqlConfigurer = new SqlConfigurer(config.GetConnectionString("defaultSecurity"));
+            var defaultSqlConfigurer = new SqlConfigurer(config.GetConnectionString("default"));
+            services.AddSingleton<IPrefixGenerator, PrefixGenerator>()
+                .AddScoped<IdentityDbContext<User>, ApplicationContext>(provider =>
+                    new ApplicationContextFactory(securitySqlConfigurer).CreateDbContext())
+                .AddScoped<IBlogService, BlogService>()
+                .AddScoped<IInformationService, InformationService>()
+                .AddSingleton<IDateProvider, DateProvider>()
+                .AddScoped<BlogContext, Core.Data.Sql.Contexts.BlogContext>(
+                    provider => new BlogContextFactory(defaultSqlConfigurer).CreateDbContext())
+                .AddScoped<Core.Data.Contexts.InformationContext, Core.Data.Sql.Contexts.InformationContext>(
+                    provider => new InformationContextFactory(defaultSqlConfigurer).CreateDbContext())
+                .AddIdentity<User, IdentityRole>().AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<IdentityDbContext<User>>();
 
-            services.ConfigureApplicationCookie(options => { options.LoginPath = "/account/login"; });
-
-            services.AddMvc();
+            services.ConfigureApplicationCookie(options => { options.LoginPath = "/account/login"; }).AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

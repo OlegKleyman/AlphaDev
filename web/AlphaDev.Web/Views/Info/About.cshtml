@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AlphaDev.Web.Models.BlogViewModel>
+﻿@model string
 
 @{
     ViewBag.Title = "About";
@@ -17,7 +17,7 @@
             <h3 class="nomargin bubbleTitle">About</h3>
         </div>
         <div>
-            testing
+            <markdown>@Model</markdown>
         </div>
     </div>
 </div>

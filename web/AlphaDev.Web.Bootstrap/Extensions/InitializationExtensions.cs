@@ -63,8 +63,7 @@ namespace AlphaDev.Web.Bootstrap.Extensions
                     context.Abouts.AddRange(
                         new About
                         {
-                            Value = GetDevelopmentContent(),
-                            ChangedOn = new DateTime(2016, 7, 7)
+                            Value = GetDevelopmentContent()
                         });
 
                     context.SaveChanges();

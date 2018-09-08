@@ -87,7 +87,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var controller = GetDefaultController();
 
-            controller.Index().Should().BeOfType<ViewResult>();
+            controller.Index().Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("Index");
         }
 
         [Fact]

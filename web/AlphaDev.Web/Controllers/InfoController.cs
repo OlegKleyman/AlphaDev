@@ -1,12 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AlphaDev.Core;
+using AlphaDev.Web.Models;
+using JetBrains.Annotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AlphaDev.Web.Controllers
 {
+    [Route("Info")]
     public class InfoController : Controller
     {
-        public IActionResult About()
+        private readonly IInformationService _informationService;
+
+        public InfoController([NotNull] IInformationService informationService)
         {
-            return View();
+            _informationService = informationService;
+        }
+
+        [Route("About")]
+        public ViewResult About()
+        {
+            return View(nameof(About), _informationService.GetAboutDetails().ValueOr(() => string.Empty));
         }
     }
 }
