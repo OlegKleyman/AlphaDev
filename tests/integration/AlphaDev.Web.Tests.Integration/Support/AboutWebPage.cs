@@ -1,4 +1,5 @@
 using System;
+using AlphaDev.Web.Tests.Integration.Extensions;
 using OpenQA.Selenium;
 
 namespace AlphaDev.Web.Tests.Integration.Support
@@ -9,9 +10,6 @@ namespace AlphaDev.Web.Tests.Integration.Support
         {
         }
 
-        public string Details
-        {
-            get { return Driver.FindElement(By.CssSelector(".bubble div:nth-child(2)")).Text; }
-        }
+        public string Details => Driver.FindElement(By.CssSelector(".bubble div:nth-child(2)")).GetInnerHtml().Trim();
     }
 }

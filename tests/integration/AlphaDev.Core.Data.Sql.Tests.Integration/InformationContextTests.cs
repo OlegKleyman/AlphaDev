@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Text;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Sql.Support;
@@ -14,9 +15,12 @@ using Xunit;
 
 namespace AlphaDev.Core.Data.Sql.Tests.Integration
 {
-    public class BlogContextTests : IDisposable
+    public class InformationContextTests : IDisposable
     {
-        public BlogContextTests()
+        private readonly string _connectionString;
+        private readonly SqlConfigurer _configurer;
+
+        public InformationContextTests()
         {
             var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("connectionstrings.json", false, true).Build();
@@ -49,30 +53,24 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             }
         }
 
-        private readonly string _connectionString;
-        private readonly SqlConfigurer _configurer;
-
-        private void SeedBlogs()
+        private void SeedAbouts()
         {
             var optionsBuilder = new DbContextOptionsBuilder();
-            var options = optionsBuilder.UseSqlServer(_connectionString).Options;
+            _configurer.Configure(optionsBuilder);
 
-            using (var context = new DbContext(options))
+            using (var context = new DbContext(optionsBuilder.Options))
             {
-                Enumerable.Range(1, 10).ToList().ForEach(
-                    // ReSharper disable once AccessToDisposedClosure - Executes eagerly
-                    i => context.Database.ExecuteSqlCommand(
-                        $"INSERT INTO Blogs(Content, Title) VALUES('test {i}', 'Title {i}')"));
+
+                context.Database.ExecuteSqlCommand(
+                    $"INSERT INTO Abouts(Id, Value) VALUES(1, 'test')");
             }
         }
 
         [NotNull]
-        private BlogContext GetBlogContext()
+        private InformationContext GetInformationContext()
         {
-            var context = new BlogContext(_configurer);
+            var context = new InformationContext(_configurer);
             context.Database.Migrate();
-
-            SeedBlogs();
 
             return context;
         }
@@ -100,87 +98,88 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
         }
 
         [Fact]
-        public void BlogsShouldAddBlog()
+        public void AboutsShouldAddAbout()
         {
-            using (var context = GetBlogContext())
+            using (var context = GetInformationContext())
             {
-                var blog = new Blog
+                var about = new About
                 {
-                    Content = string.Empty,
-                    Title = string.Empty
+                    Value = "test"
                 };
 
-                context.Blogs.Add(blog);
+                context.Abouts.Add(about);
 
                 context.SaveChanges();
 
-                GetTable("Blogs").Should().HaveCount(11);
+                GetTable("Abouts").Should().HaveCount(1);
             }
         }
 
         [Fact]
-        public void BlogsShouldAddBlogWithCurrentDate()
+        public void AboutsShouldDeleteAbouts()
         {
-            using (var context = GetBlogContext())
+            using (var context = GetInformationContext())
             {
-                var blog = new Blog
-                {
-                    Content = string.Empty,
-                    Title = string.Empty
-                };
-
-                context.Blogs.Add(blog);
-
+                context.Abouts.RemoveRange(context.Abouts);
                 context.SaveChanges();
 
-                GetTable("Blogs").Last()["Created"].Should().BeOfType<DateTime>().Which.Should()
-                    .BeCloseTo(DateTime.UtcNow, 1000).And.Be(blog.Created);
+                GetTable("Abouts").Should().BeEmpty();
             }
         }
 
         [Fact]
-        public void BlogsShouldDeleteBlogs()
+        public void AboutsShouldReturnAbouts()
         {
-            using (var context = GetBlogContext())
+            using (var context = GetInformationContext())
             {
-                context.Blogs.RemoveRange(context.Blogs);
-                context.SaveChanges();
+                SeedAbouts();
+                var abouts = context.Abouts;
 
-                GetTable("Blogs").Should().BeEmpty();
+                var aboutsDictionary = abouts.Select(
+                    about => about.GetType().GetProperties()
+                        .ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(about, null)));
+
+                GetTable("Abouts").Should().BeEquivalentTo(aboutsDictionary);
             }
         }
 
         [Fact]
-        public void BlogsShouldReturnBlogs()
+        public void AboutsShouldUpdateAbouts()
         {
-            using (var context = GetBlogContext())
+            using (var context = GetInformationContext())
             {
-                var blogs = context.Blogs;
+                SeedAbouts();
+                var targetAbout = context.Abouts.First();
 
-                var blogsDictionary = blogs.Select(
-                    blog => blog.GetType().GetProperties()
-                        .ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(blog, null)));
-
-                GetTable("Blogs").Should().BeEquivalentTo(blogsDictionary);
-            }
-        }
-
-        [Fact]
-        public void BlogsShouldUpdateBlogs()
-        {
-            using (var context = GetBlogContext())
-            {
-                var targetBlog = context.Blogs.First();
-
-                targetBlog.Title = "Updated Title";
-                targetBlog.Content = "Updated Content";
+                targetAbout.Value = "Updated Value";
 
                 context.SaveChanges();
 
-                GetTable("Blogs").First().Should().BeEquivalentTo(
-                    targetBlog.GetType().GetProperties().ToDictionary(
+                GetTable("Abouts").First().Should().BeEquivalentTo(
+                    targetAbout.GetType().GetProperties().ToDictionary(
                         x => x.Name,
-                        x => x.GetGetMethod().Invoke(targetBlog, null)));
+                        x => x.GetGetMethod().Invoke(targetAbout, null)));
+            }
+        }
+
+        [Fact]
+        public void AboutsShouldThrowIfAddingMultipleAbouts()
+        {
+            using (var context = GetInformationContext())
+            {
+                SeedAbouts();
+                var about = new About
+                {
+                    Id = false,
+                    Value = "test"
+                };
+
+                context.Abouts.Add(about);
+
+                Action saveChanges = () => context.SaveChanges();
+                saveChanges.Should().Throw<DbUpdateException>().WithInnerException<SqlException>().Which.Message
+                    .Should().MatchRegex(
+                        @"The INSERT statement conflicted with the CHECK constraint ""CK_ABOUTS_SIZE""\. The conflict occurred in database "".*"", table ""dbo.Abouts""");
             }
         }
     }

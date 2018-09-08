@@ -6,13 +6,14 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using System;
 
 namespace AlphaDev.Core.Data.Sql.Migrations.Information
 {
     [DbContext(typeof(InformationContext))]
-    [Migration("20180827004229_AddInformationContext")]
-    partial class AddInformationContext
+    [Migration("20180908223621_Inital")]
+    partial class Inital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,12 +24,11 @@ namespace AlphaDev.Core.Data.Sql.Migrations.Information
 
             modelBuilder.Entity("AlphaDev.Core.Data.Entities.About", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<bool>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("ChangedOn");
-
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .IsRequired();
 
                     b.HasKey("Id");
 

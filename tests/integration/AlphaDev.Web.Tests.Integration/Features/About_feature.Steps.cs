@@ -17,6 +17,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
         }
 
+        [UsedImplicitly]
         private CompositeStep When_I_go_to_a_configured_about_page()
         {
             return CompositeStep.DefineNew()

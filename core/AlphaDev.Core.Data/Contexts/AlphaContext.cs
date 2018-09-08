@@ -1,10 +1,23 @@
+using AlphaDev.Core.Data.Support;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Data.Contexts
 {
     public abstract class AlphaContext : DbContext
     {
-        protected abstract override void OnConfiguring(DbContextOptionsBuilder optionsBuilder);
+        private readonly Configurer _configurer;
+
+        protected AlphaContext(Configurer configurer)
+        {
+            _configurer = configurer;
+        }
+
+        protected override void OnConfiguring([NotNull] DbContextOptionsBuilder optionsBuilder)
+        {
+            _configurer.Configure(optionsBuilder);
+        }
+
         protected abstract override void OnModelCreating(ModelBuilder modelBuilder);
     }
 }

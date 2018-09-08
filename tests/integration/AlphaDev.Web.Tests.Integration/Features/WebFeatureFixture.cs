@@ -27,10 +27,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         protected DatabasesFixture DatabasesFixture { get; }
 
-        protected string Log => _server.Log;
+        public string Log => _server.Log;
 
         public SiteTester SiteTester { get; }
         public CommonSteps CommonSteps { get; }
+
+        public void ClearLog()
+        {
+            _server.ClearLog();
+        }
 
         public void Dispose()
         {
