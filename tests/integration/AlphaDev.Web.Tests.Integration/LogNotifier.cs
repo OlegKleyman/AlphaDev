@@ -14,15 +14,14 @@ namespace AlphaDev.Web.Tests.Integration
             _tester = tester;
         }
 
-        public void NotifyScenarioStart(IScenarioInfo scenario) { }
-
-        private void WriteAndClearLog()
+        public void NotifyScenarioStart(IScenarioInfo scenario)
         {
-            _tester.TestOutput.WriteLine(_tester.Log);
-            _tester.ClearLog();
         }
 
-        public void NotifyScenarioFinished(IScenarioResult scenario) => WriteAndClearLog();
+        public void NotifyScenarioFinished(IScenarioResult scenario)
+        {
+            WriteAndClearLog();
+        }
 
         public void NotifyStepStart(IStepInfo step)
         {
@@ -30,11 +29,16 @@ namespace AlphaDev.Web.Tests.Integration
 
         public void NotifyStepFinished(IStepResult step)
         {
-
         }
 
         public void NotifyStepComment(IStepInfo step, string comment)
         {
+        }
+
+        private void WriteAndClearLog()
+        {
+            _tester.TestOutput.WriteLine(_tester.Log);
+            _tester.ClearLog();
         }
     }
 }

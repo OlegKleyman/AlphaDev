@@ -8,7 +8,10 @@ namespace AlphaDev.Core.Data.Sql.Support
     {
         private readonly string _connectionString;
 
-        public SqlConfigurer(string connectionString) => _connectionString = connectionString;
+        public SqlConfigurer(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
 
         public override void Configure([NotNull] DbContextOptionsBuilder optionsBuilder)
         {

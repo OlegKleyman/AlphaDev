@@ -1,7 +1,5 @@
 ﻿using System;
-using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Sql.Support;
-using AlphaDev.Core.Data.Sql.Tests.Unit.Contexts;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +10,12 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Support
 {
     public class SqlConfigurerTests
     {
+        [NotNull]
+        private static SqlConfigurer GetSqlConfigurer(string connectionString)
+        {
+            return new SqlConfigurer(connectionString);
+        }
+
         [Fact]
         public void ConfigureShouldConfigureSqlOptions()
         {
@@ -29,12 +33,6 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Support
         {
             Action constructor = () => new SqlConfigurer(default);
             constructor.Should().NotThrow();
-        }
-
-        [NotNull]
-        private static SqlConfigurer GetSqlConfigurer(string connectionString)
-        {
-            return new SqlConfigurer(connectionString);
         }
     }
 }

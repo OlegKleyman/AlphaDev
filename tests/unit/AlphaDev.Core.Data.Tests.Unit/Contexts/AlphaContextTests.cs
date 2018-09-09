@@ -10,23 +10,6 @@ namespace AlphaDev.Core.Data.Tests.Unit.Contexts
 {
     public class AlphaContextTests
     {
-        [Fact]
-        public void ConstructorShouldInitializeAlphaContext()
-        {
-            Action constructor = () => Substitute.For<AlphaContext>(Substitute.For<Configurer>());
-            constructor.Should().NotThrow();
-        }
-
-        [Fact]
-        public void OnConfiguringShouldCallConfigure()
-        {
-            var configurer = Substitute.For<Configurer>();
-            var context = GetAlphaContext(configurer);
-            var builder = new DbContextOptionsBuilder();
-            context.CallOnConfiguring(builder);
-            configurer.Received(1).Configure(Arg.Is(builder));
-        }
-
         private TestAlphaContext GetAlphaContext(Configurer configurer)
         {
             return new TestAlphaContext(configurer);
@@ -47,6 +30,23 @@ namespace AlphaDev.Core.Data.Tests.Unit.Contexts
             {
                 throw new NotImplementedException();
             }
+        }
+
+        [Fact]
+        public void ConstructorShouldInitializeAlphaContext()
+        {
+            Action constructor = () => Substitute.For<AlphaContext>(Substitute.For<Configurer>());
+            constructor.Should().NotThrow();
+        }
+
+        [Fact]
+        public void OnConfiguringShouldCallConfigure()
+        {
+            var configurer = Substitute.For<Configurer>();
+            var context = GetAlphaContext(configurer);
+            var builder = new DbContextOptionsBuilder();
+            context.CallOnConfiguring(builder);
+            configurer.Received(1).Configure(Arg.Is(builder));
         }
     }
 }

@@ -4,13 +4,12 @@ using FluentAssertions;
 using JetBrains.Annotations;
 using LightBDD.Framework;
 using LightBDD.Framework.Scenarios.Extended;
-using LightBDD.XUnit2;
 using Markdig;
 using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
 {
-	public partial class About_feature: WebFeatureFixture
+    public partial class About_feature : WebFeatureFixture
     {
         public About_feature(ITestOutputHelper output, [NotNull] DatabaseWebServerFixture databaseWebServerFixture) :
             base(output, databaseWebServerFixture)
@@ -43,7 +42,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_I_should_see_about_details()
         {
-            SiteTester.About.Details.Should().BeEquivalentTo(Markdown.ToHtml(DatabasesFixture.InformationContextDatabaseFixture
+            SiteTester.About.Details.Should().BeEquivalentTo(Markdown.ToHtml(DatabasesFixture
+                .InformationContextDatabaseFixture
                 .InformationContext.Abouts.Single().Value).Trim());
         }
     }

@@ -23,7 +23,6 @@ namespace AlphaDev.Web.Tests.Integration
 
         public void NotifyScenarioStart([NotNull] IScenarioInfo scenario)
         {
-
             _scenarioName = NameCleanser.Replace(scenario.Name.ToString(), string.Empty);
         }
 

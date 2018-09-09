@@ -1,16 +1,13 @@
 ﻿using System;
-using AlphaDev.Core.Data.Contexts;
-using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Sql.Support;
 using AlphaDev.Core.Data.Support;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 
 namespace AlphaDev.Core.Data.Sql
 {
-    public abstract class AlphaContextFactory<T> : IDesignTimeDbContextFactory<T> where T: DbContext
+    public abstract class AlphaContextFactory<T> : IDesignTimeDbContextFactory<T> where T : DbContext
     {
         private static readonly SqlConfigurer Configurer = new SqlConfigurer(@"Data Source=(LocalDB)\v11.0;");
         private readonly Configurer _configurer;
@@ -28,9 +25,10 @@ namespace AlphaDev.Core.Data.Sql
 
             if (type.IsAbstract)
                 throw new InvalidOperationException($"Unable to instantiate {type.FullName} because it is abstract.");
-            
+
             if (type.GetConstructor(new[] {configurerType}) == null)
-                throw new MissingMethodException($"Unable to find a public constructor with a single {configurerType.FullName} argument.");
+                throw new MissingMethodException(
+                    $"Unable to find a public constructor with a single {configurerType.FullName} argument.");
 
             return (T) Activator.CreateInstance(typeof(T), _configurer ?? Configurer);
         }

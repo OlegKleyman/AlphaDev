@@ -1,9 +1,6 @@
-using System.Data.SqlClient;
 using AlphaDev.Core.Data.Entities;
-using AlphaDev.Core.Data.Sql.Contexts;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Xunit;

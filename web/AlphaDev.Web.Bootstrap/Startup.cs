@@ -2,8 +2,8 @@
 using AlphaDev.Core.Data.Account.Security.Sql;
 using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
+using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Sql;
-using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Sql.Support;
 using AlphaDev.Web.Bootstrap.Extensions;
 using JetBrains.Annotations;
@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using BlogContext = AlphaDev.Core.Data.Contexts.BlogContext;
 
 namespace AlphaDev.Web.Bootstrap
 {
@@ -35,7 +34,7 @@ namespace AlphaDev.Web.Bootstrap
                 .AddSingleton<IDateProvider, DateProvider>()
                 .AddScoped<BlogContext, Core.Data.Sql.Contexts.BlogContext>(
                     provider => new BlogContextFactory(defaultSqlConfigurer).CreateDbContext())
-                .AddScoped<Core.Data.Contexts.InformationContext, Core.Data.Sql.Contexts.InformationContext>(
+                .AddScoped<InformationContext, Core.Data.Sql.Contexts.InformationContext>(
                     provider => new InformationContextFactory(defaultSqlConfigurer).CreateDbContext())
                 .AddIdentity<User, IdentityRole>().AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<IdentityDbContext<User>>();

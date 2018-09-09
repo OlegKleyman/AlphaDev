@@ -26,14 +26,14 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             Value = "## test about"
         };
 
+        public void Dispose()
+        {
+        }
+
         private void Initialize()
         {
             InformationContext.DetachAll();
             InformationContext.Database.Migrate();
-        }
-
-        public void Dispose()
-        {
         }
     }
 }

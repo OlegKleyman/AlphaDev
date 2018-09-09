@@ -1,6 +1,5 @@
 ﻿using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Support;
-using Microsoft.Extensions.Configuration;
 
 namespace AlphaDev.Core.Data.Sql
 {

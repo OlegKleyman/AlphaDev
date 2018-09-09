@@ -1,7 +1,6 @@
 ﻿using System;
 using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
-using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Sql.Support;
 using AlphaDev.Test.Integration.Core.Extensions;
 using JetBrains.Annotations;

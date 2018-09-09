@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Text;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Sql.Support;
@@ -17,9 +16,6 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
 {
     public class InformationContextTests : IDisposable
     {
-        private readonly string _connectionString;
-        private readonly SqlConfigurer _configurer;
-
         public InformationContextTests()
         {
             var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
@@ -53,6 +49,9 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             }
         }
 
+        private readonly string _connectionString;
+        private readonly SqlConfigurer _configurer;
+
         private void SeedAbouts()
         {
             var optionsBuilder = new DbContextOptionsBuilder();
@@ -60,7 +59,6 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
 
             using (var context = new DbContext(optionsBuilder.Options))
             {
-
                 context.Database.ExecuteSqlCommand(
                     $"INSERT INTO Abouts(Id, Value) VALUES(1, 'test')");
             }
@@ -144,25 +142,6 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
         }
 
         [Fact]
-        public void AboutsShouldUpdateAbouts()
-        {
-            using (var context = GetInformationContext())
-            {
-                SeedAbouts();
-                var targetAbout = context.Abouts.First();
-
-                targetAbout.Value = "Updated Value";
-
-                context.SaveChanges();
-
-                GetTable("Abouts").First().Should().BeEquivalentTo(
-                    targetAbout.GetType().GetProperties().ToDictionary(
-                        x => x.Name,
-                        x => x.GetGetMethod().Invoke(targetAbout, null)));
-            }
-        }
-
-        [Fact]
         public void AboutsShouldThrowIfAddingMultipleAbouts()
         {
             using (var context = GetInformationContext())
@@ -180,6 +159,25 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
                 saveChanges.Should().Throw<DbUpdateException>().WithInnerException<SqlException>().Which.Message
                     .Should().MatchRegex(
                         @"The INSERT statement conflicted with the CHECK constraint ""CK_ABOUTS_SIZE""\. The conflict occurred in database "".*"", table ""dbo.Abouts""");
+            }
+        }
+
+        [Fact]
+        public void AboutsShouldUpdateAbouts()
+        {
+            using (var context = GetInformationContext())
+            {
+                SeedAbouts();
+                var targetAbout = context.Abouts.First();
+
+                targetAbout.Value = "Updated Value";
+
+                context.SaveChanges();
+
+                GetTable("Abouts").First().Should().BeEquivalentTo(
+                    targetAbout.GetType().GetProperties().ToDictionary(
+                        x => x.Name,
+                        x => x.GetGetMethod().Invoke(targetAbout, null)));
             }
         }
     }

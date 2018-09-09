@@ -10,6 +10,12 @@ namespace AlphaDev.Core.Tests.Unit
 {
     public class InformationServiceTests
     {
+        [NotNull]
+        private static InformationService GetInformationService(InformationContext context)
+        {
+            return new InformationService(context);
+        }
+
         [Fact]
         public void GetAboutDetailsShouldReturnAboutDetails()
         {
@@ -26,7 +32,8 @@ namespace AlphaDev.Core.Tests.Unit
         [Fact]
         public void GetAboutDetailsShouldReturnNoneWhenAboutDetailsAreNotFound()
         {
-            var context = new MockInformationContext(nameof(GetAboutDetailsShouldReturnNoneWhenAboutDetailsAreNotFound));
+            var context =
+                new MockInformationContext(nameof(GetAboutDetailsShouldReturnNoneWhenAboutDetailsAreNotFound));
             var service = GetInformationService(context);
             service.GetAboutDetails().Should().BeEquivalentTo(Option.None<string>());
         }
@@ -34,19 +41,15 @@ namespace AlphaDev.Core.Tests.Unit
         [Fact]
         public void GetAboutDetailsShouldThrowInvalidOperationExceptionWhenMultipleAboutRecordsAreFound()
         {
-            var context = new MockInformationContext(nameof(GetAboutDetailsShouldThrowInvalidOperationExceptionWhenMultipleAboutRecordsAreFound));
-            context.Abouts.AddRange(new About(), new About{Id = true});
+            var context =
+                new MockInformationContext(
+                    nameof(GetAboutDetailsShouldThrowInvalidOperationExceptionWhenMultipleAboutRecordsAreFound));
+            context.Abouts.AddRange(new About(), new About {Id = true});
             context.SaveChanges();
             var service = GetInformationService(context);
             Action getAboutDetails = () => service.GetAboutDetails();
             getAboutDetails.Should().Throw<InvalidOperationException>()
                 .WithMessage("Multiple about information found.");
-        }
-
-        [NotNull]
-        private static InformationService GetInformationService(InformationContext context)
-        {
-            return new InformationService(context);
         }
     }
 }

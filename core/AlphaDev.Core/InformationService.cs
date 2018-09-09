@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Linq;
 using AlphaDev.Core.Data.Contexts;
-using AlphaDev.Core.Data.Entities;
 using Omego.Extensions.EnumerableExtensions;
-using Omego.Extensions.Poco;
-using Omego.Extensions.QueryableExtensions;
 using Optional;
-using Optional.Collections;
 
 namespace AlphaDev.Core
 {

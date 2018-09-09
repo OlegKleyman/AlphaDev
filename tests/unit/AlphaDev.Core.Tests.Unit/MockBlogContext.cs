@@ -1,5 +1,4 @@
 using AlphaDev.Core.Data.Contexts;
-using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Tests.Unit

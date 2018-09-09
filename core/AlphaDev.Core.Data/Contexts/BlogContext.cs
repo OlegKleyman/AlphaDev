@@ -6,10 +6,10 @@ namespace AlphaDev.Core.Data.Contexts
 {
     public abstract class BlogContext : AlphaContext
     {
-        public DbSet<Blog> Blogs { get; set; }
-
         protected BlogContext(Configurer configurer) : base(configurer)
         {
         }
+
+        public DbSet<Blog> Blogs { get; set; }
     }
 }

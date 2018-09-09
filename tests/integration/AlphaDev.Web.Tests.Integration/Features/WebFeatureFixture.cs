@@ -32,14 +32,14 @@ namespace AlphaDev.Web.Tests.Integration.Features
         public SiteTester SiteTester { get; }
         public CommonSteps CommonSteps { get; }
 
-        public void ClearLog()
-        {
-            _server.ClearLog();
-        }
-
         public void Dispose()
         {
             DatabasesFixture.DatabaseManager.ResetDatabases();
+            _server.ClearLog();
+        }
+
+        public void ClearLog()
+        {
             _server.ClearLog();
         }
     }
