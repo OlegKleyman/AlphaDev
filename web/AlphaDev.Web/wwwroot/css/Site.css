@@ -62,9 +62,9 @@ input[type="checkbox"].input-validation-error { border: 0 none; }
 
 .nomargin { margin: 0 !important; }
 
-body .bubble .blog-content { padding-top: 4px; }
+body .bubble .bubble-content { padding-top: 4px; }
 
-body .blog-content pre { margin: 0; }
+body .bubble-content pre { margin: 0; }
 
 .post { margin-top: 30px; }
 

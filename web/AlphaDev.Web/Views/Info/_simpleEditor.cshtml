@@ -1,0 +1,11 @@
+﻿@model AlphaDev.Web.Models.AboutEditorViewModel
+
+<form id="@Html.Id("editForm")" method="post">
+    <input type="hidden" name="prefix" value="@Html.NameForModel()" />
+    <div class="col-lg-12">
+        <div>
+            <span asp-validation-for="Value" class="text-danger"></span>
+            <textarea asp-for="Value" class="blogEditor"></textarea>
+        </div>
+    </div>
+</form>

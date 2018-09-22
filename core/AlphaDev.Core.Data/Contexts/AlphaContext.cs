@@ -17,7 +17,5 @@ namespace AlphaDev.Core.Data.Contexts
         {
             _configurer.Configure(optionsBuilder);
         }
-
-        protected abstract override void OnModelCreating(ModelBuilder modelBuilder);
     }
 }

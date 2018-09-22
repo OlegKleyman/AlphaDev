@@ -1,25 +1,43 @@
 ﻿using System;
-using System.Linq;
+using AlphaDev.Core.Data;
 using AlphaDev.Core.Data.Contexts;
-using Omego.Extensions.EnumerableExtensions;
+using AlphaDev.Core.Extensions;
+using JetBrains.Annotations;
 using Optional;
 
 namespace AlphaDev.Core
 {
-    public class InformationService : IInformationService
+    public class InformationService<T> : IInformationService where T : InformationContext
     {
-        private readonly InformationContext _context;
+        private readonly IContextFactory<T> _contextFactory;
 
-        public InformationService(InformationContext context)
+        public InformationService([NotNull] IContextFactory<T> contextFactory)
         {
-            _context = context;
+            _contextFactory = contextFactory;
         }
 
         public Option<string> GetAboutDetails()
         {
-            return _context.Abouts.Select(about => about.Value).AsEnumerable().Select(Option.Some)
-                .SingleOrDefaultOrThrow(s => true, Option.None<string>,
-                    new InvalidOperationException("Multiple about information found."));
+            using (var context = _contextFactory.Create())
+            {
+                return context.About.SomeNotNull().Map(about => about.Value).NotNull();
+            }
+        }
+
+        public void Edit(string value)
+        {
+            using (var context = _contextFactory.Create())
+            {
+                context.About.SomeNotNull(() =>
+                        new InvalidOperationException("About not found."))
+                    .MapToAction(about => about.Value = value)
+                    // ReSharper disable once AccessToDisposedClosure - execution either
+                    // immediate or not at all
+                    .Map(about => context.SaveChanges())
+                    .Filter(changes => changes == 1,
+                        () => new InvalidOperationException("Inconsistent change count."))
+                    .MatchNone(exception => throw exception);
+            }
         }
     }
 }

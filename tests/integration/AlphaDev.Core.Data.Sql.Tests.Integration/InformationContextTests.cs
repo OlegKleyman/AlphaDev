@@ -142,6 +142,17 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
         }
 
         [Fact]
+        public void AboutShouldReturnAbout()
+        {
+            using (var context = GetInformationContext())
+            {
+                SeedAbouts();
+
+                context.About.Should().BeEquivalentTo(new {Id = 1, Value = "test"});
+            }
+        }
+
+        [Fact]
         public void AboutsShouldThrowIfAddingMultipleAbouts()
         {
             using (var context = GetInformationContext())

@@ -14,7 +14,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
     public class EditPostModelBinderTests
     {
         [NotNull]
-        private static PrefixModelBindingContext GetContext([CanBeNull] IValueProvider valueProvider)
+        private static ModelBindingContext GetContext([CanBeNull] IValueProvider valueProvider)
         {
             var context = new DefaultModelBindingContext
             {
@@ -22,7 +22,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
                 ValueProvider = valueProvider ?? Substitute.For<IValueProvider>()
             };
 
-            return new PrefixModelBindingContext(context, default);
+            return context;
         }
 
         [NotNull]
@@ -33,7 +33,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
         public class EditPostModelBinderMock : EditPostModelBinder
         {
-            public void BindModelMock([NotNull] PrefixModelBindingContext context)
+            public void BindModelMock([NotNull] ModelBindingContext context)
             {
                 BindModel(context);
             }

@@ -6,10 +6,10 @@ namespace AlphaDev.Web.Support
 {
     public class CreatePostModelBinder : PrefixModelBinder
     {
-        protected override void BindModel([NotNull] PrefixModelBindingContext context)
+        protected override void BindModel([NotNull] ModelBindingContext context)
         {
-            var title = context.GetValue("Title").FirstValue;
-            var content = context.GetValue("Content").FirstValue;
+            var title = context.ValueProvider.GetValue("Title").FirstValue;
+            var content = context.ValueProvider.GetValue("Content").FirstValue;
 
             var model = new CreatePostViewModel(title ?? string.Empty, content ?? string.Empty);
 

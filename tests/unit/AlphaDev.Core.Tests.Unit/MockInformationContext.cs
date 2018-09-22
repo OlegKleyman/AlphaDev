@@ -1,4 +1,6 @@
+using System.Linq;
 using AlphaDev.Core.Data.Contexts;
+using AlphaDev.Core.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Tests.Unit

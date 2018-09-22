@@ -10,13 +10,13 @@
     <div class="bubble">
         <div class="text-center" style="min-height: 40px;">
             <display value="true">
-                <a asp-action="Edit" asp-controller="Info" class="btn-xs btn-danger edit pull-right actionText">
+                <a asp-action="EditAbout" asp-controller="Info" class="btn-xs btn-danger edit pull-right actionText">
                     ~
                 </a>
             </display>
             <h3 class="nomargin bubbleTitle">About</h3>
         </div>
-        <div>
+        <div class="bubble-content">
             <markdown>@Model</markdown>
         </div>
     </div>

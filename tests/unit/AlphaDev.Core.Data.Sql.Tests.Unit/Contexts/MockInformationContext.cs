@@ -1,4 +1,4 @@
-using AlphaDev.Core.Data.Sql.Contexts;
+﻿using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Sql.Support;
 using AlphaDev.Core.Data.Support;
 using JetBrains.Annotations;
@@ -7,13 +7,13 @@ using NSubstitute;
 
 namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
 {
-    public class MockBlogContext : BlogContext
+    internal class MockInformationContext : InformationContext
     {
-        public MockBlogContext() : this(Substitute.For<Configurer>())
+        public MockInformationContext() : this(Substitute.For<Configurer>())
         {
         }
 
-        public MockBlogContext(Configurer configurer) : base(configurer)
+        public MockInformationContext(Configurer configurer) : base(configurer)
         {
         }
 

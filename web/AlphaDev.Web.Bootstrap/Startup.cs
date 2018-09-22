@@ -1,9 +1,11 @@
 ﻿using AlphaDev.Core;
+using AlphaDev.Core.Data;
 using AlphaDev.Core.Data.Account.Security.Sql;
 using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Sql;
+using AlphaDev.Core.Data.Sql.ContextFactories;
 using AlphaDev.Core.Data.Sql.Support;
 using AlphaDev.Web.Bootstrap.Extensions;
 using JetBrains.Annotations;
@@ -11,8 +13,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using InformationContextFactory = AlphaDev.Core.Data.Sql.ContextFactories.InformationContextFactory;
 
 namespace AlphaDev.Web.Bootstrap
 {
@@ -27,19 +31,17 @@ namespace AlphaDev.Web.Bootstrap
             var securitySqlConfigurer = new SqlConfigurer(config.GetConnectionString("defaultSecurity"));
             var defaultSqlConfigurer = new SqlConfigurer(config.GetConnectionString("default"));
             services.AddSingleton<IPrefixGenerator, PrefixGenerator>()
-                .AddScoped<IdentityDbContext<User>, ApplicationContext>(provider =>
-                    new ApplicationContextFactory(securitySqlConfigurer).CreateDbContext())
-                .AddScoped<IBlogService, BlogService>()
-                .AddScoped<IInformationService, InformationService>()
+                .AddServices()
+                .AddContexts(defaultSqlConfigurer)
+                .AddIdentityContexts(securitySqlConfigurer)
+                .AddContextFactories()
                 .AddSingleton<IDateProvider, DateProvider>()
-                .AddScoped<BlogContext, Core.Data.Sql.Contexts.BlogContext>(
-                    provider => new BlogContextFactory(defaultSqlConfigurer).CreateDbContext())
-                .AddScoped<InformationContext, Core.Data.Sql.Contexts.InformationContext>(
-                    provider => new InformationContextFactory(defaultSqlConfigurer).CreateDbContext())
-                .AddIdentity<User, IdentityRole>().AddDefaultTokenProviders()
-                .AddEntityFrameworkStores<IdentityDbContext<User>>();
-
-            services.ConfigureApplicationCookie(options => { options.LoginPath = "/account/login"; }).AddMvc();
+                .AddDesignTimeFactories(defaultSqlConfigurer)
+                .AddIdentity<User, IdentityRole>()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<IdentityDbContext<User>>().Services
+                .ConfigureApplicationCookie(options => { options.LoginPath = "/account/login"; })
+                .AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

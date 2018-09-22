@@ -1,8 +1,11 @@
 using AlphaDev.Core.Data.Entities;
+using AlphaDev.Core.Data.Support;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using NSubstitute;
 using Xunit;
 
 namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
@@ -12,7 +15,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
         [Fact]
         public void OnModelCreatingShouldConfigureModelWithTheCorrectConfiguration()
         {
-            var context = new MockBlogContext();
+            var context = GetBlogContext();
 
             var modelBuilder = new ModelBuilder(new ConventionSet());
             context.OnModelCreatingProxy(modelBuilder);
@@ -36,6 +39,28 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
                 ContentNullable = false,
                 TitleNullable = false
             });
+        }
+
+        [NotNull]
+        private static MockBlogContext GetBlogContext()
+        {
+            return new MockBlogContext();
+        }
+
+        [NotNull]
+        private static MockBlogContext GetBlogContext(Configurer configurer)
+        {
+            return new MockBlogContext(configurer);
+        }
+
+        [Fact]
+        public void OnConfiguringShouldConfigureDbContextOptionsBuilder()
+        {
+            var configurer = Substitute.For<Configurer>();
+            var context = GetBlogContext(configurer);
+            var builder = new DbContextOptionsBuilder();
+            context.OnConfiguringProxy(builder);
+            configurer.Received(1).Configure(builder);
         }
     }
 }

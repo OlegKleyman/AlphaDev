@@ -1,5 +1,7 @@
-﻿using AlphaDev.Core.Data.Entities;
+﻿using System.Linq;
+using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Support;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Data.Contexts
@@ -11,5 +13,7 @@ namespace AlphaDev.Core.Data.Contexts
         }
 
         public DbSet<About> Abouts { get; set; }
+
+        [CanBeNull] public About About => Abouts.SingleOrDefault();
     }
 }

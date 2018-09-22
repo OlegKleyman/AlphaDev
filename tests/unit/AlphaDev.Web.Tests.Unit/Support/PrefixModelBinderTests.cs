@@ -28,12 +28,12 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
         public abstract class MockPrefixModelBinder : PrefixModelBinder
         {
-            protected override void BindModel(PrefixModelBindingContext context)
+            protected override void BindModel(ModelBindingContext context)
             {
                 BindModelMock(context);
             }
 
-            public abstract void BindModelMock(PrefixModelBindingContext context);
+            public abstract void BindModelMock(ModelBindingContext context);
         }
 
         [Fact]
@@ -46,8 +46,8 @@ namespace AlphaDev.Web.Tests.Unit.Support
             context.ValueProvider.GetValue("test").Returns(new ValueProviderResult(new StringValues("test")));
 
             binder.BindModelAsync(context);
-            binder.Received(1).BindModelMock(Arg.Is<PrefixModelBindingContext>(bindingContext =>
-                bindingContext.GetValue("test").FirstValue == "test"));
+            binder.Received(1).BindModelMock(Arg.Is<ModelBindingContext>(bindingContext =>
+                bindingContext.ValueProvider.GetValue("test").FirstValue == "test"));
         }
 
         [Fact]
@@ -61,8 +61,20 @@ namespace AlphaDev.Web.Tests.Unit.Support
             context.ValueProvider.GetValue("prefix.test").Returns(new ValueProviderResult(new StringValues("test")));
 
             binder.BindModelAsync(context);
-            binder.Received(1).BindModelMock(Arg.Is<PrefixModelBindingContext>(bindingContext =>
-                bindingContext.GetValue("test").FirstValue == "test"));
+            binder.Received(1).BindModelMock(Arg.Is<ModelBindingContext>(bindingContext =>
+                bindingContext.ValueProvider.GetValue("test").FirstValue == "test"));
+        }
+
+        [Fact]
+        public void BindModelAsyncShouldThrowArgumentExceptionWhenValueProviderIsNull()
+        {
+            var binder = GetPrefixModelBinder();
+
+            Action bindModelAsync = () => binder.BindModelAsync(GetContext());
+            bindModelAsync.Should().Throw<ArgumentException>()
+                .WithMessage("ValueProvider cannot be null.\r\nParameter name: bindingContext").Which
+                .ParamName.Should()
+                .BeEquivalentTo("bindingContext");
         }
 
         [Fact]
@@ -71,6 +83,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
             var binder = GetPrefixModelBinder();
 
             var context = GetContext();
+            context.ValueProvider = Substitute.For<IValueProvider>();
             binder.BindModelAsync(context).Should().Be(Task.CompletedTask);
         }
 
