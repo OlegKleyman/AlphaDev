@@ -8,8 +8,16 @@ namespace AlphaDev.Web.Tests.Integration.Support
     {
         public AboutWebPage(IWebDriver driver, Uri baseUrl) : base(driver, new Uri(baseUrl, "info/about/"))
         {
+            Edit = new AboutEditorWebPage(driver, new Uri(BaseUrl, "edit"));
         }
 
         public string Details => Driver.FindElement(By.CssSelector(".bubble div:nth-child(2)")).GetInnerHtml().Trim();
+
+        public AboutEditorWebPage Edit { get; }
+
+        public void EditAbout()
+        {
+            Driver.FindElement(By.CssSelector("a[href*=\"/info/about/edit\"]")).Click();
+        }
     }
 }

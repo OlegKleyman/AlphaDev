@@ -21,7 +21,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
                         By.CssSelector(
                             ".title h3")).Text, element.FindElement(
                             By.CssSelector(
-                                ".blog-content"))
+                                ".bubble-content"))
                         .GetAttribute("innerHTML").Trim(), new BlogDate(element.FindElement(
                         By.CssSelector(
                             ".dates .created-date")).Text, Option.Some(element.FindElements(By.CssSelector(

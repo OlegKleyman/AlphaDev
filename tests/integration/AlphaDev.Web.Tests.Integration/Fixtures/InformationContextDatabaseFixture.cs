@@ -23,7 +23,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         [NotNull]
         public About DefaultAbout => new About
         {
-            Value = "## test about"
+            Value = "* test about"
         };
 
         public void Dispose()

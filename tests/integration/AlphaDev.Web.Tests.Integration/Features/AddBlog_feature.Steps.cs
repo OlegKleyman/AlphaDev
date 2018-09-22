@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
+using AlphaDev.Web.Tests.Integration.Extensions;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -62,7 +63,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_be_rendered_to_html()
         {
             SiteTester.Posts.Create.Preview.Should()
-                .BeEquivalentTo(Markdown.ToHtml(_addedBlogContent).Replace("\n", "\r\n").Trim());
+                .BeEquivalentTo(Markdown.ToHtml(_addedBlogContent).NormalizeToWindowsLineEndings().Trim());
         }
 
         private void When_I_click_save()

@@ -1,31 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using JetBrains.Annotations;
 using OpenQA.Selenium;
 
 namespace AlphaDev.Web.Tests.Integration.Support
 {
-    public class BlogEditorWebPage : WebPage
+    public class BlogEditorWebPage : EditorWebPageBase
     {
-        public BlogEditorWebPage(IWebDriver driver, Uri baseUrl) : base(driver, baseUrl)
+        public BlogEditorWebPage(IWebDriver driver, Uri baseUrl) : base(driver, baseUrl, "Content")
         {
-        }
-
-        public string Content
-        {
-            get
-            {
-                var prefix = Driver.FindElement(By.Name("prefix")).GetAttribute("value");
-                return Driver.FindElement(By.Id($"{prefix}_Content")).Text;
-            }
-            set
-            {
-                var prefix = Driver.FindElement(By.Name("prefix")).GetAttribute("value");
-                var content = Driver.FindElement(By.Id($"{prefix}_Content"));
-                content.Clear();
-                content.SendKeys(value);
-            }
         }
 
         public string BlogTitle
@@ -42,24 +23,6 @@ namespace AlphaDev.Web.Tests.Integration.Support
                 title.Clear();
                 title.SendKeys(value);
             }
-        }
-
-        public string Preview => Driver.FindElement(By.ClassName("md-preview")).GetAttribute("innerHTML").Trim();
-
-        [NotNull]
-        public IEnumerable<string> PageErrors
-        {
-            get { return Driver.FindElements(By.CssSelector("span[id$=\"-error\"]")).Select(element => element.Text); }
-        }
-
-        public void Submit()
-        {
-            Driver.FindElement(By.ClassName("btn-success")).Click();
-        }
-
-        public void TogglePreview()
-        {
-            Driver.FindElement(By.ClassName("btn-primary")).Click();
         }
     }
 }
