@@ -18,7 +18,7 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         public static IServiceCollection AddServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IBlogService, BlogService>()
-                .AddScoped<IInformationService, InformationService<InformationContext>>();
+                .AddScoped<IAboutService, AboutService<InformationContext>>();
             return serviceCollection;
         }
 

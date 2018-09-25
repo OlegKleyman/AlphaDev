@@ -2,7 +2,7 @@
 
 namespace AlphaDev.Core
 {
-    public interface IInformationService
+    public interface IAboutService
     {
         Option<string> GetAboutDetails();
         void Edit(string value);

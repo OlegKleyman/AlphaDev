@@ -12,11 +12,11 @@ namespace AlphaDev.Web.Controllers
     [Route("info")]
     public class InfoController : Controller
     {
-        private readonly IInformationService _informationService;
+        private readonly IAboutService _aboutService;
 
-        public InfoController([NotNull] IInformationService informationService)
+        public InfoController([NotNull] IAboutService aboutService)
         {
-            _informationService = informationService;
+            _aboutService = aboutService;
         }
 
         [AllowAnonymous]
@@ -24,7 +24,7 @@ namespace AlphaDev.Web.Controllers
         public IActionResult About()
         {
             IActionResult GetAboutView(string value) => View(nameof(About), value);
-            return _informationService.GetAboutDetails().Map(s => GetAboutView(s).Some())
+            return _aboutService.GetAboutDetails().Map(s => GetAboutView(s).Some())
                 .ValueOr(() =>
                     RedirectToAction(nameof(CreateAbout))
                         .SomeWhen<IActionResult>(result => User.Identity.IsAuthenticated))
@@ -34,7 +34,7 @@ namespace AlphaDev.Web.Controllers
         [Route("about/edit")]
         public IActionResult EditAbout()
         {
-            return _informationService.GetAboutDetails().Map(s => new AboutEditViewModel(s))
+            return _aboutService.GetAboutDetails().Map(s => new AboutEditViewModel(s))
                 .Map<IActionResult>(model => View(nameof(EditAbout), model))
                 .ValueOr(() => RedirectToAction(nameof(About)));
         }
@@ -44,7 +44,7 @@ namespace AlphaDev.Web.Controllers
         public IActionResult EditAbout(AboutEditViewModel model)
         {
             return ModelState.SomeWhen(dictionary => dictionary.IsValid)
-                .MapToAction(dictionary => _informationService.Edit(model.Value))
+                .MapToAction(dictionary => _aboutService.Edit(model.Value))
                 .Map(dictionary => (IActionResult) RedirectToAction(nameof(About)))
                 .ValueOr(() => View(nameof(EditAbout), model));
         }
@@ -52,7 +52,7 @@ namespace AlphaDev.Web.Controllers
         [Route("about/create")]
         public IActionResult CreateAbout()
         {
-            return _informationService.GetAboutDetails()
+            return _aboutService.GetAboutDetails()
                 .Map<IActionResult>(s => RedirectToAction(nameof(EditAbout)))
                 .ValueOr(() => View(nameof(CreateAbout), new AboutCreateViewModel()));
         }
@@ -63,7 +63,7 @@ namespace AlphaDev.Web.Controllers
         public IActionResult CreateAbout([NotNull] AboutCreateViewModel model)
         {
             return ModelState.IsValid.SomeWhen(b => b)
-                .MapToAction(b => _informationService.Create(model.Value))
+                .MapToAction(b => _aboutService.Create(model.Value))
                 .Map<IActionResult>(b => RedirectToAction(nameof(About)))
                 .ValueOr(() => View(nameof(CreateAbout), model));
         }

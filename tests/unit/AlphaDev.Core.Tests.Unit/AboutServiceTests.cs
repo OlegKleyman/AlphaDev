@@ -19,7 +19,7 @@ using Xunit;
 
 namespace AlphaDev.Core.Tests.Unit
 {
-    public class InformationServiceTests
+    public class AboutServiceTests
     {
         [Fact]
         public void GetAboutDetailsShouldReturnAboutDetails()
@@ -149,11 +149,11 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [NotNull]
-        private InformationService<InformationContext> GetInformationService(InformationContext context)
+        private AboutService<InformationContext> GetInformationService(InformationContext context)
         {
             var contextBuilder = Substitute.For<IContextFactory<InformationContext>>();
             contextBuilder.Create().Returns(context);
-            return new InformationService<InformationContext>(contextBuilder);
+            return new AboutService<InformationContext>(contextBuilder);
         }
     }
 }
