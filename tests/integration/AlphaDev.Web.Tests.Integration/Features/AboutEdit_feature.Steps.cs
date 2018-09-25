@@ -22,25 +22,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
         }
 
-        [UsedImplicitly]
-        private CompositeStep When_I_go_to_a_configured_about_page()
-        {
-            return CompositeStep.DefineNew()
-                .AddSteps(_ => There_is_about_information(), _ => When_I_go_to_the_about_page()).Build();
-        }
-
-        private void There_is_about_information()
-        {
-            DatabasesFixture.InformationContextDatabaseFixture.InformationContext.Abouts.Add(DatabasesFixture
-                .InformationContextDatabaseFixture.DefaultAbout);
-            DatabasesFixture.InformationContextDatabaseFixture.InformationContext.SaveChanges();
-        }
-
-        private void When_I_go_to_the_about_page()
-        {
-            SiteTester.About.GoTo();
-        }
-
         private void When_I_click_the_edit_icon()
         {
             SiteTester.About.EditAbout();
@@ -53,7 +34,19 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void And_am_editing_the_about_info()
         {
+            When_I_go_to_about_edit_page();
+        }
+
+        private void When_I_go_to_about_edit_page()
+        {
             SiteTester.About.Edit.GoTo();
+        }
+
+        [UsedImplicitly]
+        private CompositeStep And_I_edit_about_info()
+        {
+            return CompositeStep.DefineNew()
+                .AddSteps(_ => And_am_editing_the_about_info(), _ => And_I_entered_markdown_content()).Build();
         }
 
         private void And_I_entered_markdown_content()
@@ -83,7 +76,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
             SiteTester.About.Edit.Submit();
         }
 
-        private void Then_it_should_display_errors_under_the_required_fields_not_filled_in()
+        private void Then_it_should_display_errors_for_the_required_fields_not_filled_in()
         {
             SiteTester.About.Edit.PageErrors.Should().BeEquivalentTo("The Value field is required.");
         }

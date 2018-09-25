@@ -30,13 +30,23 @@ I want to have a web page where I can view it")]
         }
 
         [Scenario]
-        public void About_page_should_display_no_details_when_there_is_no_about_information_in_the_database()
+        public void About_page_should_display_no_details_when_there_is_no_about_information_in_the_database_and_not_logged_in()
         {
             Runner.RunScenario(
                 CommonSteps.Given_i_am_a_user,
-                And_there_is_no_about_information,
+                CommonSteps.And_there_is_no_about_information,
                 CommonSteps.When_I_go_to_the_about_page,
                 Then_it_should_display_no_details);
+        }
+
+        [Scenario]
+        public void About_page_should_redirect_to_create_about_page_when_there_is_no_about_information_in_the_database_and_logged_in()
+        {
+            Runner.RunScenario(
+                CommonSteps.Given_I_have_logged_in,
+                CommonSteps.And_there_is_no_about_information,
+                CommonSteps.When_I_go_to_the_about_page,
+                CommonSteps.Then_I_should_be_redirected_to_the_about_create_page);
         }
     }
 }
