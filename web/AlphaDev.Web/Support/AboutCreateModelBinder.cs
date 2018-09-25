@@ -1,18 +1,19 @@
-﻿using System;
-using AlphaDev.Web.Models;
+﻿using AlphaDev.Web.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Optional;
 
 namespace AlphaDev.Web.Support
 {
-    public class AboutEditModelBinder : PrefixModelBinder
+    public class AboutCreateModelBinder : PrefixModelBinder
     {
         protected override void BindModel([NotNull] ModelBindingContext context)
         {
             var value = context.ValueProvider.GetValue("Value").FirstValue ?? string.Empty;
 
-            var model = new AboutEditViewModel(value);
+            var model = new AboutCreateViewModel
+            {
+                Value = value
+            };
 
             context.Result = ModelBindingResult.Success(model);
         }

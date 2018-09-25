@@ -1,6 +1,7 @@
 ﻿using System;
 using AlphaDev.Core.Data;
 using AlphaDev.Core.Data.Contexts;
+using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Extensions;
 using JetBrains.Annotations;
 using Optional;
@@ -36,6 +37,19 @@ namespace AlphaDev.Core
                     .Map(about => context.SaveChanges())
                     .Filter(changes => changes == 1,
                         () => new InvalidOperationException("Inconsistent change count."))
+                    .MatchNone(exception => throw exception);
+            }
+        }
+
+        public void Create(string value)
+        {
+            using (var context = _contextFactory.Create())
+            {
+                context.Abouts.Add(new About {Value = value}).SomeNotNull(() => new InvalidOperationException("Unable to retrieve added entry."))
+                    // ReSharper disable once AccessToDisposedClosure - execution either
+                    // immediate or not at all
+                    .Map(entry => context.SaveChanges())
+                    .Filter(changes => changes == 1, () => new InvalidOperationException("Inconsistent change count."))
                     .MatchNone(exception => throw exception);
             }
         }

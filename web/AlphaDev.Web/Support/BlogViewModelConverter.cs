@@ -58,6 +58,7 @@ namespace AlphaDev.Web.Support
         [NotNull]
         private static string GetKeyValue([NotNull] JToken token, string key)
         {
+            // TODO add unit tests
             return
                 $"{key} {token[key].SomeNotNull().Filter(jToken => jToken.HasValues).Map(jToken => jToken.ToString()).ValueOr("[NULL]")}";
         }

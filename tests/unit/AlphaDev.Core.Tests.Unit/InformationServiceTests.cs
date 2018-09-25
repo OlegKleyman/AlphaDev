@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using AlphaDev.Core.Data;
 using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Entities;
@@ -7,10 +9,10 @@ using AlphaDev.Core.Data.Support;
 using AlphaDev.Test.Core;
 using FluentAssertions;
 using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NSubstitute;
 using Optional;
 using Xunit;
@@ -92,6 +94,58 @@ namespace AlphaDev.Core.Tests.Unit
             var service = GetInformationService(context);
             Action edit = () => service.Edit(default);
             edit.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count.");
+        }
+
+        [Fact]
+        public void CreateShouldSaveToDataStore()
+        {
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
+            context.Abouts = new About[0].ToMockDbSet();
+            var entry = (EntityEntry<About>) FormatterServices.GetUninitializedObject(typeof(EntityEntry<About>));
+            context.Abouts.Add(Arg.Any<About>()).Returns(entry);
+            context.SaveChanges().Returns(1);
+            var service = GetInformationService(context);
+            service.Create("test");
+            context.Received(1).SaveChanges();
+        }
+
+        [Fact]
+        public void CreateShouldSaveAboutToDataStore()
+        {
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
+            var abouts = new List<About>();
+            context.Abouts = abouts.ToMockDbSet();
+            context.Abouts.Add(Arg.Any<About>()).Returns(info =>
+            {
+                var about = (About) info[0];
+                abouts.Add(about);
+                return about.ToMockEntityEntry();
+            });
+            context.SaveChanges().Returns(1);
+            var service = GetInformationService(context);
+            service.Create("test");
+            context.Abouts.Should().HaveCount(1).And.BeEquivalentTo(new {Value = "test"});
+        }
+
+        [Fact]
+        public void CreateShouldThrowInvalidOperationExceptionWhenUnableToRetrieveAddedEntityDetails()
+        {
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
+            context.Abouts.Add(Arg.Any<About>()).Returns((EntityEntry<About>) null);
+            var service = GetInformationService(context);
+            Action create = () => service.Create(default);
+            create.Should().Throw<InvalidOperationException>().WithMessage("Unable to retrieve added entry.");
+        }
+
+        [Fact]
+        public void CreateShouldThrowInvalidOperationExceptionWhenUnableSavingReturnsUnexpectedSaveCount()
+        {
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
+            context.Abouts = new About[0].ToMockDbSet();
+            context.Abouts.Add(Arg.Any<About>()).Returns(new About().ToMockEntityEntry());
+            var service = GetInformationService(context);
+            Action create = () => service.Create(default);
+            create.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count.");
         }
 
         [NotNull]

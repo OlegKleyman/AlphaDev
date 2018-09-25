@@ -9,7 +9,7 @@
 <div class="container">
     <div class="bubble">
         <div class="text-center" style="min-height: 40px;">
-            <display value="true">
+            <display value="@User.Identity.IsAuthenticated">
                 <a asp-action="EditAbout" asp-controller="Info" class="btn-xs btn-danger edit pull-right actionText">
                     ~
                 </a>

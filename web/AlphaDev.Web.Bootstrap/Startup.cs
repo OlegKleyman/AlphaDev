@@ -1,11 +1,5 @@
 ﻿using AlphaDev.Core;
-using AlphaDev.Core.Data;
-using AlphaDev.Core.Data.Account.Security.Sql;
-using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
-using AlphaDev.Core.Data.Contexts;
-using AlphaDev.Core.Data.Sql;
-using AlphaDev.Core.Data.Sql.ContextFactories;
 using AlphaDev.Core.Data.Sql.Support;
 using AlphaDev.Web.Bootstrap.Extensions;
 using JetBrains.Annotations;
@@ -13,10 +7,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using InformationContextFactory = AlphaDev.Core.Data.Sql.ContextFactories.InformationContextFactory;
 
 namespace AlphaDev.Web.Bootstrap
 {

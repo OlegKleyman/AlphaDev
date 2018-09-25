@@ -27,10 +27,5 @@ namespace AlphaDev.Web.TagHelpers
                 .Map(s => $"<style>{s}</style>")
                 .MatchSome(s => output.Content.AppendHtml(s));
         }
-
-        public override Task ProcessAsync(TagHelperContext context, [NotNull] TagHelperOutput output)
-        {
-            return Task.Run(() => Process(context, output));
-        }
     }
 }

@@ -73,10 +73,5 @@ namespace AlphaDev.Web.TagHelpers
             scripts.Add(urlHelper.Content("~/lib/bootstrap-markdown/js/bootstrap-markdown.js"));
             Context.ViewData["AllScripts"] = scripts;
         }
-
-        public sealed override Task ProcessAsync(TagHelperContext context, [NotNull] TagHelperOutput output)
-        {
-            return Task.Run(() => Process(context, output));
-        }
     }
 }

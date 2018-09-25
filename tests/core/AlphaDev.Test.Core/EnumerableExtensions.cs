@@ -12,14 +12,14 @@ namespace AlphaDev.Test.Core
         public static DbSet<T> ToMockDbSet<T>([NotNull] this IEnumerable<T> target) where T : class
         {
             var targetQuery = target.AsQueryable();
-            var aboutSet = Substitute.For<DbSet<T>, IQueryable<T>>();
-            var query = aboutSet.As<IQueryable<T>>();
+            var set = Substitute.For<DbSet<T>, IQueryable<T>>();
+            var query = set.As<IQueryable<T>>();
             query.Provider.Returns(targetQuery.Provider);
             query.Expression.Returns(targetQuery.Expression);
             query.ElementType.Returns(targetQuery.ElementType);
-            query.GetEnumerator().Returns(targetQuery.GetEnumerator());
+            query.GetEnumerator().Returns(info => targetQuery.GetEnumerator());
 
-            return aboutSet;
+            return set;
         }
     }
 }

@@ -23,10 +23,5 @@ namespace AlphaDev.Web.TagHelpers
 
             output.Content.AppendHtml(inlineScripts.ToString());
         }
-
-        public override Task ProcessAsync(TagHelperContext context, [NotNull] TagHelperOutput output)
-        {
-            return Task.Run(() => Process(context, output));
-        }
     }
 }

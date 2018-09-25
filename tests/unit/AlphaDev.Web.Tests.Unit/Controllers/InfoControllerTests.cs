@@ -1,8 +1,11 @@
-﻿using AlphaDev.Core;
+﻿using System.Security.Claims;
+using System.Security.Principal;
+using AlphaDev.Core;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
 using FluentAssertions;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Optional;
@@ -15,29 +18,50 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         [NotNull]
         private static InfoController GetInfoController([NotNull] IInformationService informationService)
         {
-            return new InfoController(informationService);
+            var identity = Substitute.For<IIdentity>();
+            var user = Substitute.For<ClaimsPrincipal>();
+            user.Identity.Returns(identity);
+            var controller = new InfoController(informationService);
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext { User = user }
+            };
+
+            return controller;
         }
 
         [Fact]
         public void AboutShouldReturnAboutView()
         {
-            var controller = GetInfoController(Substitute.For<IInformationService>());
-            controller.About().ViewName.Should().BeEquivalentTo("About");
+            var informationService = Substitute.For<IInformationService>();
+            informationService.GetAboutDetails().Returns(Option.Some<string>(default));
+            var controller = GetInfoController(informationService);
+            controller.About().Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("About");
         }
 
         [Fact]
-        public void AboutShouldReturnSNoDetailsModelIfNoAboutInformationExists()
+        public void AboutShouldReturnNoDetailsModelIfNoAboutInformationExistsAndUserIsNotAuthenticated()
         {
             var informationService = Substitute.For<IInformationService>();
             var controller = GetInfoController(informationService);
-            controller.About().Model.Should().BeEquivalentTo("No details");
+            controller.About().Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo("No details");
+        }
+
+        [Fact]
+        public void AboutShouldReturnRedirectToCreateAboutActionIfNoAboutInformationExistsAndUserIsAuthenticated()
+        {
+            var informationService = Substitute.For<IInformationService>();
+            var controller = GetInfoController(informationService);
+            controller.User.Identity.IsAuthenticated.Returns(true);
+            controller.About().Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should()
+                .BeEquivalentTo("CreateAbout");
         }
 
         [Fact]
         public void AboutShouldReturnStringModel()
         {
             var controller = GetInfoController(Substitute.For<IInformationService>());
-            controller.About().Model.Should().BeOfType<string>();
+            controller.About().Should().BeOfType<ViewResult>().Which.Model.Should().BeOfType<string>();
         }
 
         [Fact]
@@ -46,14 +70,14 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var informationService = Substitute.For<IInformationService>();
             informationService.GetAboutDetails().Returns(Option.Some("test"));
             var controller = GetInfoController(informationService);
-            controller.About().Model.Should().BeEquivalentTo("test");
+            controller.About().Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo("test");
         }
 
         [Fact]
         public void EditAboutShouldReturnEditAboutView()
         {
             var informationService = Substitute.For<IInformationService>();
-
+            informationService.GetAboutDetails().Returns(Option.Some<string>(default));
             var controller = GetInfoController(informationService);
 
             controller.EditAbout()
@@ -83,7 +107,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void EditAboutShouldReturnEditAboutViewWithModelWithEmptyStringWhenAboutIsNotFound()
+        public void EditAboutShouldReturnRedirectActionResultToAboutActionWhenAboutIsNotFound()
         {
             var informationService = Substitute.For<IInformationService>();
 
@@ -92,13 +116,9 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             controller
                 .EditAbout()
                 .Should()
-                .BeOfType<ViewResult>()
-                .Which.Model.Should()
-                .BeEquivalentTo(
-                    new
-                    {
-                        Value = string.Empty
-                    });
+                .BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should()
+                .BeEquivalentTo("About");
         }
 
         [Fact]
@@ -109,7 +129,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             
             var controller = GetInfoController(informationService);
 
-            var post = new AboutEditorViewModel(editValue);
+            var post = new AboutEditViewModel(editValue);
             controller.EditAbout(post);
 
             informationService.Received(1).Edit(editValue);
@@ -121,7 +141,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var informationService = Substitute.For<IInformationService>();
             var controller = GetInfoController(informationService);
 
-            var post = new AboutEditorViewModel(default);
+            var post = new AboutEditViewModel(default);
             var result = controller.EditAbout(post);
             result.Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should().BeEquivalentTo("About");
         }
@@ -132,9 +152,61 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var informationService = Substitute.For<IInformationService>();
             var controller = GetInfoController(informationService);
             controller.ModelState.AddModelError(string.Empty, string.Empty);
-            var post = new AboutEditorViewModel(default);
+            var post = new AboutEditViewModel(default);
             var result = controller.EditAbout(post);
             result.Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("EditAbout");
+        }
+
+        [Fact]
+        public void CreateAboutShouldReturnCreateAboutViewWhenThereIsNoExistingAbout()
+        {
+            var informationService = Substitute.For<IInformationService>();
+            var controller = GetInfoController(informationService);
+
+            controller.CreateAbout()
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should().BeEquivalentTo("CreateAbout");
+        }
+
+        [Fact]
+        public void CreateAboutShouldRedirectToEditAboutActionWhenThereIsExistingAbout()
+        {
+            var informationService = Substitute.For<IInformationService>();
+            informationService.GetAboutDetails().Returns(Option.Some("test"));
+            var controller = GetInfoController(informationService);
+
+            controller.CreateAbout().Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should()
+                .BeEquivalentTo("EditAbout");
+        }
+
+        [Fact]
+        public void CreateAboutShouldCreateAboutWhenModelIsValid()
+        {
+            var informationService = Substitute.For<IInformationService>();
+            var controller = GetInfoController(informationService);
+            const string value = "value";
+            controller.CreateAbout(new AboutCreateViewModel(value));
+            informationService.Received(1).Create(value);
+        }
+
+        [Fact]
+        public void CreateAboutShouldReturnRedirectToAboutActionWhenModelIsValid()
+        {
+            var informationService = Substitute.For<IInformationService>();
+            var controller = GetInfoController(informationService);
+            var result = controller.CreateAbout(new AboutCreateViewModel(default));
+            result.Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should().BeEquivalentTo("About");
+        }
+
+        [Fact]
+        public void CreateAboutShouldReturnCreateAboutViewWhenModelIsNotValid()
+        {
+            var informationService = Substitute.For<IInformationService>();
+            var controller = GetInfoController(informationService);
+            controller.ModelState.AddModelError("test", "test");
+            var result = controller.CreateAbout(new AboutCreateViewModel(default));
+            result.Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("CreateAbout");
         }
     }
 }

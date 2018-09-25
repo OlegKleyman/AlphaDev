@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace AlphaDev.Web.Models
 {
     [ModelBinder(typeof(AboutEditModelBinder))]
-    public class AboutEditorViewModel
+    public class AboutEditViewModel
     {
-        public AboutEditorViewModel(string value)
+        public AboutEditViewModel(string value)
         {
             Value = value;
         }
 
-        public AboutEditorViewModel()
+        public AboutEditViewModel()
         {
         }
 
