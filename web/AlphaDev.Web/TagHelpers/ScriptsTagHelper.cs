@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -22,11 +21,6 @@ namespace AlphaDev.Web.TagHelpers
             var inlineScripts = Context?.ViewData["InlineScripts"] ?? string.Empty;
 
             output.Content.AppendHtml(inlineScripts.ToString());
-        }
-
-        public override Task ProcessAsync(TagHelperContext context, [NotNull] TagHelperOutput output)
-        {
-            return Task.Run(() => Process(context, output));
         }
     }
 }

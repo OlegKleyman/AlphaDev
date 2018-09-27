@@ -11,7 +11,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
     public class CreatePostModelBinderTests
     {
         [NotNull]
-        private static PrefixModelBindingContext GetContext([CanBeNull] IValueProvider valueProvider)
+        private static ModelBindingContext GetContext([CanBeNull] IValueProvider valueProvider)
         {
             var context = new DefaultModelBindingContext
             {
@@ -19,7 +19,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
                 ValueProvider = valueProvider ?? Substitute.For<IValueProvider>()
             };
 
-            return new PrefixModelBindingContext(context, default);
+            return context;
         }
 
         [NotNull]
@@ -30,7 +30,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
         public class MockCreatePostModelBinder : CreatePostModelBinder
         {
-            public void BindModelMock([NotNull] PrefixModelBindingContext context)
+            public void BindModelMock([NotNull] ModelBindingContext context)
             {
                 BindModel(context);
             }
@@ -50,7 +50,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
             binder.BindModelMock(context);
 
-            context.Result.Model.Should().BeEquivalentTo(new {Title = "title", Content = "content"});
+            context.Result.Model.Should().BeEquivalentTo(new { Title = "title", Content = "content" });
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
             binder.BindModelMock(context);
 
-            context.Result.Model.Should().BeEquivalentTo(new {Title = string.Empty, Content = string.Empty});
+            context.Result.Model.Should().BeEquivalentTo(new { Title = string.Empty, Content = string.Empty });
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
             var context = GetContext(default);
 
             binder.BindModelMock(context);
-            context.Result.Model.Should().BeEquivalentTo(new {Title = string.Empty, Content = string.Empty});
+            context.Result.Model.Should().BeEquivalentTo(new { Title = string.Empty, Content = string.Empty });
         }
     }
 }

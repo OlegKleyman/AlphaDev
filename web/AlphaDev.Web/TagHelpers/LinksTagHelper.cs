@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -26,11 +25,6 @@ namespace AlphaDev.Web.TagHelpers
                 .SomeWhen(s => !string.IsNullOrWhiteSpace(s))
                 .Map(s => $"<style>{s}</style>")
                 .MatchSome(s => output.Content.AppendHtml(s));
-        }
-
-        public override Task ProcessAsync(TagHelperContext context, [NotNull] TagHelperOutput output)
-        {
-            return Task.Run(() => Process(context, output));
         }
     }
 }

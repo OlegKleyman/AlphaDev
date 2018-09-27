@@ -1,6 +1,7 @@
 ﻿using System;
 using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
+using AlphaDev.Core.Data.Sql.Support;
 using AlphaDev.Test.Integration.Core.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         public ApplicationContextDatabaseFixture([NotNull] DatabaseConnectionFixture connection)
         {
             _connection = connection;
-            ApplicationContext = new ApplicationContext(connection.String);
+            ApplicationContext = new ApplicationContext(new SqlConfigurer(connection.String));
             Initialize();
 
             connection.Reset += Initialize;

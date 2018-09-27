@@ -10,18 +10,21 @@ namespace AlphaDev.Web.Support
     {
         public Task BindModelAsync([CanBeNull] ModelBindingContext bindingContext)
         {
-            if (bindingContext == null) throw new ArgumentNullException(nameof(bindingContext));
+            if (bindingContext is null) throw new ArgumentNullException(nameof(bindingContext));
+            if (bindingContext.ValueProvider is null)
+            {
+                throw new ArgumentException("ValueProvider cannot be null.", nameof(bindingContext));
+            }
 
             var prefix = (bindingContext.ValueProvider?.GetValue("prefix").FirstValue)
                 .SomeWhen(s => !string.IsNullOrWhiteSpace(s))
                 .Map(s => s + ".")
                 .ValueOr(string.Empty);
-
-            var prefixModelBindingContext = new PrefixModelBindingContext(bindingContext, prefix);
-            BindModel(prefixModelBindingContext);
+            bindingContext.ValueProvider = new PrefixValueProvider(bindingContext.ValueProvider, prefix);
+            BindModel(bindingContext);
             return Task.CompletedTask;
         }
 
-        protected abstract void BindModel(PrefixModelBindingContext context);
+        protected abstract void BindModel(ModelBindingContext context);
     }
 }

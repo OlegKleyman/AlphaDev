@@ -15,8 +15,9 @@ namespace AlphaDev.Web.Tests.Integration
             var notifierConfig = configuration.Get<ScenarioProgressNotifierConfiguration>();
 
             notifierConfig
-                .AppendNotifierProviders<FeatureFixture>(tester => new DelegatingScenarioProgressNotifier(new
-                    SeleniumNotifier((tester as WebFeatureFixture)?.SiteTester.Driver as ITakesScreenshot)));
+                .AppendNotifierProviders<WebFeatureFixture>(tester => new DelegatingScenarioProgressNotifier(new
+                        SeleniumNotifier(tester.SiteTester.Driver as ITakesScreenshot),
+                    new LogNotifier(tester)));
         }
     }
 }

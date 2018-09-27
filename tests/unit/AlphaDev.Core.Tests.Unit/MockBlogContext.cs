@@ -1,5 +1,4 @@
 using AlphaDev.Core.Data.Contexts;
-using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Tests.Unit
@@ -8,14 +7,14 @@ namespace AlphaDev.Core.Tests.Unit
     {
         private readonly string _testName;
 
-        public MockBlogContext(string testName)
+        public MockBlogContext(string testName) : base(null)
         {
             _testName = testName;
         }
 
         public bool Fail { get; set; }
 
-        protected override void OnConfiguring([NotNull] DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseInMemoryDatabase(_testName);
         }

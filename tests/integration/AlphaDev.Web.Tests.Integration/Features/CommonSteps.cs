@@ -57,6 +57,13 @@ namespace AlphaDev.Web.Tests.Integration.Features
             Data.Add("AddedBlog", blog);
         }
 
+        public void And_there_is_about_information()
+        {
+            var about = DatabasesFixture.InformationContextDatabaseFixture.DefaultAbout;
+            DatabasesFixture.InformationContextDatabaseFixture.InformationContext.AddRangeAndSave(about);
+            Data.Add("AddedAbout", about);
+        }
+
         public void And_there_is_a_blog_post()
         {
             Given_there_is_a_blog_post();
@@ -76,6 +83,30 @@ namespace AlphaDev.Web.Tests.Integration.Features
         public void Then_it_should_display_the_error_page_with_a_404()
         {
             SiteTester.Error.Status.Should().BeEquivalentTo("Error 404.");
+        }
+
+        public void When_I_go_to_the_about_page()
+        {
+            SiteTester.About.GoTo();
+        }
+
+        public void And_I_am_on_the_about_page()
+        {
+            When_I_go_to_the_about_page();
+        }
+
+        public void And_there_is_no_about_information()
+        {
+        }
+
+        public void Then_I_should_be_redirected_to_the_about_create_page()
+        {
+            SiteTester.Driver.Url.Should().BeEquivalentTo(SiteTester.About.Create.BaseUrl.AbsoluteUri);
+        }
+
+        public void Then_I_should_be_redirected_to_the_about_edit_page()
+        {
+            SiteTester.Driver.Url.Should().BeEquivalentTo(SiteTester.About.Edit.BaseUrl.AbsoluteUri);
         }
     }
 }

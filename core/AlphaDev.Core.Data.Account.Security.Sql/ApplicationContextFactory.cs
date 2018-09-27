@@ -1,28 +1,19 @@
 ﻿using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
+using AlphaDev.Core.Data.Sql;
+using AlphaDev.Core.Data.Support;
 using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 
 namespace AlphaDev.Core.Data.Account.Security.Sql
 {
-    public class ApplicationContextFactory : IDesignTimeDbContextFactory<ApplicationContext>
+    public class ApplicationContextFactory : AlphaContextFactory<ApplicationContext>
     {
-        private readonly IConfigurationRoot _config;
-
-        public ApplicationContextFactory()
+        [UsedImplicitly]
+        public ApplicationContextFactory() : this(null)
         {
         }
 
-        public ApplicationContextFactory(IConfigurationRoot config)
+        public ApplicationContextFactory(Configurer configurer) : base(configurer)
         {
-            _config = config;
-        }
-
-        [NotNull]
-        public ApplicationContext CreateDbContext(string[] args)
-        {
-            return new ApplicationContext(
-                _config?.GetConnectionString("AlphaDevSecurity") ?? @"Data Source=(LocalDB)\v11.0;");
         }
     }
 }

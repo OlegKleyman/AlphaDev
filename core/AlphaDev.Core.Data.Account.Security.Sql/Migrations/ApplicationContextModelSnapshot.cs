@@ -2,6 +2,7 @@
 
 using System;
 using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
+    [UsedImplicitly]
     internal class ApplicationContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

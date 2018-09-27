@@ -1,16 +1,18 @@
 using AlphaDev.Core.Data.Sql.Contexts;
+using AlphaDev.Core.Data.Support;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using NSubstitute;
 
 namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
 {
     public class MockBlogContext : BlogContext
     {
-        public MockBlogContext() : base("Server={server};Database={database}")
+        public MockBlogContext() : this(Substitute.For<Configurer>())
         {
         }
 
-        public MockBlogContext(string connectionString) : base(connectionString)
+        public MockBlogContext(Configurer configurer) : base(configurer)
         {
         }
 

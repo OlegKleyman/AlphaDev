@@ -64,7 +64,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             helper.Context = new ViewContext
             {
-                ViewData = {["AllScripts"] = new HashSet<string>(new[] {"test"})}
+                ViewData = { ["AllScripts"] = new HashSet<string>(new[] { "test" }) }
             };
 
             helper.Process(null, tagHelperOutput);

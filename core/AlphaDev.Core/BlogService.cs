@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using AlphaDev.Core.Data.Contexts;
+using AlphaDev.Core.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using Omego.Extensions.OptionExtensions;
 using Optional;
 using Optional.Collections;
 
@@ -48,48 +48,46 @@ namespace AlphaDev.Core
         [NotNull]
         public BlogBase Add([NotNull] BlogBase blog)
         {
-            var entity = new Data.Entities.Blog
-            {
-                Title = blog.Title,
-                Content = blog.Content
-            };
-
-            var entry = _context.Blogs.Add(entity);
-            _context.SaveChanges();
-
-            if (entry.State != EntityState.Unchanged) throw new InvalidOperationException("Unable to save changes");
-
-            return new Blog(entity.Id, entity.Title, entity.Content,
-                new Dates(entity.Created, entity.Modified.ToOption()));
+            return new Data.Entities.Blog
+                {
+                    Title = blog.Title,
+                    Content = blog.Content
+                }.Some().Map(targetBlog => _context.Blogs.Add(targetBlog))
+                .MapToAction(() => _context.SaveChanges())
+                .Filter(entry => entry.State == EntityState.Unchanged)
+                .WithException(() => new InvalidOperationException("Unable to save changes"))
+                .Map(entry => new Blog(entry.Entity.Id, entry.Entity.Title, entry.Entity.Content,
+                    new Dates(entry.Entity.Created, entry.Entity.Modified.ToOption())))
+                .ValueOr(exception => throw exception);
         }
 
         public void Delete(int id)
         {
             _context.Blogs.Find(id)
-                .SomeNotNull()
-                .MatchNoneContinue(() => throw new InvalidOperationException($"Blog ID {id} not found"))
+                .SomeNotNull(() => new InvalidOperationException($"Blog ID {id} not found"))
                 .Map(blog => _context.Blogs.Remove(blog))
-                .MatchSomeContinue(blog => _context.SaveChanges())
-                .Filter(entry => entry.State == EntityState.Detached)
-                .MatchNone(() => throw new InvalidOperationException("Unable to delete"));
+                .MapToAction(() => _context.SaveChanges())
+                .Filter(entry => entry.State == EntityState.Detached,
+                    () => new InvalidOperationException("Unable to delete"))
+                .MatchNone(exception => throw exception);
         }
 
         public void Edit(int id, Action<BlogEditArguments> edit)
         {
             _context.Blogs.Find(id)
-                .SomeNotNull()
-                .MatchNoneContinue(() => throw new InvalidOperationException($"Blog with ID {id} was not found"))
-                .Map(blog => new {Blog = blog, Arguments = new BlogEditArguments()})
-                .MatchSomeContinue(match =>
+                .SomeNotNull(() => new InvalidOperationException($"Blog with ID {id} was not found"))
+                .Map(blog => new { Blog = blog, Arguments = new BlogEditArguments() })
+                .MapToAction(match => edit(match.Arguments))
+                .MapToAction(match =>
                 {
-                    edit(match.Arguments);
                     match.Blog.Content = match.Arguments.Content;
                     match.Blog.Title = match.Arguments.Title;
                     match.Blog.Modified = _dateProvider.UtcNow;
-                    _context.SaveChanges();
                 })
-                .Filter(match => _context.Entry(match.Blog).State == EntityState.Unchanged)
-                .MatchNone(() => throw new InvalidOperationException("Inconsistent change count on update"));
+                .MapToAction(() => _context.SaveChanges())
+                .Filter(match => _context.Entry(match.Blog).State == EntityState.Unchanged,
+                    () => new InvalidOperationException("Inconsistent change count on update"))
+                .MatchNone(exception => throw exception);
         }
     }
 }

@@ -1,48 +1,43 @@
-using System.Data.SqlClient;
 using AlphaDev.Core.Data.Entities;
-using AlphaDev.Core.Data.Sql.Contexts;
+using AlphaDev.Core.Data.Support;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using NSubstitute;
 using Xunit;
 
 namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
 {
     public class BlogContextTests
     {
-        [Fact]
-        public void ConstructorShouldSetConnectionString()
+        [NotNull]
+        private static MockBlogContext GetBlogContext()
         {
-            const string server = "testDb";
-            const string database = "testDatabase";
+            return new MockBlogContext();
+        }
 
-            var context = new BlogContext($"Server={server};Database={database};");
-
-            context.Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.Should().BeEquivalentTo(
-                new {Database = database, DataSource = server},
-                options => options.Including(connection => connection.Database)
-                    .Including(connection => connection.DataSource));
+        [NotNull]
+        private static MockBlogContext GetBlogContext(Configurer configurer)
+        {
+            return new MockBlogContext(configurer);
         }
 
         [Fact]
-        public void OnConfiguringShouldConfigureToUseSqlServerWithAssignedConnectionString()
+        public void OnConfiguringShouldConfigureDbContextOptionsBuilder()
         {
-            const string connectionString = "Server=testServer;Database=testDb;";
-            var context = new MockBlogContext(connectionString);
-
+            var configurer = Substitute.For<Configurer>();
+            var context = GetBlogContext(configurer);
             var builder = new DbContextOptionsBuilder();
             context.OnConfiguringProxy(builder);
-
-            builder.Options.GetExtension<SqlServerOptionsExtension>().ConnectionString
-                .Should().BeEquivalentTo(connectionString);
+            configurer.Received(1).Configure(builder);
         }
 
         [Fact]
         public void OnModelCreatingShouldConfigureModelWithTheCorrectConfiguration()
         {
-            var context = new MockBlogContext();
+            var context = GetBlogContext();
 
             var modelBuilder = new ModelBuilder(new ConventionSet());
             context.OnModelCreatingProxy(modelBuilder);

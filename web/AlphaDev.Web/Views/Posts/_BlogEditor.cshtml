@@ -16,6 +16,6 @@
         </div>
     </div>
 
-    @HtmlHelperOptionExtensions.Hidden(Html, "Created", Model.Dates.Map(model => model.Created), new {id = Html.Id("Created")})
-    @HtmlHelperOptionExtensions.Hidden(Html, "Modified", Model.Dates.FlatMap(model => model.Modified), new {id = Html.Id("Modified")})
+    @HtmlHelperOptionExtensions.Hidden(Html, "Created", Model.Dates.Map(model => model.Created), new { id = Html.Id("Created") })
+    @HtmlHelperOptionExtensions.Hidden(Html, "Modified", Model.Dates.FlatMap(model => model.Modified), new { id = Html.Id("Modified") })
 </form>

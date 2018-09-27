@@ -4,7 +4,7 @@
 <div class="bubble">
     @Html.Partial("Partial/_BlogHeader", Model)
 
-    <div class="blog-content">
+    <div class="bubble-content">
         <markdown>
             @Model.Content?.Truncate(100)
         </markdown>

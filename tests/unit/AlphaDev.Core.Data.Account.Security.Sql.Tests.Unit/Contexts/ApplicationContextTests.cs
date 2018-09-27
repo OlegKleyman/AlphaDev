@@ -1,25 +1,42 @@
-﻿using System.Data.SqlClient;
+﻿using System;
 using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
+using AlphaDev.Core.Data.Support;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using NSubstitute;
 using Xunit;
 
 namespace AlphaDev.Core.Data.Account.Security.Sql.Tests.Unit.Contexts
 {
     public class ApplicationContextTests
     {
-        [Fact]
-        public void ConstructorShouldSetConnectionString()
+        public class MockApplicationContext : ApplicationContext
         {
-            const string server = "testDb";
-            const string database = "testDatabase";
+            public MockApplicationContext(Configurer configurer) : base(configurer)
+            {
+            }
 
-            var context = new ApplicationContext($"Server={server};Database={database};");
+            public void OnConfiguringProxy(DbContextOptionsBuilder optionsBuilder)
+            {
+                OnConfiguring(optionsBuilder);
+            }
+        }
 
-            context.Database.GetDbConnection().Should().BeOfType<SqlConnection>().Subject.Should().BeEquivalentTo(
-                new {Database = database, DataSource = server},
-                options => options.Including(connection => connection.Database)
-                    .Including(connection => connection.DataSource));
+        [Fact]
+        public void ConstructorShouldInitializeApplicationContext()
+        {
+            Action constructor = () => new ApplicationContext(default);
+            constructor.Should().NotThrow();
+        }
+
+        [Fact]
+        public void OnConfiguringShouldCallConfigure()
+        {
+            var configurer = Substitute.For<Configurer>();
+            var context = new MockApplicationContext(configurer);
+            var optionsBuilder = new DbContextOptionsBuilder();
+            context.OnConfiguringProxy(optionsBuilder);
+            configurer.Received(1).Configure(Arg.Is(optionsBuilder));
         }
     }
 }

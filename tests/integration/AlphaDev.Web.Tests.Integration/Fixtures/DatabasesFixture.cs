@@ -8,14 +8,17 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         {
             DatabaseManager = new DatabaseManagerFixture();
 
-            BlogContextDatabaseFixture = new BlogContextDatabaseFixture(DatabaseManager.Get("default"));
+            var connection = DatabaseManager.Get("default");
+            BlogContextDatabaseFixture = new BlogContextDatabaseFixture(connection);
             ApplicationContextDatabaseFixture =
                 new ApplicationContextDatabaseFixture(DatabaseManager.Get("defaultSecurity"));
+            InformationContextDatabaseFixture = new InformationContextDatabaseFixture(connection);
         }
 
         public BlogContextDatabaseFixture BlogContextDatabaseFixture { get; }
         public ApplicationContextDatabaseFixture ApplicationContextDatabaseFixture { get; }
         public DatabaseManagerFixture DatabaseManager { get; }
+        public InformationContextDatabaseFixture InformationContextDatabaseFixture { get; }
 
         public void Dispose()
         {

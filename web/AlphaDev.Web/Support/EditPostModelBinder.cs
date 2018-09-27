@@ -8,20 +8,20 @@ namespace AlphaDev.Web.Support
 {
     public class EditPostModelBinder : PrefixModelBinder
     {
-        protected override void BindModel([NotNull] PrefixModelBindingContext context)
+        protected override void BindModel([NotNull] ModelBindingContext context)
         {
-            if (!DateTime.TryParse(context.GetValue("Created").FirstValue, out var created))
+            if (!DateTime.TryParse(context.ValueProvider.GetValue("Created").FirstValue, out var created))
             {
                 context.ModelState.AddModelError("NoCreatedDate", "No created date found");
                 context.Result = ModelBindingResult.Failed();
             }
             else
             {
-                var title = context.GetValue("Title").FirstValue;
-                var content = context.GetValue("Content").FirstValue;
+                var title = context.ValueProvider.GetValue("Title").FirstValue;
+                var content = context.ValueProvider.GetValue("Content").FirstValue;
 
                 var modified = DateTime
-                    .TryParse(context.GetValue("Modified").FirstValue, out var modDate)
+                    .TryParse(context.ValueProvider.GetValue("Modified").FirstValue, out var modDate)
                     .SomeWhen(isValidDate => isValidDate)
                     .Map(b => modDate);
 

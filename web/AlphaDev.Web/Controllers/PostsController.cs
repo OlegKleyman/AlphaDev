@@ -67,7 +67,7 @@ namespace AlphaDev.Web.Controllers
                 .MatchSomeContinue(blog => TempData["Model"] = JsonConvert.SerializeObject(new BlogViewModel(blog.Id,
                     blog.Title, blog.Content,
                     new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)), BlogViewModelConverter.Default))
-                .Map(blog => (ActionResult) RedirectToAction(nameof(Index), new {id = blog.Id}))
+                .Map(blog => (ActionResult) RedirectToAction(nameof(Index), new { id = blog.Id }))
                 .ValueOr(View(nameof(Create), post));
         }
 
@@ -78,7 +78,7 @@ namespace AlphaDev.Web.Controllers
         {
             _blogService.Delete(id);
 
-            return RedirectToAction(nameof(Index), new {id = (object) null});
+            return RedirectToAction(nameof(Index), new { id = (object) null });
         }
 
         [Authorize]

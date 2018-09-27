@@ -16,7 +16,7 @@ namespace AlphaDev.Web.Tests.Unit.Models
 
             var model = new EditPostViewModel(title, content, dates);
 
-            model.Should().BeEquivalentTo(new {Title = title, Content = content, Dates = dates});
+            model.Should().BeEquivalentTo(new { Title = title, Content = content, Dates = dates });
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace AlphaDev.Web.Tests.Unit.Models
 
             var model = new EditPostViewModel(title, content, default);
 
-            model.Should().BeEquivalentTo(new {Title = title, Content = content});
+            model.Should().BeEquivalentTo(new { Title = title, Content = content });
         }
     }
 }

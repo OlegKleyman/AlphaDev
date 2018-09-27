@@ -1,7 +1,6 @@
 ﻿using AlphaDev.Core;
-using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
-using AlphaDev.Core.Data.Contexts;
+using AlphaDev.Core.Data.Sql.Support;
 using AlphaDev.Web.Bootstrap.Extensions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
@@ -21,20 +20,20 @@ namespace AlphaDev.Web.Bootstrap
         public void ConfigureServices(IServiceCollection services)
         {
             var config = services.BuildServiceProvider().GetService<IConfiguration>();
-
-            services.AddSingleton<IPrefixGenerator, PrefixGenerator>();
-            services.AddScoped<IdentityDbContext<User>, ApplicationContext>(provider =>
-                new ApplicationContext(config.GetConnectionString("defaultSecurity")));
-            services.AddScoped<IBlogService, BlogService>();
-            services.AddScoped<IDateProvider, DateProvider>();
-            services.AddScoped<BlogContext, Core.Data.Sql.Contexts.BlogContext>(
-                provider => new Core.Data.Sql.Contexts.BlogContext(config.GetConnectionString("default")));
-            services.AddIdentity<User, IdentityRole>().AddDefaultTokenProviders()
-                .AddEntityFrameworkStores<IdentityDbContext<User>>();
-
-            services.ConfigureApplicationCookie(options => { options.LoginPath = "/account/login"; });
-
-            services.AddMvc();
+            var securitySqlConfigurer = new SqlConfigurer(config.GetConnectionString("defaultSecurity"));
+            var defaultSqlConfigurer = new SqlConfigurer(config.GetConnectionString("default"));
+            services.AddSingleton<IPrefixGenerator, PrefixGenerator>()
+                .AddServices()
+                .AddContexts(defaultSqlConfigurer)
+                .AddIdentityContexts(securitySqlConfigurer)
+                .AddContextFactories()
+                .AddSingleton<IDateProvider, DateProvider>()
+                .AddDesignTimeFactories(defaultSqlConfigurer)
+                .AddIdentity<User, IdentityRole>()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<IdentityDbContext<User>>().Services
+                .ConfigureApplicationCookie(options => { options.LoginPath = "/account/login"; })
+                .AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +45,7 @@ namespace AlphaDev.Web.Bootstrap
                 .UseStatusCodePagesWithReExecute("/default/error/{0}")
                 .UseAllDatabaseMigrations()
                 .UseDevelopmentBlogs()
+                .UseDevelopmentInformation()
                 .UseDevelopmentUser().GetAwaiter().GetResult()
                 .UseStaticFiles()
                 .UseAuthentication()

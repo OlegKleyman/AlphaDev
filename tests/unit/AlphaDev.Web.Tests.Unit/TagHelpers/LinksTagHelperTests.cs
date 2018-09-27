@@ -39,7 +39,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             helper.Context = new ViewContext
             {
-                ViewData = {["InlineStyles"] = new HashSet<string>(new[] {"test"})}
+                ViewData = { ["InlineStyles"] = new HashSet<string>(new[] { "test" }) }
             };
 
             helper.Process(null, tagHelperOutput);
@@ -61,7 +61,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             helper.Context = new ViewContext
             {
-                ViewData = {["AllLinks"] = new HashSet<string>(new[] {"test"})}
+                ViewData = { ["AllLinks"] = new HashSet<string>(new[] { "test" }) }
             };
 
             helper.Process(null, tagHelperOutput);

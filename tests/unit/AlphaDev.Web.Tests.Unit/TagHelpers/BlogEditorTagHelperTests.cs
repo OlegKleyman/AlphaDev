@@ -1,12 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AlphaDev.Core;
 using AlphaDev.Web.TagHelpers;
 using FluentAssertions;
-using JetBrains.Annotations;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -19,165 +14,91 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 {
     public class BlogEditorTagHelperTests
     {
-        [NotNull]
-        private BlogEditorTagHelper GetBlogEditorTagHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory,
-            IPrefixGenerator prefixGenerator)
-        {
-            return new BlogEditorTagHelper(htmlHelper, urlHelperFactory, prefixGenerator);
-        }
-
-        [NotNull]
-        private BlogEditorTagHelper GetBlogEditorTagHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory)
-        {
-            return GetBlogEditorTagHelper(htmlHelper, urlHelperFactory, Substitute.For<IPrefixGenerator>());
-        }
-
         [Fact]
-        public void ContextShouldGetAndSetViewContext()
-        {
-            var helper = GetBlogEditorTagHelper(default, default);
-
-            var context = new ViewContext();
-            helper.Context = context;
-            helper.Context.Should().Be(context);
-        }
-
-        [Fact]
-        public void ProcessShouldSetAllLinksWithDependentLinkUrls()
+        public void ConstructorShouldInitializeBlogEditorTagHelperWithTheCorrectEditorElementName()
         {
             var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
                 (_, __) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
-
-            var urlHelperFactory = Substitute.For<IUrlHelperFactory>();
-            var urlHelper = Substitute.For<IUrlHelper>();
-
-            var helper = GetBlogEditorTagHelper(Substitute.For<IHtmlHelper, IViewContextAware>(), urlHelperFactory);
-            helper.Context = new ViewContext();
-
-            urlHelperFactory.GetUrlHelper(helper.Context).Returns(urlHelper);
-            urlHelper.Content(Arg.Any<string>()).Returns(info => info[0].ToString().TrimStart('~'));
-
-            helper.Process(default, tagHelperOutput);
-
-            helper.Context.ViewData
-                .Should().ContainKey("AllLinks")
-                .WhichValue.Should().BeEquivalentTo(new HashSet<string>
-                {
-                    "/lib/bootstrap-markdown/css/bootstrap-markdown.min.css"
-                });
-        }
-
-        [Fact]
-        public void ProcessShouldSetAllScriptsWithDependentScriptUrls()
-        {
-            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
-                (_, __) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
-
-            var urlHelperFactory = Substitute.For<IUrlHelperFactory>();
-            var urlHelper = Substitute.For<IUrlHelper>();
-
-            var helper = GetBlogEditorTagHelper(Substitute.For<IHtmlHelper, IViewContextAware>(), urlHelperFactory);
-            helper.Context = new ViewContext();
-
-            urlHelperFactory.GetUrlHelper(helper.Context).Returns(urlHelper);
-            urlHelper.Content(Arg.Any<string>()).Returns(info => info[0].ToString().TrimStart('~'));
-
-            helper.Process(default, tagHelperOutput);
-
-            helper.Context.ViewData
-                .Should().ContainKey("AllScripts")
-                .WhichValue.Should().BeEquivalentTo(new HashSet<string>
-                {
-                    "/lib/marked/marked.min.js",
-                    "/lib/bootstrap-markdown/js/bootstrap-markdown.js"
-                });
-        }
-
-        [Fact]
-        public void ProcessShouldSetHtmlContentWithView()
-        {
-            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
-                (_, __) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
-
-            var urlHelperFactory = Substitute.For<IUrlHelperFactory>();
-            var urlHelper = Substitute.For<IUrlHelper>();
 
             var htmlHelper = Substitute.For<IHtmlHelper, IViewContextAware>();
-
-            var helper = GetBlogEditorTagHelper(htmlHelper, urlHelperFactory);
+            htmlHelper.Id("Content").Returns("Content");
+            var helper = new BlogEditorTagHelper(htmlHelper, Substitute.For<IUrlHelperFactory>(),
+                Substitute.For<IPrefixGenerator>());
             helper.Context = new ViewContext();
 
-            // ReSharper disable once Mvc.PartialViewNotResolved - it exists
-            htmlHelper.PartialAsync("_BlogEditor", Arg.Any<object>(), helper.Context.ViewData)
-                .Returns(Task.FromResult((IHtmlContent) new StringHtmlContent("test")));
-
-            urlHelperFactory.GetUrlHelper(helper.Context).Returns(urlHelper);
-
             helper.Process(default, tagHelperOutput);
-
-            var writer = new StringWriter();
-
-            tagHelperOutput.Content.WriteTo(writer, HtmlEncoder.Default);
-
-            writer.ToString().Should().BeEquivalentTo("test");
-        }
-
-        [Fact]
-        public void ProcessShouldSetHtmlFieldPrefix()
-        {
-            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
-                (_, __) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
-
-            var urlHelperFactory = Substitute.For<IUrlHelperFactory>();
-            var urlHelper = Substitute.For<IUrlHelper>();
-
-            var prefixGenerator = Substitute.For<IPrefixGenerator>();
-            prefixGenerator.Generate().Returns("test");
-
-            var helper = GetBlogEditorTagHelper(Substitute.For<IHtmlHelper, IViewContextAware>(), urlHelperFactory,
-                prefixGenerator);
-            helper.Context = new ViewContext();
-
-            urlHelperFactory.GetUrlHelper(helper.Context).Returns(urlHelper);
-
-            helper.Process(default, tagHelperOutput);
-
-            helper.Context.ViewData.TemplateInfo.HtmlFieldPrefix.Should().BeEquivalentTo("test");
-        }
-
-        [Fact]
-        public void ProcessShouldSetInlineScriptsWithDependentScriptUrls()
-        {
-            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
-                (_, __) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
-
-            var urlHelperFactory = Substitute.For<IUrlHelperFactory>();
-            var urlHelper = Substitute.For<IUrlHelper>();
-
-            var helper = GetBlogEditorTagHelper(Substitute.For<IHtmlHelper, IViewContextAware>(), urlHelperFactory);
-            helper.Context = new ViewContext();
-
-            urlHelperFactory.GetUrlHelper(helper.Context).Returns(urlHelper);
-
-            helper.Process(default, tagHelperOutput);
-
+            // ReSharper disable once Mvc.PartialViewNotResolved - no need for a valid view in unit test
+            // ReSharper disable once MustUseReturnValue - don't care about return value
             helper.Context.ViewData
                 .Should().ContainKey("InlineScripts")
-                .WhichValue.Should().BeEquivalentTo($@"<script type=""text/javascript"">
-                                                    $('#').markdown({{
+                .WhichValue.Should().BeEquivalentTo(@"<script type=""text/javascript"">
+                                                    $('#Content').markdown({
                                                                 savable: true,
-                                                        onChange: function() {{
+                                                        onChange: function() {
                                                                     Prism.highlightAll();
-                                                                }},
-                                                        onSave: function() {{
+                                                                },
+                                                        onSave: function() {
                                                             $('#').submit();
-                                                                }}
-                                                            }})
+                                                                }
+                                                            })
                                                 </script>");
         }
 
         [Fact]
-        public void ProcessShouldSetTagNameToAnEmptyString()
+        public void ConstructorShouldInitializeBlogEditorTagHelperWithTheCorrectViewName()
+        {
+            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
+                (_, __) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
+
+            var htmlHelper = Substitute.For<IHtmlHelper, IViewContextAware>();
+
+            var helper = new BlogEditorTagHelper(htmlHelper, Substitute.For<IUrlHelperFactory>(),
+                Substitute.For<IPrefixGenerator>());
+            helper.Context = new ViewContext();
+
+            helper.Process(default, tagHelperOutput);
+            // ReSharper disable once Mvc.PartialViewNotResolved - no need for a valid view in unit test
+            // ReSharper disable once MustUseReturnValue - don't care about return value
+            htmlHelper.Received(1).PartialAsync("_BlogEditor", Arg.Any<object>(), helper.Context.ViewData);
+        }
+
+        [Fact]
+        public void ConstructorShouldInitializeBlogEditorTagHelperWithTheHtmlHelperArgument()
+        {
+            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
+                (_, __) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
+
+            var htmlHelper = Substitute.For<IHtmlHelper, IViewContextAware>();
+
+            var helper = new BlogEditorTagHelper(htmlHelper, Substitute.For<IUrlHelperFactory>(),
+                Substitute.For<IPrefixGenerator>());
+            helper.Context = new ViewContext();
+
+            helper.Process(default, tagHelperOutput);
+            // ReSharper disable once Mvc.PartialViewNotResolved - no need for a valid view in unit test
+            // ReSharper disable once MustUseReturnValue - don't care about return value
+            htmlHelper.Received(1).PartialAsync(Arg.Any<string>(), Arg.Any<object>(), helper.Context.ViewData);
+        }
+
+        [Fact]
+        public void ConstructorShouldInitializeBlogEditorTagHelperWithThePrefixGeneratorResult()
+        {
+            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
+                (_, __) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
+
+            var prefixGenerator = Substitute.For<IPrefixGenerator>();
+            const string prefix = "test";
+            prefixGenerator.Generate().Returns(prefix);
+            var helper = new BlogEditorTagHelper(Substitute.For<IHtmlHelper, IViewContextAware>(),
+                Substitute.For<IUrlHelperFactory>(), prefixGenerator);
+            helper.Context = new ViewContext();
+            helper.Process(default, tagHelperOutput);
+
+            helper.Context.ViewData.TemplateInfo.HtmlFieldPrefix.Should().BeEquivalentTo(prefix);
+        }
+
+        [Fact]
+        public void ConstructorShouldInitializeBlogEditorTagHelperWithTheUrlHelperFactoryArgument()
         {
             var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
                 (_, __) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
@@ -185,16 +106,12 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             var urlHelperFactory = Substitute.For<IUrlHelperFactory>();
             var urlHelper = Substitute.For<IUrlHelper>();
 
-            var helper = GetBlogEditorTagHelper(Substitute.For<IHtmlHelper, IViewContextAware>(), urlHelperFactory);
+            var helper = new BlogEditorTagHelper(Substitute.For<IHtmlHelper, IViewContextAware>(), urlHelperFactory,
+                Substitute.For<IPrefixGenerator>());
             helper.Context = new ViewContext();
-
             urlHelperFactory.GetUrlHelper(helper.Context).Returns(urlHelper);
-
-            tagHelperOutput.TagName = "test";
-
             helper.Process(default, tagHelperOutput);
-
-            tagHelperOutput.TagName.Should().BeEmpty();
+            urlHelper.Received().Content(Arg.Any<string>());
         }
     }
 }

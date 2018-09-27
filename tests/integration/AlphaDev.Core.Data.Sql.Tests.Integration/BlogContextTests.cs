@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Sql.Contexts;
+using AlphaDev.Core.Data.Sql.Support;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
@@ -28,9 +29,10 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
                 };
 
             _connectionString = connectionBuilder.ToString();
-            var options = optionsBuilder.UseSqlServer(_connectionString).Options;
+            _configurer = new SqlConfigurer(connectionBuilder.ToString());
+            _configurer.Configure(optionsBuilder);
 
-            using (var context = new DbContext(options))
+            using (var context = new DbContext(optionsBuilder.Options))
             {
                 context.Database.EnsureCreated();
             }
@@ -48,6 +50,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
         }
 
         private readonly string _connectionString;
+        private readonly SqlConfigurer _configurer;
 
         private void SeedBlogs()
         {
@@ -66,7 +69,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
         [NotNull]
         private BlogContext GetBlogContext()
         {
-            var context = new BlogContext(_connectionString);
+            var context = new BlogContext(_configurer);
             context.Database.Migrate();
 
             SeedBlogs();
