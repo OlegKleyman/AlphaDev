@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Text.RegularExpressions;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Web.Tests.Integration.Extensions;
 using AlphaDev.Web.Tests.Integration.Fixtures;
@@ -17,7 +16,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
     {
         private string _aboutValue;
 
-        public AboutEdit_feature(ITestOutputHelper output, [NotNull] DatabaseWebServerFixture databaseWebServerFixture) :
+        public AboutEdit_feature(ITestOutputHelper output,
+            [NotNull] DatabaseWebServerFixture databaseWebServerFixture) :
             base(output, databaseWebServerFixture)
         {
         }
@@ -51,7 +51,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void And_I_entered_markdown_content()
         {
-            var about = (About)CommonSteps.Data["AddedAbout"];
+            var about = (About) CommonSteps.Data["AddedAbout"];
             SiteTester.About.Edit.Content = _aboutValue = about.Value + "\r\n\r\n```\r\ntest\r\n```";
         }
 

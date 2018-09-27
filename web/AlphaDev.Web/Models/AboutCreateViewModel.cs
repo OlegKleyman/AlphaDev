@@ -9,7 +9,6 @@ namespace AlphaDev.Web.Models
     {
         public AboutCreateViewModel()
         {
-            
         }
 
         public AboutCreateViewModel(string value)
@@ -17,7 +16,6 @@ namespace AlphaDev.Web.Models
             Value = value;
         }
 
-        [Required]
-        public string Value { get; set; }
+        [Required] public string Value { get; set; }
     }
 }

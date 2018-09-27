@@ -10,9 +10,6 @@ using AlphaDev.Test.Core;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NSubstitute;
 using Optional;
 using Xunit;
@@ -21,38 +18,71 @@ namespace AlphaDev.Core.Tests.Unit
 {
     public class AboutServiceTests
     {
-        [Fact]
-        public void GetAboutDetailsShouldReturnAboutDetails()
+        [NotNull]
+        private AboutService<InformationContext> GetInformationService(InformationContext context)
         {
-            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
-            context.Abouts = new[] {new About {Value = "test"}}.ToMockDbSet();
-            var service = GetInformationService(context);
-            service.GetAboutDetails().Should().BeEquivalentTo(Option.Some("test"));
+            var contextBuilder = Substitute.For<IContextFactory<InformationContext>>();
+            contextBuilder.Create().Returns(context);
+            return new AboutService<InformationContext>(contextBuilder);
         }
 
         [Fact]
-        public void GetAboutDetailsShouldReturnNoneWhenAboutIsNull()
+        public void CreateShouldSaveAboutToDataStore()
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
-            context.Abouts = Enumerable.Empty<About>().ToMockDbSet();
+            var abouts = new List<About>();
+            context.Abouts = abouts.ToMockDbSet();
+            context.Abouts.Add(Arg.Any<About>()).Returns(info =>
+            {
+                var about = (About) info[0];
+                abouts.Add(about);
+                return about.ToMockEntityEntry();
+            });
+            context.SaveChanges().Returns(1);
             var service = GetInformationService(context);
-            service.GetAboutDetails().Should().BeEquivalentTo(Option.None<string>());
+            service.Create("test");
+            context.Abouts.Should().HaveCount(1).And.BeEquivalentTo(new { Value = "test" });
         }
 
         [Fact]
-        public void GetAboutDetailsShouldReturnNoneWhenAboutValueIsNull()
+        public void CreateShouldSaveToDataStore()
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
-            context.Abouts = new[]{new About()}.ToMockDbSet();
+            context.Abouts = new About[0].ToMockDbSet();
+            var entry = (EntityEntry<About>) FormatterServices.GetUninitializedObject(typeof(EntityEntry<About>));
+            context.Abouts.Add(Arg.Any<About>()).Returns(entry);
+            context.SaveChanges().Returns(1);
             var service = GetInformationService(context);
-            service.GetAboutDetails().Should().BeEquivalentTo(Option.None<string>());
+            service.Create("test");
+            context.Received(1).SaveChanges();
+        }
+
+        [Fact]
+        public void CreateShouldThrowInvalidOperationExceptionWhenUnableSavingReturnsUnexpectedSaveCount()
+        {
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
+            context.Abouts = new About[0].ToMockDbSet();
+            context.Abouts.Add(Arg.Any<About>()).Returns(new About().ToMockEntityEntry());
+            var service = GetInformationService(context);
+            Action create = () => service.Create(default);
+            create.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count.");
+        }
+
+        [Fact]
+        public void CreateShouldThrowInvalidOperationExceptionWhenUnableToRetrieveAddedEntityDetails()
+        {
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
+            context.Abouts.Add(Arg.Any<About>()).Returns((EntityEntry<About>) null);
+            var service = GetInformationService(context);
+            Action create = () => service.Create(default);
+            create.Should().Throw<InvalidOperationException>().WithMessage("Unable to retrieve added entry.");
         }
 
         [Fact]
         public void EditShouldEditAboutValue()
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
-            var abouts = new[] {new About()}.ToMockDbSet();
+            var abouts = new[] { new About() }.ToMockDbSet();
             context.Abouts = abouts;
             context.SaveChanges().Returns(1);
             var service = GetInformationService(context);
@@ -65,7 +95,7 @@ namespace AlphaDev.Core.Tests.Unit
         public void EditShouldSaveNewValueToDataStore()
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
-            var abouts = new[] {new About()}.ToMockDbSet();
+            var abouts = new[] { new About() }.ToMockDbSet();
             context.Abouts = abouts;
             context.SaveChanges().Returns(1);
             var service = GetInformationService(context);
@@ -97,63 +127,30 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void CreateShouldSaveToDataStore()
+        public void GetAboutDetailsShouldReturnAboutDetails()
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
-            context.Abouts = new About[0].ToMockDbSet();
-            var entry = (EntityEntry<About>) FormatterServices.GetUninitializedObject(typeof(EntityEntry<About>));
-            context.Abouts.Add(Arg.Any<About>()).Returns(entry);
-            context.SaveChanges().Returns(1);
+            context.Abouts = new[] { new About { Value = "test" } }.ToMockDbSet();
             var service = GetInformationService(context);
-            service.Create("test");
-            context.Received(1).SaveChanges();
+            service.GetAboutDetails().Should().BeEquivalentTo(Option.Some("test"));
         }
 
         [Fact]
-        public void CreateShouldSaveAboutToDataStore()
+        public void GetAboutDetailsShouldReturnNoneWhenAboutIsNull()
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
-            var abouts = new List<About>();
-            context.Abouts = abouts.ToMockDbSet();
-            context.Abouts.Add(Arg.Any<About>()).Returns(info =>
-            {
-                var about = (About) info[0];
-                abouts.Add(about);
-                return about.ToMockEntityEntry();
-            });
-            context.SaveChanges().Returns(1);
+            context.Abouts = Enumerable.Empty<About>().ToMockDbSet();
             var service = GetInformationService(context);
-            service.Create("test");
-            context.Abouts.Should().HaveCount(1).And.BeEquivalentTo(new {Value = "test"});
+            service.GetAboutDetails().Should().BeEquivalentTo(Option.None<string>());
         }
 
         [Fact]
-        public void CreateShouldThrowInvalidOperationExceptionWhenUnableToRetrieveAddedEntityDetails()
+        public void GetAboutDetailsShouldReturnNoneWhenAboutValueIsNull()
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
-            context.Abouts.Add(Arg.Any<About>()).Returns((EntityEntry<About>) null);
+            context.Abouts = new[] { new About() }.ToMockDbSet();
             var service = GetInformationService(context);
-            Action create = () => service.Create(default);
-            create.Should().Throw<InvalidOperationException>().WithMessage("Unable to retrieve added entry.");
-        }
-
-        [Fact]
-        public void CreateShouldThrowInvalidOperationExceptionWhenUnableSavingReturnsUnexpectedSaveCount()
-        {
-            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
-            context.Abouts = new About[0].ToMockDbSet();
-            context.Abouts.Add(Arg.Any<About>()).Returns(new About().ToMockEntityEntry());
-            var service = GetInformationService(context);
-            Action create = () => service.Create(default);
-            create.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count.");
-        }
-
-        [NotNull]
-        private AboutService<InformationContext> GetInformationService(InformationContext context)
-        {
-            var contextBuilder = Substitute.For<IContextFactory<InformationContext>>();
-            contextBuilder.Create().Returns(context);
-            return new AboutService<InformationContext>(contextBuilder);
+            service.GetAboutDetails().Should().BeEquivalentTo(Option.None<string>());
         }
     }
 }

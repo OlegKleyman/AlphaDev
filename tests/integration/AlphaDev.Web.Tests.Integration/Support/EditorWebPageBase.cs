@@ -10,7 +10,8 @@ namespace AlphaDev.Web.Tests.Integration.Support
     {
         private readonly string _editorElement;
 
-        public EditorWebPageBase(IWebDriver driver, Uri baseUrl, [CanBeNull] string editorElement) : base(driver, baseUrl)
+        public EditorWebPageBase(IWebDriver driver, Uri baseUrl, [CanBeNull] string editorElement) : base(driver,
+            baseUrl)
         {
             if (!string.IsNullOrWhiteSpace(editorElement)) _editorElement = $"_{editorElement}";
         }

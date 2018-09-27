@@ -29,7 +29,8 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
         [NotNull]
         private EditorTagHelper GetEditorTagHelperHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory)
         {
-            return GetEditorTagHelperHelper(htmlHelper, urlHelperFactory, new EditorView("testView", "testPrefix", "testElementName"));
+            return GetEditorTagHelperHelper(htmlHelper, urlHelperFactory,
+                new EditorView("testView", "testPrefix", "testElementName"));
         }
 
         [Fact]
@@ -120,7 +121,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             // ReSharper disable once Mvc.PartialViewNotResolved - no need for a valid view in unit test
             htmlHelper.PartialAsync(editorView.Name, Arg.Any<object>(), helper.Context.ViewData)
-                .Returns(Task.FromResult((IHtmlContent)new StringHtmlContent("test")));
+                .Returns(Task.FromResult((IHtmlContent) new StringHtmlContent("test")));
 
             urlHelperFactory.GetUrlHelper(helper.Context).Returns(urlHelper);
 

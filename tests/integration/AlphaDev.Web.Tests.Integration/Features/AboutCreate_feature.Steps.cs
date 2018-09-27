@@ -1,12 +1,8 @@
 ﻿using System.Linq;
-using System.Text.RegularExpressions;
-using AlphaDev.Core.Data.Entities;
 using AlphaDev.Web.Tests.Integration.Extensions;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using FluentAssertions;
 using JetBrains.Annotations;
-using LightBDD.Framework;
-using LightBDD.Framework.Scenarios.Extended;
 using Markdig;
 using Microsoft.EntityFrameworkCore;
 using Xunit.Abstractions;
@@ -18,7 +14,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
     {
         private string _aboutValue;
 
-        public AboutCreate_feature(ITestOutputHelper output, [NotNull] DatabaseWebServerFixture databaseWebServerFixture) :
+        public AboutCreate_feature(ITestOutputHelper output,
+            [NotNull] DatabaseWebServerFixture databaseWebServerFixture) :
             base(output, databaseWebServerFixture)
         {
         }

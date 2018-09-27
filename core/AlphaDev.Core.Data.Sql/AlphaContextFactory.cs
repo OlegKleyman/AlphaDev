@@ -26,7 +26,7 @@ namespace AlphaDev.Core.Data.Sql
             if (type.IsAbstract)
                 throw new InvalidOperationException($"Unable to instantiate {type.FullName} because it is abstract.");
 
-            if (type.GetConstructor(new[] {configurerType}) == null)
+            if (type.GetConstructor(new[] { configurerType }) == null)
                 throw new MissingMethodException(
                     $"Unable to find a public constructor with a single {configurerType.FullName} argument.");
 

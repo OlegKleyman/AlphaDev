@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
-namespace AlphaDev.Web.Support
+﻿namespace AlphaDev.Web.Support
 {
     public class EditorView
     {

@@ -1,12 +1,9 @@
-﻿using System;
-using AlphaDev.Web.Models;
-using AlphaDev.Web.Support;
+﻿using AlphaDev.Web.Support;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
 using NSubstitute;
-using Optional;
 using Xunit;
 
 namespace AlphaDev.Web.Tests.Unit.Support
@@ -40,6 +37,19 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [Fact]
+        public void BindModelShouldSetModelWithValueEmptyWhenNoValueExists()
+        {
+            var binder = GetAboutEditModelBinder();
+
+            var valueProvider = Substitute.For<IValueProvider>();
+
+            var context = GetContext(valueProvider);
+
+            binder.BindModelMock(context);
+            context.Result.Model.Should().BeEquivalentTo(new { Value = string.Empty });
+        }
+
+        [Fact]
         public void BindModelShouldSetModelWithWithValue()
         {
             var binder = GetAboutEditModelBinder();
@@ -51,20 +61,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
             var context = GetContext(valueProvider);
 
             binder.BindModelMock(context);
-            context.Result.Model.Should().BeEquivalentTo(new {Value = "value"});
-        }
-
-        [Fact]
-        public void BindModelShouldSetModelWithValueEmptyWhenNoValueExists()
-        {
-            var binder = GetAboutEditModelBinder();
-
-            var valueProvider = Substitute.For<IValueProvider>();
-
-            var context = GetContext(valueProvider);
-
-            binder.BindModelMock(context);
-            context.Result.Model.Should().BeEquivalentTo(new {Value = string.Empty});
+            context.Result.Model.Should().BeEquivalentTo(new { Value = "value" });
         }
     }
 }

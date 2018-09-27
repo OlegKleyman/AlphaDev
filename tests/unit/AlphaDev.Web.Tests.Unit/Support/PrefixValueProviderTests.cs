@@ -10,6 +10,12 @@ namespace AlphaDev.Web.Tests.Unit.Support
 {
     public class PrefixValueProviderTests
     {
+        [NotNull]
+        private PrefixValueProvider GetPrefixValueProvider([NotNull] IValueProvider provider, string prefix)
+        {
+            return new PrefixValueProvider(provider, prefix);
+        }
+
         [Fact]
         public void ContainsPrefixShouldReturnTrue()
         {
@@ -32,12 +38,6 @@ namespace AlphaDev.Web.Tests.Unit.Support
             dependencyProvider.GetValue("prefixtest").Returns(new ValueProviderResult(new StringValues("value")));
             var provider = GetPrefixValueProvider(dependencyProvider, "prefix");
             provider.GetValue("test").FirstValue.Should().BeEquivalentTo("value");
-        }
-
-        [NotNull]
-        private PrefixValueProvider GetPrefixValueProvider([NotNull] IValueProvider provider, string prefix)
-        {
-            return new PrefixValueProvider(provider, prefix);
         }
     }
 }

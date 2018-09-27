@@ -11,7 +11,7 @@ namespace AlphaDev.Web.Tests.Unit.Models
         public void ConstructorShouldInitializeAboutEditorViewModelWithArguments()
         {
             const string value = "value";
-            new AboutEditViewModel(value).Should().BeEquivalentTo(new {Value = value});
+            new AboutEditViewModel(value).Should().BeEquivalentTo(new { Value = value });
         }
 
         [Fact]

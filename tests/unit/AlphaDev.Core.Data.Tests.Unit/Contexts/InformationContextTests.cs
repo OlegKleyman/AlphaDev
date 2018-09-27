@@ -11,13 +11,18 @@ namespace AlphaDev.Core.Data.Tests.Unit.Contexts
 {
     public class InformationContextTests
     {
+        private InformationContext GetInformationContext()
+        {
+            return Substitute.For<InformationContext>((Configurer) default);
+        }
+
         [Fact]
         public void AboutShouldReturnAboutWhenExists()
         {
             var context = GetInformationContext();
-            var abouts = new[] {new About {Id = true, Value = "value"}}.ToMockDbSet();
+            var abouts = new[] { new About { Id = true, Value = "value" } }.ToMockDbSet();
             context.Abouts = abouts;
-            context.About.Should().BeEquivalentTo(new {Id = 1, Value = "value"});
+            context.About.Should().BeEquivalentTo(new { Id = 1, Value = "value" });
         }
 
         [Fact]
@@ -33,15 +38,10 @@ namespace AlphaDev.Core.Data.Tests.Unit.Contexts
         public void AboutShouldThrowInvalidOperationExceptionWhenMultipleAboutsAreFound()
         {
             var context = GetInformationContext();
-            var abouts = new[] {default(About), default}.ToMockDbSet();
+            var abouts = new[] { default(About), default }.ToMockDbSet();
             context.Abouts = abouts;
             Action about = () => context.About.EmptyCall();
             about.Should().Throw<InvalidOperationException>().WithMessage("Sequence contains more than one element");
-        }
-
-        private InformationContext GetInformationContext()
-        {
-            return Substitute.For<InformationContext>((Configurer)default);
         }
     }
 }

@@ -5,11 +5,11 @@ using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Core.Data.Sql;
 using AlphaDev.Core.Data.Sql.Contexts;
-using AlphaDev.Core.Data.Sql.Support;
 using AlphaDev.Core.Data.Support;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.DependencyInjection;
+using BlogContext = AlphaDev.Core.Data.Contexts.BlogContext;
 
 namespace AlphaDev.Web.Bootstrap.Extensions
 {
@@ -25,7 +25,7 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         public static IServiceCollection AddContexts(this IServiceCollection serviceCollection,
             Configurer configurer)
         {
-            serviceCollection.AddScoped<Core.Data.Contexts.BlogContext, BlogContext>(
+            serviceCollection.AddScoped<BlogContext, Core.Data.Sql.Contexts.BlogContext>(
                     provider => new BlogContextFactory(configurer).CreateDbContext())
                 .AddScoped<Core.Data.Contexts.InformationContext, InformationContext>(
                     provider => new InformationContextFactory(configurer).CreateDbContext());

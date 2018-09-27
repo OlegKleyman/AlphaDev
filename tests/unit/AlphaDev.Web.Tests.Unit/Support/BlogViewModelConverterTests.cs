@@ -89,7 +89,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
                     },
                     new object[]
                     {
-                        Serialize(new {Id = default(int), Dates = new { }}), "Created", "DateTime"
+                        Serialize(new { Id = default(int), Dates = new { } }), "Created", "DateTime"
                     }
                 };
 
@@ -98,11 +98,11 @@ namespace AlphaDev.Web.Tests.Unit.Support
                 {
                     new object[]
                     {
-                        Serialize(new {Id = default(object)}), "Id", "Int32"
+                        Serialize(new { Id = default(object) }), "Id", "Int32"
                     },
                     new object[]
                     {
-                        Serialize(new {Id = default(int), Dates = new {Created = default(object)}}), "Created",
+                        Serialize(new { Id = default(int), Dates = new { Created = default(object) } }), "Created",
                         "DateTime"
                     }
                 };
@@ -162,7 +162,11 @@ namespace AlphaDev.Web.Tests.Unit.Support
                     Id = 0,
                     Title = "title",
                     Content = "content",
-                    Dates = new {Created = new DateTime(2018, 1, 1), Modified = Option.Some(new DateTime(2018, 2, 18))}
+                    Dates = new
+                    {
+                        Created = new DateTime(2018, 1, 1),
+                        Modified = Option.Some(new DateTime(2018, 2, 18))
+                    }
                 });
         }
 
@@ -182,7 +186,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
                     Id = 0,
                     Title = "title",
                     Content = "content",
-                    Dates = new {Created = new DateTime(2018, 1, 1), Modified = Option.None<DateTime>()}
+                    Dates = new { Created = new DateTime(2018, 1, 1), Modified = Option.None<DateTime>() }
                 });
         }
 
@@ -202,7 +206,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
                     Id = 0,
                     Title = "title",
                     Content = "content",
-                    Dates = new {Created = new DateTime(2018, 1, 1), Modified = Option.None<DateTime>()}
+                    Dates = new { Created = new DateTime(2018, 1, 1), Modified = Option.None<DateTime>() }
                 });
         }
 
@@ -210,7 +214,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         public void ReadJsonShouldThrowArgumentExceptionWhenDatesFieldIsMissing()
         {
             var converter = GetBlogViewModelConverter();
-            var reader = new StringReader(JsonConvert.SerializeObject(new {Id = default(int)}));
+            var reader = new StringReader(JsonConvert.SerializeObject(new { Id = default(int) }));
 
             Action readJson = () => converter.ReadJson(new JsonTextReader(reader), null, null, null);
 

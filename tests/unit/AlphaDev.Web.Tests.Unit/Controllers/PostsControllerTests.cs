@@ -139,7 +139,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var post = new EditPostViewModel("title", "content", default);
             controller.Edit(1, post);
 
-            editArguments.Should().BeEquivalentTo(new {post.Content, post.Title});
+            editArguments.Should().BeEquivalentTo(new { post.Content, post.Title });
         }
 
         [Fact]
@@ -282,12 +282,15 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
 
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetAll().Returns(new[] {blog});
+            blogService.GetAll().Returns(new[] { blog });
 
             var controller = GetPostsController(blogService);
 
             controller.Index().Model.Should().BeEquivalentTo(
-                new[] {new {blog.Id, blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}}});
+                new[]
+                {
+                    new { blog.Id, blog.Title, blog.Content, Dates = new { blog.Dates.Created, blog.Dates.Modified } }
+                });
         }
 
         [Fact]
@@ -305,7 +308,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetPostsController(blogService);
 
             controller.Index(id).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(
-                new {blog.Id, blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}});
+                new { blog.Id, blog.Title, blog.Content, Dates = new { blog.Dates.Created, blog.Dates.Modified } });
         }
 
         [Fact]
@@ -331,7 +334,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             };
 
             controller.Index(default).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(
-                new {blog.Id, blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}});
+                new { blog.Id, blog.Title, blog.Content, Dates = new { blog.Dates.Created, blog.Dates.Modified } });
         }
 
         [Fact]

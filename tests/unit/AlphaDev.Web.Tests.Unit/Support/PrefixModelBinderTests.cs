@@ -66,6 +66,16 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [Fact]
+        public void BindModelAsyncShouldReturnCompletedTask()
+        {
+            var binder = GetPrefixModelBinder();
+
+            var context = GetContext();
+            context.ValueProvider = Substitute.For<IValueProvider>();
+            binder.BindModelAsync(context).Should().Be(Task.CompletedTask);
+        }
+
+        [Fact]
         public void BindModelAsyncShouldThrowArgumentExceptionWhenValueProviderIsNull()
         {
             var binder = GetPrefixModelBinder();
@@ -75,16 +85,6 @@ namespace AlphaDev.Web.Tests.Unit.Support
                 .WithMessage("ValueProvider cannot be null.\r\nParameter name: bindingContext").Which
                 .ParamName.Should()
                 .BeEquivalentTo("bindingContext");
-        }
-
-        [Fact]
-        public void BindModelAsyncShouldReturnCompletedTask()
-        {
-            var binder = GetPrefixModelBinder();
-
-            var context = GetContext();
-            context.ValueProvider = Substitute.For<IValueProvider>();
-            binder.BindModelAsync(context).Should().Be(Task.CompletedTask);
         }
 
         [Fact]

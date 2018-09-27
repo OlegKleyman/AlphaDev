@@ -1,11 +1,8 @@
-﻿using System.Linq;
-using AlphaDev.Core.Data.Entities;
-using AlphaDev.Core.Data.Sql.Contexts;
+﻿using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Support;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using NSubstitute;
 using Xunit;
@@ -14,28 +11,6 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
 {
     public class InformationContextTests
     {
-        [Fact]
-        public void OnModelCreatingShouldConfigureModelWithTheCorrectConfiguration()
-        {
-            var context = GetInformationContext();
-
-            var modelBuilder = new ModelBuilder(new ConventionSet());
-            context.OnModelCreatingProxy(modelBuilder);
-
-            var informationMetaData = modelBuilder.Entity<About>().Metadata;
-            new
-            {
-                PrimaryKeyName = informationMetaData.FindPrimaryKey().Properties[0].Name,
-                PrimaryKeyType = informationMetaData.FindPrimaryKey().Properties[0].ClrType,
-                ValueNullable = informationMetaData.FindProperty("Value").IsNullable
-            }.Should().BeEquivalentTo(new
-            {
-                PrimaryKeyName = "Id",
-                PrimaryKeyType = typeof(bool),
-                ValueNullable = false
-            });
-        }
-
         [NotNull]
         private static MockInformationContext GetInformationContext()
         {
@@ -56,6 +31,28 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
             var builder = new DbContextOptionsBuilder();
             context.OnConfiguringProxy(builder);
             configurer.Received(1).Configure(builder);
+        }
+
+        [Fact]
+        public void OnModelCreatingShouldConfigureModelWithTheCorrectConfiguration()
+        {
+            var context = GetInformationContext();
+
+            var modelBuilder = new ModelBuilder(new ConventionSet());
+            context.OnModelCreatingProxy(modelBuilder);
+
+            var informationMetaData = modelBuilder.Entity<About>().Metadata;
+            new
+            {
+                PrimaryKeyName = informationMetaData.FindPrimaryKey().Properties[0].Name,
+                PrimaryKeyType = informationMetaData.FindPrimaryKey().Properties[0].ClrType,
+                ValueNullable = informationMetaData.FindProperty("Value").IsNullable
+            }.Should().BeEquivalentTo(new
+            {
+                PrimaryKeyName = "Id",
+                PrimaryKeyType = typeof(bool),
+                ValueNullable = false
+            });
         }
     }
 }

@@ -30,7 +30,8 @@ I want to have a web page where I can view it")]
         }
 
         [Scenario]
-        public void About_page_should_display_no_details_when_there_is_no_about_information_in_the_database_and_not_logged_in()
+        public void
+            About_page_should_display_no_details_when_there_is_no_about_information_in_the_database_and_not_logged_in()
         {
             Runner.RunScenario(
                 CommonSteps.Given_i_am_a_user,
@@ -40,7 +41,8 @@ I want to have a web page where I can view it")]
         }
 
         [Scenario]
-        public void About_page_should_redirect_to_create_about_page_when_there_is_no_about_information_in_the_database_and_logged_in()
+        public void
+            About_page_should_redirect_to_create_about_page_when_there_is_no_about_information_in_the_database_and_logged_in()
         {
             Runner.RunScenario(
                 CommonSteps.Given_I_have_logged_in,

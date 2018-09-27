@@ -1,9 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AlphaDev.Core;
 using AlphaDev.Web.TagHelpers;
 using FluentAssertions;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -17,22 +15,6 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
     public class SimpleEditorTagHelperTests
     {
         [Fact]
-        public void ConstructorShouldInitializeSimpleEditorTagHelperWithThePrefixGeneratorResult()
-        {
-            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
-                (_, __) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
-
-            var prefixGenerator = Substitute.For<IPrefixGenerator>();
-            const string prefix = "test";
-            prefixGenerator.Generate().Returns(prefix);
-            var helper = new SimpleEditorTagHelper(Substitute.For<IHtmlHelper, IViewContextAware>(), Substitute.For<IUrlHelperFactory>(), prefixGenerator);
-            helper.Context = new ViewContext();
-            helper.Process(default, tagHelperOutput);
-
-            helper.Context.ViewData.TemplateInfo.HtmlFieldPrefix.Should().BeEquivalentTo(prefix);
-        }
-
-        [Fact]
         public void ConstructorShouldInitializeSimpleEditorTagHelperWithTheCorrectEditorElementName()
         {
             var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
@@ -40,7 +22,8 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             var htmlHelper = Substitute.For<IHtmlHelper, IViewContextAware>();
             htmlHelper.Id(Arg.Any<string>()).Returns(info => info[0].ToString());
-            var helper = new SimpleEditorTagHelper(htmlHelper, Substitute.For<IUrlHelperFactory>(), Substitute.For<IPrefixGenerator>());
+            var helper = new SimpleEditorTagHelper(htmlHelper, Substitute.For<IUrlHelperFactory>(),
+                Substitute.For<IPrefixGenerator>());
             helper.Context = new ViewContext();
 
             helper.Process(default, tagHelperOutput);
@@ -69,7 +52,8 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             var htmlHelper = Substitute.For<IHtmlHelper, IViewContextAware>();
 
-            var helper = new SimpleEditorTagHelper(htmlHelper, Substitute.For<IUrlHelperFactory>(), Substitute.For<IPrefixGenerator>());
+            var helper = new SimpleEditorTagHelper(htmlHelper, Substitute.For<IUrlHelperFactory>(),
+                Substitute.For<IPrefixGenerator>());
             helper.Context = new ViewContext();
 
             helper.Process(default, tagHelperOutput);
@@ -86,13 +70,31 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             var htmlHelper = Substitute.For<IHtmlHelper, IViewContextAware>();
 
-            var helper = new SimpleEditorTagHelper(htmlHelper, Substitute.For<IUrlHelperFactory>(), Substitute.For<IPrefixGenerator>());
+            var helper = new SimpleEditorTagHelper(htmlHelper, Substitute.For<IUrlHelperFactory>(),
+                Substitute.For<IPrefixGenerator>());
             helper.Context = new ViewContext();
 
             helper.Process(default, tagHelperOutput);
             // ReSharper disable once Mvc.PartialViewNotResolved - no need for a valid view in unit test
             // ReSharper disable once MustUseReturnValue - don't care about return value
             htmlHelper.Received(1).PartialAsync(Arg.Any<string>(), Arg.Any<object>(), helper.Context.ViewData);
+        }
+
+        [Fact]
+        public void ConstructorShouldInitializeSimpleEditorTagHelperWithThePrefixGeneratorResult()
+        {
+            var tagHelperOutput = new TagHelperOutput(default, new TagHelperAttributeList(),
+                (_, __) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()));
+
+            var prefixGenerator = Substitute.For<IPrefixGenerator>();
+            const string prefix = "test";
+            prefixGenerator.Generate().Returns(prefix);
+            var helper = new SimpleEditorTagHelper(Substitute.For<IHtmlHelper, IViewContextAware>(),
+                Substitute.For<IUrlHelperFactory>(), prefixGenerator);
+            helper.Context = new ViewContext();
+            helper.Process(default, tagHelperOutput);
+
+            helper.Context.ViewData.TemplateInfo.HtmlFieldPrefix.Should().BeEquivalentTo(prefix);
         }
 
         [Fact]
@@ -104,10 +106,12 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             var urlHelperFactory = Substitute.For<IUrlHelperFactory>();
             var urlHelper = Substitute.For<IUrlHelper>();
 
-            var helper = new SimpleEditorTagHelper(Substitute.For<IHtmlHelper, IViewContextAware>(), urlHelperFactory, Substitute.For<IPrefixGenerator>());
+            var helper = new SimpleEditorTagHelper(Substitute.For<IHtmlHelper, IViewContextAware>(), urlHelperFactory,
+                Substitute.For<IPrefixGenerator>());
             helper.Context = new ViewContext();
             urlHelperFactory.GetUrlHelper(helper.Context).Returns(urlHelper);
             helper.Process(default, tagHelperOutput);
-            urlHelper.Received().Content(Arg.Any<string>());}
+            urlHelper.Received().Content(Arg.Any<string>());
+        }
     }
 }

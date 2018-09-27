@@ -50,7 +50,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
             binder.BindModelMock(context);
 
-            context.Result.Model.Should().BeEquivalentTo(new {Title = "title", Content = "content"});
+            context.Result.Model.Should().BeEquivalentTo(new { Title = "title", Content = "content" });
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
             binder.BindModelMock(context);
 
-            context.Result.Model.Should().BeEquivalentTo(new {Title = string.Empty, Content = string.Empty});
+            context.Result.Model.Should().BeEquivalentTo(new { Title = string.Empty, Content = string.Empty });
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
             var context = GetContext(default);
 
             binder.BindModelMock(context);
-            context.Result.Model.Should().BeEquivalentTo(new {Title = string.Empty, Content = string.Empty});
+            context.Result.Model.Should().BeEquivalentTo(new { Title = string.Empty, Content = string.Empty });
         }
     }
 }

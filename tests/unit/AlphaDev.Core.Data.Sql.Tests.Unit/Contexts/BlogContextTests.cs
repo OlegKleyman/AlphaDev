@@ -12,6 +12,28 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
 {
     public class BlogContextTests
     {
+        [NotNull]
+        private static MockBlogContext GetBlogContext()
+        {
+            return new MockBlogContext();
+        }
+
+        [NotNull]
+        private static MockBlogContext GetBlogContext(Configurer configurer)
+        {
+            return new MockBlogContext(configurer);
+        }
+
+        [Fact]
+        public void OnConfiguringShouldConfigureDbContextOptionsBuilder()
+        {
+            var configurer = Substitute.For<Configurer>();
+            var context = GetBlogContext(configurer);
+            var builder = new DbContextOptionsBuilder();
+            context.OnConfiguringProxy(builder);
+            configurer.Received(1).Configure(builder);
+        }
+
         [Fact]
         public void OnModelCreatingShouldConfigureModelWithTheCorrectConfiguration()
         {
@@ -39,28 +61,6 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
                 ContentNullable = false,
                 TitleNullable = false
             });
-        }
-
-        [NotNull]
-        private static MockBlogContext GetBlogContext()
-        {
-            return new MockBlogContext();
-        }
-
-        [NotNull]
-        private static MockBlogContext GetBlogContext(Configurer configurer)
-        {
-            return new MockBlogContext(configurer);
-        }
-
-        [Fact]
-        public void OnConfiguringShouldConfigureDbContextOptionsBuilder()
-        {
-            var configurer = Substitute.For<Configurer>();
-            var context = GetBlogContext(configurer);
-            var builder = new DbContextOptionsBuilder();
-            context.OnConfiguringProxy(builder);
-            configurer.Received(1).Configure(builder);
         }
     }
 }

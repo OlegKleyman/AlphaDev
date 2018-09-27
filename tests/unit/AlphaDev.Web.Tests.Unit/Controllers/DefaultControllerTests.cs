@@ -79,7 +79,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetDefaultController(blogService);
 
             controller.Index().Model.Should().BeEquivalentTo(
-                new {blog.Id, blog.Title, blog.Content, Dates = new {blog.Dates.Created, blog.Dates.Modified}});
+                new { blog.Id, blog.Title, blog.Content, Dates = new { blog.Dates.Created, blog.Dates.Modified } });
         }
 
         [Fact]

@@ -116,7 +116,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
             var context = GetContext(valueProvider);
 
             binder.BindModelMock(context);
-            context.Result.Model.Should().BeEquivalentTo(new {Title = "title", Content = "content"},
+            context.Result.Model.Should().BeEquivalentTo(new { Title = "title", Content = "content" },
                 options => options.ExcludingMissingMembers());
         }
 
@@ -131,7 +131,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
             var context = GetContext(valueProvider);
 
             binder.BindModelMock(context);
-            context.Result.Model.Should().BeEquivalentTo(new {Title = string.Empty, Content = string.Empty});
+            context.Result.Model.Should().BeEquivalentTo(new { Title = string.Empty, Content = string.Empty });
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using AlphaDev.Core.Data.Entities;
+﻿using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Support;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;

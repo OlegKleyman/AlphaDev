@@ -37,6 +37,19 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [Fact]
+        public void BindModelShouldSetModelWithValueEmptyWhenNoValueExists()
+        {
+            var binder = GetAboutCreateModelBinder();
+
+            var valueProvider = Substitute.For<IValueProvider>();
+
+            var context = GetContext(valueProvider);
+
+            binder.BindModelMock(context);
+            context.Result.Model.Should().BeEquivalentTo(new { Value = string.Empty });
+        }
+
+        [Fact]
         public void BindModelShouldSetModelWithWithValue()
         {
             var binder = GetAboutCreateModelBinder();
@@ -49,19 +62,6 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
             binder.BindModelMock(context);
             context.Result.Model.Should().BeEquivalentTo(new { Value = "value" });
-        }
-
-        [Fact]
-        public void BindModelShouldSetModelWithValueEmptyWhenNoValueExists()
-        {
-            var binder = GetAboutCreateModelBinder();
-
-            var valueProvider = Substitute.For<IValueProvider>();
-
-            var context = GetContext(valueProvider);
-
-            binder.BindModelMock(context);
-            context.Result.Model.Should().BeEquivalentTo(new { Value = string.Empty });
         }
     }
 }

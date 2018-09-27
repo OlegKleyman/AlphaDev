@@ -1,6 +1,4 @@
-﻿using System;
-using AlphaDev.Core.Data.Contexts;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Data
 {

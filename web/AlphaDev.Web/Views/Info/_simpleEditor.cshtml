@@ -1,7 +1,7 @@
 ﻿@model AlphaDev.Web.Models.SimpleEditorViewModel
 
 <form id="@Html.Id("editForm")" method="post">
-    <input type="hidden" name="prefix" value="@Html.NameForModel()" />
+    <input type="hidden" name="prefix" value="@Html.NameForModel()"/>
     <div class="col-lg-12">
         <div>
             <span asp-validation-for="Value" class="text-danger"></span>

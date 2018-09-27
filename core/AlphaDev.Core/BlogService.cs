@@ -5,7 +5,6 @@ using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using Omego.Extensions.OptionExtensions;
 using Optional;
 using Optional.Collections;
 
@@ -86,7 +85,8 @@ namespace AlphaDev.Core
                     match.Blog.Modified = _dateProvider.UtcNow;
                 })
                 .MapToAction(() => _context.SaveChanges())
-                .Filter(match => _context.Entry(match.Blog).State == EntityState.Unchanged, () => new InvalidOperationException("Inconsistent change count on update"))
+                .Filter(match => _context.Entry(match.Blog).State == EntityState.Unchanged,
+                    () => new InvalidOperationException("Inconsistent change count on update"))
                 .MatchNone(exception => throw exception);
         }
     }

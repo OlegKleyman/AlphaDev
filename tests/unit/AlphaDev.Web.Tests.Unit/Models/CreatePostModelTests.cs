@@ -14,7 +14,7 @@ namespace AlphaDev.Web.Tests.Unit.Models
 
             var model = new CreatePostViewModel(title, content);
 
-            model.Should().BeEquivalentTo(new {Title = title, Content = content});
+            model.Should().BeEquivalentTo(new { Title = title, Content = content });
         }
     }
 }

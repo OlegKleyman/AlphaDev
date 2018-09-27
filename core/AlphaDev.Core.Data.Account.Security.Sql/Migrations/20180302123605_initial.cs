@@ -96,7 +96,7 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new {x.LoginProvider, x.ProviderKey});
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
                         "FK_AspNetUserLogins_AspNetUsers_UserId",
                         x => x.UserId,
@@ -114,7 +114,7 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new {x.UserId, x.RoleId});
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
                         "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         x => x.RoleId,
@@ -140,7 +140,7 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new {x.UserId, x.LoginProvider, x.Name});
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
                         "FK_AspNetUserTokens_AspNetUsers_UserId",
                         x => x.UserId,

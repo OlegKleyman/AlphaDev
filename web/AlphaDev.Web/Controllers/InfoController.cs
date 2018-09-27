@@ -23,7 +23,11 @@ namespace AlphaDev.Web.Controllers
         [Route("about")]
         public IActionResult About()
         {
-            IActionResult GetAboutView(string value) => View(nameof(About), value);
+            IActionResult GetAboutView(string value)
+            {
+                return View(nameof(About), value);
+            }
+
             return _aboutService.GetAboutDetails().Map(s => GetAboutView(s).Some())
                 .ValueOr(() =>
                     RedirectToAction(nameof(CreateAbout))

@@ -74,6 +74,94 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
+        public void CreateAboutShouldCreateAboutWhenModelIsValid()
+        {
+            var informationService = Substitute.For<IAboutService>();
+            var controller = GetInfoController(informationService);
+            const string value = "value";
+            controller.CreateAbout(new AboutCreateViewModel(value));
+            informationService.Received(1).Create(value);
+        }
+
+        [Fact]
+        public void CreateAboutShouldRedirectToEditAboutActionWhenThereIsExistingAbout()
+        {
+            var informationService = Substitute.For<IAboutService>();
+            informationService.GetAboutDetails().Returns(Option.Some("test"));
+            var controller = GetInfoController(informationService);
+
+            controller.CreateAbout().Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should()
+                .BeEquivalentTo("EditAbout");
+        }
+
+        [Fact]
+        public void CreateAboutShouldReturnCreateAboutViewWhenModelIsNotValid()
+        {
+            var informationService = Substitute.For<IAboutService>();
+            var controller = GetInfoController(informationService);
+            controller.ModelState.AddModelError("test", "test");
+            var result = controller.CreateAbout(new AboutCreateViewModel(default));
+            result.Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("CreateAbout");
+        }
+
+        [Fact]
+        public void CreateAboutShouldReturnCreateAboutViewWhenThereIsNoExistingAbout()
+        {
+            var informationService = Substitute.For<IAboutService>();
+            var controller = GetInfoController(informationService);
+
+            controller.CreateAbout()
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should().BeEquivalentTo("CreateAbout");
+        }
+
+        [Fact]
+        public void CreateAboutShouldReturnRedirectToAboutActionWhenModelIsValid()
+        {
+            var informationService = Substitute.For<IAboutService>();
+            var controller = GetInfoController(informationService);
+            var result = controller.CreateAbout(new AboutCreateViewModel(default));
+            result.Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should().BeEquivalentTo("About");
+        }
+
+        [Fact]
+        public void EditAboutShouldEditAboutWithModelData()
+        {
+            var informationService = Substitute.For<IAboutService>();
+            const string editValue = "value";
+
+            var controller = GetInfoController(informationService);
+
+            var post = new AboutEditViewModel(editValue);
+            controller.EditAbout(post);
+
+            informationService.Received(1).Edit(editValue);
+        }
+
+        [Fact]
+        public void EditAboutShouldReturnAboutRedirectToActionResultWhenModelIsValid()
+        {
+            var informationService = Substitute.For<IAboutService>();
+            var controller = GetInfoController(informationService);
+
+            var post = new AboutEditViewModel(default);
+            var result = controller.EditAbout(post);
+            result.Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should().BeEquivalentTo("About");
+        }
+
+        [Fact]
+        public void EditAboutShouldReturnAboutViewResultWhenModelIsValid()
+        {
+            var informationService = Substitute.For<IAboutService>();
+            var controller = GetInfoController(informationService);
+            controller.ModelState.AddModelError(string.Empty, string.Empty);
+            var post = new AboutEditViewModel(default);
+            var result = controller.EditAbout(post);
+            result.Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("EditAbout");
+        }
+
+        [Fact]
         public void EditAboutShouldReturnEditAboutView()
         {
             var informationService = Substitute.For<IAboutService>();
@@ -119,94 +207,6 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 .BeOfType<RedirectToActionResult>()
                 .Which.ActionName.Should()
                 .BeEquivalentTo("About");
-        }
-
-        [Fact]
-        public void EditAboutShouldEditAboutWithModelData()
-        {
-            var informationService = Substitute.For<IAboutService>();
-            const string editValue = "value";
-            
-            var controller = GetInfoController(informationService);
-
-            var post = new AboutEditViewModel(editValue);
-            controller.EditAbout(post);
-
-            informationService.Received(1).Edit(editValue);
-        }
-
-        [Fact]
-        public void EditAboutShouldReturnAboutRedirectToActionResultWhenModelIsValid()
-        {
-            var informationService = Substitute.For<IAboutService>();
-            var controller = GetInfoController(informationService);
-
-            var post = new AboutEditViewModel(default);
-            var result = controller.EditAbout(post);
-            result.Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should().BeEquivalentTo("About");
-        }
-
-        [Fact]
-        public void EditAboutShouldReturnAboutViewResultWhenModelIsValid()
-        {
-            var informationService = Substitute.For<IAboutService>();
-            var controller = GetInfoController(informationService);
-            controller.ModelState.AddModelError(string.Empty, string.Empty);
-            var post = new AboutEditViewModel(default);
-            var result = controller.EditAbout(post);
-            result.Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("EditAbout");
-        }
-
-        [Fact]
-        public void CreateAboutShouldReturnCreateAboutViewWhenThereIsNoExistingAbout()
-        {
-            var informationService = Substitute.For<IAboutService>();
-            var controller = GetInfoController(informationService);
-
-            controller.CreateAbout()
-                .Should()
-                .BeOfType<ViewResult>()
-                .Which.ViewName.Should().BeEquivalentTo("CreateAbout");
-        }
-
-        [Fact]
-        public void CreateAboutShouldRedirectToEditAboutActionWhenThereIsExistingAbout()
-        {
-            var informationService = Substitute.For<IAboutService>();
-            informationService.GetAboutDetails().Returns(Option.Some("test"));
-            var controller = GetInfoController(informationService);
-
-            controller.CreateAbout().Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should()
-                .BeEquivalentTo("EditAbout");
-        }
-
-        [Fact]
-        public void CreateAboutShouldCreateAboutWhenModelIsValid()
-        {
-            var informationService = Substitute.For<IAboutService>();
-            var controller = GetInfoController(informationService);
-            const string value = "value";
-            controller.CreateAbout(new AboutCreateViewModel(value));
-            informationService.Received(1).Create(value);
-        }
-
-        [Fact]
-        public void CreateAboutShouldReturnRedirectToAboutActionWhenModelIsValid()
-        {
-            var informationService = Substitute.For<IAboutService>();
-            var controller = GetInfoController(informationService);
-            var result = controller.CreateAbout(new AboutCreateViewModel(default));
-            result.Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should().BeEquivalentTo("About");
-        }
-
-        [Fact]
-        public void CreateAboutShouldReturnCreateAboutViewWhenModelIsNotValid()
-        {
-            var informationService = Substitute.For<IAboutService>();
-            var controller = GetInfoController(informationService);
-            controller.ModelState.AddModelError("test", "test");
-            var result = controller.CreateAbout(new AboutCreateViewModel(default));
-            result.Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("CreateAbout");
         }
     }
 }

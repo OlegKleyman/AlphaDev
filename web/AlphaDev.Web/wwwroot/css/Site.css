@@ -90,11 +90,10 @@ body .bubble-content pre { margin: 0; }
     margin-right: 10px;
 }
 
-.bubble .actionText {
-    font-family: Lucida Console, monospace;
-}
+.bubble .actionText { font-family: Lucida Console, monospace; }
 
 .titleInput { display: inline; }
+
 .bubbleTitle { padding-top: 3px; }
 
 @media screen and (min-width: 531px) {

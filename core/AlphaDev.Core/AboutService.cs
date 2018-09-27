@@ -45,7 +45,8 @@ namespace AlphaDev.Core
         {
             using (var context = _contextFactory.Create())
             {
-                context.Abouts.Add(new About {Value = value}).SomeNotNull(() => new InvalidOperationException("Unable to retrieve added entry."))
+                context.Abouts.Add(new About { Value = value }).SomeNotNull(() =>
+                        new InvalidOperationException("Unable to retrieve added entry."))
                     // ReSharper disable once AccessToDisposedClosure - execution either
                     // immediate or not at all
                     .Map(entry => context.SaveChanges())

@@ -97,7 +97,6 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         public void And_there_is_no_about_information()
         {
-
         }
 
         public void Then_I_should_be_redirected_to_the_about_create_page()

@@ -14,7 +14,7 @@ namespace AlphaDev.Test.Core
         }
 
         [NotNull]
-        public static EntityEntry<T> ToMockEntityEntry<T>([NotNull] this T target) where T:class 
+        public static EntityEntry<T> ToMockEntityEntry<T>([NotNull] this T target) where T : class
         {
             var stateManager = Substitute.For<IStateManager>();
             var entityType = new EntityType(typeof(About), new Model(), ConfigurationSource.Convention);

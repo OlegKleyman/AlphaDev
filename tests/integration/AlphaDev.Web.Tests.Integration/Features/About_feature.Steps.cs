@@ -21,7 +21,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private CompositeStep When_I_go_to_a_configured_about_page()
         {
             return CompositeStep.DefineNew()
-                .AddSteps(_ => CommonSteps.And_there_is_about_information(), _ => CommonSteps.When_I_go_to_the_about_page()).Build();
+                .AddSteps(_ => CommonSteps.And_there_is_about_information(),
+                    _ => CommonSteps.When_I_go_to_the_about_page()).Build();
         }
 
         private void Then_it_should_load()

@@ -5,8 +5,8 @@ namespace AlphaDev.Web.Support
 {
     public class PrefixValueProvider : IValueProvider
     {
-        private readonly IValueProvider _valueProvider;
         private readonly string _prefix;
+        private readonly IValueProvider _valueProvider;
 
         public PrefixValueProvider([NotNull] IValueProvider valueProvider, string prefix)
         {
