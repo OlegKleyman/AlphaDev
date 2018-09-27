@@ -8,16 +8,11 @@
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.3.0" />
     <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+    <PackageReference Include="NSubstitute" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\core\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="NSubstitute">
-      <HintPath>..\..\..\..\..\.nuget\packages\nsubstitute\3.1.0\lib\netstandard1.3\NSubstitute.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
