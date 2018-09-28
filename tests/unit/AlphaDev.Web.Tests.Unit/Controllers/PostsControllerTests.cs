@@ -329,5 +329,13 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             controller.Index(id).Should().BeOfType<ViewResult>().Which.ViewData["Title"].Should()
                 .BeEquivalentTo("title");
         }
+
+        [Fact]
+        public void CreateShouldReturnCreateView()
+        {
+            var controller = GetPostsController();
+
+            controller.Create().ViewName.Should().BeEquivalentTo("Create");
+        }
     }
 }
