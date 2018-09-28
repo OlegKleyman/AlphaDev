@@ -24,7 +24,10 @@ namespace AlphaDev.Web.TagHelpers
             _editorView = editorView;
         }
 
-        [NotNull] [ViewContext] public ViewContext Context { get; set; }
+        [NotNull]
+        [ViewContext]
+        public ViewContext Context { get; set; }
+
         public object Model { get; set; }
 
         public sealed override void Process(TagHelperContext context, [NotNull] TagHelperOutput output)

@@ -14,6 +14,7 @@ namespace AlphaDev.Core.Data.Contexts
 
         public DbSet<About> Abouts { get; set; }
 
-        [CanBeNull] public About About => Abouts.SingleOrDefault();
+        [CanBeNull]
+        public About About => Abouts.SingleOrDefault();
     }
 }

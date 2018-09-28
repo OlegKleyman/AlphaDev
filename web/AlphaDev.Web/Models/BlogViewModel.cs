@@ -21,7 +21,8 @@ namespace AlphaDev.Web.Models
         public string Content { get; }
         public int Id { get; set; }
 
-        [NotNull] public static BlogViewModel Welcome => WelcomeBlogViewModel.Value;
+        [NotNull]
+        public static BlogViewModel Welcome => WelcomeBlogViewModel.Value;
 
         private class WelcomeBlogViewModel : BlogViewModel
         {

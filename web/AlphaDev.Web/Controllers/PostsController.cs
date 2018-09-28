@@ -1,12 +1,10 @@
 ﻿using System.Linq;
 using AlphaDev.Core;
+using AlphaDev.Core.Extensions;
 using AlphaDev.Web.Models;
-using AlphaDev.Web.Support;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Omego.Extensions.OptionExtensions;
 using Optional;
 
 namespace AlphaDev.Web.Controllers
@@ -36,16 +34,12 @@ namespace AlphaDev.Web.Controllers
         [Route("{id}")]
         public ActionResult Index(int id)
         {
-            return (TempData?["Model"])
-                .SomeNotNull()
-                .Map(o => JsonConvert.DeserializeObject<BlogViewModel>(o.ToString(), BlogViewModelConverter.Default))
-                .Else(() =>
-                    _blogService.Get(id)
-                        .Map(foundBlog => new BlogViewModel(foundBlog.Id,
-                            foundBlog.Title,
-                            foundBlog.Content,
-                            new DatesViewModel(foundBlog.Dates.Created, foundBlog.Dates.Modified))))
-                .MatchSomeContinue(model => ViewBag.Title = model.Title)
+            return _blogService.Get(id)
+                .Map(foundBlog => new BlogViewModel(foundBlog.Id,
+                    foundBlog.Title,
+                    foundBlog.Content,
+                    new DatesViewModel(foundBlog.Dates.Created, foundBlog.Dates.Modified)))
+                .MapToAction(model => ViewBag.Title = model.Title)
                 .Map(model => (ActionResult) View("Post", model)).ValueOr(NotFound);
         }
 
@@ -64,9 +58,6 @@ namespace AlphaDev.Web.Controllers
             return ModelState
                 .SomeWhen(dictionary => dictionary.IsValid)
                 .Map(dictionary => _blogService.Add(new Blog(post?.Title, post?.Content)))
-                .MatchSomeContinue(blog => TempData["Model"] = JsonConvert.SerializeObject(new BlogViewModel(blog.Id,
-                    blog.Title, blog.Content,
-                    new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)), BlogViewModelConverter.Default))
                 .Map(blog => (ActionResult) RedirectToAction(nameof(Index), new { id = blog.Id }))
                 .ValueOr(View(nameof(Create), post));
         }
@@ -99,7 +90,7 @@ namespace AlphaDev.Web.Controllers
         {
             return ModelState
                 .SomeWhen(dictionary => dictionary.IsValid)
-                .MatchSomeContinue(dictionary => _blogService.Edit(id, arguments =>
+                .MapToAction(dictionary => _blogService.Edit(id, arguments =>
                 {
                     arguments.Content = model?.Content;
                     arguments.Title = model?.Title;

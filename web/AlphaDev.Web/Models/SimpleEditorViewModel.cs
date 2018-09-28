@@ -4,6 +4,7 @@ namespace AlphaDev.Web.Models
 {
     public class SimpleEditorViewModel
     {
-        [Required] public string Value { get; set; }
+        [Required]
+        public string Value { get; set; }
     }
 }

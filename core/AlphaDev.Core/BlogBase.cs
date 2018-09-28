@@ -21,11 +21,14 @@ namespace AlphaDev.Core
         {
             private static readonly Dates EmptyDates = new Dates(default, Option.None<DateTime>());
 
-            [NotNull] public override string Title => string.Empty;
+            [NotNull]
+            public override string Title => string.Empty;
 
             public override Dates Dates => EmptyDates;
 
-            [NotNull] public override string Content => string.Empty;
+            [NotNull]
+            public override string Content => string.Empty;
+
             public override int Id => default;
         }
     }

@@ -9,7 +9,8 @@ namespace AlphaDev.Web.TagHelpers
 {
     public class ScriptsTagHelper : TagHelper
     {
-        [ViewContext] public ViewContext Context { get; set; }
+        [ViewContext]
+        public ViewContext Context { get; set; }
 
         public override void Process(TagHelperContext context, [NotNull] TagHelperOutput output)
         {
