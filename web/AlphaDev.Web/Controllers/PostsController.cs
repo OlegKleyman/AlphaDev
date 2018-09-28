@@ -2,12 +2,9 @@
 using AlphaDev.Core;
 using AlphaDev.Core.Extensions;
 using AlphaDev.Web.Models;
-using AlphaDev.Web.Support;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Omego.Extensions.OptionExtensions;
 using Optional;
 
 namespace AlphaDev.Web.Controllers

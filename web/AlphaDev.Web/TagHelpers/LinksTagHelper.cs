@@ -10,7 +10,8 @@ namespace AlphaDev.Web.TagHelpers
 {
     public class LinksTagHelper : TagHelper
     {
-        [ViewContext] public ViewContext Context { [CanBeNull] get; [NotNull] set; }
+        [ViewContext]
+        public ViewContext Context { [CanBeNull] get; [NotNull] set; }
 
         public override void Process(TagHelperContext context, [NotNull] TagHelperOutput output)
         {

@@ -97,7 +97,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 Password = "pass"
             };
 
-            (controller.Login(model)).Should().BeOfType<ViewResult>().Which.Model.Should()
+            controller.Login(model).Should().BeOfType<ViewResult>().Which.Model.Should()
                 .BeEquivalentTo(model);
         }
 
@@ -113,7 +113,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 Password = "working"
             };
 
-            (controller.Login(model)).Should()
+            controller.Login(model).Should()
                 .BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(model);
         }
 
@@ -128,7 +128,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 Password = "pass"
             };
 
-            (controller.Login(model)).Should().BeOfType<ViewResult>().Which.ViewName.Should()
+            controller.Login(model).Should().BeOfType<ViewResult>().Which.ViewName.Should()
                 .BeEquivalentTo("Login");
         }
 
@@ -138,7 +138,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetAccountController();
             controller.ModelState.AddModelError("test", "error");
 
-            (controller.Login(new LoginViewModel())).Should()
+            controller.Login(new LoginViewModel()).Should()
                 .BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("Login");
         }
 
@@ -155,7 +155,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 Password = "working"
             };
 
-            (controller.Login(model)).Should().BeOfType<ViewResult>().Which.ViewName.Should()
+            controller.Login(model).Should().BeOfType<ViewResult>().Which.ViewName.Should()
                 .BeEquivalentTo("Login");
         }
 
@@ -170,7 +170,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 Password = "working"
             };
 
-            (controller.Login(model)).Should()
+            controller.Login(model).Should()
                 .BeOfType<RedirectResult>();
         }
 
@@ -185,7 +185,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 Password = "working"
             };
 
-            (controller.Login(model)).Should()
+            controller.Login(model).Should()
                 .BeOfType<RedirectResult>().Which.Url.Should().BeEquivalentTo("/");
         }
 
@@ -200,7 +200,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 Password = "working"
             };
 
-            (controller.Login(model, "admin")).Should()
+            controller.Login(model, "admin").Should()
                 .BeOfType<RedirectResult>().Which.Url.Should().BeEquivalentTo("admin");
         }
 

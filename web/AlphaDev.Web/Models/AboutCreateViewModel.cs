@@ -16,6 +16,7 @@ namespace AlphaDev.Web.Models
             Value = value;
         }
 
-        [Required] public string Value { get; set; }
+        [Required]
+        public string Value { get; set; }
     }
 }

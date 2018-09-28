@@ -12,7 +12,8 @@ namespace AlphaDev.Web.Models
             Title = title;
         }
 
-        [Required] public string Title { get; set; }
+        [Required]
+        public string Title { get; set; }
 
         [Required]
         [DataType(DataType.MultilineText)]

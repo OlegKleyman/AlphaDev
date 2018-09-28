@@ -5,9 +5,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Omego.Extensions.OptionExtensions;
 using Optional;
-using Option = Optional.Option;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace AlphaDev.Web.Controllers

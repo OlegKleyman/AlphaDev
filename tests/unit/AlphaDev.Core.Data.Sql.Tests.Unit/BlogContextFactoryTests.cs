@@ -8,16 +8,16 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
     public class BlogContextFactoryTests
     {
         [Fact]
-        public void DefaultConstructorShouldNotThrow()
+        public void ConstructorUsingConfigurerArgumentShouldNotThrow()
         {
-            Action constructor = () => new BlogContextFactory().EmptyCall();
+            Action constructor = () => new BlogContextFactory(default).EmptyCall();
             constructor.Should().NotThrow();
         }
 
         [Fact]
-        public void ConstructorUsingConfigurerArgumentShouldNotThrow()
+        public void DefaultConstructorShouldNotThrow()
         {
-            Action constructor = () => new BlogContextFactory(default).EmptyCall();
+            Action constructor = () => new BlogContextFactory().EmptyCall();
             constructor.Should().NotThrow();
         }
     }

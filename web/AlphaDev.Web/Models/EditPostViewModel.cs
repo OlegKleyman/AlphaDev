@@ -16,7 +16,8 @@ namespace AlphaDev.Web.Models
 
         public DatesViewModel Dates { get; }
 
-        [Required] public string Title { get; }
+        [Required]
+        public string Title { get; }
 
         [Required]
         [DataType(DataType.MultilineText)]

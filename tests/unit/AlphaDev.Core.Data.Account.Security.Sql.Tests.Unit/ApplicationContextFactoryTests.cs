@@ -8,16 +8,16 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Tests.Unit
     public class ApplicationContextFactoryTests
     {
         [Fact]
-        public void DefaultConstructorShouldNotThrow()
+        public void ConstructorUsingConfigurerArgumentShouldNotThrow()
         {
-            Action constructor = () => new ApplicationContextFactory().EmptyCall();
+            Action constructor = () => new ApplicationContextFactory(default).EmptyCall();
             constructor.Should().NotThrow();
         }
 
         [Fact]
-        public void ConstructorUsingConfigurerArgumentShouldNotThrow()
+        public void DefaultConstructorShouldNotThrow()
         {
-            Action constructor = () => new ApplicationContextFactory(default).EmptyCall();
+            Action constructor = () => new ApplicationContextFactory().EmptyCall();
             constructor.Should().NotThrow();
         }
     }

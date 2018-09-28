@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using AlphaDev.Core;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
-using AlphaDev.Web.Support;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Newtonsoft.Json;
 using NSubstitute;
 using Optional;
 using Xunit;
@@ -31,6 +29,14 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         private PostsController GetPostsController([NotNull] IBlogService blogService)
         {
             return new PostsController(blogService);
+        }
+
+        [Fact]
+        public void CreateShouldReturnCreateView()
+        {
+            var controller = GetPostsController();
+
+            controller.Create().ViewName.Should().BeEquivalentTo("Create");
         }
 
         [Fact]
@@ -328,14 +334,6 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             controller.Index(id).Should().BeOfType<ViewResult>().Which.ViewData["Title"].Should()
                 .BeEquivalentTo("title");
-        }
-
-        [Fact]
-        public void CreateShouldReturnCreateView()
-        {
-            var controller = GetPostsController();
-
-            controller.Create().ViewName.Should().BeEquivalentTo("Create");
         }
     }
 }
