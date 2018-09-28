@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AlphaDev.Core;
+using AlphaDev.Core.Extensions;
 using AlphaDev.Web.Models;
 using AlphaDev.Web.Support;
 using JetBrains.Annotations;
@@ -41,7 +42,7 @@ namespace AlphaDev.Web.Controllers
                     foundBlog.Title,
                     foundBlog.Content,
                     new DatesViewModel(foundBlog.Dates.Created, foundBlog.Dates.Modified)))
-                .MatchSomeContinue(model => ViewBag.Title = model.Title)
+                .MapToAction(model => ViewBag.Title = model.Title)
                 .Map(model => (ActionResult) View("Post", model)).ValueOr(NotFound);
         }
 
@@ -92,7 +93,7 @@ namespace AlphaDev.Web.Controllers
         {
             return ModelState
                 .SomeWhen(dictionary => dictionary.IsValid)
-                .MatchSomeContinue(dictionary => _blogService.Edit(id, arguments =>
+                .MapToAction(dictionary => _blogService.Edit(id, arguments =>
                 {
                     arguments.Content = model?.Content;
                     arguments.Title = model?.Title;

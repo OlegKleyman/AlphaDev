@@ -30,19 +30,18 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([CanBeNull] LoginViewModel model, [CanBeNull] string returnUrl = null)
+        public IActionResult Login([CanBeNull] LoginViewModel model, [CanBeNull] string returnUrl = null)
         {
-            var result = Option.None<IActionResult>();
-
-            if (ModelState.IsValid)
-            {
-                result = (await _signInManager.PasswordSignInAsync(model?.Username, model?.Password, false, false))
-                    .SomeWhen(signInResult => signInResult == SignInResult.Success)
-                    .Map(signInResult => (IActionResult) Redirect(returnUrl ?? "/"))
-                    .MatchNoneContinue(() => ModelState.AddModelError(string.Empty, "Invalid login"));
-            }
-
-            return result.ValueOr(() => View("Login", model));
+            return ModelState.IsValid.SomeWhen(b => b)
+                .Map(b => _signInManager.PasswordSignInAsync(model?.Username, model?.Password, false, false)
+                    .GetAwaiter().GetResult())
+                .Filter(signInResult => signInResult == SignInResult.Success)
+                .Map<IActionResult>(signInResult => Redirect(returnUrl ?? "/")).Match(actionResult => actionResult,
+                    () =>
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login");
+                        return View("Login", model);
+                    });
         }
 
         [HttpPost]
