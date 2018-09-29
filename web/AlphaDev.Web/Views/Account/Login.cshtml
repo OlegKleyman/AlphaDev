@@ -8,7 +8,7 @@
 
 <div class="container">
 
-    <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="col-lg-4 col-lg-offset-4">
+    <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="col-lg-8 col-lg-offset-4 col-md-8 col-md-offset-4 col-xs-7 col-xs-offset-3">
         <div asp-validation-summary="All" class="text-danger"></div>
         <div>
             <div>
@@ -16,7 +16,7 @@
                     <label asp-for="Username"></label>
                 </div>
                 <div>
-                    <input asp-for="Username" class="form-control"/>
+                    <input asp-for="Username" class="form-control" />
                 </div>
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
@@ -25,7 +25,7 @@
                     <label asp-for="Password"></label>
                 </div>
                 <div>
-                    <input asp-for="Password" class="form-control"/>
+                    <input asp-for="Password" class="form-control" />
                 </div>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
