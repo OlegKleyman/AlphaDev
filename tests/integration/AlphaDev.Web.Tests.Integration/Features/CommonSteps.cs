@@ -90,6 +90,11 @@ namespace AlphaDev.Web.Tests.Integration.Features
             SiteTester.About.GoTo();
         }
 
+        public void When_I_go_to_the_contact_page()
+        {
+            SiteTester.Contact.GoTo();
+        }
+
         public void And_I_am_on_the_about_page()
         {
             When_I_go_to_the_about_page();

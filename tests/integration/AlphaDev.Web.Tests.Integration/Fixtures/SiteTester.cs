@@ -27,6 +27,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             Admin = new AdminWebPage(Driver, new Uri(baseUrl, "admin/"));
             Login = new LoginWebPage(Driver, new Uri(baseUrl, "account/login/"));
             About = new AboutWebPage(Driver, baseUrl);
+            Contact = new ContactWebPage(Driver, baseUrl);
         }
 
         public IWebDriver Driver { get; }
@@ -37,6 +38,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         public AdminWebPage Admin { get; }
         public LoginWebPage Login { get; }
         public AboutWebPage About { get; }
+        public ContactWebPage Contact { get; }
 
         public void Dispose()
         {
