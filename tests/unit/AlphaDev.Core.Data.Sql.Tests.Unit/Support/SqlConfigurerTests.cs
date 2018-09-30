@@ -4,6 +4,7 @@ using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
+using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
 using Xunit;
 
 namespace AlphaDev.Core.Data.Sql.Tests.Unit.Support

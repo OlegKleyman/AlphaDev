@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 
-namespace AlphaDev.Test.Core
+namespace AlphaDev.Test.Core.Extensions
 {
     public static class EnumerableExtensions
     {
