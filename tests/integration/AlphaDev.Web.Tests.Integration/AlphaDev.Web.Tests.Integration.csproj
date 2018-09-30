@@ -20,15 +20,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.3.0" />
-    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+    <PackageReference Include="FluentAssertions" Version="5.4.2" />
+    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
     <PackageReference Include="LightBDD.XUnit2" Version="2.3.6" />
-    <PackageReference Include="Markdig" Version="0.15.0" />
+    <PackageReference Include="Markdig" Version="0.15.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
     <PackageReference Include="Omego.Extensions" Version="2.0.21" />
     <PackageReference Include="Selenium.PhantomJS.WebDriver" Version="2.1.1" />
-    <PackageReference Include="Selenium.Support" Version="3.12.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.38.0.1" />
+    <PackageReference Include="Selenium.Support" Version="3.14.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.42.0.1" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
