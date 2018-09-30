@@ -24,7 +24,7 @@
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
     <PackageReference Include="LightBDD.XUnit2" Version="2.4.3" />
     <PackageReference Include="Markdig" Version="0.15.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="Omego.Extensions" Version="2.0.21" />
     <PackageReference Include="Selenium.PhantomJS.WebDriver" Version="2.1.1" />
     <PackageReference Include="Selenium.Support" Version="3.14.0" />

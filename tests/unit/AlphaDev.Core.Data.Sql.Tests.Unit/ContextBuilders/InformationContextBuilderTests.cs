@@ -2,6 +2,7 @@
 using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Support;
 using AlphaDev.Test.Core;
+using AlphaDev.Test.Core.Extensions;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Design;
