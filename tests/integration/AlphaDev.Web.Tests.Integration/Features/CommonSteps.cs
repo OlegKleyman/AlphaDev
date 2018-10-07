@@ -111,9 +111,18 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
         }
 
+        public void And_there_is_no_contact_information()
+        {
+        }
+
         public void Then_I_should_be_redirected_to_the_about_create_page()
         {
             SiteTester.Driver.Url.Should().BeEquivalentTo(SiteTester.About.Create.BaseUrl.AbsoluteUri);
+        }
+
+        public void Then_I_should_be_redirected_to_the_contact_create_page()
+        {
+            SiteTester.Driver.Url.Should().BeEquivalentTo(SiteTester.Contact.Create.BaseUrl.AbsoluteUri);
         }
 
         public void Then_I_should_be_redirected_to_the_about_edit_page()

@@ -8,8 +8,11 @@ namespace AlphaDev.Web.Tests.Integration.Support
     {
         public DetailsWebPage(IWebDriver driver, Uri baseUrl) : base(driver, baseUrl)
         {
+            Create = new SingleValueCreateEditorWebPage(driver, baseUrl);
         }
 
         public string Details => Driver.FindElement(By.CssSelector(".bubble div:nth-child(2)")).GetInnerHtml().Trim();
+
+        public SingleValueCreateEditorWebPage Create { get; }
     }
 }

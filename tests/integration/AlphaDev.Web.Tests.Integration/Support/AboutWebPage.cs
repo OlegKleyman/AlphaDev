@@ -9,11 +9,9 @@ namespace AlphaDev.Web.Tests.Integration.Support
         public AboutWebPage(IWebDriver driver, Uri baseUrl) : base(driver, new Uri(baseUrl, "info/about/"))
         {
             Edit = new AboutEditorWebPage(driver, BaseUrl);
-            Create = new AboutCreateEditorWebPage(driver, BaseUrl);
         }
 
         public AboutEditorWebPage Edit { get; }
-        public AboutCreateEditorWebPage Create { get; }
 
         public void EditAbout()
         {

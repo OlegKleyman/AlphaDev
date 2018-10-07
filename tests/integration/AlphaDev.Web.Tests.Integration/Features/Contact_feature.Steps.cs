@@ -37,5 +37,11 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 .InformationContextDatabaseFixture
                 .InformationContext.Contacts.Single().Value).NormalizeToWindowsLineEndings().Trim());
         }
+
+        private void Then_it_should_display_no_details()
+        {
+            SiteTester.Contact.Details.Should()
+                .BeEquivalentTo("No details".ToHtmlFromMarkdown().NormalizeToWindowsLineEndings().Trim());
+        }
     }
 }
