@@ -89,6 +89,7 @@ namespace AlphaDev.Web.Controllers
                 .ValueOr(() => GetContactView("No details"));
         }
 
+        [Route("contact/create")]
         public void CreateContact() { }
     }
 }
