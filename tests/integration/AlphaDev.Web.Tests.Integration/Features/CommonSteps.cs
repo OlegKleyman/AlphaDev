@@ -64,6 +64,13 @@ namespace AlphaDev.Web.Tests.Integration.Features
             Data.Add("AddedAbout", about);
         }
 
+        public void And_there_is_contact_information()
+        {
+            var contact = DatabasesFixture.InformationContextDatabaseFixture.DefaultContact;
+            DatabasesFixture.InformationContextDatabaseFixture.InformationContext.AddRangeAndSave(contact);
+            Data.Add("AddedContact", contact);
+        }
+
         public void And_there_is_a_blog_post()
         {
             Given_there_is_a_blog_post();

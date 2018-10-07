@@ -34,7 +34,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
         }
 
         [Fact]
-        public void OnModelCreatingShouldConfigureModelWithTheCorrectConfiguration()
+        public void OnModelCreatingShouldConfigureModelWithTheCorrectAboutConfiguration()
         {
             var context = GetInformationContext();
 
@@ -42,6 +42,28 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
             context.OnModelCreatingProxy(modelBuilder);
 
             var informationMetaData = modelBuilder.Entity<About>().Metadata;
+            new
+            {
+                PrimaryKeyName = informationMetaData.FindPrimaryKey().Properties[0].Name,
+                PrimaryKeyType = informationMetaData.FindPrimaryKey().Properties[0].ClrType,
+                ValueNullable = informationMetaData.FindProperty("Value").IsNullable
+            }.Should().BeEquivalentTo(new
+            {
+                PrimaryKeyName = "Id",
+                PrimaryKeyType = typeof(bool),
+                ValueNullable = false
+            });
+        }
+
+        [Fact]
+        public void OnModelCreatingShouldConfigureModelWithTheCorrectContactConfiguration()
+        {
+            var context = GetInformationContext();
+
+            var modelBuilder = new ModelBuilder(new ConventionSet());
+            context.OnModelCreatingProxy(modelBuilder);
+
+            var informationMetaData = modelBuilder.Entity<Contact>().Metadata;
             new
             {
                 PrimaryKeyName = informationMetaData.FindPrimaryKey().Properties[0].Name,

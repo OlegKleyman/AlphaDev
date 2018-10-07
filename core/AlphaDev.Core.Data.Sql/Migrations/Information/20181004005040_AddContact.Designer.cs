@@ -3,14 +3,16 @@ using AlphaDev.Core.Data.Sql.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AlphaDev.Core.Data.Sql.Migrations.Information
 {
     [DbContext(typeof(InformationContext))]
-    partial class InformationContextModelSnapshot : ModelSnapshot
+    [Migration("20181004005040_AddContact")]
+    partial class AddContact
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

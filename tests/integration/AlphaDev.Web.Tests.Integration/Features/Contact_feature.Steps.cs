@@ -22,5 +22,20 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             SiteTester.About.Title.Should().BeEquivalentTo("Contact - AlphaDev");
         }
+
+        [UsedImplicitly]
+        private CompositeStep When_I_go_to_a_configured_contact_page()
+        {
+            return CompositeStep.DefineNew()
+                .AddSteps(_ => CommonSteps.And_there_is_contact_information(),
+                    _ => CommonSteps.When_I_go_to_the_contact_page()).Build();
+        }
+
+        private void Then_i_should_see_contact_details()
+        {
+            SiteTester.Contact.Details.Should().BeEquivalentTo(Markdown.ToHtml(DatabasesFixture
+                .InformationContextDatabaseFixture
+                .InformationContext.Contacts.Single().Value).NormalizeToWindowsLineEndings().Trim());
+        }
     }
 }

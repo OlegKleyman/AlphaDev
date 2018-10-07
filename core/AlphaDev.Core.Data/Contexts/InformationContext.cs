@@ -16,5 +16,10 @@ namespace AlphaDev.Core.Data.Contexts
 
         [CanBeNull]
         public About About => Abouts.SingleOrDefault();
+
+        public DbSet<Contact> Contacts { get; set; }
+
+        [CanBeNull]
+        public Contact Contact => Contacts.SingleOrDefault();
     }
 }
