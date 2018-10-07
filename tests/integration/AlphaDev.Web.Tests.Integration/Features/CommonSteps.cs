@@ -134,5 +134,10 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             SiteTester.Driver.Url.Should().BeEquivalentTo(SiteTester.About.Edit.BaseUrl.AbsoluteUri);
         }
+
+        public void Then_I_should_be_redirected_to_the_contact_edit_page()
+        {
+            SiteTester.Driver.Url.Should().BeEquivalentTo(SiteTester.Contact.Edit.BaseUrl.AbsoluteUri);
+        }
     }
 }
