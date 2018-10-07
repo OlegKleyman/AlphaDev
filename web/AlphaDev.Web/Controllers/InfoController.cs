@@ -13,10 +13,12 @@ namespace AlphaDev.Web.Controllers
     public class InfoController : Controller
     {
         private readonly IAboutService _aboutService;
+        private readonly IContactService _contactService;
 
-        public InfoController([NotNull] IAboutService aboutService)
+        public InfoController([NotNull]  IAboutService aboutService, [NotNull] IContactService contactService)
         {
             _aboutService = aboutService;
+            _contactService = contactService;
         }
 
         [AllowAnonymous]
@@ -61,7 +63,6 @@ namespace AlphaDev.Web.Controllers
                 .ValueOr(() => View(nameof(CreateAbout), new AboutCreateViewModel()));
         }
 
-        // TODO add unit tests
         [Route("about/create")]
         [HttpPost]
         public IActionResult CreateAbout([NotNull] AboutCreateViewModel model)
@@ -71,5 +72,23 @@ namespace AlphaDev.Web.Controllers
                 .Map<IActionResult>(b => RedirectToAction(nameof(About)))
                 .ValueOr(() => View(nameof(CreateAbout), model));
         }
+
+        [AllowAnonymous]
+        [Route("contact")]
+        public IActionResult Contact()
+        {
+            IActionResult GetContactView(string value)
+            {
+                return View(nameof(Contact), value);
+            }
+
+            return _contactService.GetDetails().Map(s => GetContactView(s).Some())
+                .ValueOr(() =>
+                    RedirectToAction(nameof(CreateContact))
+                        .SomeWhen<IActionResult>(result => User.Identity.IsAuthenticated))
+                .ValueOr(() => GetContactView("No details"));
+        }
+
+        public void CreateContact() { }
     }
 }

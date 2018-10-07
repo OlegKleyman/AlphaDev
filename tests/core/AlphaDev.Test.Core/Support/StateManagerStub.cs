@@ -203,7 +203,17 @@ namespace AlphaDev.Test.Core.Support
         public virtual IEntityMaterializerSource EntityMaterializerSource { get; }
         public virtual bool SensitiveLoggingEnabled { get; }
         public virtual IDiagnosticsLogger<DbLoggerCategory.Update> UpdateLogger { get; }
-        public virtual event EventHandler<EntityTrackedEventArgs> Tracked;
-        public virtual event EventHandler<EntityStateChangedEventArgs> StateChanged;
+
+        public virtual event EventHandler<EntityTrackedEventArgs> Tracked
+        {
+            add { throw new NotImplementedException(); }
+            remove { throw new NotImplementedException(); }
+        }
+
+        public virtual event EventHandler<EntityStateChangedEventArgs> StateChanged
+        {
+            add { throw new NotImplementedException(); }
+            remove { throw new NotImplementedException(); }
+        }
     }
 }

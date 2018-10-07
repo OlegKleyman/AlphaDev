@@ -18,7 +18,8 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         public static IServiceCollection AddServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IBlogService, BlogService>()
-                .AddScoped<IAboutService, AboutService<InformationContext>>();
+                .AddScoped<IAboutService, AboutService>()
+                .AddScoped<IContactService, ContactService>();
             return serviceCollection;
         }
 
@@ -55,7 +56,7 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         public static IServiceCollection AddContextFactories(this IServiceCollection serviceCollection)
         {
             return serviceCollection
-                .AddSingleton<IContextFactory<InformationContext>,
+                .AddSingleton<IContextFactory<Core.Data.Contexts.InformationContext>,
                     Core.Data.Sql.ContextFactories.InformationContextFactory>();
         }
     }

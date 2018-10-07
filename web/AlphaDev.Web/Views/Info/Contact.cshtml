@@ -1,0 +1,8 @@
+﻿@using AlphaDev.Web.Models
+@model string
+
+@{
+    ViewBag.Title = "Contact";
+}
+
+<partial name="_singleDisplay" model="@{ new DisplayValueViewModel("EditContact", "Info", Model, "Contact"); }"/>

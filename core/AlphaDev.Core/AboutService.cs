@@ -8,11 +8,11 @@ using Optional;
 
 namespace AlphaDev.Core
 {
-    public class AboutService<T> : IAboutService where T : InformationContext
+    public class AboutService : IAboutService
     {
-        private readonly IContextFactory<T> _contextFactory;
+        private readonly IContextFactory<InformationContext> _contextFactory;
 
-        public AboutService([NotNull] IContextFactory<T> contextFactory)
+        public AboutService([NotNull] IContextFactory<InformationContext> contextFactory)
         {
             _contextFactory = contextFactory;
         }

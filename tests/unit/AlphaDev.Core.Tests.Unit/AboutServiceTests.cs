@@ -20,11 +20,11 @@ namespace AlphaDev.Core.Tests.Unit
     public class AboutServiceTests
     {
         [NotNull]
-        private AboutService<InformationContext> GetInformationService(InformationContext context)
+        private AboutService GetAboutService(InformationContext context)
         {
             var contextBuilder = Substitute.For<IContextFactory<InformationContext>>();
             contextBuilder.Create().Returns(context);
-            return new AboutService<InformationContext>(contextBuilder);
+            return new AboutService(contextBuilder);
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace AlphaDev.Core.Tests.Unit
                 return about.ToMockEntityEntry();
             });
             context.SaveChanges().Returns(1);
-            var service = GetInformationService(context);
+            var service = GetAboutService(context);
             service.Create("test");
             context.Abouts.Should().HaveCount(1).And.BeEquivalentTo(new { Value = "test" });
         }
@@ -53,7 +53,7 @@ namespace AlphaDev.Core.Tests.Unit
             var entry = (EntityEntry<About>) FormatterServices.GetUninitializedObject(typeof(EntityEntry<About>));
             context.Abouts.Add(Arg.Any<About>()).Returns(entry);
             context.SaveChanges().Returns(1);
-            var service = GetInformationService(context);
+            var service = GetAboutService(context);
             service.Create("test");
             context.Received(1).SaveChanges();
         }
@@ -64,7 +64,7 @@ namespace AlphaDev.Core.Tests.Unit
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
             context.Abouts = new About[0].ToMockDbSet();
             context.Abouts.Add(Arg.Any<About>()).Returns(new About().ToMockEntityEntry());
-            var service = GetInformationService(context);
+            var service = GetAboutService(context);
             Action create = () => service.Create(default);
             create.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count.");
         }
@@ -74,7 +74,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
             context.Abouts.Add(Arg.Any<About>()).Returns((EntityEntry<About>) null);
-            var service = GetInformationService(context);
+            var service = GetAboutService(context);
             Action create = () => service.Create(default);
             create.Should().Throw<InvalidOperationException>().WithMessage("Unable to retrieve added entry.");
         }
@@ -86,7 +86,7 @@ namespace AlphaDev.Core.Tests.Unit
             var abouts = new[] { new About() }.ToMockDbSet();
             context.Abouts = abouts;
             context.SaveChanges().Returns(1);
-            var service = GetInformationService(context);
+            var service = GetAboutService(context);
             service.Edit("new value");
             // ReSharper disable once PossibleNullReferenceException -- value must be set for test to pass
             context.About.Value.Should().BeEquivalentTo("new value");
@@ -99,7 +99,7 @@ namespace AlphaDev.Core.Tests.Unit
             var abouts = new[] { new About() }.ToMockDbSet();
             context.Abouts = abouts;
             context.SaveChanges().Returns(1);
-            var service = GetInformationService(context);
+            var service = GetAboutService(context);
             service.Edit(default);
             context.Received(1).SaveChanges();
         }
@@ -110,7 +110,7 @@ namespace AlphaDev.Core.Tests.Unit
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
             var abouts = new About[0].ToMockDbSet();
             context.Abouts = abouts;
-            var service = GetInformationService(context);
+            var service = GetAboutService(context);
             Action edit = () => service.Edit(default);
             edit.Should().Throw<InvalidOperationException>().WithMessage("About not found.");
         }
@@ -122,7 +122,7 @@ namespace AlphaDev.Core.Tests.Unit
             var abouts = new[] { new About() }.ToMockDbSet();
             context.Abouts = abouts;
             context.SaveChanges().Returns(0);
-            var service = GetInformationService(context);
+            var service = GetAboutService(context);
             Action edit = () => service.Edit(default);
             edit.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count.");
         }
@@ -132,7 +132,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
             context.Abouts = new[] { new About { Value = "test" } }.ToMockDbSet();
-            var service = GetInformationService(context);
+            var service = GetAboutService(context);
             service.GetAboutDetails().Should().BeEquivalentTo(Option.Some("test"));
         }
 
@@ -141,7 +141,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
             context.Abouts = Enumerable.Empty<About>().ToMockDbSet();
-            var service = GetInformationService(context);
+            var service = GetAboutService(context);
             service.GetAboutDetails().Should().BeEquivalentTo(Option.None<string>());
         }
 
@@ -150,7 +150,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
             context.Abouts = new[] { new About() }.ToMockDbSet();
-            var service = GetInformationService(context);
+            var service = GetAboutService(context);
             service.GetAboutDetails().Should().BeEquivalentTo(Option.None<string>());
         }
     }

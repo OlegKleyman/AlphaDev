@@ -1,0 +1,17 @@
+﻿@model AlphaDev.Web.Models.DisplayValueViewModel
+
+<div class="container">
+    <div class="bubble">
+        <div class="text-center" style="min-height: 40px;">
+            <display value="@User.Identity.IsAuthenticated">
+                <a asp-action="@Model.EditAction" asp-controller="@Model.Controller" class="btn-xs btn-danger edit pull-right actionText">
+                    ~
+                </a>
+            </display>
+            <h1 class="nomargin bubbleTitle">@Model.Title</h1>
+        </div>
+        <div class="bubble-content">
+            <markdown>@Model.Value</markdown>
+        </div>
+    </div>
+</div>

@@ -1,23 +1,8 @@
-﻿@model string
+﻿@using AlphaDev.Web.Models
+@model string
 
 @{
     ViewBag.Title = "About";
 }
 
-<h1 class="text-center">About</h1>
-
-<div class="container">
-    <div class="bubble">
-        <div class="text-center" style="min-height: 40px;">
-            <display value="@User.Identity.IsAuthenticated">
-                <a asp-action="EditAbout" asp-controller="Info" class="btn-xs btn-danger edit pull-right actionText">
-                    ~
-                </a>
-            </display>
-            <h3 class="nomargin bubbleTitle">About</h3>
-        </div>
-        <div class="bubble-content">
-            <markdown>@Model</markdown>
-        </div>
-    </div>
-</div>
+<partial name="_singleDisplay" model="@{ new DisplayValueViewModel("EditAbout", "Info", Model, "About"); }" />
