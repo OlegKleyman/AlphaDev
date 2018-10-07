@@ -16,7 +16,7 @@ namespace AlphaDev.Core.Tests.Unit
     public class ContactServiceTests
     {
         [NotNull]
-        private ContactService GetInformationService(InformationContext context)
+        private ContactService GetContactService(InformationContext context)
         {
             var contextBuilder = Substitute.For<IContextFactory<InformationContext>>();
             contextBuilder.Create().Returns(context);
@@ -36,7 +36,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
             context.Contacts = new[] { new Contact { Value = "test" } }.ToMockDbSet();
-            var service = GetInformationService(context);
+            var service = GetContactService(context);
             service.GetDetails().Should().BeEquivalentTo(Option.Some("test"));
         }
 
@@ -45,7 +45,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
             context.Contacts = Enumerable.Empty<Contact>().ToMockDbSet();
-            var service = GetInformationService(context);
+            var service = GetContactService(context);
             service.GetDetails().Should().BeEquivalentTo(Option.None<string>());
         }
 
@@ -54,8 +54,56 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
             context.Contacts = new[] { new Contact() }.ToMockDbSet();
-            var service = GetInformationService(context);
+            var service = GetContactService(context);
             service.GetDetails().Should().BeEquivalentTo(Option.None<string>());
+        }
+
+        [Fact]
+        public void EditShouldEditContactValue()
+        {
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
+            var contacts = new[] { new Contact() }.ToMockDbSet();
+            context.Contacts = contacts;
+            context.SaveChanges().Returns(1);
+            var service = GetContactService(context);
+            service.Edit("new value");
+            // ReSharper disable once PossibleNullReferenceException -- value must be set for test to pass
+            context.Contact.Value.Should().BeEquivalentTo("new value");
+        }
+
+        [Fact]
+        public void EditShouldSaveNewValueToDataStore()
+        {
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
+            var contacts = new[] { new Contact() }.ToMockDbSet();
+            context.Contacts = contacts;
+            context.SaveChanges().Returns(1);
+            var service = GetContactService(context);
+            service.Edit(default);
+            context.Received(1).SaveChanges();
+        }
+
+        [Fact]
+        public void EditShouldThrowInvalidOperationExceptionWhenContactWasNotFound()
+        {
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
+            var contacts = new Contact[0].ToMockDbSet();
+            context.Contacts = contacts;
+            var service = GetContactService(context);
+            Action edit = () => service.Edit(default);
+            edit.Should().Throw<InvalidOperationException>().WithMessage("Contact not found.");
+        }
+
+        [Fact]
+        public void EditShouldThrowInvalidOperationExceptionWhenUpdateResultsInInconsistentState()
+        {
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
+            var contacts = new[] { new Contact() }.ToMockDbSet();
+            context.Contacts = contacts;
+            context.SaveChanges().Returns(0);
+            var service = GetContactService(context);
+            Action edit = () => service.Edit(default);
+            edit.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count.");
         }
     }
 }

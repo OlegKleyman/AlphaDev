@@ -22,10 +22,9 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var user = Substitute.For<ClaimsPrincipal>();
             user.Identity.Returns(identity);
             var controller = new InfoController(aboutService.ValueOr(Substitute.For<IAboutService>()),
-                contactService.ValueOr(Substitute.For<IContactService>()));
-            controller.ControllerContext = new ControllerContext
+                contactService.ValueOr(Substitute.For<IContactService>()))
             {
-                HttpContext = new DefaultHttpContext { User = user }
+                ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext { User = user } }
             };
 
             return controller;
@@ -249,6 +248,90 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             contactService.GetDetails().Returns(Option.Some("test"));
             var controller = GetInfoController(default, contactService.Some());
             controller.Contact().Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo("test");
+        }
+
+        [Fact]
+        public void EditContactShouldEditContactWithModelData()
+        {
+            var contactService = Substitute.For<IContactService>();
+            const string editValue = "value";
+
+            var controller = GetInfoController(default, contactService.Some());
+
+            var post = new ContactEditViewModel(editValue);
+            controller.EditContact(post);
+
+            contactService.Received(1).Edit(editValue);
+        }
+
+        [Fact]
+        public void EditContactShouldReturnContactRedirectToActionResultWhenModelIsValid()
+        {
+            var contactService = Substitute.For<IContactService>();
+            var controller = GetInfoController(default, contactService.Some());
+
+            var post = new ContactEditViewModel(default);
+            var result = controller.EditContact(post);
+            result.Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should().BeEquivalentTo("Contact");
+        }
+
+        [Fact]
+        public void EditContactShouldReturnContactViewResultWhenModelIsValid()
+        {
+            var contactService = Substitute.For<IContactService>();
+            var controller = GetInfoController(default, contactService.Some());
+            controller.ModelState.AddModelError(string.Empty, string.Empty);
+            var post = new ContactEditViewModel(default);
+            var result = controller.EditContact(post);
+            result.Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("EditContact");
+        }
+
+        [Fact]
+        public void EditContactShouldReturnEditContactView()
+        {
+            var contactService = Substitute.For<IContactService>();
+            contactService.GetDetails().Returns(Option.Some<string>(default));
+            var controller = GetInfoController(default, contactService.Some());
+
+            controller.EditContact()
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should().BeEquivalentTo("EditContact");
+        }
+
+        [Fact]
+        public void EditContactShouldReturnEditContactViewWithModelFromRepositoryWhenContactIsFound()
+        {
+            var contactService = Substitute.For<IContactService>();
+            contactService.GetDetails().Returns(Option.Some("test"));
+
+            var controller = GetInfoController(default, contactService.Some());
+
+            controller
+                .EditContact()
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeEquivalentTo(
+                    new
+                    {
+                        Value = "test"
+                    });
+        }
+
+        [Fact]
+        public void EditContactShouldReturnRedirectActionResultToContactActionWhenContactIsNotFound()
+        {
+            var contactService = Substitute.For<IContactService>();
+
+            var controller = GetInfoController(default, contactService.Some());
+
+            controller
+                .EditContact()
+                .Should()
+                .BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should()
+                .BeEquivalentTo("Contact");
         }
     }
 }

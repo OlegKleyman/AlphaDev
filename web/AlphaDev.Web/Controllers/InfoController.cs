@@ -93,6 +93,21 @@ namespace AlphaDev.Web.Controllers
         public void CreateContact() { }
 
         [Route("contact/edit")]
-        public void EditContact() { }
+        public IActionResult EditContact()
+        {
+            return _contactService.GetDetails().Map(s => new ContactEditViewModel(s))
+                .Map<IActionResult>(model => View(nameof(EditContact), model))
+                .ValueOr(() => RedirectToAction(nameof(Contact)));
+        }
+
+        [Route("contact/edit")]
+        [HttpPost]
+        public IActionResult EditContact(ContactEditViewModel model)
+        {
+            return ModelState.SomeWhen(dictionary => dictionary.IsValid)
+                .MapToAction(dictionary => _contactService.Edit(model.Value))
+                .Map<IActionResult>(dictionary => RedirectToAction(nameof(Contact)))
+                .ValueOr(() => View(nameof(EditContact), model));
+        }
     }
 }

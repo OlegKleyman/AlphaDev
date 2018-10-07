@@ -70,6 +70,12 @@
     <Compile Update="Features\AboutCreate_feature.Steps.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Features\ContactEdit_feature.Steps.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Features\ContactEdit_feature.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Features\AboutEdit_feature.cs">
       <SubType>Code</SubType>
     </Compile>

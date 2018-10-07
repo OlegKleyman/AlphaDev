@@ -5,19 +5,19 @@ using Xunit;
 
 namespace AlphaDev.Web.Tests.Unit.Models
 {
-    public class AboutEditViewModelTests
+    public class ContactEditViewModelTests
     {
         [Fact]
         public void ConstructorShouldInitializeAboutEditorViewModelWithArguments()
         {
             const string value = "value";
-            new AboutEditViewModel(value).Should().BeEquivalentTo(new { Value = value });
+            new ContactEditViewModel(value).Should().BeEquivalentTo(new { Value = value });
         }
 
         [Fact]
         public void DefaultConstructorShouldInitializeAboutEditorViewModelWithEmptyString()
         {
-            new AboutEditViewModel().Value.Should().BeEmpty();
+            new ContactEditViewModel().Value.Should().BeEmpty();
         }
     }
 }
