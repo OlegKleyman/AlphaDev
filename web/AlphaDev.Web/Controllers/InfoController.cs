@@ -91,5 +91,8 @@ namespace AlphaDev.Web.Controllers
 
         [Route("contact/create")]
         public void CreateContact() { }
+
+        [Route("contact/edit")]
+        public void EditContact() { }
     }
 }
