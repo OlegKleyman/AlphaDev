@@ -43,5 +43,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
             SiteTester.Contact.Details.Should()
                 .BeEquivalentTo("No details".ToHtmlFromMarkdown().NormalizeToWindowsLineEndings().Trim());
         }
+
+        private void When_I_click_the_edit_icon()
+        {
+            SiteTester.Contact.EditValue();
+        }
+
+        private void Then_I_should_be_directed_to_the_edit_contact_page()
+        {
+            SiteTester.Driver.Url.Should().BeEquivalentTo(SiteTester.Contact.Edit.BaseUrl.AbsoluteUri);
+        }
     }
 }

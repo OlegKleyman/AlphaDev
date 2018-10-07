@@ -50,5 +50,16 @@ I want to have a web page where I can view it")]
                 CommonSteps.When_I_go_to_the_contact_page,
                 CommonSteps.Then_I_should_be_redirected_to_the_contact_create_page);
         }
+
+        [Scenario]
+        public void Edit_icon_should_link_to_edit_about_page()
+        {
+            Runner.RunScenario(
+                _ => CommonSteps.Given_I_have_logged_in(),
+                _ => CommonSteps.And_there_is_contact_information(),
+                _ => CommonSteps.And_I_am_on_the_contact_page(),
+                _ => When_I_click_the_edit_icon(),
+                _ => Then_I_should_be_directed_to_the_edit_contact_page());
+        }
     }
 }

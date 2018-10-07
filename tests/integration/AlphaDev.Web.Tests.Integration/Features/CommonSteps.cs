@@ -107,6 +107,11 @@ namespace AlphaDev.Web.Tests.Integration.Features
             When_I_go_to_the_about_page();
         }
 
+        public void And_I_am_on_the_contact_page()
+        {
+            When_I_go_to_the_contact_page();
+        }
+
         public void And_there_is_no_about_information()
         {
         }

@@ -8,5 +8,10 @@ namespace AlphaDev.Web.Tests.Integration.Support
         public ContactWebPage(IWebDriver driver, Uri baseUrl) : base(driver, new Uri(baseUrl, "info/contact/"))
         {
         }
+
+        public override void EditValue()
+        {
+            Driver.FindElement(By.CssSelector("a[href*=\"/info/contact/edit\"]")).Click();
+        }
     }
 }
