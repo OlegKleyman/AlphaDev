@@ -2,9 +2,9 @@
 
 namespace AlphaDev.Web.Models
 {
-    public abstract class SingleValueEditViewModel
+    public abstract class SingleValueViewModel
     {
-        protected SingleValueEditViewModel(string value)
+        protected SingleValueViewModel(string value)
         {
             Value = value;
         }

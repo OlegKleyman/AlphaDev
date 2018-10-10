@@ -9,7 +9,8 @@ namespace AlphaDev.Test.Core.Extensions
 {
     public static class EnumerableExtensions
     {
-        public static DbSet<T> ToMockDbSet<T>([NotNull] this IEnumerable<T> target) where T : class
+        [NotNull]
+        public static DbSet<T> ToMockDbSet<T>([NotNull] this ICollection<T> target) where T : class
         {
             var targetQuery = target.AsQueryable();
             var set = Substitute.For<DbSet<T>, IQueryable<T>>();
@@ -18,6 +19,13 @@ namespace AlphaDev.Test.Core.Extensions
             query.Expression.Returns(targetQuery.Expression);
             query.ElementType.Returns(targetQuery.ElementType);
             query.GetEnumerator().Returns(info => targetQuery.GetEnumerator());
+
+            set.Add(Arg.Any<T>()).Returns(info =>
+            {
+                var entity = (T) info[0];
+                target.Add(entity);
+                return entity.ToMockEntityEntry();
+            });
 
             return set;
         }

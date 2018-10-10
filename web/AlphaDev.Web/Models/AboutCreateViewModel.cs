@@ -5,18 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace AlphaDev.Web.Models
 {
     [ModelBinder(typeof(AboutCreateModelBinder))]
-    public class AboutCreateViewModel
+    public class AboutCreateViewModel : SingleValueViewModel
     {
-        public AboutCreateViewModel()
+        public AboutCreateViewModel() : base(string.Empty)
         {
         }
 
-        public AboutCreateViewModel(string value)
+        public AboutCreateViewModel(string value) : base(value)
         {
-            Value = value;
         }
-
-        [Required]
-        public string Value { get; set; }
     }
 }

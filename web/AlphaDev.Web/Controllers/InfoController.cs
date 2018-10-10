@@ -89,9 +89,6 @@ namespace AlphaDev.Web.Controllers
                 .ValueOr(() => GetContactView("No details"));
         }
 
-        [Route("contact/create")]
-        public void CreateContact() { }
-
         [Route("contact/edit")]
         public IActionResult EditContact()
         {
@@ -108,6 +105,24 @@ namespace AlphaDev.Web.Controllers
                 .MapToAction(dictionary => _contactService.Edit(model.Value))
                 .Map<IActionResult>(dictionary => RedirectToAction(nameof(Contact)))
                 .ValueOr(() => View(nameof(EditContact), model));
+        }
+
+        [Route("contact/create")]
+        public IActionResult CreateContact()
+        {
+            return _contactService.GetDetails()
+                .Map<IActionResult>(s => RedirectToAction(nameof(EditContact)))
+                .ValueOr(() => View(nameof(CreateContact), new ContactCreateViewModel()));
+        }
+
+        [Route("contact/create")]
+        [HttpPost]
+        public IActionResult CreateContact([NotNull] ContactCreateViewModel model)
+        {
+            return ModelState.IsValid.SomeWhen(b => b)
+                .MapToAction(b => _contactService.Create(model.Value))
+                .Map<IActionResult>(b => RedirectToAction(nameof(Contact)))
+                .ValueOr(() => View(nameof(CreateContact), model));
         }
     }
 }

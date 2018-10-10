@@ -47,6 +47,9 @@
     <Content Update="Views\Info\Contact.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Info\CreateContact.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Info\EditContact.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

@@ -8,14 +8,14 @@ namespace AlphaDev.Web.Tests.Unit.Models
     public class AboutEditViewModelTests
     {
         [Fact]
-        public void ConstructorShouldInitializeAboutEditorViewModelWithArguments()
+        public void ConstructorShouldInitializeWithArguments()
         {
             const string value = "value";
             new AboutEditViewModel(value).Should().BeEquivalentTo(new { Value = value });
         }
 
         [Fact]
-        public void DefaultConstructorShouldInitializeAboutEditorViewModelWithEmptyString()
+        public void DefaultConstructorShouldInitializeWithEmptyString()
         {
             new AboutEditViewModel().Value.Should().BeEmpty();
         }

@@ -6,5 +6,6 @@ namespace AlphaDev.Core
     {
         Option<string> GetDetails();
         void Edit(string value);
+        void Create(string value);
     }
 }

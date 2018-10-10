@@ -10,14 +10,14 @@ namespace AlphaDev.Web.Tests.Unit.Models
         [Fact]
         public void ConstructorShouldInitializeSingleValueEditViewModelWithValue()
         {
-            var model = Substitute.For<SingleValueEditViewModel>("test");
+            var model = Substitute.For<SingleValueViewModel>("test");
             model.Value.Should().BeEquivalentTo("test");
         }
 
         [Fact]
         public void ValueShouldGetAndSet()
         {
-            var model = Substitute.For<SingleValueEditViewModel>(default(string));
+            var model = Substitute.For<SingleValueViewModel>(default(string));
             model.Value = "test";
             model.Value.Should().BeEquivalentTo("test");
         }

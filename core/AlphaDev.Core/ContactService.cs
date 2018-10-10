@@ -1,6 +1,7 @@
 ﻿using System;
 using AlphaDev.Core.Data;
 using AlphaDev.Core.Data.Contexts;
+using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Extensions;
 using JetBrains.Annotations;
 using Optional;
@@ -28,15 +29,15 @@ namespace AlphaDev.Core
         {
             using (var context = _contextFactory.Create())
             {
-                context.Contact.SomeNotNull(() =>
-                        new InvalidOperationException("Contact not found."))
-                    .MapToAction(contact => contact.Value = value)
-                    // ReSharper disable once AccessToDisposedClosure - execution either
-                    // immediate or not at all
-                    .Map(contact => context.SaveChanges())
-                    .Filter(changes => changes == 1,
-                        () => new InvalidOperationException("Inconsistent change count."))
-                    .MatchNone(exception => throw exception);
+                context.UpdateAndSaveSingleOrThrow(x => x.Contact, contact => contact.Value = value);
+            }
+        }
+
+        public void Create(string value)
+        {
+            using (var context = _contextFactory.Create())
+            {
+                context.AddAndSaveSingleOrThrow(x => x.Contacts, new Contact { Value = value });
             }
         }
     }

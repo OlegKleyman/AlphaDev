@@ -333,5 +333,57 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 .Which.ActionName.Should()
                 .BeEquivalentTo("Contact");
         }
+
+        [Fact]
+        public void CreateContactShouldCreateContactWhenModelIsValid()
+        {
+            var contactService = Substitute.For<IContactService>();
+            var controller = GetInfoController(default, contactService.Some());
+            const string value = "value";
+            controller.CreateContact(new ContactCreateViewModel(value));
+            contactService.Received(1).Create(value);
+        }
+
+        [Fact]
+        public void CreateContactShouldRedirectToEditContactActionWhenThereIsExistingContact()
+        {
+            var contactService = Substitute.For<IContactService>();
+            contactService.GetDetails().Returns(Option.Some("test"));
+            var controller = GetInfoController(default, contactService.Some());
+
+            controller.CreateContact().Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should()
+                .BeEquivalentTo("EditContact");
+        }
+
+        [Fact]
+        public void CreateContactShouldReturnCreateContactViewWhenModelIsNotValid()
+        {
+            var contactService = Substitute.For<IContactService>();
+            var controller = GetInfoController(default, contactService.Some());
+            controller.ModelState.AddModelError("test", "test");
+            var result = controller.CreateContact(new ContactCreateViewModel(default));
+            result.Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("CreateContact");
+        }
+
+        [Fact]
+        public void CreateContactShouldReturnCreateContactViewWhenThereIsNoExistingContact()
+        {
+            var contactService = Substitute.For<IContactService>();
+            var controller = GetInfoController(default, contactService.Some());
+
+            controller.CreateContact()
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should().BeEquivalentTo("CreateContact");
+        }
+
+        [Fact]
+        public void CreateContactShouldReturnRedirectToContactActionWhenModelIsValid()
+        {
+            var contactService = Substitute.For<IContactService>();
+            var controller = GetInfoController(default, contactService.Some());
+            var result = controller.CreateContact(new ContactCreateViewModel(default));
+            result.Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should().BeEquivalentTo("Contact");
+        }
     }
 }

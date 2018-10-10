@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Optional;
 
 namespace AlphaDev.Core.Extensions
@@ -7,7 +8,7 @@ namespace AlphaDev.Core.Extensions
     {
         public static Option<T, TE> MapToAction<T, TE>(this Option<T, TE> target, Action<T> action)
         {
-            target.MatchSome(action);
+            target.MatchSome(obj => action(obj));
             return target;
         }
 
