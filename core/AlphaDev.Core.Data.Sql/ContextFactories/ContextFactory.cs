@@ -1,5 +1,4 @@
-﻿using AlphaDev.Core.Data.Sql.Contexts;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 

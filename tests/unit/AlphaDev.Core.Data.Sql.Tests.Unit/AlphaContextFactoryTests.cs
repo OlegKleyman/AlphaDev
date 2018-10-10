@@ -3,7 +3,6 @@ using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Support;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
 using Microsoft.Extensions.Configuration;
 using NSubstitute;

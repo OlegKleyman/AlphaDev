@@ -1,5 +1,4 @@
-﻿using System;
-using AlphaDev.Web.Models;
+﻿using AlphaDev.Web.Models;
 using FluentAssertions;
 using Xunit;
 

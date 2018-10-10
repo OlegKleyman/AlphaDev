@@ -3,13 +3,13 @@ using AlphaDev.Core.Data;
 using AlphaDev.Core.Data.Account.Security.Sql;
 using AlphaDev.Core.Data.Account.Security.Sql.Contexts;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
+using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Sql;
-using AlphaDev.Core.Data.Sql.Contexts;
+using AlphaDev.Core.Data.Sql.ContextFactories;
 using AlphaDev.Core.Data.Support;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.DependencyInjection;
-using BlogContext = AlphaDev.Core.Data.Contexts.BlogContext;
 
 namespace AlphaDev.Web.Bootstrap.Extensions
 {
@@ -28,7 +28,7 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         {
             serviceCollection.AddScoped<BlogContext, Core.Data.Sql.Contexts.BlogContext>(
                     provider => new BlogContextFactory(configurer).CreateDbContext())
-                .AddScoped<Core.Data.Contexts.InformationContext, InformationContext>(
+                .AddScoped<InformationContext, Core.Data.Sql.Contexts.InformationContext>(
                     provider => new InformationContextFactory(configurer).CreateDbContext());
             return serviceCollection;
         }
@@ -46,7 +46,7 @@ namespace AlphaDev.Web.Bootstrap.Extensions
             Configurer configurer)
         {
             serviceCollection
-                .AddSingleton<IDesignTimeDbContextFactory<InformationContext>,
+                .AddSingleton<IDesignTimeDbContextFactory<Core.Data.Sql.Contexts.InformationContext>,
                     InformationContextFactory
                 >(provider => new InformationContextFactory(configurer));
 
@@ -56,8 +56,8 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         public static IServiceCollection AddContextFactories(this IServiceCollection serviceCollection)
         {
             return serviceCollection
-                .AddSingleton<IContextFactory<Core.Data.Contexts.InformationContext>,
-                    Core.Data.Sql.ContextFactories.ContextFactory<InformationContext>>();
+                .AddSingleton<IContextFactory<InformationContext>,
+                    ContextFactory<Core.Data.Sql.Contexts.InformationContext>>();
         }
     }
 }

@@ -2,7 +2,6 @@
 using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Support;
-using AlphaDev.Test.Core;
 using AlphaDev.Test.Core.Extensions;
 using FluentAssertions;
 using NSubstitute;

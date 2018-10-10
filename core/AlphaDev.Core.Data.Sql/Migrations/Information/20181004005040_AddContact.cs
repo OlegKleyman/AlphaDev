@@ -7,16 +7,13 @@ namespace AlphaDev.Core.Data.Sql.Migrations.Information
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Contacts",
-                columns: table => new
+                "Contacts",
+                table => new
                 {
                     Value = table.Column<string>(nullable: false),
                     Id = table.Column<bool>(nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Contacts", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Contacts", x => x.Id); });
 
             migrationBuilder.Sql(
                 "ALTER TABLE Contacts ADD CONSTRAINT CK_CONTACTS_SIZE CHECK (dbo.CheckTableSize('Contacts') = 1)");
@@ -25,7 +22,7 @@ namespace AlphaDev.Core.Data.Sql.Migrations.Information
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Contacts");
+                "Contacts");
         }
     }
 }

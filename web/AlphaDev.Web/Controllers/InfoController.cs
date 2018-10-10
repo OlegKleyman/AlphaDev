@@ -15,7 +15,7 @@ namespace AlphaDev.Web.Controllers
         private readonly IAboutService _aboutService;
         private readonly IContactService _contactService;
 
-        public InfoController([NotNull]  IAboutService aboutService, [NotNull] IContactService contactService)
+        public InfoController([NotNull] IAboutService aboutService, [NotNull] IContactService contactService)
         {
             _aboutService = aboutService;
             _contactService = contactService;

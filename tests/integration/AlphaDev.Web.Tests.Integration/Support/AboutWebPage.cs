@@ -1,5 +1,4 @@
 using System;
-using AlphaDev.Web.Tests.Integration.Extensions;
 using OpenQA.Selenium;
 
 namespace AlphaDev.Web.Tests.Integration.Support

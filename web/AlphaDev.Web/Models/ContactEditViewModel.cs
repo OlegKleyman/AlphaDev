@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AlphaDev.Web.Models
 {
     [ModelBinder(typeof(ContactEditModelBinder))]
-    public class ContactEditViewModel :SingleValueViewModel
+    public class ContactEditViewModel : SingleValueViewModel
     {
         public ContactEditViewModel(string value) : base(value)
         {
@@ -12,7 +12,6 @@ namespace AlphaDev.Web.Models
 
         public ContactEditViewModel() : base(string.Empty)
         {
-            
         }
     }
 }

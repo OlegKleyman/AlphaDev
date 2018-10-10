@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using AlphaDev.Core.Data;
 using AlphaDev.Core.Data.Contexts;
@@ -36,30 +35,49 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void GetContactDetailsShouldReturnContactDetails()
+        public void CreateShouldSaveContactToDataStore()
         {
-            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
-            context.Contacts = new[] { new Contact { Value = "test" } }.ToMockDbSet();
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>()).Mock();
+            var contacts = new List<Contact>();
+            context.Contacts = contacts.ToMockDbSet();
+            context.SaveChanges().Returns(1);
             var service = GetContactService(context);
-            service.GetDetails().Should().BeEquivalentTo(Option.Some("test"));
+            service.Create("test");
+            context.Contacts.Should().HaveCount(1).And.BeEquivalentTo(new { Value = "test" });
         }
 
         [Fact]
-        public void GetContactDetailsShouldReturnNoneWhenContactIsNull()
+        public void CreateShouldSaveToDataStore()
         {
-            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>()).Mock();
             context.Contacts = new List<Contact>().ToMockDbSet();
+            var entry = (EntityEntry<Contact>) FormatterServices.GetUninitializedObject(typeof(EntityEntry<Contact>));
+            context.Contacts.Add(Arg.Any<Contact>()).Returns(entry);
+            context.SaveChanges().Returns(1);
             var service = GetContactService(context);
-            service.GetDetails().Should().BeEquivalentTo(Option.None<string>());
+            service.Create("test");
+            context.Received(1).SaveChanges();
         }
 
         [Fact]
-        public void GetContactDetailsShouldReturnNoneWhenContactValueIsNull()
+        public void CreateShouldThrowInvalidOperationExceptionWhenUnableSavingReturnsUnexpectedSaveCount()
+        {
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>()).Mock();
+            context.Contacts = new List<Contact>().ToMockDbSet();
+            context.Contacts.Add(Arg.Any<Contact>()).Returns(new Contact().ToMockEntityEntry());
+            var service = GetContactService(context);
+            Action create = () => service.Create(default);
+            create.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count of 0.");
+        }
+
+        [Fact]
+        public void CreateShouldThrowInvalidOperationExceptionWhenUnableToRetrieveAddedEntityDetails()
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
-            context.Contacts = new[] { new Contact() }.ToMockDbSet();
+            context.Contacts.Add(Arg.Any<Contact>()).Returns((EntityEntry<Contact>) null);
             var service = GetContactService(context);
-            service.GetDetails().Should().BeEquivalentTo(Option.None<string>());
+            Action create = () => service.Create(default);
+            create.Should().Throw<InvalidOperationException>().WithMessage("Unable to retrieve added entry.");
         }
 
         [Fact]
@@ -111,49 +129,30 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void CreateShouldSaveContactToDataStore()
-        {
-            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>()).Mock();
-            var contacts = new List<Contact>();
-            context.Contacts = contacts.ToMockDbSet();
-            context.SaveChanges().Returns(1);
-            var service = GetContactService(context);
-            service.Create("test");
-            context.Contacts.Should().HaveCount(1).And.BeEquivalentTo(new { Value = "test" });
-        }
-
-        [Fact]
-        public void CreateShouldSaveToDataStore()
-        {
-            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>()).Mock();
-            context.Contacts = new List<Contact>().ToMockDbSet();
-            var entry = (EntityEntry<Contact>)FormatterServices.GetUninitializedObject(typeof(EntityEntry<Contact>));
-            context.Contacts.Add(Arg.Any<Contact>()).Returns(entry);
-            context.SaveChanges().Returns(1);
-            var service = GetContactService(context);
-            service.Create("test");
-            context.Received(1).SaveChanges();
-        }
-
-        [Fact]
-        public void CreateShouldThrowInvalidOperationExceptionWhenUnableSavingReturnsUnexpectedSaveCount()
-        {
-            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>()).Mock();
-            context.Contacts = new List<Contact>().ToMockDbSet();
-            context.Contacts.Add(Arg.Any<Contact>()).Returns(new Contact().ToMockEntityEntry());
-            var service = GetContactService(context);
-            Action create = () => service.Create(default);
-            create.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count of 0.");
-        }
-
-        [Fact]
-        public void CreateShouldThrowInvalidOperationExceptionWhenUnableToRetrieveAddedEntityDetails()
+        public void GetContactDetailsShouldReturnContactDetails()
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
-            context.Contacts.Add(Arg.Any<Contact>()).Returns((EntityEntry<Contact>)null);
+            context.Contacts = new[] { new Contact { Value = "test" } }.ToMockDbSet();
             var service = GetContactService(context);
-            Action create = () => service.Create(default);
-            create.Should().Throw<InvalidOperationException>().WithMessage("Unable to retrieve added entry.");
+            service.GetDetails().Should().BeEquivalentTo(Option.Some("test"));
+        }
+
+        [Fact]
+        public void GetContactDetailsShouldReturnNoneWhenContactIsNull()
+        {
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
+            context.Contacts = new List<Contact>().ToMockDbSet();
+            var service = GetContactService(context);
+            service.GetDetails().Should().BeEquivalentTo(Option.None<string>());
+        }
+
+        [Fact]
+        public void GetContactDetailsShouldReturnNoneWhenContactValueIsNull()
+        {
+            var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
+            context.Contacts = new[] { new Contact() }.ToMockDbSet();
+            var service = GetContactService(context);
+            service.GetDetails().Should().BeEquivalentTo(Option.None<string>());
         }
     }
 }

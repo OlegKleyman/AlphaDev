@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using AlphaDev.Web.Support;
+﻿using AlphaDev.Web.Support;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlphaDev.Web.Models

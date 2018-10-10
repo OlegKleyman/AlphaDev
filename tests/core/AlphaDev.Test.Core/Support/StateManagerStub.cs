@@ -206,14 +206,14 @@ namespace AlphaDev.Test.Core.Support
 
         public virtual event EventHandler<EntityTrackedEventArgs> Tracked
         {
-            add { throw new NotImplementedException(); }
-            remove { throw new NotImplementedException(); }
+            add => throw new NotImplementedException();
+            remove => throw new NotImplementedException();
         }
 
         public virtual event EventHandler<EntityStateChangedEventArgs> StateChanged
         {
-            add { throw new NotImplementedException(); }
-            remove { throw new NotImplementedException(); }
+            add => throw new NotImplementedException();
+            remove => throw new NotImplementedException();
         }
     }
 }

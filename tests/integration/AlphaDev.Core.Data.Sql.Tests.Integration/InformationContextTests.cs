@@ -108,102 +108,6 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
         }
 
         [Fact]
-        public void ContactShouldReturnContact()
-        {
-            using (var context = GetInformationContext())
-            {
-                SeedContacts();
-
-                context.Contact.Should().BeEquivalentTo(new { Id = 1, Value = "test" });
-            }
-        }
-
-        [Fact]
-        public void ContactsShouldAddContact()
-        {
-            using (var context = GetInformationContext())
-            {
-                var contact = new Contact
-                {
-                    Value = "test"
-                };
-
-                context.Contacts.Add(contact);
-
-                context.SaveChanges();
-
-                GetTable("Contacts").Should().HaveCount(1);
-            }
-        }
-
-        [Fact]
-        public void ContactsShouldDeleteContacts()
-        {
-            using (var context = GetInformationContext())
-            {
-                context.Contacts.RemoveRange(context.Contacts);
-                context.SaveChanges();
-
-                GetTable("Contacts").Should().BeEmpty();
-            }
-        }
-
-        [Fact]
-        public void ContactsShouldReturnContacts()
-        {
-            using (var context = GetInformationContext())
-            {
-                SeedContacts();
-                var aboutsDictionary = context.Contacts.Select(
-                    about => about.GetType().GetProperties()
-                        .ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(about, null)));
-
-                GetTable("Contacts").Should().BeEquivalentTo(aboutsDictionary);
-            }
-        }
-
-        [Fact]
-        public void ContactsShouldThrowIfAddingMultipleContacts()
-        {
-            using (var context = GetInformationContext())
-            {
-                SeedContacts();
-                var contact = new Contact
-                {
-                    Id = false,
-                    Value = "test"
-                };
-
-                context.Contacts.Add(contact);
-
-                Action saveChanges = () => context.SaveChanges();
-                saveChanges.Should().Throw<DbUpdateException>().WithInnerException<SqlException>().Which.Message
-                    .Should().MatchRegex(
-                        @"The INSERT statement conflicted with the CHECK constraint ""CK_CONTACTS_SIZE""\. The conflict occurred in database "".*"", table ""dbo.Contacts""");
-            }
-        }
-
-        [Fact]
-        public void ContactsShouldUpdateContacts()
-        {
-            using (var context = GetInformationContext())
-            {
-                SeedContacts();
-                var targetContact = context.Contact;
-
-                // ReSharper disable once PossibleNullReferenceException -- Contacts have already been seeded
-                targetContact.Value = "Updated Value";
-
-                context.SaveChanges();
-
-                GetTable("Contacts").First().Should().BeEquivalentTo(
-                    targetContact.GetType().GetProperties().ToDictionary(
-                        x => x.Name,
-                        x => x.GetGetMethod().Invoke(targetContact, null)));
-            }
-        }
-
-        [Fact]
         public void AboutShouldReturnAbout()
         {
             using (var context = GetInformationContext())
@@ -297,6 +201,102 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
                     targetAbout.GetType().GetProperties().ToDictionary(
                         x => x.Name,
                         x => x.GetGetMethod().Invoke(targetAbout, null)));
+            }
+        }
+
+        [Fact]
+        public void ContactShouldReturnContact()
+        {
+            using (var context = GetInformationContext())
+            {
+                SeedContacts();
+
+                context.Contact.Should().BeEquivalentTo(new { Id = 1, Value = "test" });
+            }
+        }
+
+        [Fact]
+        public void ContactsShouldAddContact()
+        {
+            using (var context = GetInformationContext())
+            {
+                var contact = new Contact
+                {
+                    Value = "test"
+                };
+
+                context.Contacts.Add(contact);
+
+                context.SaveChanges();
+
+                GetTable("Contacts").Should().HaveCount(1);
+            }
+        }
+
+        [Fact]
+        public void ContactsShouldDeleteContacts()
+        {
+            using (var context = GetInformationContext())
+            {
+                context.Contacts.RemoveRange(context.Contacts);
+                context.SaveChanges();
+
+                GetTable("Contacts").Should().BeEmpty();
+            }
+        }
+
+        [Fact]
+        public void ContactsShouldReturnContacts()
+        {
+            using (var context = GetInformationContext())
+            {
+                SeedContacts();
+                var aboutsDictionary = context.Contacts.Select(
+                    about => about.GetType().GetProperties()
+                        .ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(about, null)));
+
+                GetTable("Contacts").Should().BeEquivalentTo(aboutsDictionary);
+            }
+        }
+
+        [Fact]
+        public void ContactsShouldThrowIfAddingMultipleContacts()
+        {
+            using (var context = GetInformationContext())
+            {
+                SeedContacts();
+                var contact = new Contact
+                {
+                    Id = false,
+                    Value = "test"
+                };
+
+                context.Contacts.Add(contact);
+
+                Action saveChanges = () => context.SaveChanges();
+                saveChanges.Should().Throw<DbUpdateException>().WithInnerException<SqlException>().Which.Message
+                    .Should().MatchRegex(
+                        @"The INSERT statement conflicted with the CHECK constraint ""CK_CONTACTS_SIZE""\. The conflict occurred in database "".*"", table ""dbo.Contacts""");
+            }
+        }
+
+        [Fact]
+        public void ContactsShouldUpdateContacts()
+        {
+            using (var context = GetInformationContext())
+            {
+                SeedContacts();
+                var targetContact = context.Contact;
+
+                // ReSharper disable once PossibleNullReferenceException -- Contacts have already been seeded
+                targetContact.Value = "Updated Value";
+
+                context.SaveChanges();
+
+                GetTable("Contacts").First().Should().BeEquivalentTo(
+                    targetContact.GetType().GetProperties().ToDictionary(
+                        x => x.Name,
+                        x => x.GetGetMethod().Invoke(targetContact, null)));
             }
         }
     }
