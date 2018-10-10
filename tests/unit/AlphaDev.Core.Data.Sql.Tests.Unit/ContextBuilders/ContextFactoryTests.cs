@@ -1,43 +1,45 @@
 ﻿using System;
+using AlphaDev.Core.Data.Sql.ContextFactories;
 using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Support;
 using AlphaDev.Test.Core;
 using AlphaDev.Test.Core.Extensions;
 using FluentAssertions;
 using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using NSubstitute;
 using Xunit;
 
 namespace AlphaDev.Core.Data.Sql.Tests.Unit.ContextBuilders
 {
-    public class InformationContextBuilderTests
+    public class ContextFactoryTests
     {
         [NotNull]
-        private ContextFactories.InformationContextFactory GetInformationContextFactory(
-            [NotNull] IDesignTimeDbContextFactory<InformationContext> factory)
+        private ContextFactory<DbContext> GetContextFactory(
+            [NotNull] IDesignTimeDbContextFactory<DbContext> factory)
         {
-            return new ContextFactories.InformationContextFactory(factory);
+            return new ContextFactory<DbContext>(factory);
         }
 
         [Fact]
         public void ConstructorShouldInitializeNewObject()
         {
             Action constructor = () =>
-                new ContextFactories.InformationContextFactory(
-                    Substitute.For<AlphaContextFactory<InformationContext>>(Substitute.For<Configurer>())).EmptyCall();
+                new ContextFactory<DbContext>(
+                    Substitute.For<IDesignTimeDbContextFactory<DbContext>>()).EmptyCall();
             constructor.Should().NotThrow();
         }
 
         [Fact]
-        public void CreateShouldCreateNewInformationContext()
+        public void CreateShouldCreateNewDbContext()
         {
             var factoryMock =
                 Substitute
-                    .For<IDesignTimeDbContextFactory<InformationContext>>();
-            var context = Substitute.For<InformationContext>((Configurer) default);
+                    .For<IDesignTimeDbContextFactory<DbContext>>();
+            var context = Substitute.For<DbContext>();
             factoryMock.CreateDbContext(Arg.Any<string[]>()).Returns(context);
-            var factory = GetInformationContextFactory(factoryMock);
+            var factory = GetContextFactory(factoryMock);
 
             factory.Create().Should().NotBeNull();
         }

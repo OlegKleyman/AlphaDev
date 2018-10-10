@@ -57,7 +57,7 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         {
             return serviceCollection
                 .AddSingleton<IContextFactory<Core.Data.Contexts.InformationContext>,
-                    Core.Data.Sql.ContextFactories.InformationContextFactory>();
+                    Core.Data.Sql.ContextFactories.ContextFactory<InformationContext>>();
         }
     }
 }
