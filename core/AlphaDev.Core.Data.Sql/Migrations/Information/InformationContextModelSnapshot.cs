@@ -14,13 +14,13 @@ namespace AlphaDev.Core.Data.Sql.Migrations.Information
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.3-rtm-10026")
+                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("AlphaDev.Core.Data.Entities.About", b =>
             {
-                b.Property<bool>("Id")
-                    .ValueGeneratedOnAdd();
+                b.Property<bool>("Id");
 
                 b.Property<string>("Value")
                     .IsRequired();
@@ -28,6 +28,18 @@ namespace AlphaDev.Core.Data.Sql.Migrations.Information
                 b.HasKey("Id");
 
                 b.ToTable("Abouts");
+            });
+
+            modelBuilder.Entity("AlphaDev.Core.Data.Entities.Contact", b =>
+            {
+                b.Property<bool>("Id");
+
+                b.Property<string>("Value")
+                    .IsRequired();
+
+                b.HasKey("Id");
+
+                b.ToTable("Contacts");
             });
 #pragma warning restore 612, 618
         }

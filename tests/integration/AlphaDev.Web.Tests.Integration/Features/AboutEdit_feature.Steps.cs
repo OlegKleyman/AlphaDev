@@ -24,7 +24,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void When_I_click_the_edit_icon()
         {
-            SiteTester.About.EditAbout();
+            SiteTester.About.EditValue();
         }
 
         private void Then_I_should_be_directed_to_the_edit_about_page()

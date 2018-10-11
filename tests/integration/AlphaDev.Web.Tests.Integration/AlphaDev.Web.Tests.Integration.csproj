@@ -64,16 +64,34 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Assets.resx</DependentUpon>
     </Compile>
+    <Compile Update="Features\ContactCreate_feature.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Features\ContactCreate_feature.Steps.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Features\AboutCreate_feature.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Features\AboutCreate_feature.Steps.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Features\ContactEdit_feature.Steps.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Features\ContactEdit_feature.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Features\AboutEdit_feature.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Features\AboutEdit_feature.Steps.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Features\Contact_feature.Steps.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Features\Contact_feature.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Features\About_feature.cs">

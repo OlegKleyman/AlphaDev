@@ -2,7 +2,6 @@
 using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Support;
-using AlphaDev.Test.Core;
 using AlphaDev.Test.Core.Extensions;
 using FluentAssertions;
 using NSubstitute;
@@ -43,6 +42,34 @@ namespace AlphaDev.Core.Data.Tests.Unit.Contexts
             context.Abouts = abouts;
             Action about = () => context.About.EmptyCall();
             about.Should().Throw<InvalidOperationException>().WithMessage("Sequence contains more than one element");
+        }
+
+        [Fact]
+        public void ContactShouldReturnContactWhenExists()
+        {
+            var context = GetInformationContext();
+            var contacts = new[] { new Contact { Id = true, Value = "value" } }.ToMockDbSet();
+            context.Contacts = contacts;
+            context.Contact.Should().BeEquivalentTo(new { Id = 1, Value = "value" });
+        }
+
+        [Fact]
+        public void ContactShouldReturnNullWhenNoBlogsAreFound()
+        {
+            var context = GetInformationContext();
+            var contacts = new Contact[0].ToMockDbSet();
+            context.Contacts = contacts;
+            context.Contact.Should().BeNull();
+        }
+
+        [Fact]
+        public void ContactShouldThrowInvalidOperationExceptionWhenMultipleContactsAreFound()
+        {
+            var context = GetInformationContext();
+            var contacts = new[] { default(Contact), default }.ToMockDbSet();
+            context.Contacts = contacts;
+            Action contact = () => context.Contact.EmptyCall();
+            contact.Should().Throw<InvalidOperationException>().WithMessage("Sequence contains more than one element");
         }
     }
 }

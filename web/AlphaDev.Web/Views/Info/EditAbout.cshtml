@@ -2,7 +2,7 @@
 @model AlphaDev.Web.Models.AboutEditViewModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit About";
 }
 
-<simple-editor model="@{ new SimpleEditorViewModel { Value = Model.Value } }"></simple-editor>
+<simple-editor model="@new SimpleEditorViewModel { Value = Model.Value }"></simple-editor>

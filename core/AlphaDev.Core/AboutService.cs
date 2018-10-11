@@ -1,5 +1,4 @@
-﻿using System;
-using AlphaDev.Core.Data;
+﻿using AlphaDev.Core.Data;
 using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Extensions;
@@ -8,11 +7,11 @@ using Optional;
 
 namespace AlphaDev.Core
 {
-    public class AboutService<T> : IAboutService where T : InformationContext
+    public class AboutService : IAboutService
     {
-        private readonly IContextFactory<T> _contextFactory;
+        private readonly IContextFactory<InformationContext> _contextFactory;
 
-        public AboutService([NotNull] IContextFactory<T> contextFactory)
+        public AboutService([NotNull] IContextFactory<InformationContext> contextFactory)
         {
             _contextFactory = contextFactory;
         }
@@ -29,15 +28,7 @@ namespace AlphaDev.Core
         {
             using (var context = _contextFactory.Create())
             {
-                context.About.SomeNotNull(() =>
-                        new InvalidOperationException("About not found."))
-                    .MapToAction(about => about.Value = value)
-                    // ReSharper disable once AccessToDisposedClosure - execution either
-                    // immediate or not at all
-                    .Map(about => context.SaveChanges())
-                    .Filter(changes => changes == 1,
-                        () => new InvalidOperationException("Inconsistent change count."))
-                    .MatchNone(exception => throw exception);
+                context.UpdateAndSaveSingleOrThrow(x => x.About, about => about.Value = value);
             }
         }
 
@@ -45,13 +36,7 @@ namespace AlphaDev.Core
         {
             using (var context = _contextFactory.Create())
             {
-                context.Abouts.Add(new About { Value = value }).SomeNotNull(() =>
-                        new InvalidOperationException("Unable to retrieve added entry."))
-                    // ReSharper disable once AccessToDisposedClosure - execution either
-                    // immediate or not at all
-                    .Map(entry => context.SaveChanges())
-                    .Filter(changes => changes == 1, () => new InvalidOperationException("Inconsistent change count."))
-                    .MatchNone(exception => throw exception);
+                context.AddAndSaveSingleOrThrow(x => x.Abouts, new About { Value = value });
             }
         }
     }

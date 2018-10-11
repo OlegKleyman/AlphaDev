@@ -64,6 +64,13 @@ namespace AlphaDev.Web.Tests.Integration.Features
             Data.Add("AddedAbout", about);
         }
 
+        public void And_there_is_contact_information()
+        {
+            var contact = DatabasesFixture.InformationContextDatabaseFixture.DefaultContact;
+            DatabasesFixture.InformationContextDatabaseFixture.InformationContext.AddRangeAndSave(contact);
+            Data.Add("AddedContact", contact);
+        }
+
         public void And_there_is_a_blog_post()
         {
             Given_there_is_a_blog_post();
@@ -90,12 +97,26 @@ namespace AlphaDev.Web.Tests.Integration.Features
             SiteTester.About.GoTo();
         }
 
+        public void When_I_go_to_the_contact_page()
+        {
+            SiteTester.Contact.GoTo();
+        }
+
         public void And_I_am_on_the_about_page()
         {
             When_I_go_to_the_about_page();
         }
 
+        public void And_I_am_on_the_contact_page()
+        {
+            When_I_go_to_the_contact_page();
+        }
+
         public void And_there_is_no_about_information()
+        {
+        }
+
+        public void And_there_is_no_contact_information()
         {
         }
 
@@ -104,9 +125,19 @@ namespace AlphaDev.Web.Tests.Integration.Features
             SiteTester.Driver.Url.Should().BeEquivalentTo(SiteTester.About.Create.BaseUrl.AbsoluteUri);
         }
 
+        public void Then_I_should_be_redirected_to_the_contact_create_page()
+        {
+            SiteTester.Driver.Url.Should().BeEquivalentTo(SiteTester.Contact.Create.BaseUrl.AbsoluteUri);
+        }
+
         public void Then_I_should_be_redirected_to_the_about_edit_page()
         {
             SiteTester.Driver.Url.Should().BeEquivalentTo(SiteTester.About.Edit.BaseUrl.AbsoluteUri);
+        }
+
+        public void Then_I_should_be_redirected_to_the_contact_edit_page()
+        {
+            SiteTester.Driver.Url.Should().BeEquivalentTo(SiteTester.Contact.Edit.BaseUrl.AbsoluteUri);
         }
     }
 }

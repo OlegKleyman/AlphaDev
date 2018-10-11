@@ -59,9 +59,14 @@ namespace AlphaDev.Web.Bootstrap.Extensions
                 {
                     var context = scope.ServiceProvider.GetService<InformationContext>();
 
-                    context.Database.ExecuteSqlCommand("TRUNCATE TABLE Abouts");
                     context.Abouts.AddRange(
                         new About
+                        {
+                            Value = GetDevelopmentContent()
+                        });
+
+                    context.Contacts.AddRange(
+                        new Contact
                         {
                             Value = GetDevelopmentContent()
                         });

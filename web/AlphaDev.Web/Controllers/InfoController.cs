@@ -13,10 +13,12 @@ namespace AlphaDev.Web.Controllers
     public class InfoController : Controller
     {
         private readonly IAboutService _aboutService;
+        private readonly IContactService _contactService;
 
-        public InfoController([NotNull] IAboutService aboutService)
+        public InfoController([NotNull] IAboutService aboutService, [NotNull] IContactService contactService)
         {
             _aboutService = aboutService;
+            _contactService = contactService;
         }
 
         [AllowAnonymous]
@@ -61,7 +63,6 @@ namespace AlphaDev.Web.Controllers
                 .ValueOr(() => View(nameof(CreateAbout), new AboutCreateViewModel()));
         }
 
-        // TODO add unit tests
         [Route("about/create")]
         [HttpPost]
         public IActionResult CreateAbout([NotNull] AboutCreateViewModel model)
@@ -70,6 +71,58 @@ namespace AlphaDev.Web.Controllers
                 .MapToAction(b => _aboutService.Create(model.Value))
                 .Map<IActionResult>(b => RedirectToAction(nameof(About)))
                 .ValueOr(() => View(nameof(CreateAbout), model));
+        }
+
+        [AllowAnonymous]
+        [Route("contact")]
+        public IActionResult Contact()
+        {
+            IActionResult GetContactView(string value)
+            {
+                return View(nameof(Contact), value);
+            }
+
+            return _contactService.GetDetails().Map(s => GetContactView(s).Some())
+                .ValueOr(() =>
+                    RedirectToAction(nameof(CreateContact))
+                        .SomeWhen<IActionResult>(result => User.Identity.IsAuthenticated))
+                .ValueOr(() => GetContactView("No details"));
+        }
+
+        [Route("contact/edit")]
+        public IActionResult EditContact()
+        {
+            return _contactService.GetDetails().Map(s => new ContactEditViewModel(s))
+                .Map<IActionResult>(model => View(nameof(EditContact), model))
+                .ValueOr(() => RedirectToAction(nameof(Contact)));
+        }
+
+        [Route("contact/edit")]
+        [HttpPost]
+        public IActionResult EditContact(ContactEditViewModel model)
+        {
+            return ModelState.SomeWhen(dictionary => dictionary.IsValid)
+                .MapToAction(dictionary => _contactService.Edit(model.Value))
+                .Map<IActionResult>(dictionary => RedirectToAction(nameof(Contact)))
+                .ValueOr(() => View(nameof(EditContact), model));
+        }
+
+        [Route("contact/create")]
+        public IActionResult CreateContact()
+        {
+            return _contactService.GetDetails()
+                .Map<IActionResult>(s => RedirectToAction(nameof(EditContact)))
+                .ValueOr(() => View(nameof(CreateContact), new ContactCreateViewModel()));
+        }
+
+        [Route("contact/create")]
+        [HttpPost]
+        public IActionResult CreateContact([NotNull] ContactCreateViewModel model)
+        {
+            return ModelState.IsValid.SomeWhen(b => b)
+                .MapToAction(b => _contactService.Create(model.Value))
+                .Map<IActionResult>(b => RedirectToAction(nameof(Contact)))
+                .ValueOr(() => View(nameof(CreateContact), model));
         }
     }
 }

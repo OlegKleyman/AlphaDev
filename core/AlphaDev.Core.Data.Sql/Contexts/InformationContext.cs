@@ -13,10 +13,13 @@ namespace AlphaDev.Core.Data.Sql.Contexts
 
         protected override void OnModelCreating([NotNull] ModelBuilder modelBuilder)
         {
-            var entity = modelBuilder.Entity<About>();
+            var aboutEntity = modelBuilder.Entity<About>();
+            aboutEntity.HasKey(x => x.Id);
+            aboutEntity.Property(x => x.Value).IsRequired();
 
-            entity.HasKey(x => x.Id);
-            entity.Property(x => x.Value).IsRequired();
+            var contactEntity = modelBuilder.Entity<Contact>();
+            contactEntity.HasKey(x => x.Id);
+            contactEntity.Property(x => x.Value).IsRequired();
         }
     }
 }

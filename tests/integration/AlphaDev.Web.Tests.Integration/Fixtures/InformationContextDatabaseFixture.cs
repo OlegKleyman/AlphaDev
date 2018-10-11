@@ -26,6 +26,12 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             Value = "* test about"
         };
 
+        [NotNull]
+        public Contact DefaultContact => new Contact
+        {
+            Value = "* test about"
+        };
+
         public void Dispose()
         {
         }
