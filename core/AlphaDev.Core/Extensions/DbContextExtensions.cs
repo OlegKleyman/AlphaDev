@@ -17,7 +17,7 @@ namespace AlphaDev.Core.Extensions
         }
 
         public static void UpdateAndSaveSingleOrThrow<TContext, TEntity>([NotNull] this TContext context,
-            [NotNull] Func<TContext, TEntity> getEntity, Action<TEntity> editEntity)
+            [NotNull] Func<TContext, TEntity> getEntity, [NotNull] Action<TEntity> editEntity)
             where TContext : DbContext where TEntity : class
         {
             getEntity(context).SomeNotNull(() =>

@@ -109,7 +109,7 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
             context.Database.Returns(Substitute.For<DatabaseFacade>(context));
             context.SaveChanges().Returns(1);
             Action updateAndSaveSingleOrThrow =
-                () => context.UpdateAndSaveSingleOrThrow(x => (TestEntity) null, default);
+                () => context.UpdateAndSaveSingleOrThrow(x => (TestEntity) null, x => {});
             updateAndSaveSingleOrThrow.Should().Throw<InvalidOperationException>()
                 .WithMessage("TestEntity not found.");
         }
