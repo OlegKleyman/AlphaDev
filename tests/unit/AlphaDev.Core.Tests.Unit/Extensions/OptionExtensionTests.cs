@@ -10,7 +10,8 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
         [Theory]
         [InlineData(true, true)]
         [InlineData(false, false)]
-        public void MapToActionOnSingleValuedOptionWithNoActionParametersShouldExecuteActionWhenSome(bool some, bool expected)
+        public void MapToActionOnSingleValuedOptionWithNoActionParametersShouldExecuteActionWhenSome(bool some,
+            bool expected)
         {
             var option = default(object).SomeWhen(o => some);
             var flag = false;
@@ -21,7 +22,8 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
         [Theory]
         [InlineData(true, true)]
         [InlineData(false, false)]
-        public void MapToActionOnWithExceptionValuedOptionWithNoActionParametersShouldExecuteActionWhenSome(bool some, bool expected)
+        public void MapToActionOnWithExceptionValuedOptionWithNoActionParametersShouldExecuteActionWhenSome(bool some,
+            bool expected)
         {
             var option = default(object).SomeWhen(o => some, default(object));
             var flag = false;
@@ -32,7 +34,8 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
         [Theory]
         [InlineData(true, true)]
         [InlineData(false, false)]
-        public void MapToActionOnSingleValuedOptionWithValueActionParameterShouldExecuteActionWhenSome(bool some, bool expected)
+        public void MapToActionOnSingleValuedOptionWithValueActionParameterShouldExecuteActionWhenSome(bool some,
+            bool expected)
         {
             var option = default(object).SomeWhen(o => some);
             var flag = false;
@@ -43,7 +46,8 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
         [Theory]
         [InlineData(true, true)]
         [InlineData(false, false)]
-        public void MapToActionOnWithExceptionValuedOptionWithValueActionParameterShouldExecuteActionWhenSome(bool some, bool expected)
+        public void MapToActionOnWithExceptionValuedOptionWithValueActionParameterShouldExecuteActionWhenSome(bool some,
+            bool expected)
         {
             var option = default(object).SomeWhen(o => some, default(object));
             var flag = false;
