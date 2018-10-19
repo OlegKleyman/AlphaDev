@@ -48,7 +48,10 @@ namespace AlphaDev.Web.Bootstrap.Extensions
             serviceCollection
                 .AddSingleton<IDesignTimeDbContextFactory<Core.Data.Sql.Contexts.InformationContext>,
                     InformationContextFactory
-                >(provider => new InformationContextFactory(configurer));
+                >(provider => new InformationContextFactory(configurer))
+                .AddSingleton<IDesignTimeDbContextFactory<Core.Data.Sql.Contexts.BlogContext>,
+                    BlogContextFactory
+                >(provider => new BlogContextFactory(configurer));
 
             return serviceCollection;
         }
@@ -57,7 +60,9 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         {
             return serviceCollection
                 .AddSingleton<IContextFactory<InformationContext>,
-                    ContextFactory<Core.Data.Sql.Contexts.InformationContext>>();
+                    ContextFactory<Core.Data.Sql.Contexts.InformationContext>>()
+                .AddSingleton<IContextFactory<BlogContext>,
+                    ContextFactory<Core.Data.Sql.Contexts.BlogContext>>();
         }
     }
 }

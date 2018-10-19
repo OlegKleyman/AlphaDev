@@ -31,7 +31,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>()).Mock();
             var abouts = new List<About>();
-            context.Abouts = abouts.ToMockDbSet();
+            context.Abouts = abouts.ToMockDbSet().WithAddReturns(abouts);
             context.SaveChanges().Returns(1);
             var service = GetAboutService(context);
             service.Create("test");
@@ -56,7 +56,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>()).Mock();
             context.Abouts = new List<About>().ToMockDbSet();
-            context.Abouts.Add(Arg.Any<About>()).Returns(new About().ToMockEntityEntry());
+            context.Abouts.Add(Arg.Any<About>()).Returns(info => new About().ToMockEntityEntry());
             var service = GetAboutService(context);
             Action create = () => service.Create(default);
             create.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count of 0.");
