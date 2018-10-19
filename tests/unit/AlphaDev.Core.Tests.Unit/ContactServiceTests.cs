@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using AlphaDev.Core.Data;
 using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Entities;
@@ -39,7 +38,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>()).Mock();
             var contacts = new List<Contact>();
-            context.Contacts = contacts.ToMockDbSet();
+            context.Contacts = contacts.ToMockDbSet().WithAddReturns(contacts);
             context.SaveChanges().Returns(1);
             var service = GetContactService(context);
             service.Create("test");
@@ -50,9 +49,8 @@ namespace AlphaDev.Core.Tests.Unit
         public void CreateShouldSaveToDataStore()
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>()).Mock();
-            context.Contacts = new List<Contact>().ToMockDbSet();
-            var entry = (EntityEntry<Contact>) FormatterServices.GetUninitializedObject(typeof(EntityEntry<Contact>));
-            context.Contacts.Add(Arg.Any<Contact>()).Returns(entry);
+            var contacts = new List<Contact>();
+            context.Contacts = contacts.ToMockDbSet().WithAddReturns(contacts);
             context.SaveChanges().Returns(1);
             var service = GetContactService(context);
             service.Create("test");
@@ -63,8 +61,8 @@ namespace AlphaDev.Core.Tests.Unit
         public void CreateShouldThrowInvalidOperationExceptionWhenUnableSavingReturnsUnexpectedSaveCount()
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>()).Mock();
-            context.Contacts = new List<Contact>().ToMockDbSet();
-            context.Contacts.Add(Arg.Any<Contact>()).Returns(new Contact().ToMockEntityEntry());
+            var contacts = new List<Contact>();
+            context.Contacts = contacts.ToMockDbSet().WithAddReturns(contacts);
             var service = GetContactService(context);
             Action create = () => service.Create(default);
             create.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count of 0.");

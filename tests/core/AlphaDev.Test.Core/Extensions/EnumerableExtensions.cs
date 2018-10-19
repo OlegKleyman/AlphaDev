@@ -20,13 +20,6 @@ namespace AlphaDev.Test.Core.Extensions
             query.ElementType.Returns(targetQuery.ElementType);
             query.GetEnumerator().Returns(info => targetQuery.GetEnumerator());
 
-            set.Add(Arg.Any<T>()).Returns(info =>
-            {
-                var entity = (T) info[0];
-                target.Add(entity);
-                return entity.ToMockEntityEntry();
-            });
-
             return set;
         }
     }

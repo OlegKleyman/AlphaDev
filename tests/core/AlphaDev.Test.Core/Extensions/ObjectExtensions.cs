@@ -1,5 +1,4 @@
-﻿using AlphaDev.Core.Data.Entities;
-using AlphaDev.Test.Core.Support;
+﻿using AlphaDev.Test.Core.Support;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
@@ -18,9 +17,12 @@ namespace AlphaDev.Test.Core.Extensions
         public static EntityEntry<T> ToMockEntityEntry<T>([NotNull] this T target) where T : class
         {
             var stateManager = Substitute.For<StateManagerStub>();
-            var entityType = new EntityType(typeof(About), new Model(), ConfigurationSource.Convention);
+            var entityType = new EntityType(typeof(T), new Model(), ConfigurationSource.Convention);
             var internalClrEntityEntry = new InternalClrEntityEntry(stateManager, entityType, target);
-            return new EntityEntry<T>(internalClrEntityEntry);
+
+            var mockEntry = Substitute.For<EntityEntry<T>>(internalClrEntityEntry);
+            mockEntry.Entity.Returns(target);
+            return mockEntry;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AlphaDev.Core.Extensions;
+using AlphaDev.Core.Tests.Unit.Extensions.Support;
 using AlphaDev.Test.Core.Extensions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using Xunit;
 
 namespace AlphaDev.Core.Tests.Unit.Extensions
@@ -26,22 +28,57 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
             context.Database.Returns(Substitute.For<DatabaseFacade>(context));
             context.SaveChanges().Returns(1);
             var mocks = new List<object>();
-            var mockSet = mocks.ToMockDbSet();
+            var mockSet = mocks.ToMockDbSet().WithAddReturns(mocks);
             var target = new object();
             context.AddAndSaveSingleOrThrow(x => mockSet, target);
             mockSet.Should().ContainSingle().Which.Should().BeSameAs(target);
         }
 
         [Fact]
-        public void AddAndSaveSingleOrThrowShouldThrowInvalidOperationExceptionWhenAddingEntityReturnsNull()
+        public void AddAndSaveSingleOrThrowShouldReturnSavedEntity()
         {
             var context = Substitute.For<DbContext>();
+            context.Database.Returns(Substitute.For<DatabaseFacade>(context));
+            context.SaveChanges().Returns(1);
+            var mocks = new List<object>();
+            var mockSet = mocks.ToMockDbSet().WithAddReturns(mocks);
+            var target = new object();
+            context.AddAndSaveSingleOrThrow(x => mockSet, target).Entity.Should().BeSameAs(target);
+        }
+
+        [Fact]
+        public void AddAndSaveSingleOrThrowShouldThrowInvalidOperationExceptionWhenAddingEntityReturnsNull()
+        {
+            var context = Substitute.For<DbContext>().Mock();
             var mocks = new List<object>();
             var mockSet = mocks.ToMockDbSet();
-            mockSet.Add(Arg.Any<object>()).Returns(default(EntityEntry<object>));
+            mockSet.Add(Arg.Any<object>()).ReturnsNullForAnyArgs();
             Action addAndSaveSingleOrThrow = () => context.AddAndSaveSingleOrThrow(x => mockSet, new object());
             addAndSaveSingleOrThrow.Should().Throw<InvalidOperationException>()
                 .WithMessage("Unable to retrieve added entry.");
+        }
+
+        [Fact]
+        public void DeleteSingleOrThrowShouldReturnEntityEntry()
+        {
+            var context = Substitute.For<DbContext>();
+            context.Database.Returns(Substitute.For<DatabaseFacade>(context));
+            context.SaveChanges().Returns(1);
+            var target = new object();
+            context.Remove<object>(Arg.Any<object>()).Returns(info => info[0].ToMockEntityEntry());
+            context.DeleteSingleOrThrow(target).Entity.Should().Be(target);
+        }
+
+        [Fact]
+        public void DeleteSingleOrThrowShouldThrowInvalidOperationExceptionWhenEntityEntryIsNull()
+        {
+            var context = Substitute.For<DbContext>();
+            context.Database.Returns(Substitute.For<DatabaseFacade>(context));
+            context.SaveChanges().Returns(1);
+            var target = new object();
+            context.Remove<object>(Arg.Any<object>()).Returns((EntityEntry<object>) null);
+            Action deleteSingleOrThrow = () => context.DeleteSingleOrThrow(target);
+            deleteSingleOrThrow.Should().Throw<InvalidOperationException>().WithMessage("Object not found.");
         }
 
         [Fact]
@@ -89,6 +126,15 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
             context.SaveChanges().Returns(1);
             context.SaveSingleOrThrow();
             databaseFacade.Received(1).BeginTransaction();
+        }
+
+        [Fact]
+        public void SaveSingleOrThrowShouldThrowArgumentExceptionWhenDatabaseIsNull()
+        {
+            var context = Substitute.For<DbContext>();
+            Action saveSingleOrThrow = () => context.SaveSingleOrThrow();
+            saveSingleOrThrow.Should().Throw<ArgumentException>()
+                .WithMessage("Database is null.\r\nParameter name: context").Which.ParamName.Should().Be("context");
         }
 
         [Fact]
