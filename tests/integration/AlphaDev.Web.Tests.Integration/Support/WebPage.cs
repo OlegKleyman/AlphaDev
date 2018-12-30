@@ -6,7 +6,7 @@ using OpenQA.Selenium;
 
 namespace AlphaDev.Web.Tests.Integration.Support
 {
-    public abstract class WebPage
+    public abstract class WebPage : INavigable<WebPage>
     {
         protected readonly IWebDriver Driver;
 

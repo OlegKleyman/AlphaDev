@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
+using AlphaDev.Web.Tests.Integration.Extensions;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using AlphaDev.Web.Tests.Integration.Support;
 using FluentAssertions;
 using JetBrains.Annotations;
+using LightBDD.Framework;
+using LightBDD.Framework.Scenarios.Basic;
+using LightBDD.Framework.Scenarios.Extended;
 using Markdig;
 using Omego.Extensions.DbContextExtensions;
 using Optional;
+using Optional.Collections;
 using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
@@ -15,7 +21,10 @@ namespace AlphaDev.Web.Tests.Integration.Features
     [UsedImplicitly]
     public partial class Posts_feature : WebFeatureFixture
     {
-        public Posts_feature(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture) : base(output,
+        private int _pages;
+        private int _pageToNavigateTo;
+
+        public Posts_feature(ITestOutputHelper output, [NotNull] DatabaseWebServerFixture databaseWebServerFixture) : base(output,
             databaseWebServerFixture)
         {
         }
@@ -119,6 +128,60 @@ namespace AlphaDev.Web.Tests.Integration.Features
                     }
                 }),
                 options => options.ExcludingMissingMembers());
+        }
+
+        private void And_there_are_PAGES_pages_of_posts(int pages)
+        {
+            const int itemsPerPage = 10;
+            foreach (var page in Enumerable.Range(1, pages * itemsPerPage))
+            {
+                var defaultBlog = BlogContextDatabaseFixture.DefaultBlog;
+                defaultBlog.Title = page.ToString(CultureInfo.InvariantCulture);
+                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Add(defaultBlog);
+            }
+
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.SaveChanges();
+            _pages = pages;
+        }
+
+        private void Then_it_should_display_all_the_pages()
+        {
+            const int maxPages = 5;
+            SiteTester.Posts.Pages.Take(maxPages).Select((x, i) => new { x.Page.Identity.Number, TextFormat = x.Page.DisplayFormat, Position = i + 1 })
+                .Should().OnlyContain(x => x.TextFormat == DisplayFormat.Number || _pages == 0).And.Subject
+                .Should().HaveCount(Math.Min(_pages, maxPages)).And.Subject.Should()
+                .OnlyContain(x => x.Number == x.Position);
+        }
+
+        private void Then_it_should_display_ellipses_after_the_last_max_page()
+        {
+            SiteTester.Posts.Pages.LastOrNone()
+                .WithException(() => new InvalidOperationException("No page links found"))
+                .Map(x => x.Page.Identity.DisplayValue.IsEllipses().Should()).ValueOr(x => throw x).BeTrue();
+        }
+
+        private void Then_it_should_display_the_current_page_as_grayed_out()
+        {
+            SiteTester.Posts.Pages.Where(x => x.Page == SiteTester.Posts.CurrentPage).Should()
+                .ContainSingle().Which.Page.Active.Should().BeTrue();
+        }
+
+        [UsedImplicitly]
+        private CompositeStep And_there_are_multiple_pages_of_posts()
+        {
+            return CompositeStep.DefineNew().AddSteps(_ => And_there_are_PAGES_pages_of_posts(7)).Build();
+        }
+
+        private void When_i_go_to_the_PAGE_page(int page)
+        {
+            _pageToNavigateTo = page;
+            SiteTester.Posts.Pages.Where(x => x.Page.Identity.Number == page).SingleOrNone()
+                .WithException(() => new InvalidOperationException()).Match(x => x.GoTo(), x => throw x);
+        }
+
+        private void Then_the_current_page_should_be_the_navigated_to_page()
+        {
+            SiteTester.Posts.CurrentPage.Should().Be(_pageToNavigateTo);
         }
     }
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using AlphaDev.Web.Tests.Integration.Extensions;
 using JetBrains.Annotations;
 using OpenQA.Selenium;
 using Optional;
@@ -9,8 +11,17 @@ namespace AlphaDev.Web.Tests.Integration.Support
 {
     public class PostsWebPage : WebPage
     {
-        public PostsWebPage(IWebDriver driver, Uri baseUrl) : base(driver, baseUrl)
+        public Page CurrentPage { get; }
+
+        public PostsWebPage(IWebDriver driver, Uri baseUrl) : this(driver, baseUrl, new Page(new PageIdentity("1", 1), DisplayFormat.Number, true))
         {
+            Create = new BlogEditorWebPage(Driver, new Uri(BaseUrl, "create"));
+            Edit = new BlogEditorWebPage(Driver, new Uri(BaseUrl, "edit"));
+        }
+
+        public PostsWebPage(IWebDriver driver, Uri baseUrl, Page currentPage) : base(driver, baseUrl)
+        {
+            CurrentPage = currentPage;
             Create = new BlogEditorWebPage(Driver, new Uri(BaseUrl, "create"));
             Edit = new BlogEditorWebPage(Driver, new Uri(BaseUrl, "edit"));
         }
@@ -41,5 +52,42 @@ namespace AlphaDev.Web.Tests.Integration.Support
         public BlogEditorWebPage Create { get; }
 
         public BlogEditorWebPage Edit { get; }
+
+        [NotNull]
+        public IEnumerable<PostsWebPageLink> Pages
+        {
+            get
+            {
+                return Driver.FindElements(By.CssSelector(".pages .page"))
+                    .Select(x =>
+                    {
+                        var isActive = !x.TagName.Equals("a", StringComparison.OrdinalIgnoreCase);
+                        int pageNumber;
+                        var displayFormat = x.Text.IsEllipses() ? DisplayFormat.Text : DisplayFormat.Number; ;
+
+                        if (isActive)
+                        {
+                            if (!int.TryParse(x.Text, NumberStyles.Integer, CultureInfo.InvariantCulture,
+                                out pageNumber))
+                            {
+                                throw new InvalidCastException($"Page text \"{x.Text}\" does not contain number.");
+                            }
+                        }
+                        else
+                        {
+                            var href = new Uri(x.GetAttribute("href"));
+                            var urlPageNumber = href.Segments.Last();
+                            if (!int.TryParse(urlPageNumber, NumberStyles.Integer, CultureInfo.InvariantCulture,
+                                out pageNumber))
+                            {
+                                throw new InvalidCastException($"Page text \"{urlPageNumber}\" does not contain number.");
+                            }
+                        }
+
+                        return new PostsWebPageLink(Driver, BaseUrl,
+                            new Page(new PageIdentity(x.Text, pageNumber), displayFormat, isActive));
+                    });
+            }
+        }
     }
 }
