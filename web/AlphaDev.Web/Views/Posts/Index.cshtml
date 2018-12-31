@@ -3,6 +3,25 @@
 @{
     ViewBag.Title = "Posts";
 }
+<style type="text/css">
+    .pages {
+        margin-top: 10px;
+        background-color: #ccc;
+        padding-left: 10px;
+        padding-right: 10px;
+        display: inline-block;
+        -ms-border-radius: 25px;
+        border-radius: 25px;
+    }
+
+    .page {
+        color: #444;
+    }
+
+    a.page {
+        text-decoration: underline;
+    }
+</style>
 
 <h1 class="text-center">Posts</h1>
 
@@ -11,4 +30,10 @@
     {
         @await Component.InvokeAsync("BlogPreview", new { blogViewModel = blog })
     }
+
+    <div class="pages">
+        Page:
+        <span class="page">1</span>
+        <a href="/2" class="page">2</a>
+    </div>
 </div>
