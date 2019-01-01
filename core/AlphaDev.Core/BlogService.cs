@@ -90,5 +90,10 @@ namespace AlphaDev.Core
                 });
             }
         }
+
+        public IEnumerable<BlogBase> Get(int start, int count)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

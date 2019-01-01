@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AlphaDev.Core;
 using AlphaDev.Core.Extensions;
+using AlphaDev.Web.Extensions;
 using AlphaDev.Web.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
@@ -19,14 +20,16 @@ namespace AlphaDev.Web.Controllers
             _blogService = blogService;
         }
 
-        public ViewResult Index()
+        [Route("page/{page}")]
+        public ViewResult Page(int page)
         {
-            var blogs = _blogService.GetAll();
+            var blogs = _blogService.Get(page * 10, 11);
             var model = blogs.Select(blog => new BlogViewModel(blog.Id,
                     blog.Title,
                     blog.Content,
                     new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)))
-                .OrderByDescending(viewModel => viewModel.Dates.Created);
+                .OrderByDescending(viewModel => viewModel.Dates.Created)
+                .ToPager(page, x => x.Count > 10);
 
             return View(nameof(Index), model);
         }

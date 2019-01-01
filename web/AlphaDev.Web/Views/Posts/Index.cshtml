@@ -1,4 +1,5 @@
-﻿@model IEnumerable<AlphaDev.Web.Models.BlogViewModel>
+﻿@using AlphaDev.Web.Extensions
+@model AlphaDev.Web.Support.Pager<AlphaDev.Web.Models.BlogViewModel>
 
 @{
     ViewBag.Title = "Posts";
@@ -33,7 +34,12 @@
 
     <div class="pages">
         Page:
-        <span class="page">1</span>
-        <a href="/2" class="page">2</a>
+        @foreach (var pageNumber in Model.Pages)
+        {
+            <a asp-controller="Posts" asp-action="Index" asp-route-page="@pageNumber" class="page">@pageNumber</a>
+        }
+
+        @Model.AuxiliaryPage.Match(i => Html.ActionLink(i.ToString(), "Index", "Posts", new {page = i}),
+            () => Html.Raw(""))
     </div>
 </div>
