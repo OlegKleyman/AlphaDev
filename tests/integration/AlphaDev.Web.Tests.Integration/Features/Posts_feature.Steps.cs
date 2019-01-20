@@ -23,6 +23,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
     {
         private int _pages;
         private int _pageToNavigateTo;
+        private Page _currentPageUrl;
 
         public Posts_feature(ITestOutputHelper output, [NotNull] DatabaseWebServerFixture databaseWebServerFixture) : base(output,
             databaseWebServerFixture)
@@ -123,7 +124,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 {
                     NavigationLink = new
                     {
-                        Href = new Uri(SiteTester.Posts.BaseUrl,
+                        Href = new Uri(SiteTester.Posts.PostBaseUrl,
                             blog.Id.ToString(CultureInfo.InvariantCulture)).AbsoluteUri
                     }
                 }),
@@ -146,7 +147,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_all_the_pages()
         {
-            const int maxPages = 5;
+            const int maxPages = 10;
             SiteTester.Posts.Pages.Take(maxPages).Select((x, i) => new { x.Page.Identity.Number, TextFormat = x.Page.DisplayFormat, Position = i + 1 })
                 .Should().OnlyContain(x => x.TextFormat == DisplayFormat.Number || _pages == 0).And.Subject
                 .Should().HaveCount(Math.Min(_pages, maxPages)).And.Subject.Should()
@@ -162,8 +163,13 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_the_current_page_as_grayed_out()
         {
-            SiteTester.Posts.Pages.Where(x => x.Page == SiteTester.Posts.CurrentPage).Should()
-                .ContainSingle().Which.Page.Active.Should().BeTrue();
+            var postsWebPageLinks = SiteTester.Posts.Pages.ToArray();
+            postsWebPageLinks.Where(x =>
+                {
+                    var postsCurrentPage = SiteTester.Posts.CurrentPage;
+                    return x.Page == postsCurrentPage;
+                }).Should()
+                .ContainSingle().Which.Page.Attributes.Active.Should().Be(ActivityStatus.Active);
         }
 
         [UsedImplicitly]
@@ -175,13 +181,14 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void When_i_go_to_the_PAGE_page(int page)
         {
             _pageToNavigateTo = page;
-            SiteTester.Posts.Pages.Where(x => x.Page.Identity.Number == page).SingleOrNone()
-                .WithException(() => new InvalidOperationException()).Match(x => x.GoTo(), x => throw x);
+            _currentPageUrl = SiteTester.Posts.Pages.Where(x => x.Page.Identity.Number == page).SingleOrNone()
+                .WithException(() => new InvalidOperationException($"Page {page} was not found."))
+                .Match(x => x.GoTo(), x => throw x);
         }
 
         private void Then_the_current_page_should_be_the_navigated_to_page()
         {
-            SiteTester.Posts.CurrentPage.Should().Be(_pageToNavigateTo);
+            SiteTester.Posts.CurrentPage.Attributes.Url.Should().BeEquivalentTo(_currentPageUrl.Attributes.Url);
         }
     }
 }

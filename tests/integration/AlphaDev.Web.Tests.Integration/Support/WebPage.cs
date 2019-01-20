@@ -33,9 +33,12 @@ namespace AlphaDev.Web.Tests.Integration.Support
             return this;
         }
 
-        public void GoTo(int id)
+        [NotNull]
+        public virtual WebPage GoTo(int id)
         {
             Driver.Navigate().GoToUrl($"{BaseUrl.AbsoluteUri.Trim('/')}/{id}");
+
+            return this;
         }
     }
 }

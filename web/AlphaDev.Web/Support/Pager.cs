@@ -1,8 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Optional;
+using AlphaDev.Web.Extensions;
+using Optional.Collections;
+using Enumerable = System.Linq.Enumerable;
 
 namespace AlphaDev.Web.Support
 {
@@ -10,30 +14,25 @@ namespace AlphaDev.Web.Support
     {
         private readonly IEnumerable<T> _collection;
 
-        public Pager([NotNull] ICollection<T> collection, int startPage) : this(collection, startPage, false)
+        public Pager([NotNull] ICollection<T> collection, PageDimensions dimensions, int total)
         {
-            _collection = collection;
-        }
+            var totalPages = dimensions.Boundaries.GetTotalPages(total);
+            var pagesToDisplay = Math.Min(dimensions.Boundaries.MaxTotal.Value, totalPages);
 
-        public Pager([NotNull] ICollection<T> collection, int startPage, bool hasAuxiliary)
-        {
-            _collection = collection;
-            AuxiliaryPage = hasAuxiliary && collection.Count > 1 ? (collection.Count + startPage - 1).Some() : Option.None<int>();
-            Pages = AuxiliaryPage.Map(x => collection.SkipLast(1)).WithException(collection).ValueOr(x => x)
-                .Select((_, index) => index + startPage).ToArray();
+            FirstPage = dimensions.Start;
+            Pages = Enumerable.Range(dimensions.Start.Value + 1, Math.Max(pagesToDisplay - 1, 0)).ToArray();
+            AuxiliaryPage = totalPages > pagesToDisplay ? (Pages.LastOrNone().ValueOr(FirstPage.Value) + 1).Some() : Option.None<int>();
+
+            var pagesRemaining = total - dimensions.Start.ToStartPosition(dimensions.Boundaries.Count).Value + 1;
+            _collection = collection.Take(Math.Min(dimensions.Boundaries.Count.Value, pagesRemaining));
         }
 
         public int[] Pages { get; }
         public Option<int> AuxiliaryPage { get; }
+        public PositiveInteger FirstPage { get; }
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _collection.GetEnumerator();
-        }
+        public IEnumerator<T> GetEnumerator() => _collection.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

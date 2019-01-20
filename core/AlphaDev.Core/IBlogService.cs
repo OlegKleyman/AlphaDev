@@ -11,6 +11,7 @@ namespace AlphaDev.Core
         BlogBase Add(BlogBase blog);
         void Delete(int id);
         void Edit(int id, Action<BlogEditArguments> edit);
-        IEnumerable<BlogBase> Get(int start, int count);
+        IEnumerable<BlogBase> GetOrderedByDates(int start, int count);
+        int GetCount(int start);
     }
 }

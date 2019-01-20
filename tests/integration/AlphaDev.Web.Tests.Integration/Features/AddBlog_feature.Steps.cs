@@ -79,7 +79,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_I_should_be_redirected_to_the_post()
         {
-            SiteTester.Driver.Url.Should().MatchRegex(Regex.Escape(SiteTester.Posts.BaseUrl.AbsoluteUri) + @"\d+$");
+            SiteTester.Driver.Url.Should().MatchRegex(Regex.Escape(SiteTester.Posts.PostBaseUrl.AbsoluteUri) + @"\d+$");
         }
     }
 }

@@ -99,7 +99,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             Runner.RunScenario(
                 _ => CommonSteps.Given_i_am_a_user(),
-                _ => And_there_are_PAGES_pages_of_posts(7),
+                _ => And_there_are_PAGES_pages_of_posts(11),
                 _ => When_i_go_to_the_posts_page(),
                 _ => Then_it_should_display_ellipses_after_the_last_max_page());
         }
@@ -120,6 +120,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
             Runner.RunScenario(
                 _ => CommonSteps.Given_i_am_a_user(),
                 _ => And_there_are_multiple_pages_of_posts(),
+                _ => When_i_go_to_the_posts_page(),
                 _ => When_i_go_to_the_PAGE_page(2),
                 _ => Then_the_current_page_should_be_the_navigated_to_page());
         }

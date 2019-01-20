@@ -34,12 +34,13 @@
 
     <div class="pages">
         Page:
+        <span class="page">@Model.FirstPage.Value</span>
         @foreach (var pageNumber in Model.Pages)
         {
-            <a asp-controller="Posts" asp-action="Index" asp-route-page="@pageNumber" class="page">@pageNumber</a>
+            <a asp-controller="Posts" asp-action="Page" asp-route-page="@pageNumber" class="page">@pageNumber</a>
         }
 
-        @Model.AuxiliaryPage.Match(i => Html.ActionLink(i.ToString(), "Index", "Posts", new {page = i}),
+        @Model.AuxiliaryPage.Match(i => Html.ActionLink("...", "Page", "Posts", new {page = i}, new{@class="page"}),
             () => Html.Raw(""))
     </div>
 </div>

@@ -33,17 +33,6 @@ namespace AlphaDev.Core
             }
         }
 
-        public IEnumerable<BlogBase> GetAll()
-        {
-            using (var context = _contextFactory.Create())
-            {
-                return context.Blogs.SomeNotNull().Match(blogs => blogs.Select(targetBlog => new Blog(targetBlog.Id,
-                    targetBlog.Title ?? string.Empty,
-                    targetBlog.Content ?? string.Empty,
-                    new Dates(targetBlog.Created, targetBlog.Modified.ToOption()))).ToArray(), Enumerable.Empty<Blog>);
-            }
-        }
-
         public Option<BlogBase> Get(int id)
         {
             using (var context = _contextFactory.Create())
@@ -91,9 +80,27 @@ namespace AlphaDev.Core
             }
         }
 
-        public IEnumerable<BlogBase> Get(int start, int count)
+        public IEnumerable<BlogBase> GetOrderedByDates(int start, int count)
         {
-            throw new NotImplementedException();
+            using (var context = _contextFactory.Create())
+            {
+                return context.Blogs.OrderByDescending(x => x.Modified).ThenByDescending(x => x.Created)
+                    .Skip(start - 1).Take(count).SomeNotNull().Match(blogs => blogs.Select(targetBlog =>
+                            new Blog(targetBlog.Id,
+                                targetBlog.Title ?? string.Empty,
+                                targetBlog.Content ?? string.Empty,
+                                new Dates(targetBlog.Created, targetBlog.Modified.ToOption()))).ToArray(),
+                        Enumerable.Empty<BlogBase>);
+            }
+        }
+
+        public int GetCount(int start)
+        {
+            using (var context = _contextFactory.Create())
+            {
+                return context.Blogs.OrderByDescending(x => x.Modified).ThenByDescending(x => x.Created).Skip(start - 1)
+                    .Count();
+            }
         }
     }
 }

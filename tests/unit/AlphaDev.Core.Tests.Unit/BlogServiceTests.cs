@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AlphaDev.Core.Data;
 using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Support;
@@ -148,7 +149,7 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void GetAllShouldReturnBlogsWithCreatedDate()
+        public void GetOrderedByDatesShouldReturnBlogsWithCreatedDate()
         {
             var testValue = new DateTime(2017, 1, 1);
 
@@ -159,13 +160,13 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetAll().Should().BeEquivalentTo(
+            service.GetOrderedByDates(1, 1).Should().BeEquivalentTo(
                 new[] { new { Dates = new { Created = testValue } } },
                 options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public void GetAllShouldReturnBlogsWithEmptyContentWhenDbContentIsNull()
+        public void GetOrderedByDatesShouldReturnBlogsWithEmptyContentWhenDbContentIsNull()
         {
             var entities = new[] { new Data.Entities.Blog { Content = null } };
             var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
@@ -173,13 +174,13 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetAll().Should().BeEquivalentTo(
+            service.GetOrderedByDates(1, 1).Should().BeEquivalentTo(
                 new[] { new { Content = string.Empty } },
                 options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public void GetAllShouldReturnBlogsWithEmptyTitleWhenDbTitleIsNull()
+        public void GetOrderedByDatesShouldReturnBlogsWithEmptyTitleWhenDbTitleIsNull()
         {
             var entities = new[] { new Data.Entities.Blog { Title = null } };
             var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
@@ -187,13 +188,13 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetAll().Should().BeEquivalentTo(
+            service.GetOrderedByDates(1, 1).Should().BeEquivalentTo(
                 new[] { new { Title = string.Empty } },
                 options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public void GetAllShouldReturnBlogsWithModifiedDate()
+        public void GetOrderedByDatesShouldReturnBlogsWithModifiedDate()
         {
             var testValue = new DateTime(2017, 1, 1);
 
@@ -203,13 +204,13 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetAll().Should().BeEquivalentTo(
+            service.GetOrderedByDates(1, 1).Should().BeEquivalentTo(
                 new[] { new { Dates = new { Modified = Option.Some(testValue) } } },
                 options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public void GetAllShouldReturnBlogsWithNoModifiedDateWhenDbModifiedDateIsNull()
+        public void GetOrderedByDatesShouldReturnBlogsWithNoModifiedDateWhenDbModifiedDateIsNull()
         {
             var entities = new[] { new Data.Entities.Blog() };
             var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
@@ -217,13 +218,13 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetAll().Should().BeEquivalentTo(
+            service.GetOrderedByDates(1, 1).Should().BeEquivalentTo(
                 new[] { new { Dates = new { Modified = Option.None<DateTime>() } } },
                 options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public void GetAllShouldReturnBlogsWithTitle()
+        public void GetOrderedByDatesShouldReturnBlogsWithTitle()
         {
             const string testValue = "test";
 
@@ -233,13 +234,13 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetAll().Should().BeEquivalentTo(
+            service.GetOrderedByDates(1, 1).Should().BeEquivalentTo(
                 new[] { new { Title = testValue } },
                 options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public void GetAllShouldReturnBlogWithContent()
+        public void GetOrderedByDatesShouldReturnBlogWithContent()
         {
             const string testValue = "test content";
 
@@ -249,19 +250,70 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetAll().Should().BeEquivalentTo(
+            service.GetOrderedByDates(1, 1).Should().BeEquivalentTo(
                 new[] { new { Content = "test content" } },
                 options => options.Including(info => info.Content));
         }
 
         [Fact]
-        public void GetAllShouldReturnEmptyBlogsWhenNoBlogIsFound()
+        public void GetOrderedByDatesShouldReturnBlogsOrderedByModifiedThenByCreatedDateDescending()
+        {
+            var entities = new[]
+            {
+                new Data.Entities.Blog { Created = new DateTime(2010, 5, 1)},
+                new Data.Entities.Blog { Created = new DateTime(2010, 7, 1)},
+                new Data.Entities.Blog { Created = new DateTime(2010, 4, 1)},
+                new Data.Entities.Blog { Created = new DateTime(2010, 1, 1), Modified = new DateTime(2011,1,1)},
+                new Data.Entities.Blog { Created = new DateTime(2010, 1, 1)},
+                new Data.Entities.Blog { Created = new DateTime(2010, 11, 1)}
+            };
+
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
+                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+
+            var service = GetBlogService(context);
+
+            service.GetOrderedByDates(1, entities.Length).Select(x => x.Dates).Should()
+                .BeEquivalentTo(entities.OrderByDescending(x => x.Modified).ThenByDescending(x => x.Created)
+                    .Select(x => new { x.Created, Modified = x.Modified.ToOption() }));
+        }
+
+        [Fact]
+        public void GetOrderedByDatesShouldReturnBlogsStartingFromTheStartArgument()
+        {
+            var entities = Enumerable.Range(1, 10).Select(x => new Data.Entities.Blog { Id = x }).ToArray();
+
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
+                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+
+            var service = GetBlogService(context);
+
+            service.GetOrderedByDates(7, 10).Should().HaveCount(4).And.Subject.Select(x => x.Id).Should()
+                .BeEquivalentTo(entities.Skip(6).Select(x => x.Id));
+        }
+
+        [Fact]
+        public void GetOrderedByDatesShouldReturnBlogCountBasedOnTheCountArgument()
+        {
+            var entities = Enumerable.Range(1, 10).Select(x => new Data.Entities.Blog { Id = x }).ToArray();
+
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
+                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+
+            var service = GetBlogService(context);
+
+            service.GetOrderedByDates(1, 4).Should().HaveCount(4).And.Subject.Select(x => x.Id).Should()
+                .BeEquivalentTo(entities.Take(4).Select(x => x.Id));
+        }
+
+        [Fact]
+        public void GetOrderedByDatesShouldReturnEmptyBlogsWhenNoBlogIsFound()
         {
             var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
                 .WithDbSet(new Data.Entities.Blog[0], (blogContext, set) => blogContext.Blogs = set);
             var service = GetBlogService(context);
 
-            service.GetAll().Should().BeEmpty();
+            service.GetOrderedByDates(1, 1).Should().BeEmpty();
         }
 
         [Fact]

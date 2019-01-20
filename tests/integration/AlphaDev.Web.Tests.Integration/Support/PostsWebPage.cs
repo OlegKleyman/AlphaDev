@@ -11,19 +11,21 @@ namespace AlphaDev.Web.Tests.Integration.Support
 {
     public class PostsWebPage : WebPage
     {
-        public Page CurrentPage { get; }
-
-        public PostsWebPage(IWebDriver driver, Uri baseUrl) : this(driver, baseUrl, new Page(new PageIdentity("1", 1), DisplayFormat.Number, true))
+        public Page CurrentPage
         {
-            Create = new BlogEditorWebPage(Driver, new Uri(BaseUrl, "create"));
-            Edit = new BlogEditorWebPage(Driver, new Uri(BaseUrl, "edit"));
+            get
+            {
+                var displayValue = new Uri(Driver.Url).Segments.Last().TrimEnd('/');
+                var number = int.Parse(displayValue);
+                return new Page(new PageIdentity(displayValue, number), DisplayFormat.Number, new PageAttributes());
+            }
         }
 
-        public PostsWebPage(IWebDriver driver, Uri baseUrl, Page currentPage) : base(driver, baseUrl)
+        public PostsWebPage(IWebDriver driver, Uri baseUrl) : base(driver, new Uri(baseUrl, "page/1/"))
         {
-            CurrentPage = currentPage;
-            Create = new BlogEditorWebPage(Driver, new Uri(BaseUrl, "create"));
-            Edit = new BlogEditorWebPage(Driver, new Uri(BaseUrl, "edit"));
+            Create = new BlogEditorWebPage(Driver, new Uri(baseUrl, "create"));
+            Edit = new BlogEditorWebPage(Driver, new Uri(baseUrl, "edit"));
+            PostBaseUrl = baseUrl;
         }
 
         [NotNull]
@@ -77,6 +79,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
                         {
                             var href = new Uri(x.GetAttribute("href"));
                             var urlPageNumber = href.Segments.Last();
+
                             if (!int.TryParse(urlPageNumber, NumberStyles.Integer, CultureInfo.InvariantCulture,
                                 out pageNumber))
                             {
@@ -84,10 +87,19 @@ namespace AlphaDev.Web.Tests.Integration.Support
                             }
                         }
 
-                        return new PostsWebPageLink(Driver, BaseUrl,
-                            new Page(new PageIdentity(x.Text, pageNumber), displayFormat, isActive));
+                        var pageAttributes = isActive ? new PageAttributes() : new PageAttributes(BaseUrl, pageNumber);
+                        return new PostsWebPageLink(Driver,
+                            new Page(new PageIdentity(x.Text, pageNumber), displayFormat, pageAttributes));
                     });
             }
+        }
+
+        public Uri PostBaseUrl { get; }
+
+        public override WebPage GoTo(int id)
+        {
+            Driver.Navigate().GoToUrl($"{PostBaseUrl.AbsoluteUri.Trim('/')}/{id}");
+            return this;
         }
     }
 }

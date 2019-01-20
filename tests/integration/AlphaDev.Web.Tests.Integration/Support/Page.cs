@@ -6,7 +6,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
     {
         public bool Equals(Page other)
         {
-            return Identity.Equals(other.Identity) && DisplayFormat == other.DisplayFormat && Active == other.Active;
+            return Identity.Equals(other.Identity) && DisplayFormat == other.DisplayFormat && Attributes == other.Attributes;
         }
 
         public override bool Equals([CanBeNull] object obj)
@@ -20,25 +20,25 @@ namespace AlphaDev.Web.Tests.Integration.Support
             {
                 var hashCode = Identity.GetHashCode();
                 hashCode = (hashCode * 397) ^ (int) DisplayFormat;
-                hashCode = (hashCode * 397) ^ Active.GetHashCode();
+                hashCode = (hashCode * 397) ^ Attributes.GetHashCode();
                 return hashCode;
             }
         }
 
         public PageIdentity Identity { get; }
         public DisplayFormat DisplayFormat { get; }
-        public bool Active { get; }
+        public PageAttributes Attributes { get; }
 
-        public Page(PageIdentity identity, DisplayFormat displayFormat, bool active)
+        public Page(PageIdentity identity, DisplayFormat displayFormat, PageAttributes attributes)
         {
             Identity = identity;
             DisplayFormat = displayFormat;
-            Active = active;
+            Attributes = attributes;
         }
 
         public static bool operator ==(Page x, Page y)
         {
-            return x.Active == y.Active && x.DisplayFormat == y.DisplayFormat && x.Identity == y.Identity;
+            return x.Attributes == y.Attributes && x.DisplayFormat == y.DisplayFormat && x.Identity == y.Identity;
         }
 
         public static bool operator !=(Page x, Page y)

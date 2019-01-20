@@ -9,11 +9,10 @@ namespace AlphaDev.Web.Extensions
     public static class Enumerable
     {
         [NotNull]
-        public static Pager<T> ToPager<T>([NotNull] this IEnumerable<T> enumerable, int startPage,
-            [NotNull] Func<ICollection<T>, bool> getHasAuxiliary)
+        public static Pager<T> ToPager<T>([NotNull] this IEnumerable<T> enumerable, PageDimensions dimensions,
+            int totalItemCount)
         {
-            var collection = enumerable.ToArray();
-            return new Pager<T>(collection, startPage, getHasAuxiliary(collection));
+            return new Pager<T>(enumerable.ToArray(), dimensions, totalItemCount);
         }
     }
 }

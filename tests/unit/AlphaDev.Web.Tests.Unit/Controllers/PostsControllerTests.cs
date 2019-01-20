@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NSubstitute;
 using Optional;
 using Xunit;
+using Int32 = AlphaDev.Web.Extensions.Int32;
+using PositiveInteger = AlphaDev.Web.Extensions.PositiveInteger;
 
 namespace AlphaDev.Web.Tests.Unit.Controllers
 {
@@ -103,12 +105,12 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void DeleteShouldRedirectToDefaultIndexAction()
+        public void DeleteShouldRedirectToDefaultPageAction()
         {
             var controller = GetPostsController(Substitute.For<IBlogService>());
 
             var result = controller.Delete(default).Should().BeOfType<RedirectToActionResult>();
-            result.Which.ActionName.Should().BeEquivalentTo("Index");
+            result.Which.ActionName.Should().BeEquivalentTo("Page");
             result.Which.RouteValues["id"].Should().BeNull();
         }
 
@@ -216,28 +218,6 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void PageShouldReturnBlogModelsOrderedByCreatedDateDescending()
-        {
-            var blogs = new[]
-            {
-                new Blog(321, default, default,
-                    new Dates(new DateTime(2014, 1, 1), Option.None<DateTime>())),
-                new Blog(123,
-                    "title",
-                    "content",
-                    new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))))
-            };
-
-            var blogService = Substitute.For<IBlogService>();
-            blogService.Get(Arg.Any<int>(), Arg.Any<int>()).Returns(blogs);
-
-            var controller = GetPostsController(blogService);
-
-            controller.Page(default).Model.Should().BeAssignableTo<IEnumerable<BlogViewModel>>().Which.Should()
-                .BeInDescendingOrder(model => model.Dates.Created);
-        }
-
-        [Fact]
         public void PageShouldReturnBlogModelsWithValuesSetFromTheBlogService()
         {
             var blog = new Blog(123,
@@ -246,11 +226,12 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
 
             var blogService = Substitute.For<IBlogService>();
-            blogService.Get(Arg.Any<int>(), Arg.Any<int>()).Returns(new[] { blog });
+            blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>()).Returns(new[] { blog });
+            blogService.GetCount(1).Returns(int.MaxValue);
 
             var controller = GetPostsController(blogService);
 
-            controller.Page(default).Model.Should().BeEquivalentTo(
+            controller.Page(Web.Support.PositiveInteger.MinValue.Value).Model.Should().BeEquivalentTo(
                 new[]
                 {
                     new { blog.Id, blog.Title, blog.Content, Dates = new { blog.Dates.Created, blog.Dates.Modified } }
@@ -280,7 +261,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var controller = GetPostsController();
 
-            controller.Page(default).Should().BeOfType<ViewResult>();
+            controller.Page(Web.Support.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>();
         }
 
         [Fact]
@@ -321,9 +302,9 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         public void PageShouldReturnBlogModelsAssignableToEnumerableOfBlogViewModel()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.Get(Arg.Any<int>(), Arg.Any<int>()).Returns(Enumerable.Empty<Blog>());
+            blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>()).Returns(Enumerable.Empty<Blog>());
             var controller = GetPostsController(blogService);
-            controller.Page(default).Model.Should().BeAssignableTo<IEnumerable<BlogViewModel>>();
+            controller.Page(Web.Support.PositiveInteger.MinValue.Value).Model.Should().BeAssignableTo<IEnumerable<BlogViewModel>>();
         }
 
         [Fact]
@@ -336,7 +317,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             };
 
             var blogService = Substitute.For<IBlogService>();
-            blogService.Get(Arg.Any<int>(), Arg.Any<int>()).Returns(blogs);
+            blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>()).Returns(blogs);
 
             var controller = GetPostsController(blogService);
 
@@ -345,25 +326,25 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void PageShouldReturnBlogModelsWithAnAuxiliaryPageNumberWhenThereAreMoreThanTenItems()
+        public void PageShouldReturnBlogModelsWithAnAuxiliaryPageNumberWhenThereAreMoreThanTenPages()
         {
-            var blogs = Enumerable.Range(1, 11).Select(x => new Blog(default, default, default, default));
             var blogService = Substitute.For<IBlogService>();
-            blogService.Get(Arg.Any<int>(), Arg.Any<int>()).Returns(blogs);
-
+            blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>()).Returns(Array.Empty<BlogBase>());
+            blogService.GetCount(Arg.Any<int>()).Returns(101);
             var controller = GetPostsController(blogService);
 
-            controller.Page(1).Model.Should().BeAssignableTo<Pager<BlogViewModel>>().Which.AuxiliaryPage.Should()
+            controller.Page(Web.Support.PositiveInteger.MinValue.Value).Model.Should().BeAssignableTo<Pager<BlogViewModel>>().Which.AuxiliaryPage.Should()
                 .Be(11.Some());
         }
 
         [Fact]
-        public void PageShouldGetLessThanTwelveItemsAndWithStartPageTenTimesThePageArgument()
+        public void PageShouldGetLessThanElevenItems()
         {
             var blogService = Substitute.For<IBlogService>();
             const int page = 9;
             GetPostsController(blogService).Page(page);
-            blogService.Received(1).Get(Arg.Is(10 * page), Arg.Is(11));
+            var value = PositiveInteger.ToStartPosition(Int32.ToPositiveInteger(page), Int32.ToPositiveInteger(10)).Value;
+            blogService.Received(1).GetOrderedByDates(Arg.Is(value), Arg.Is(10));
         }
     }
 }
