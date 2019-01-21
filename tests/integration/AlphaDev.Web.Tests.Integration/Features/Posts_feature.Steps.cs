@@ -154,6 +154,16 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 .OnlyContain(x => x.Number == x.Position);
         }
 
+        private void Then_it_should_display_pages_before_the_current_page()
+        {
+            const int maxPreviousPages = 5;
+            var pages = SiteTester.Posts.Pages.ToLookup(x => x.Page.Attributes.Active);
+            var activePageNumber = pages[ActivityStatus.Active].Should().ContainSingle().Subject.Page.Identity.Number;
+            var previousPages = pages[ActivityStatus.Inactive].Where(x => x.Page.Identity.Number < activePageNumber).Select((x, i) => new {x.Page.Identity.Number, x.Page.DisplayFormat, Position = i + 1 });
+            previousPages.Should().OnlyContain(x => x.DisplayFormat == DisplayFormat.Number || _pages == 0).And
+                .HaveCount(Math.Min(maxPreviousPages, activePageNumber - 1)).And.Subject.Should().OnlyContain(x => x.Number == x.Position);
+        }
+
         private void Then_it_should_display_ellipses_after_the_last_max_page()
         {
             SiteTester.Posts.Pages.LastOrNone()

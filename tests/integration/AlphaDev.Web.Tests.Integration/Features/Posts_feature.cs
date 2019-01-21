@@ -124,5 +124,15 @@ namespace AlphaDev.Web.Tests.Integration.Features
                 _ => When_i_go_to_the_PAGE_page(2),
                 _ => Then_the_current_page_should_be_the_navigated_to_page());
         }
+
+        [Scenario]
+        public void Posts_page_should_load_previous_pages_before_the_current_page()
+        {
+            Runner.RunScenario(
+                _ => CommonSteps.Given_i_am_a_user(),
+                _ => And_there_are_PAGES_pages_of_posts(20),
+                _ => When_i_go_to_the_PAGE_page(11),
+                _ => Then_it_should_display_pages_before_the_current_page());
+        }
     }
 }
