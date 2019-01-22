@@ -34,8 +34,8 @@
 
     <div class="pages">
         Page:
-        <span class="page">@Model.FirstPage.Value</span>
-        @foreach (var pageNumber in Model.Pages)
+        <span class="page">@Model.CurrentPage.Value</span>
+        @foreach (var pageNumber in Model.NextPages)
         {
             <a asp-controller="Posts" asp-action="Page" asp-route-page="@pageNumber" class="page">@pageNumber</a>
         }

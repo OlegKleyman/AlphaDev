@@ -104,17 +104,17 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [Fact]
-        public void ConstructorShouldInitializePagesWithOneAfterTheFirstPage()
+        public void ConstructorShouldInitializeNextPagesWithOneAfterTheCurrentPage()
         {
             var testValues = Array.Empty<int>();
             var pager = new Pager<int>(testValues, new PageDimensions(7.ToPositiveInteger(), new PageBoundaries(PositiveInteger.MinValue, 2.ToPositiveInteger())), int.MaxValue);
-            pager.Pages.First().Should().Be(pager.FirstPage + 1);
+            pager.NextPages.First().Should().Be(pager.CurrentPage + 1);
         }
 
         private static class PagerTestsFixture
         {
             [NotNull]
-            public static object[][] ConstructorShouldInitializeWithTheCorrectNumberOfPagesTestCases => new[]
+            public static object[][] ConstructorShouldInitializeWithTheCorrectNumberOfNextPagesTestCases => new[]
             {
                 new object[]
                 {
@@ -148,12 +148,12 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [Theory]
-        [MemberData(nameof(PagerTestsFixture.ConstructorShouldInitializeWithTheCorrectNumberOfPagesTestCases), MemberType = typeof(PagerTestsFixture))]
-        public void ConstructorShouldInitializeWithTheCorrectNumberOfPages(int start, PageBoundaries pageBoundaries, int totalItems, int expected)
+        [MemberData(nameof(PagerTestsFixture.ConstructorShouldInitializeWithTheCorrectNumberOfNextPagesTestCases), MemberType = typeof(PagerTestsFixture))]
+        public void ConstructorShouldInitializeWithTheCorrectNumberOfNextPages(int start, PageBoundaries pageBoundaries, int totalItems, int expected)
         {
             var testValues = Array.Empty<int>();
             var pager = new Pager<int>(testValues, new PageDimensions(start.ToPositiveInteger(), pageBoundaries), totalItems);
-            pager.Pages.Should().HaveCount(expected);
+            pager.NextPages.Should().HaveCount(expected);
         }
 
         [Theory]
@@ -179,22 +179,22 @@ namespace AlphaDev.Web.Tests.Unit.Support
         [Theory]
         [InlineData(2)]
         [InlineData(1)]
-        public void ConstructorShouldInitializePagesWhenThereArePagesRemaining(int size)
+        public void ConstructorShouldInitializeNextPagesWhenThereArePagesRemaining(int size)
         {
             var testValues = Array.Empty<int>();
             var pager = new Pager<int>(testValues, new PageDimensions(PositiveInteger.MinValue, new PageBoundaries(2.ToPositiveInteger(), size.ToPositiveInteger())), int.MaxValue);
-            pager.Pages.Should().HaveCount(size - 1);
+            pager.NextPages.Should().HaveCount(size - 1);
         }
 
         [Theory]
         [InlineData(2)]
         [InlineData(1)]
-        public void ConstructorShouldInitializeFirstPage(int startPage)
+        public void ConstructorShouldInitializeCurrentPage(int startPage)
         {
             var testValues = Array.Empty<int>();
             var start = startPage.ToPositiveInteger();
             var pager = new Pager<int>(testValues, new PageDimensions(start, new PageBoundaries(2.ToPositiveInteger(), PositiveInteger.MaxValue)), int.MaxValue);
-            pager.FirstPage.Should().Be(start);
+            pager.CurrentPage.Should().Be(start);
         }
 
         [NotNull]

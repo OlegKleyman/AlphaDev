@@ -20,7 +20,7 @@ namespace AlphaDev.Web.Tests.Unit.Extensions
             var pager = collection.ToPager(pageDimensions, total);
             var expectations = new Pager<int>(collection, PageDimensions.MinValue, 1);
             pager.AuxiliaryPage.Should().Be(expectations.AuxiliaryPage);
-            pager.Pages.Should().BeEquivalentTo(expectations.Pages);
+            pager.NextPages.Should().BeEquivalentTo(expectations.NextPages);
             pager.Should().BeEquivalentTo(expectations);
         }
     }
