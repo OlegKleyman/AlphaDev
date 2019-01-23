@@ -19,13 +19,15 @@ namespace AlphaDev.Web.Support
             var totalPages = dimensions.Boundaries.GetTotalPages(total);
             var pagesToDisplay = Math.Min(dimensions.Boundaries.MaxTotal.Value, totalPages);
 
+            PreviousPages = Enumerable.Range(dimensions.Start.Value - dimensions.Boundaries.MaxTotal.Value, dimensions.Boundaries.MaxTotal.Value).Where(x => x > 0).ToArray();
             CurrentPage = dimensions.Start;
             NextPages = Enumerable.Range(dimensions.Start.Value + 1, Math.Max(pagesToDisplay - 1, 0)).ToArray();
             AuxiliaryPage = totalPages > pagesToDisplay ? (NextPages.LastOrNone().ValueOr(CurrentPage.Value) + 1).Some() : Option.None<int>();
 
-            var pagesRemaining = total - dimensions.Start.ToStartPosition(dimensions.Boundaries.Count).Value + 1;
-            _collection = collection.Take(Math.Min(dimensions.Boundaries.Count.Value, pagesRemaining));
+            _collection = collection.Take(dimensions.Boundaries.Count.Value);
         }
+
+        public int[] PreviousPages { get; set; }
 
         public int[] NextPages { get; }
         public Option<int> AuxiliaryPage { get; }

@@ -22,6 +22,12 @@
     a.page {
         text-decoration: underline;
     }
+
+    .page.activePage {
+        background-color: #ddd;
+        border: 1px solid #000;
+        font-weight: bold;
+    }
 </style>
 
 <h1 class="text-center">Posts</h1>
@@ -34,13 +40,17 @@
 
     <div class="pages">
         Page:
-        <span class="page">@Model.CurrentPage.Value</span>
+        @foreach (var pageNumber in Model.PreviousPages)
+        {
+            <a asp-controller="Posts" asp-action="Page" asp-route-page="@pageNumber" class="page">@pageNumber</a>
+        }
+        <span class="page activePage">@Model.CurrentPage.Value</span>
         @foreach (var pageNumber in Model.NextPages)
         {
             <a asp-controller="Posts" asp-action="Page" asp-route-page="@pageNumber" class="page">@pageNumber</a>
         }
 
-        @Model.AuxiliaryPage.Match(i => Html.ActionLink("...", "Page", "Posts", new {page = i}, new{@class="page"}),
-            () => Html.Raw(""))
+        @Model.AuxiliaryPage.Match(i => Html.ActionLink("...", "Page", "Posts", new {page = i}, new{@class= "page" }),
+            () => Html.Raw(string.Empty))
     </div>
 </div>

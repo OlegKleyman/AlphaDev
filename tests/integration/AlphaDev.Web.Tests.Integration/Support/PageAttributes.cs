@@ -30,7 +30,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
         public PageAttributes(Uri baseUrl, int number)
         {
             Active = ActivityStatus.Inactive;
-            Url = new Uri(baseUrl, $"/page/{number}").Some();
+            Url = new Uri(baseUrl, $"page/{number}").Some();
         }
 
         public PageAttributes ToActive(int pageNumber)

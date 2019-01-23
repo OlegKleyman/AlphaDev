@@ -156,12 +156,13 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_pages_before_the_current_page()
         {
-            const int maxPreviousPages = 5;
+            const int maxPreviousPages = 10;
             var pages = SiteTester.Posts.Pages.ToLookup(x => x.Page.Attributes.Active);
             var activePageNumber = pages[ActivityStatus.Active].Should().ContainSingle().Subject.Page.Identity.Number;
             var previousPages = pages[ActivityStatus.Inactive].Where(x => x.Page.Identity.Number < activePageNumber).Select((x, i) => new {x.Page.Identity.Number, x.Page.DisplayFormat, Position = i + 1 });
             previousPages.Should().OnlyContain(x => x.DisplayFormat == DisplayFormat.Number || _pages == 0).And
-                .HaveCount(Math.Min(maxPreviousPages, activePageNumber - 1)).And.Subject.Should().OnlyContain(x => x.Number == x.Position);
+                .HaveCount(Math.Min(maxPreviousPages, activePageNumber - 1)).And.Subject.Should()
+                .BeInAscendingOrder(arg => arg.Number);
         }
 
         private void Then_it_should_display_ellipses_after_the_last_max_page()
@@ -191,9 +192,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void When_i_go_to_the_PAGE_page(int page)
         {
             _pageToNavigateTo = page;
-            _currentPageUrl = SiteTester.Posts.Pages.Where(x => x.Page.Identity.Number == page).SingleOrNone()
-                .WithException(() => new InvalidOperationException($"Page {page} was not found."))
-                .Match(x => x.GoTo(), x => throw x);
+            _currentPageUrl = SiteTester.Posts.GoToPage(page);
         }
 
         private void Then_the_current_page_should_be_the_navigated_to_page()

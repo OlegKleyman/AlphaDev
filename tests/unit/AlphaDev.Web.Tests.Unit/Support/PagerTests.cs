@@ -52,14 +52,14 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [Fact]
-        public void GetEnumeratorOfTShouldNotEnumeratePassedThePagesRemaining()
+        public void GetEnumeratorOfTShouldNotEnumeratePassedTheBoundaryCount()
         {
             var testValues = Enumerable.Range(0, 10).ToArray();
-            var pager = new Pager<int>(testValues, new PageDimensions(8.ToPositiveInteger(), new PageBoundaries(10.ToPositiveInteger(), 10.ToPositiveInteger())), 73);
+            var pager = new Pager<int>(testValues, new PageDimensions(8.ToPositiveInteger(), new PageBoundaries(7.ToPositiveInteger(), 10.ToPositiveInteger())), 73);
 
             using (var enumerator = pager.GetEnumerator())
             {
-                for (var i = 0; i < 3; i++)
+                for (var i = 0; i < 7; i++)
                 {
                     enumerator.MoveNext().Should().BeTrue();
                     enumerator.Current.Should().Be(testValues[i]);
@@ -193,8 +193,26 @@ namespace AlphaDev.Web.Tests.Unit.Support
         {
             var testValues = Array.Empty<int>();
             var start = startPage.ToPositiveInteger();
-            var pager = new Pager<int>(testValues, new PageDimensions(start, new PageBoundaries(2.ToPositiveInteger(), PositiveInteger.MaxValue)), int.MaxValue);
+            var pager = new Pager<int>(testValues, new PageDimensions(start, new PageBoundaries(2.ToPositiveInteger(), 1000.ToPositiveInteger())), int.MaxValue);
             pager.CurrentPage.Should().Be(start);
+        }
+
+        [Theory]
+        [InlineData(6)]
+        [InlineData(5)]
+        [InlineData(2)]
+        [InlineData(1)]
+        [InlineData(8)]
+        [InlineData(11)]
+        public void ConstructorShouldInitializePreviousPagesWithUpToFiveBeforeTheCurrentPage(int startPage)
+        {
+            const int maxTotalPagesToDisplay = 5;
+            var testValues = Array.Empty<int>();
+            var start = startPage.ToPositiveInteger();
+            var pager = new Pager<int>(testValues, new PageDimensions(start, new PageBoundaries(2.ToPositiveInteger(), maxTotalPagesToDisplay.ToPositiveInteger())), int.MaxValue);
+            pager.CurrentPage.Should().Be(start);
+            var previousPages = Enumerable.Range(startPage - maxTotalPagesToDisplay, 5).Where(x => x > 0);
+            pager.PreviousPages.Should().BeEquivalentTo(previousPages);
         }
 
         [NotNull]

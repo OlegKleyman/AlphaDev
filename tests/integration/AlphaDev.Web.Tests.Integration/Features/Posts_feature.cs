@@ -131,7 +131,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
             Runner.RunScenario(
                 _ => CommonSteps.Given_i_am_a_user(),
                 _ => And_there_are_PAGES_pages_of_posts(20),
-                _ => When_i_go_to_the_PAGE_page(11),
+                _ => When_i_go_to_the_posts_page(),_ => When_i_go_to_the_posts_page(),
+                _ => When_i_go_to_the_PAGE_page(14),
                 _ => Then_it_should_display_pages_before_the_current_page());
         }
     }

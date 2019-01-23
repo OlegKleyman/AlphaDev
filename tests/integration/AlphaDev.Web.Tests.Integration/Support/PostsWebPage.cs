@@ -87,7 +87,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
                             }
                         }
 
-                        var pageAttributes = isActive ? new PageAttributes() : new PageAttributes(BaseUrl, pageNumber);
+                        var pageAttributes = isActive ? new PageAttributes() : new PageAttributes(PostBaseUrl, pageNumber);
                         return new PostsWebPageLink(Driver,
                             new Page(new PageIdentity(x.Text, pageNumber), displayFormat, pageAttributes));
                     });
@@ -100,6 +100,13 @@ namespace AlphaDev.Web.Tests.Integration.Support
         {
             Driver.Navigate().GoToUrl($"{PostBaseUrl.AbsoluteUri.Trim('/')}/{id}");
             return this;
+        }
+
+        public Page GoToPage(int pageNumber)
+        {
+            Driver.Navigate().GoToUrl(new Uri(PostBaseUrl, $"page/{pageNumber}"));
+            return new Page(new PageIdentity(pageNumber.ToString(CultureInfo.InvariantCulture), pageNumber),
+                DisplayFormat.Number, new PageAttributes());
         }
     }
 }
