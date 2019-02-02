@@ -2,11 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AlphaDev.Core;
 using JetBrains.Annotations;
 using Optional;
-using AlphaDev.Web.Extensions;
 using Optional.Collections;
-using Enumerable = System.Linq.Enumerable;
 
 namespace AlphaDev.Web.Support
 {
@@ -14,15 +13,19 @@ namespace AlphaDev.Web.Support
     {
         private readonly IEnumerable<T> _collection;
 
-        public Pager([NotNull] ICollection<T> collection, PageDimensions dimensions, [NotNull] Core.PositiveInteger total)
+        public Pager([NotNull] ICollection<T> collection, PageDimensions dimensions, [NotNull] PositiveInteger total)
         {
             var totalPages = dimensions.Boundaries.GetTotalPages(total.Value);
             var pagesToDisplay = Math.Min(dimensions.Boundaries.MaxTotal.Value, totalPages);
 
-            PreviousPages = Enumerable.Range(dimensions.Start.Value - dimensions.Boundaries.MaxTotal.Value, dimensions.Boundaries.MaxTotal.Value).Where(x => x > 0).ToArray();
+            PreviousPages = Enumerable
+                .Range(dimensions.Start.Value - dimensions.Boundaries.MaxTotal.Value,
+                    dimensions.Boundaries.MaxTotal.Value).Where(x => x > 0).ToArray();
             CurrentPage = dimensions.Start;
             NextPages = Enumerable.Range(dimensions.Start.Value + 1, Math.Max(pagesToDisplay - 1, 0)).ToArray();
-            AuxiliaryPage = totalPages > pagesToDisplay ? (NextPages.LastOrNone().ValueOr(CurrentPage.Value) + 1).Some() : Option.None<int>();
+            AuxiliaryPage = totalPages > pagesToDisplay
+                ? (NextPages.LastOrNone().ValueOr(CurrentPage.Value) + 1).Some()
+                : Option.None<int>();
 
             _collection = collection.Take(dimensions.Boundaries.Count.Value);
         }
@@ -31,10 +34,16 @@ namespace AlphaDev.Web.Support
 
         public int[] NextPages { get; }
         public Option<int> AuxiliaryPage { get; }
-        public Core.PositiveInteger CurrentPage { get; }
+        public PositiveInteger CurrentPage { get; }
 
-        public IEnumerator<T> GetEnumerator() => _collection.GetEnumerator();
+        public IEnumerator<T> GetEnumerator()
+        {
+            return _collection.GetEnumerator();
+        }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

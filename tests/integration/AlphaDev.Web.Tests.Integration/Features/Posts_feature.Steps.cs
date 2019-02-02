@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using AlphaDev.Web.Tests.Integration.Extensions;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using AlphaDev.Web.Tests.Integration.Support;
 using FluentAssertions;
 using JetBrains.Annotations;
 using LightBDD.Framework;
-using LightBDD.Framework.Scenarios.Basic;
 using LightBDD.Framework.Scenarios.Extended;
 using Markdig;
 using Omego.Extensions.DbContextExtensions;
@@ -21,12 +19,13 @@ namespace AlphaDev.Web.Tests.Integration.Features
     [UsedImplicitly]
     public partial class Posts_feature : WebFeatureFixture
     {
+        private Page _currentPageUrl;
         private int _pages;
         private int _pageToNavigateTo;
-        private Page _currentPageUrl;
 
-        public Posts_feature(ITestOutputHelper output, [NotNull] DatabaseWebServerFixture databaseWebServerFixture) : base(output,
-            databaseWebServerFixture)
+        public Posts_feature(ITestOutputHelper output, [NotNull] DatabaseWebServerFixture databaseWebServerFixture) :
+            base(output,
+                databaseWebServerFixture)
         {
         }
 
@@ -148,7 +147,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_all_the_pages()
         {
             const int maxPages = 10;
-            SiteTester.Posts.Pages.Take(maxPages).Select((x, i) => new { x.Page.Identity.Number, TextFormat = x.Page.DisplayFormat, Position = i + 1 })
+            SiteTester.Posts.Pages.Take(maxPages).Select((x, i) =>
+                    new { x.Page.Identity.Number, TextFormat = x.Page.DisplayFormat, Position = i + 1 })
                 .Should().OnlyContain(x => x.TextFormat == DisplayFormat.Number || _pages == 0).And.Subject
                 .Should().HaveCount(Math.Min(_pages, maxPages)).And.Subject.Should()
                 .OnlyContain(x => x.Number == x.Position);
@@ -159,7 +159,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
             const int maxPreviousPages = 10;
             var pages = SiteTester.Posts.Pages.ToLookup(x => x.Page.Attributes.Active);
             var activePageNumber = pages[ActivityStatus.Active].Should().ContainSingle().Subject.Page.Identity.Number;
-            var previousPages = pages[ActivityStatus.Inactive].Where(x => x.Page.Identity.Number < activePageNumber).Select((x, i) => new {x.Page.Identity.Number, x.Page.DisplayFormat, Position = i + 1 });
+            var previousPages = pages[ActivityStatus.Inactive].Where(x => x.Page.Identity.Number < activePageNumber)
+                .Select((x, i) => new { x.Page.Identity.Number, x.Page.DisplayFormat, Position = i + 1 });
             previousPages.Should().OnlyContain(x => x.DisplayFormat == DisplayFormat.Number || _pages == 0).And
                 .HaveCount(Math.Min(maxPreviousPages, activePageNumber - 1)).And.Subject.Should()
                 .BeInAscendingOrder(arg => arg.Number);

@@ -11,6 +11,13 @@ namespace AlphaDev.Web.Tests.Integration.Support
 {
     public class PostsWebPage : WebPage
     {
+        public PostsWebPage(IWebDriver driver, Uri baseUrl) : base(driver, new Uri(baseUrl, "page/1/"))
+        {
+            Create = new BlogEditorWebPage(Driver, new Uri(baseUrl, "create"));
+            Edit = new BlogEditorWebPage(Driver, new Uri(baseUrl, "edit"));
+            PostBaseUrl = baseUrl;
+        }
+
         public Page CurrentPage
         {
             get
@@ -19,13 +26,6 @@ namespace AlphaDev.Web.Tests.Integration.Support
                 var number = int.Parse(displayValue);
                 return new Page(new PageIdentity(displayValue, number), DisplayFormat.Number, new PageAttributes());
             }
-        }
-
-        public PostsWebPage(IWebDriver driver, Uri baseUrl) : base(driver, new Uri(baseUrl, "page/1/"))
-        {
-            Create = new BlogEditorWebPage(Driver, new Uri(baseUrl, "create"));
-            Edit = new BlogEditorWebPage(Driver, new Uri(baseUrl, "edit"));
-            PostBaseUrl = baseUrl;
         }
 
         [NotNull]
@@ -65,7 +65,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
                     {
                         var isActive = !x.TagName.Equals("a", StringComparison.OrdinalIgnoreCase);
                         int pageNumber;
-                        var displayFormat = x.Text.IsEllipses() ? DisplayFormat.Text : DisplayFormat.Number; ;
+                        var displayFormat = x.Text.IsEllipses() ? DisplayFormat.Text : DisplayFormat.Number;
 
                         if (isActive)
                         {
@@ -83,11 +83,13 @@ namespace AlphaDev.Web.Tests.Integration.Support
                             if (!int.TryParse(urlPageNumber, NumberStyles.Integer, CultureInfo.InvariantCulture,
                                 out pageNumber))
                             {
-                                throw new InvalidCastException($"Page text \"{urlPageNumber}\" does not contain number.");
+                                throw new InvalidCastException(
+                                    $"Page text \"{urlPageNumber}\" does not contain number.");
                             }
                         }
 
-                        var pageAttributes = isActive ? new PageAttributes() : new PageAttributes(PostBaseUrl, pageNumber);
+                        var pageAttributes =
+                            isActive ? new PageAttributes() : new PageAttributes(PostBaseUrl, pageNumber);
                         return new PostsWebPageLink(Driver,
                             new Page(new PageIdentity(x.Text, pageNumber), displayFormat, pageAttributes));
                     });

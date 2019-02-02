@@ -5,7 +5,8 @@ namespace AlphaDev.Web.Support
 {
     public struct PageBoundaries
     {
-        public static readonly PageBoundaries MinValue = new PageBoundaries(PositiveInteger.MinValue, PositiveInteger.MinValue);
+        public static readonly PageBoundaries MinValue =
+            new PageBoundaries(PositiveInteger.MinValue, PositiveInteger.MinValue);
 
         public PageBoundaries(PositiveInteger count, PositiveInteger maxTotal)
         {
@@ -16,6 +17,9 @@ namespace AlphaDev.Web.Support
         public PositiveInteger Count { get; }
         public PositiveInteger MaxTotal { get; }
 
-        public int GetTotalPages(int itemCount) => (int)Math.Ceiling(itemCount / (decimal)Count.Value);
+        public int GetTotalPages(int itemCount)
+        {
+            return (int) Math.Ceiling(itemCount / (decimal) Count.Value);
+        }
     }
 }

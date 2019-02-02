@@ -110,13 +110,9 @@ body .bubble-content pre { margin: 0; }
     border-radius: 25px;
 }
 
-.page {
-    color: #444;
-}
+.page { color: #444; }
 
-a.page {
-    text-decoration: underline;
-}
+a.page { text-decoration: underline; }
 
 .page.activePage {
     background-color: #ddd;

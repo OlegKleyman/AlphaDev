@@ -1,6 +1,4 @@
-﻿using System;
-using AlphaDev.Core;
-using AlphaDev.Test.Core.Extensions;
+﻿using AlphaDev.Core;
 using AlphaDev.Web.Support;
 using FluentAssertions;
 using Xunit;
@@ -14,14 +12,19 @@ namespace AlphaDev.Web.Tests.Unit.Support
         {
             var maxItemCount = PositiveInteger.MinValue;
             var maxPageTotal = PositiveInteger.MaxValue;
-            var pageDimensions = new PageDimensions(PositiveInteger.MinValue, new PageBoundaries(maxItemCount, maxPageTotal));
-            pageDimensions.Should().BeEquivalentTo(new { Start = PositiveInteger.MinValue, Boundaries = new{Count = maxItemCount, MaxTotal =maxPageTotal}});
+            var pageDimensions =
+                new PageDimensions(PositiveInteger.MinValue, new PageBoundaries(maxItemCount, maxPageTotal));
+            pageDimensions.Should().BeEquivalentTo(new
+            {
+                Start = PositiveInteger.MinValue, Boundaries = new { Count = maxItemCount, MaxTotal = maxPageTotal }
+            });
         }
 
         [Fact]
         public void MinValueShouldBeCorrect()
         {
-            PageDimensions.MinValue.Should().BeEquivalentTo(new { Start = PositiveInteger.MinValue, Boundaries = PageBoundaries.MinValue });
+            PageDimensions.MinValue.Should().BeEquivalentTo(new
+                { Start = PositiveInteger.MinValue, Boundaries = PageBoundaries.MinValue });
         }
     }
 }

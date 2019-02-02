@@ -6,7 +6,8 @@ namespace AlphaDev.Web.Tests.Integration.Support
     {
         public bool Equals(Page other)
         {
-            return Identity.Equals(other.Identity) && DisplayFormat == other.DisplayFormat && Attributes == other.Attributes;
+            return Identity.Equals(other.Identity) && DisplayFormat == other.DisplayFormat &&
+                   Attributes == other.Attributes;
         }
 
         public override bool Equals([CanBeNull] object obj)

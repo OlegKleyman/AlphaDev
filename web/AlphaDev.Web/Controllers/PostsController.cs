@@ -34,7 +34,7 @@ namespace AlphaDev.Web.Controllers
                     blog.Content,
                     new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)))
                 .SomeWhen(x => x.Any(), NotFound())
-                .Match(x => (ActionResult)View("Index", x.ToPager(new PageDimensions(startPage,
+                .Match(x => (ActionResult) View("Index", x.ToPager(new PageDimensions(startPage,
                         new PageBoundaries(itemsPerPage.ToPositiveInteger(), maxPagesToDisplay)),
                     _blogService.GetCount(startPosition.Value).ToPositiveInteger())), x => x);
         }

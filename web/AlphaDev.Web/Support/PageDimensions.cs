@@ -1,5 +1,4 @@
-﻿using System;
-using AlphaDev.Core;
+﻿using AlphaDev.Core;
 
 namespace AlphaDev.Web.Support
 {
@@ -7,7 +6,9 @@ namespace AlphaDev.Web.Support
     {
         public PositiveInteger Start { get; }
         public PageBoundaries Boundaries { get; }
-        public static readonly PageDimensions MinValue = new PageDimensions(PositiveInteger.MinValue, PageBoundaries.MinValue);
+
+        public static readonly PageDimensions MinValue =
+            new PageDimensions(PositiveInteger.MinValue, PageBoundaries.MinValue);
 
         public PageDimensions(PositiveInteger start, PageBoundaries boundaries)
         {
