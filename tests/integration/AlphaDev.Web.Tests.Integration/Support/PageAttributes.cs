@@ -48,10 +48,4 @@ namespace AlphaDev.Web.Tests.Integration.Support
             return !(x == y);
         }
     }
-
-    public enum ActivityStatus
-    {
-        Active,
-        Inactive
-    }
 }
