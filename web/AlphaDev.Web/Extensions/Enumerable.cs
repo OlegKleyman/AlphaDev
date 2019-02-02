@@ -10,7 +10,7 @@ namespace AlphaDev.Web.Extensions
     {
         [NotNull]
         public static Pager<T> ToPager<T>([NotNull] this IEnumerable<T> enumerable, PageDimensions dimensions,
-            int totalItemCount)
+            Support.PositiveInteger totalItemCount)
         {
             return new Pager<T>(enumerable.ToArray(), dimensions, totalItemCount);
         }

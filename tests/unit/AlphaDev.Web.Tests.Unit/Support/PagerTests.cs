@@ -55,7 +55,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         public void GetEnumeratorOfTShouldNotEnumeratePassedTheBoundaryCount()
         {
             var testValues = Enumerable.Range(0, 10).ToArray();
-            var pager = new Pager<int>(testValues, new PageDimensions(8.ToPositiveInteger(), new PageBoundaries(7.ToPositiveInteger(), 10.ToPositiveInteger())), 73);
+            var pager = new Pager<int>(testValues, new PageDimensions(8.ToPositiveInteger(), new PageBoundaries(7.ToPositiveInteger(), 10.ToPositiveInteger())), 73.ToPositiveInteger());
 
             using (var enumerator = pager.GetEnumerator())
             {
@@ -89,7 +89,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         public void ConstructorShouldInitializeWithCollectionArgument()
         {
             var testValues = Enumerable.Range(0, 10).ToList();
-            var pager = new Pager<int>(testValues, new PageDimensions(PositiveInteger.MinValue, new PageBoundaries(10.ToPositiveInteger(), 1.ToPositiveInteger())), int.MaxValue);
+            var pager = new Pager<int>(testValues, new PageDimensions(PositiveInteger.MinValue, new PageBoundaries(10.ToPositiveInteger(), 1.ToPositiveInteger())), PositiveInteger.MaxValue);
 
             using (var enumerator = pager.GetEnumerator())
             {
@@ -107,7 +107,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         public void ConstructorShouldInitializeNextPagesWithOneAfterTheCurrentPage()
         {
             var testValues = Array.Empty<int>();
-            var pager = new Pager<int>(testValues, new PageDimensions(7.ToPositiveInteger(), new PageBoundaries(PositiveInteger.MinValue, 2.ToPositiveInteger())), int.MaxValue);
+            var pager = new Pager<int>(testValues, new PageDimensions(7.ToPositiveInteger(), new PageBoundaries(PositiveInteger.MinValue, 2.ToPositiveInteger())), PositiveInteger.MaxValue);
             pager.NextPages.First().Should().Be(pager.CurrentPage + 1);
         }
 
@@ -152,7 +152,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         public void ConstructorShouldInitializeWithTheCorrectNumberOfNextPages(int start, PageBoundaries pageBoundaries, int totalItems, int expected)
         {
             var testValues = Array.Empty<int>();
-            var pager = new Pager<int>(testValues, new PageDimensions(start.ToPositiveInteger(), pageBoundaries), totalItems);
+            var pager = new Pager<int>(testValues, new PageDimensions(start.ToPositiveInteger(), pageBoundaries), totalItems.ToPositiveInteger());
             pager.NextPages.Should().HaveCount(expected);
         }
 
@@ -164,7 +164,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         {
             var testValues = Array.Empty<int>();
             var pageBoundaries = new PageBoundaries(1.ToPositiveInteger(), totalPagesToDisplay.ToPositiveInteger());
-            var pager = new Pager<int>(testValues, new PageDimensions(start.ToPositiveInteger(), pageBoundaries), int.MaxValue);
+            var pager = new Pager<int>(testValues, new PageDimensions(start.ToPositiveInteger(), pageBoundaries), PositiveInteger.MaxValue);
             pager.AuxiliaryPage.Should().Be(expected.Some());
         }
 
@@ -172,7 +172,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         public void ConstructorShouldInitializeWithoutTheAuxiliaryPageWhenThereAreLessOrEqualPagesThanTheMaxPageBoundary()
         {
             var testValues = Array.Empty<int>();
-            var pager = new Pager<int>(testValues, new PageDimensions(PositiveInteger.MinValue, new PageBoundaries(1.ToPositiveInteger(), 1.ToPositiveInteger())), 1);
+            var pager = new Pager<int>(testValues, new PageDimensions(PositiveInteger.MinValue, new PageBoundaries(1.ToPositiveInteger(), 1.ToPositiveInteger())), 1.ToPositiveInteger());
             pager.AuxiliaryPage.Should().Be(Option.None<int>());
         }
 
@@ -182,7 +182,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         public void ConstructorShouldInitializeNextPagesWhenThereArePagesRemaining(int size)
         {
             var testValues = Array.Empty<int>();
-            var pager = new Pager<int>(testValues, new PageDimensions(PositiveInteger.MinValue, new PageBoundaries(2.ToPositiveInteger(), size.ToPositiveInteger())), int.MaxValue);
+            var pager = new Pager<int>(testValues, new PageDimensions(PositiveInteger.MinValue, new PageBoundaries(2.ToPositiveInteger(), size.ToPositiveInteger())), PositiveInteger.MaxValue);
             pager.NextPages.Should().HaveCount(size - 1);
         }
 
@@ -193,7 +193,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         {
             var testValues = Array.Empty<int>();
             var start = startPage.ToPositiveInteger();
-            var pager = new Pager<int>(testValues, new PageDimensions(start, new PageBoundaries(2.ToPositiveInteger(), 1000.ToPositiveInteger())), int.MaxValue);
+            var pager = new Pager<int>(testValues, new PageDimensions(start, new PageBoundaries(2.ToPositiveInteger(), 1000.ToPositiveInteger())), PositiveInteger.MaxValue);
             pager.CurrentPage.Should().Be(start);
         }
 
@@ -209,7 +209,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
             const int maxTotalPagesToDisplay = 5;
             var testValues = Array.Empty<int>();
             var start = startPage.ToPositiveInteger();
-            var pager = new Pager<int>(testValues, new PageDimensions(start, new PageBoundaries(2.ToPositiveInteger(), maxTotalPagesToDisplay.ToPositiveInteger())), int.MaxValue);
+            var pager = new Pager<int>(testValues, new PageDimensions(start, new PageBoundaries(2.ToPositiveInteger(), maxTotalPagesToDisplay.ToPositiveInteger())), PositiveInteger.MaxValue);
             pager.CurrentPage.Should().Be(start);
             var previousPages = Enumerable.Range(startPage - maxTotalPagesToDisplay, 5).Where(x => x > 0);
             pager.PreviousPages.Should().BeEquivalentTo(previousPages);
@@ -218,7 +218,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         [NotNull]
         private static Pager<T> GetPager<T>([NotNull] ICollection<T> testValues, int total = default, int maxItemsPerPage = 1)
         {
-            return new Pager<T>(testValues, new PageDimensions(PositiveInteger.MinValue, new PageBoundaries(maxItemsPerPage.ToPositiveInteger(), 1.ToPositiveInteger())), total);
+            return new Pager<T>(testValues, new PageDimensions(PositiveInteger.MinValue, new PageBoundaries(maxItemsPerPage.ToPositiveInteger(), 1.ToPositiveInteger())), total.ToPositiveInteger());
         }
     }
 }

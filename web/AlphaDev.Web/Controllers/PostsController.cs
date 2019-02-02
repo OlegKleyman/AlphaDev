@@ -23,20 +23,21 @@ namespace AlphaDev.Web.Controllers
         }
 
         [Route("page/{page}")]
-        public ViewResult Page(int page)
+        public IActionResult Page(int page)
         {
             const int itemsPerPage = 10;
             var maxPagesToDisplay = 10.ToPositiveInteger();
             var startPage = page.ToPositiveInteger();
             var startPosition = startPage.ToStartPosition(itemsPerPage.ToPositiveInteger());
             var blogs = _blogService.GetOrderedByDates(startPosition.Value, itemsPerPage);
-            var model = blogs.Select(blog => new BlogViewModel(blog.Id,
+            return blogs.Select(blog => new BlogViewModel(blog.Id,
                     blog.Title,
                     blog.Content,
                     new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)))
-                .ToPager(new PageDimensions(startPage, new PageBoundaries(itemsPerPage.ToPositiveInteger(), maxPagesToDisplay)), _blogService.GetCount(startPosition.Value));
-
-            return View(nameof(Index), model);
+                .SomeWhen(x => x.Any(), NotFound())
+                .Match(x => (ActionResult)View("Index", x.ToPager(new PageDimensions(startPage,
+                        new PageBoundaries(itemsPerPage.ToPositiveInteger(), maxPagesToDisplay)),
+                    _blogService.GetCount(startPosition.Value).ToPositiveInteger())), x => x);
         }
 
         [Route("{id}")]
