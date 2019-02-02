@@ -18,6 +18,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             Runner.RunScenario(
                 CommonSteps.Given_i_am_a_user,
+                CommonSteps.And_there_is_a_blog_post,
                 When_i_go_to_the_posts_page,
                 Then_it_should_load);
         }

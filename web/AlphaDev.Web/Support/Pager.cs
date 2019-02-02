@@ -14,7 +14,7 @@ namespace AlphaDev.Web.Support
     {
         private readonly IEnumerable<T> _collection;
 
-        public Pager([NotNull] ICollection<T> collection, PageDimensions dimensions, PositiveInteger total)
+        public Pager([NotNull] ICollection<T> collection, PageDimensions dimensions, [NotNull] PositiveInteger total)
         {
             var totalPages = dimensions.Boundaries.GetTotalPages(total.Value);
             var pagesToDisplay = Math.Min(dimensions.Boundaries.MaxTotal.Value, totalPages);

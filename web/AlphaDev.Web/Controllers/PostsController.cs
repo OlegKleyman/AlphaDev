@@ -8,7 +8,6 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Optional;
-using PositiveInteger = AlphaDev.Web.Support.PositiveInteger;
 
 namespace AlphaDev.Web.Controllers
 {

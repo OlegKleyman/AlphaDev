@@ -2,6 +2,7 @@
 using AlphaDev.Test.Core.Extensions;
 using AlphaDev.Web.Support;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Xunit;
 
 namespace AlphaDev.Web.Tests.Unit.Support
@@ -25,14 +26,6 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [Fact]
-        public void ValueShouldThrowInvalidOperationExceptionWhenValueIsLessThanOne()
-        {
-            var integer = new PositiveInteger();
-            Action value = () => integer.Value.EmptyCall();
-            value.Should().Throw<InvalidOperationException>().WithMessage("The value is invalid.");
-        }
-
-        [Fact]
         public void ValueShouldReturnValue()
         {
             const int value = 1;
@@ -40,6 +33,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
             integer.Value.Should().Be(value);
         }
 
+        [NotNull]
         private static PositiveInteger GetPositiveInteger(int value)
         {
             return new PositiveInteger(value);
@@ -94,6 +88,41 @@ namespace AlphaDev.Web.Tests.Unit.Support
         public void MaxValueShouldBeInt32MaxValue()
         {
             PositiveInteger.MaxValue.Value.Should().Be(int.MaxValue);
+        }
+
+        [Theory]
+        [InlineData(1, 1, true)]
+        [InlineData(1, 2, false)]
+        public void ObjectEqualsShouldReturnWhetherTwoPositiveIntegersAreEqual(int first, int second, bool expected)
+        {
+            // ReSharper disable once RedundantCast - object equals method needs to be tested so a cast to object is a must
+            ((object) new PositiveInteger(first)).Equals(new PositiveInteger(second)).Should().Be(expected);
+        }
+
+        [Fact]
+        public void ObjectEqualsMethodShouldReturnFalseWhenOtherObjectIsNotPositiveInteger()
+        {
+            ((object) PositiveInteger.MinValue).Equals(new object()).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ObjectEqualsMethodShouldReturnFalseWhenOtherObjectIsNull()
+        {
+            ((object)PositiveInteger.MinValue).Equals(null).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(1, 1, true)]
+        [InlineData(1, 2, false)]
+        public void EqualsShouldReturnWhetherTwoPositiveIntegersAreEqual(int first, int second, bool expected)
+        {
+            new PositiveInteger(first).Equals(new PositiveInteger(second)).Should().Be(expected);
+        }
+
+        [Fact]
+        public void EqualsMethodShouldReturnFalseWhenOtherObjectIsNull()
+        {
+            PositiveInteger.MinValue.Equals(null).Should().BeFalse();
         }
     }
 }
