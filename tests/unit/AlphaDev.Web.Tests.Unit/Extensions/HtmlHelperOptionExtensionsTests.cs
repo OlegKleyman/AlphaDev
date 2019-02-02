@@ -15,6 +15,34 @@ namespace AlphaDev.Web.Tests.Unit.Extensions
     public class HtmlHelperOptionExtensionsTests
     {
         [Fact]
+        public void ActionLinkShouldReturnEmptyHtmlContentWhenOptionIsNone()
+        {
+            var target = Option.None<string>();
+            var helper = Substitute.For<IHtmlHelper<object>>();
+
+            var content = helper.ActionLink(target, default, default, default, default, default);
+
+            var writer = new StringWriter();
+            content.WriteTo(writer, HtmlEncoder.Default);
+            writer.ToString().Should().BeEquivalentTo(string.Empty);
+        }
+
+        [Fact]
+        public void ActionLinkShouldReturnFormattedHtmlContentWhenOptionIsNotEmpty()
+        {
+            var target = Option.Some("test");
+            var helper = Substitute.For<IHtmlHelper<object>>();
+            helper.ActionLink("text", "action", "controller", null, null, null, "routeValue", Arg.Any<object>())
+                .Returns(new StringHtmlContent("test"));
+
+            var content = helper.ActionLink(target, "text", "action", "controller", x => "routeValue", default);
+
+            var writer = new StringWriter();
+            content.WriteTo(writer, HtmlEncoder.Default);
+            writer.ToString().Should().BeEquivalentTo("test");
+        }
+
+        [Fact]
         public void DisplayForShouldReturnEmptyHtmlContentWhenOptionIsNone()
         {
             var target = Option.None<string>();

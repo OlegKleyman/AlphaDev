@@ -1,4 +1,5 @@
-﻿@model AlphaDev.Web.Support.Pager<AlphaDev.Web.Models.BlogViewModel>
+﻿@using AlphaDev.Web.Extensions
+@model AlphaDev.Web.Support.Pager<AlphaDev.Web.Models.BlogViewModel>
 
 @{
     ViewBag.Title = "Posts";
@@ -23,8 +24,6 @@
         {
             <a asp-controller="Posts" asp-action="Page" asp-route-page="@pageNumber" class="page">@pageNumber</a>
         }
-
-        @Model.AuxiliaryPage.Match(i => Html.ActionLink("...", "Page", "Posts", new { page = i }, new { @class = "page" }),
-            () => Html.Raw(string.Empty))
+        @Html.ActionLink(Model.AuxiliaryPage, "...", "Page", "Posts", x => new { page = x }, new { @class = "page" })
     </div>
 </div>
