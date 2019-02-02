@@ -92,7 +92,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             var blog = (Blog) CommonSteps.Data["AddedBlog"];
             SiteTester.Driver.Url.Should()
-                .MatchRegex($"{Regex.Escape(SiteTester.Posts.BaseUrl.AbsoluteUri)}{blog.Id}$");
+                .MatchRegex($"{Regex.Escape(SiteTester.Posts.PostBaseUrl.AbsoluteUri)}{blog.Id}$");
         }
 
         private void And_I_try_to_edit_a_blog_post_that_doesnt_exist()

@@ -16,5 +16,10 @@ namespace AlphaDev.Web.Tests.Integration.Extensions
         {
             return Markdown.ToHtml(target);
         }
+
+        public static bool IsEllipses(this string target)
+        {
+            return target == "...";
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AlphaDev.Core;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
+using AlphaDev.Web.Support;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,8 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NSubstitute;
 using Optional;
 using Xunit;
+using Int32 = AlphaDev.Core.Extensions.Int32;
+using PositiveInteger = AlphaDev.Web.Extensions.PositiveInteger;
 
 namespace AlphaDev.Web.Tests.Unit.Controllers
 {
@@ -21,7 +24,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var blogService = Substitute.For<IBlogService>();
             blogService.GetLatest().Returns(((BlogBase) new Blog(default, null, null, default)).Some());
-
+            blogService.GetCount(Arg.Any<int>()).Returns(1);
             return GetPostsController(blogService);
         }
 
@@ -101,12 +104,12 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void DeleteShouldRedirectToDefaultIndexAction()
+        public void DeleteShouldRedirectToDefaultPageAction()
         {
             var controller = GetPostsController(Substitute.For<IBlogService>());
 
             var result = controller.Delete(default).Should().BeOfType<RedirectToActionResult>();
-            result.Which.ActionName.Should().BeEquivalentTo("Index");
+            result.Which.ActionName.Should().BeEquivalentTo("Page");
             result.Which.RouteValues["id"].Should().BeNull();
         }
 
@@ -214,69 +217,6 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void IndexShouldReturnBlogModelsAssignableToEnumerableOfBlogViewModel()
-        {
-            var blogs = new[]
-            {
-                new Blog(321, default, default,
-                    new Dates(new DateTime(2014, 1, 1), Option.None<DateTime>())),
-                new Blog(123,
-                    "title",
-                    "content",
-                    new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))))
-            };
-
-            var blogService = Substitute.For<IBlogService>();
-            blogService.GetAll().Returns(blogs);
-
-            var controller = GetPostsController(blogService);
-
-            controller.Index().Model.Should().BeAssignableTo<IEnumerable<BlogViewModel>>();
-        }
-
-        [Fact]
-        public void IndexShouldReturnBlogModelsOrderedByCreatedDateDescending()
-        {
-            var blogs = new[]
-            {
-                new Blog(321, default, default,
-                    new Dates(new DateTime(2014, 1, 1), Option.None<DateTime>())),
-                new Blog(123,
-                    "title",
-                    "content",
-                    new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))))
-            };
-
-            var blogService = Substitute.For<IBlogService>();
-            blogService.GetAll().Returns(blogs);
-
-            var controller = GetPostsController(blogService);
-
-            controller.Index().Model.Should().BeAssignableTo<IEnumerable<BlogViewModel>>().Which.Should()
-                .BeInDescendingOrder(model => model.Dates.Created);
-        }
-
-        [Fact]
-        public void IndexShouldReturnBlogModelsWithValuesSetFromTheBlogService()
-        {
-            var blog = new Blog(123,
-                "title",
-                "content",
-                new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
-
-            var blogService = Substitute.For<IBlogService>();
-            blogService.GetAll().Returns(new[] { blog });
-
-            var controller = GetPostsController(blogService);
-
-            controller.Index().Model.Should().BeEquivalentTo(
-                new[]
-                {
-                    new { blog.Id, blog.Title, blog.Content, Dates = new { blog.Dates.Created, blog.Dates.Modified } }
-                });
-        }
-
-        [Fact]
         public void IndexShouldReturnBlogModelWithValuesSetFromTheBlogServiceWhenTempDataOrModelDontExist()
         {
             const int id = 123;
@@ -292,14 +232,6 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             controller.Index(id).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(
                 new { blog.Id, blog.Title, blog.Content, Dates = new { blog.Dates.Created, blog.Dates.Modified } });
-        }
-
-        [Fact]
-        public void IndexShouldReturnIndexView()
-        {
-            var controller = GetPostsController();
-
-            controller.Index().Should().BeOfType<ViewResult>();
         }
 
         [Fact]
@@ -334,6 +266,107 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             controller.Index(id).Should().BeOfType<ViewResult>().Which.ViewData["Title"].Should()
                 .BeEquivalentTo("title");
+        }
+
+        [Fact]
+        public void PageShouldGetLessThanElevenItems()
+        {
+            var blogService = Substitute.For<IBlogService>();
+            blogService.GetCount(Arg.Any<int>()).Returns(1);
+            const int page = 9;
+            GetPostsController(blogService).Page(page);
+            var value = PositiveInteger.ToStartPosition(Int32.ToPositiveInteger(page), Int32.ToPositiveInteger(10))
+                .Value;
+            blogService.Received(1).GetOrderedByDates(Arg.Is(value), Arg.Is(10));
+        }
+
+        [Fact]
+        public void PageShouldReturnBlogModelsAssignableToEnumerableOfBlogViewModel()
+        {
+            var blogService = Substitute.For<IBlogService>();
+            blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>())
+                .Returns(new[] { new Blog(string.Empty, string.Empty) });
+            blogService.GetCount(Arg.Any<int>()).Returns(1);
+            var controller = GetPostsController(blogService);
+            controller.Page(Core.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>().Which.Model.Should()
+                .BeAssignableTo<IEnumerable<BlogViewModel>>();
+        }
+
+        [Fact]
+        public void PageShouldReturnBlogModelsWithAnAuxiliaryPageNumberWhenThereAreMoreThanTenPages()
+        {
+            var blogService = Substitute.For<IBlogService>();
+            blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>())
+                .Returns(new[] { new Blog(string.Empty, string.Empty) });
+            blogService.GetCount(Arg.Any<int>()).Returns(101);
+            var controller = GetPostsController(blogService);
+
+            controller.Page(Core.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>().Which.Model.Should()
+                .BeAssignableTo<Pager<BlogViewModel>>().Which.AuxiliaryPage.Should()
+                .Be(11.Some());
+        }
+
+        [Fact]
+        public void PageShouldReturnBlogModelsWithoutAnAuxiliaryPageNumberWhenThereAreLessThanElevenItems()
+        {
+            var blogs = new[]
+            {
+                new Blog(321, default, default,
+                    new Dates(new DateTime(2014, 1, 1), Option.None<DateTime>()))
+            };
+
+            var blogService = Substitute.For<IBlogService>();
+            blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>()).Returns(blogs);
+            blogService.GetCount(Arg.Any<int>()).Returns(1);
+            var controller = GetPostsController(blogService);
+
+            controller.Page(1).Should().BeOfType<ViewResult>().Which.Model.Should()
+                .BeAssignableTo<Pager<BlogViewModel>>().Which.AuxiliaryPage.Should()
+                .Be(Option.None<int>());
+        }
+
+        [Fact]
+        public void PageShouldReturnBlogModelsWithValuesSetFromTheBlogService()
+        {
+            var blog = new Blog(123,
+                "title",
+                "content",
+                new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
+
+            var blogService = Substitute.For<IBlogService>();
+            blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>()).Returns(new[] { blog });
+            blogService.GetCount(1).Returns(int.MaxValue);
+
+            var controller = GetPostsController(blogService);
+
+            controller.Page(Core.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>().Which.Model.Should()
+                .BeEquivalentTo(
+                    new[]
+                    {
+                        new
+                        {
+                            blog.Id, blog.Title, blog.Content, Dates = new { blog.Dates.Created, blog.Dates.Modified }
+                        }
+                    });
+        }
+
+        [Fact]
+        public void PageShouldReturnNotFoundResultWhenNoBlogsFound()
+        {
+            var blogService = Substitute.For<IBlogService>();
+            GetPostsController(blogService).Page(1).Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public void PageShouldReturnPageView()
+        {
+            var blogService = Substitute.For<IBlogService>();
+            blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>())
+                .Returns(new[] { new Blog(string.Empty, string.Empty) });
+            blogService.GetCount(Arg.Any<int>()).Returns(101);
+            var controller = GetPostsController(blogService);
+
+            controller.Page(Core.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>();
         }
     }
 }

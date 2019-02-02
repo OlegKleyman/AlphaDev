@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using AlphaDev.Core;
 using AlphaDev.Core.Extensions;
+using AlphaDev.Web.Extensions;
 using AlphaDev.Web.Models;
+using AlphaDev.Web.Support;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,16 +21,22 @@ namespace AlphaDev.Web.Controllers
             _blogService = blogService;
         }
 
-        public ViewResult Index()
+        [Route("page/{page}")]
+        public IActionResult Page(int page)
         {
-            var blogs = _blogService.GetAll();
-            var model = blogs.Select(blog => new BlogViewModel(blog.Id,
+            const int itemsPerPage = 10;
+            var maxPagesToDisplay = 10.ToPositiveInteger();
+            var startPage = page.ToPositiveInteger();
+            var startPosition = startPage.ToStartPosition(itemsPerPage.ToPositiveInteger());
+            var blogs = _blogService.GetOrderedByDates(startPosition.Value, itemsPerPage);
+            return blogs.Select(blog => new BlogViewModel(blog.Id,
                     blog.Title,
                     blog.Content,
                     new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)))
-                .OrderByDescending(viewModel => viewModel.Dates.Created);
-
-            return View(nameof(Index), model);
+                .SomeWhen(x => x.Any(), NotFound())
+                .Match(x => (ActionResult) View("Index", x.ToPager(new PageDimensions(startPage,
+                        new PageBoundaries(itemsPerPage.ToPositiveInteger(), maxPagesToDisplay)),
+                    _blogService.GetCount(startPosition.Value).ToPositiveInteger())), x => x);
         }
 
         [Route("{id}")]
@@ -69,7 +77,7 @@ namespace AlphaDev.Web.Controllers
         {
             _blogService.Delete(id);
 
-            return RedirectToAction(nameof(Index), new { id = (object) null });
+            return RedirectToAction(nameof(Page), new { page = 1 });
         }
 
         [Authorize]

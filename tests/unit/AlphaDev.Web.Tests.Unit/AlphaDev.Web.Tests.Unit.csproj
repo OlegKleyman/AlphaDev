@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\web\AlphaDev.Web\AlphaDev.Web.csproj" />
+    <ProjectReference Include="..\..\core\AlphaDev.Test.Core\AlphaDev.Test.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

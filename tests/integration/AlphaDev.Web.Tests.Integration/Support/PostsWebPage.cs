@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using AlphaDev.Web.Tests.Integration.Extensions;
 using JetBrains.Annotations;
 using OpenQA.Selenium;
 using Optional;
@@ -9,10 +11,21 @@ namespace AlphaDev.Web.Tests.Integration.Support
 {
     public class PostsWebPage : WebPage
     {
-        public PostsWebPage(IWebDriver driver, Uri baseUrl) : base(driver, baseUrl)
+        public PostsWebPage(IWebDriver driver, Uri baseUrl) : base(driver, new Uri(baseUrl, "page/1/"))
         {
-            Create = new BlogEditorWebPage(Driver, new Uri(BaseUrl, "create"));
-            Edit = new BlogEditorWebPage(Driver, new Uri(BaseUrl, "edit"));
+            Create = new BlogEditorWebPage(Driver, new Uri(baseUrl, "create"));
+            Edit = new BlogEditorWebPage(Driver, new Uri(baseUrl, "edit"));
+            PostBaseUrl = baseUrl;
+        }
+
+        public Page CurrentPage
+        {
+            get
+            {
+                var displayValue = new Uri(Driver.Url).Segments.Last().TrimEnd('/');
+                var number = int.Parse(displayValue);
+                return new Page(new PageIdentity(displayValue, number), DisplayFormat.Number, new PageAttributes());
+            }
         }
 
         [NotNull]
@@ -41,5 +54,61 @@ namespace AlphaDev.Web.Tests.Integration.Support
         public BlogEditorWebPage Create { get; }
 
         public BlogEditorWebPage Edit { get; }
+
+        [NotNull]
+        public IEnumerable<PostsWebPageLink> Pages
+        {
+            get
+            {
+                return Driver.FindElements(By.CssSelector(".pages .page"))
+                    .Select(x =>
+                    {
+                        var isActive = !x.TagName.Equals("a", StringComparison.OrdinalIgnoreCase);
+                        int pageNumber;
+                        var displayFormat = x.Text.IsEllipses() ? DisplayFormat.Text : DisplayFormat.Number;
+
+                        if (isActive)
+                        {
+                            if (!int.TryParse(x.Text, NumberStyles.Integer, CultureInfo.InvariantCulture,
+                                out pageNumber))
+                            {
+                                throw new InvalidCastException($"Page text \"{x.Text}\" does not contain number.");
+                            }
+                        }
+                        else
+                        {
+                            var href = new Uri(x.GetAttribute("href"));
+                            var urlPageNumber = href.Segments.Last();
+
+                            if (!int.TryParse(urlPageNumber, NumberStyles.Integer, CultureInfo.InvariantCulture,
+                                out pageNumber))
+                            {
+                                throw new InvalidCastException(
+                                    $"Page text \"{urlPageNumber}\" does not contain number.");
+                            }
+                        }
+
+                        var pageAttributes =
+                            isActive ? new PageAttributes() : new PageAttributes(PostBaseUrl, pageNumber);
+                        return new PostsWebPageLink(Driver,
+                            new Page(new PageIdentity(x.Text, pageNumber), displayFormat, pageAttributes));
+                    });
+            }
+        }
+
+        public Uri PostBaseUrl { get; }
+
+        public override WebPage GoTo(int id)
+        {
+            Driver.Navigate().GoToUrl($"{PostBaseUrl.AbsoluteUri.Trim('/')}/{id}");
+            return this;
+        }
+
+        public Page GoToPage(int pageNumber)
+        {
+            Driver.Navigate().GoToUrl(new Uri(PostBaseUrl, $"page/{pageNumber}"));
+            return new Page(new PageIdentity(pageNumber.ToString(CultureInfo.InvariantCulture), pageNumber),
+                DisplayFormat.Number, new PageAttributes());
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Core.Data.Contexts;
@@ -29,19 +30,13 @@ namespace AlphaDev.Web.Bootstrap.Extensions
 
                     context.Database.ExecuteSqlCommand("TRUNCATE TABLE Blogs");
                     context.Blogs.AddRange(
-                        new Blog
+                        Enumerable.Range(1, 412).Select(x => new Blog
                         {
                             Content = GetDevelopmentContent(),
-                            Title = "testing",
+                            Title = $"testing {x}",
                             Created = new DateTime(2016, 7, 7),
                             Modified = new DateTime(2017, 7, 10)
-                        }, new Blog
-                        {
-                            Content = GetDevelopmentContent(),
-                            Title = "testing two",
-                            Created = new DateTime(2016, 7, 7),
-                            Modified = new DateTime(2017, 7, 10)
-                        });
+                        }));
 
                     context.SaveChanges();
                 }

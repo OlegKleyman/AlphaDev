@@ -21,6 +21,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             connection.Reset += Initialize;
         }
 
+        [NotNull]
         public static Blog DefaultBlog => new Blog
         {
             Content = "Content integration test2.",
@@ -29,6 +30,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             Modified = new DateTime(2017, 7, 8)
         };
 
+        [NotNull]
         public static Blog[] DefaultBlogs => new[]
         {
             new Blog
