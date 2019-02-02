@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace AlphaDev.Web.Support
+namespace AlphaDev.Core
 {
     public class PositiveInteger : IEquatable<PositiveInteger>
     {

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AlphaDev.Core.Extensions;
 using AlphaDev.Web.Support;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -9,7 +10,7 @@ using Optional;
 using Xunit;
 using AlphaDev.Web.Extensions;
 using Enumerable = System.Linq.Enumerable;
-using PositiveInteger = AlphaDev.Web.Support.PositiveInteger;
+using PositiveInteger = AlphaDev.Core.PositiveInteger;
 
 namespace AlphaDev.Web.Tests.Unit.Support
 {

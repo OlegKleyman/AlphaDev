@@ -14,7 +14,7 @@ namespace AlphaDev.Web.Support
     {
         private readonly IEnumerable<T> _collection;
 
-        public Pager([NotNull] ICollection<T> collection, PageDimensions dimensions, [NotNull] PositiveInteger total)
+        public Pager([NotNull] ICollection<T> collection, PageDimensions dimensions, [NotNull] Core.PositiveInteger total)
         {
             var totalPages = dimensions.Boundaries.GetTotalPages(total.Value);
             var pagesToDisplay = Math.Min(dimensions.Boundaries.MaxTotal.Value, totalPages);
@@ -31,7 +31,7 @@ namespace AlphaDev.Web.Support
 
         public int[] NextPages { get; }
         public Option<int> AuxiliaryPage { get; }
-        public PositiveInteger CurrentPage { get; }
+        public Core.PositiveInteger CurrentPage { get; }
 
         public IEnumerator<T> GetEnumerator() => _collection.GetEnumerator();
 

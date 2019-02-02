@@ -1,8 +1,9 @@
-﻿using AlphaDev.Web.Extensions;
+﻿using AlphaDev.Core.Extensions;
+using AlphaDev.Web.Extensions;
 using AlphaDev.Web.Support;
 using FluentAssertions;
 using Xunit;
-using PositiveInteger = AlphaDev.Web.Support.PositiveInteger;
+using PositiveInteger = AlphaDev.Core.PositiveInteger;
 
 namespace AlphaDev.Web.Tests.Unit.Support
 {

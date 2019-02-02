@@ -1,7 +1,7 @@
-﻿using AlphaDev.Web.Extensions;
+﻿using AlphaDev.Core.Extensions;
+using AlphaDev.Web.Extensions;
 using FluentAssertions;
 using Xunit;
-using PositiveInteger = AlphaDev.Web.Support.PositiveInteger;
 
 namespace AlphaDev.Web.Tests.Unit.Extensions
 {

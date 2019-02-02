@@ -5,9 +5,9 @@ namespace AlphaDev.Web.Extensions
     public static class PositiveInteger
     {
         [NotNull]
-        public static Support.PositiveInteger ToStartPosition([NotNull] this Support.PositiveInteger page, [NotNull] Support.PositiveInteger itemCount)
+        public static Core.PositiveInteger ToStartPosition([NotNull] this Core.PositiveInteger page, [NotNull] Core.PositiveInteger itemCount)
         {
-            return new Support.PositiveInteger((page.Value - 1) * itemCount.Value + 1);
+            return new Core.PositiveInteger((page.Value - 1) * itemCount.Value + 1);
         }
     }
 }

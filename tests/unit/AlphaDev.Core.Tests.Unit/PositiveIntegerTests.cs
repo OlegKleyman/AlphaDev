@@ -1,11 +1,10 @@
 ﻿using System;
 using AlphaDev.Test.Core.Extensions;
-using AlphaDev.Web.Support;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Xunit;
 
-namespace AlphaDev.Web.Tests.Unit.Support
+namespace AlphaDev.Core.Tests.Unit
 {
     public class PositiveIntegerTests
     {

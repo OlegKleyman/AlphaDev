@@ -1,9 +1,8 @@
-﻿using AlphaDev.Web.Extensions;
+﻿using AlphaDev.Core.Extensions;
 using FluentAssertions;
 using Xunit;
-using PositiveInteger = AlphaDev.Web.Support.PositiveInteger;
 
-namespace AlphaDev.Web.Tests.Unit.Extensions
+namespace AlphaDev.Core.Tests.Unit.Extensions
 {
     public class Int32Tests
     {

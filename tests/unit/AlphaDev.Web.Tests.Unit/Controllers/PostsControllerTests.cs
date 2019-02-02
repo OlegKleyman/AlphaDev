@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NSubstitute;
 using Optional;
 using Xunit;
-using Int32 = AlphaDev.Web.Extensions.Int32;
+using Int32 = AlphaDev.Core.Extensions.Int32;
 using PositiveInteger = AlphaDev.Web.Extensions.PositiveInteger;
 
 namespace AlphaDev.Web.Tests.Unit.Controllers
@@ -231,7 +231,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var controller = GetPostsController(blogService);
 
-            controller.Page(Web.Support.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(
+            controller.Page(Core.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(
                 new[]
                 {
                     new { blog.Id, blog.Title, blog.Content, Dates = new { blog.Dates.Created, blog.Dates.Modified } }
@@ -264,7 +264,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             blogService.GetCount(Arg.Any<int>()).Returns(101);
             var controller = GetPostsController(blogService);
 
-            controller.Page(Web.Support.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>();
+            controller.Page(Core.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>();
         }
 
         [Fact]
@@ -308,7 +308,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>()).Returns(new []{new Blog(string.Empty, string.Empty) });
             blogService.GetCount(Arg.Any<int>()).Returns(1);
             var controller = GetPostsController(blogService);
-            controller.Page(Web.Support.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>().Which.Model.Should().BeAssignableTo<IEnumerable<BlogViewModel>>();
+            controller.Page(Core.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>().Which.Model.Should().BeAssignableTo<IEnumerable<BlogViewModel>>();
         }
 
         [Fact]
@@ -337,7 +337,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             blogService.GetCount(Arg.Any<int>()).Returns(101);
             var controller = GetPostsController(blogService);
 
-            controller.Page(Web.Support.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>().Which.Model.Should().BeAssignableTo<Pager<BlogViewModel>>().Which.AuxiliaryPage.Should()
+            controller.Page(Core.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>().Which.Model.Should().BeAssignableTo<Pager<BlogViewModel>>().Which.AuxiliaryPage.Should()
                 .Be(11.Some());
         }
 

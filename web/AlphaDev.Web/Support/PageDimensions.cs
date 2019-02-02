@@ -1,4 +1,5 @@
 ﻿using System;
+using AlphaDev.Core;
 
 namespace AlphaDev.Web.Support
 {
