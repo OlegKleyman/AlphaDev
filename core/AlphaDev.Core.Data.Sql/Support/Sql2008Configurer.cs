@@ -4,18 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Data.Sql.Support
 {
-    public class SqlConfigurer : Configurer
+    public class Sql2008Configurer : Configurer
     {
         private readonly string _connectionString;
 
-        public SqlConfigurer(string connectionString)
+        public Sql2008Configurer(string connectionString)
         {
             _connectionString = connectionString;
         }
 
         public override void Configure([NotNull] DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_connectionString);
+            optionsBuilder.UseSqlServer(_connectionString, builder => builder.UseRowNumberForPaging());
         }
     }
 }

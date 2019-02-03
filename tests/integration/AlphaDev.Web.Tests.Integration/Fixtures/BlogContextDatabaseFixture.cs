@@ -15,7 +15,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         public BlogContextDatabaseFixture([NotNull] DatabaseConnectionFixture connection)
         {
             _connection = connection;
-            BlogContext = new BlogContext(new SqlConfigurer(connection.String));
+            BlogContext = new BlogContext(new Sql2008Configurer(connection.String));
             Initialize();
 
             connection.Reset += Initialize;

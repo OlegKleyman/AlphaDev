@@ -15,7 +15,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         public ApplicationContextDatabaseFixture([NotNull] DatabaseConnectionFixture connection)
         {
             _connection = connection;
-            ApplicationContext = new ApplicationContext(new SqlConfigurer(connection.String));
+            ApplicationContext = new ApplicationContext(new Sql2008Configurer(connection.String));
             Initialize();
 
             connection.Reset += Initialize;

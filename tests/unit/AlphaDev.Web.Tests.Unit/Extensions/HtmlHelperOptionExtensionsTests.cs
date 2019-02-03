@@ -32,6 +32,8 @@ namespace AlphaDev.Web.Tests.Unit.Extensions
         {
             var target = Option.Some("test");
             var helper = Substitute.For<IHtmlHelper<object>>();
+            // ReSharper disable once Mvc.ActionNotResolved - real action not needed
+            // ReSharper disable once Mvc.ControllerNotResolved - real controller not needed
             helper.ActionLink("text", "action", "controller", null, null, null, "routeValue", Arg.Any<object>())
                 .Returns(new StringHtmlContent("test"));
 

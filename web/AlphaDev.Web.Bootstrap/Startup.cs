@@ -20,8 +20,8 @@ namespace AlphaDev.Web.Bootstrap
         public void ConfigureServices(IServiceCollection services)
         {
             var config = services.BuildServiceProvider().GetService<IConfiguration>();
-            var securitySqlConfigurer = new SqlConfigurer(config.GetConnectionString("defaultSecurity"));
-            var defaultSqlConfigurer = new SqlConfigurer(config.GetConnectionString("default"));
+            var securitySqlConfigurer = new Sql2008Configurer(config.GetConnectionString("defaultSecurity"));
+            var defaultSqlConfigurer = new Sql2008Configurer(config.GetConnectionString("default"));
             services.AddSingleton<IPrefixGenerator, PrefixGenerator>()
                 .AddServices()
                 .AddContexts(defaultSqlConfigurer)

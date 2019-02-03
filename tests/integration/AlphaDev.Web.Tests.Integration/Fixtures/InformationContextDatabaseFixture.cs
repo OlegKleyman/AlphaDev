@@ -12,7 +12,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
     {
         public InformationContextDatabaseFixture([NotNull] DatabaseConnectionFixture connection)
         {
-            InformationContext = new InformationContext(new SqlConfigurer(connection.String));
+            InformationContext = new InformationContext(new Sql2008Configurer(connection.String));
             Initialize();
 
             connection.Reset += Initialize;

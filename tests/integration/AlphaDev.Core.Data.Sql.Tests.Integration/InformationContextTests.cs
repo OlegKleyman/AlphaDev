@@ -29,7 +29,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
                 };
 
             _connectionString = connectionBuilder.ToString();
-            _configurer = new SqlConfigurer(connectionBuilder.ToString());
+            _configurer = new Sql2008Configurer(connectionBuilder.ToString());
             _configurer.Configure(optionsBuilder);
 
             using (var context = new DbContext(optionsBuilder.Options))
@@ -50,7 +50,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
         }
 
         private readonly string _connectionString;
-        private readonly SqlConfigurer _configurer;
+        private readonly Sql2008Configurer _configurer;
 
         private void SeedAbouts()
         {
