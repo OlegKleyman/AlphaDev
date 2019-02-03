@@ -1,5 +1,5 @@
 ﻿using LightBDD.Framework;
-using LightBDD.Framework.Scenarios.Extended;
+using LightBDD.Framework.Scenarios;
 using LightBDD.XUnit2;
 
 namespace AlphaDev.Web.Tests.Integration.Features

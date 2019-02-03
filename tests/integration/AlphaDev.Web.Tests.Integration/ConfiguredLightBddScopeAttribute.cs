@@ -1,8 +1,8 @@
 ﻿using AlphaDev.Web.Tests.Integration.Features;
 using JetBrains.Annotations;
 using LightBDD.Core.Configuration;
+using LightBDD.Framework.Configuration;
 using LightBDD.Framework.Notification;
-using LightBDD.Framework.Notification.Configuration;
 using LightBDD.XUnit2;
 using OpenQA.Selenium;
 

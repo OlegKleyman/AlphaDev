@@ -196,11 +196,11 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void EditShouldRouteToIndexAction()
+        public void EditShouldRouteToIndexActionWhenModelStateIsValid()
         {
             var controller = GetPostsController(Substitute.For<IBlogService>());
 
-            controller.Edit(default, Arg.Any<EditPostViewModel>())
+            controller.Edit(default, default)
                 .Should().BeOfType<RedirectToActionResult>()
                 .Which.ActionName.Should().BeEquivalentTo("Index");
         }

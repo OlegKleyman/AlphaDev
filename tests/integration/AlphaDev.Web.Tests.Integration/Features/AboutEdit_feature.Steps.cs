@@ -5,7 +5,7 @@ using AlphaDev.Web.Tests.Integration.Fixtures;
 using FluentAssertions;
 using JetBrains.Annotations;
 using LightBDD.Framework;
-using LightBDD.Framework.Scenarios.Extended;
+using LightBDD.Framework.Scenarios;
 using Markdig;
 using Microsoft.EntityFrameworkCore;
 using Xunit.Abstractions;
