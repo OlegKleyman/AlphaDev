@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>    
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
@@ -20,18 +20,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.4.2" />
-    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
-    <PackageReference Include="LightBDD.XUnit2" Version="2.4.3" />
-    <PackageReference Include="Markdig" Version="0.15.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+    <PackageReference Include="FluentAssertions" Version="5.6.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2018.3.0" />
+    <PackageReference Include="LightBDD.XUnit2" Version="3.0.1" />
+    <PackageReference Include="Markdig" Version="0.15.7" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="Omego.Extensions" Version="2.0.21" />
     <PackageReference Include="Selenium.PhantomJS.WebDriver" Version="2.1.1" />
-    <PackageReference Include="Selenium.Support" Version="3.14.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.42.0.1" />
+    <PackageReference Include="Selenium.Support" Version="3.141.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.46.0" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
-    <PackageReference Include="xunit" Version="2.4.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0">
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
