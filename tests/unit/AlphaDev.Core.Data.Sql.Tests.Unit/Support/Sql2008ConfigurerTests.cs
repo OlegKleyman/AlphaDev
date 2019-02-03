@@ -8,12 +8,12 @@ using Xunit;
 
 namespace AlphaDev.Core.Data.Sql.Tests.Unit.Support
 {
-    public class SqlConfigurerTests
+    public class Sql2008ConfigurerTests
     {
         [NotNull]
-        private static SqlConfigurer GetSqlConfigurer(string connectionString)
+        private static Sql2008Configurer GetSqlConfigurer(string connectionString)
         {
-            return new SqlConfigurer(connectionString);
+            return new Sql2008Configurer(connectionString);
         }
 
         [Fact]
@@ -23,15 +23,15 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Support
             var configurer = GetSqlConfigurer(connectionString);
             var builder = new DbContextOptionsBuilder();
             configurer.Configure(builder);
-
-            builder.Options.GetExtension<SqlServerOptionsExtension>().ConnectionString
-                .Should().BeEquivalentTo(connectionString);
+            builder.Options.GetExtension<SqlServerOptionsExtension>().Should().BeEquivalentTo(new
+                    { ConnectionString = connectionString, LogFragment = "RowNumberPaging " },
+                options => options.ExcludingMissingMembers());
         }
 
         [Fact]
         public void ConstructorShouldInitializeSqlConfigurer()
         {
-            Action constructor = () => new SqlConfigurer(default);
+            Action constructor = () => new Sql2008Configurer(default);
             constructor.Should().NotThrow();
         }
     }
