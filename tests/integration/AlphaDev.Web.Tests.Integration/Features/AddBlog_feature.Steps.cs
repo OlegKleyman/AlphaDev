@@ -17,7 +17,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private string _addedBlogContent;
         private string _addedBlogTitle;
 
-        public AddBlog_feature(ITestOutputHelper output, [NotNull] DatabaseWebServerFixture databaseWebServerFixture) : base(
+        public AddBlog_feature(ITestOutputHelper output,
+            [NotNull] DatabaseWebServerFixture databaseWebServerFixture) : base(
             output, databaseWebServerFixture)
         {
         }
