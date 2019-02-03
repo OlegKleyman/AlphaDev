@@ -93,6 +93,11 @@ namespace AlphaDev.Test.Core.Support
             throw new NotImplementedException();
         }
 
+        public IEnumerable<Tuple<INavigation, InternalEntityEntry>> GetRecordedReferrers(object referencedEntity, bool clear)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual IEnumerable<Tuple<INavigation, InternalEntityEntry>> GetRecordedReferers(object referencedEntity,
             bool clear)
         {
