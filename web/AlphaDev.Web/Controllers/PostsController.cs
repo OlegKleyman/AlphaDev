@@ -103,7 +103,7 @@ namespace AlphaDev.Web.Controllers
                     arguments.Content = model?.Content;
                     arguments.Title = model?.Title;
                 }))
-                .Map(dictionary => (IActionResult) RedirectToAction(nameof(Index)))
+                .Map(dictionary => (IActionResult) RedirectToAction(nameof(Index), new { id = id }))
                 .ValueOr(View(nameof(Edit), model));
         }
     }
