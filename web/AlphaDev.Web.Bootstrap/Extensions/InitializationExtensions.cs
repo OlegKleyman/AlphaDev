@@ -94,23 +94,6 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         }
 
         [NotNull]
-        public static IApplicationBuilder UseLoggerSettings([NotNull] this IApplicationBuilder builder)
-        {
-            using (var scope = builder.ApplicationServices.CreateScope())
-            {
-                var configuration = scope.ServiceProvider.GetService<IConfiguration>();
-                var loggerFactory = scope.ServiceProvider.GetService<ILoggerFactory>();
-
-                loggerFactory.AddConsole(configuration.GetSection("Logging"));
-                loggerFactory.AddDebug();
-                var logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
-                loggerFactory.AddSerilog(logger);
-            }
-
-            return builder;
-        }
-
-        [NotNull]
         public static IApplicationBuilder UseExceptionHandling([NotNull] this IApplicationBuilder builder)
         {
             using (var scope = builder.ApplicationServices.CreateScope())
