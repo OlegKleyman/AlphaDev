@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace AlphaDev.Web.Bootstrap
 {
@@ -34,6 +36,14 @@ namespace AlphaDev.Web.Bootstrap
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<IdentityDbContext<User>>().Services
                 .ConfigureApplicationCookie(options => { options.LoginPath = "/account/login"; })
+                .AddLogging(builder =>
+                {
+                    builder.AddConfiguration(config.GetSection("Logging"));
+                    builder.AddConsole();
+                    builder.AddDebug();
+                    var logger = new LoggerConfiguration().ReadFrom.Configuration(config).CreateLogger();
+                    builder.AddSerilog(logger);
+                })
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -43,7 +53,6 @@ namespace AlphaDev.Web.Bootstrap
         public void Configure([NotNull] IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseExceptionHandling()
-                .UseLoggerSettings()
                 .UseStatusCodePagesWithReExecute("/default/error/{0}")
                 .UseAllDatabaseMigrations()
                 .UseDevelopmentBlogs()
