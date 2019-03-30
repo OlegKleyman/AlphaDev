@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using AlphaDev.Web.Tests.Integration.Support;
 using FluentAssertions;
@@ -91,6 +92,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_an_error_should_be_logged()
         {
+            // wait for error to be logged
+            Thread.Sleep(500);
             Log.Should().Contain("[Error] An unhandled exception has occurred");
         }
 
