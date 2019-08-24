@@ -17,14 +17,20 @@ namespace AlphaDev.Web.Bootstrap
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         [UsedImplicitly]
         public void ConfigureServices(IServiceCollection services)
         {
-            var config = services.BuildServiceProvider().GetService<IConfiguration>();
-            var securitySqlConfigurer = new Sql2008Configurer(config.GetConnectionString("defaultSecurity"));
-            var defaultSqlConfigurer = new Sql2008Configurer(config.GetConnectionString("default"));
+            var securitySqlConfigurer = new Sql2008Configurer(_configuration.GetConnectionString("defaultSecurity"));
+            var defaultSqlConfigurer = new Sql2008Configurer(_configuration.GetConnectionString("default"));
             services.AddSingleton<IPrefixGenerator, PrefixGenerator>()
                 .AddServices()
                 .AddContexts(defaultSqlConfigurer)
@@ -38,10 +44,10 @@ namespace AlphaDev.Web.Bootstrap
                 .ConfigureApplicationCookie(options => { options.LoginPath = "/account/login"; })
                 .AddLogging(builder =>
                 {
-                    builder.AddConfiguration(config.GetSection("Logging"));
+                    builder.AddConfiguration(_configuration.GetSection("Logging"));
                     builder.AddConsole();
                     builder.AddDebug();
-                    var logger = new LoggerConfiguration().ReadFrom.Configuration(config).CreateLogger();
+                    var logger = new LoggerConfiguration().ReadFrom.Configuration(_configuration).CreateLogger();
                     builder.AddSerilog(logger);
                 })
                 .AddMvc()
