@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using JetBrains.Annotations;
 
 namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
     public class DatabaseManagerFixture : IDisposable
     {
+        private static readonly object SyncLock = new object();
+
         private const string ConnectionStringTemplate =
             @"Data Source=(LocalDB)\MSSQLLocalDB;Integrated Security=True;MultipleActiveResultSets=true;Database=";
 
@@ -28,29 +31,33 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             }
         }
 
-        public DatabaseConnectionFixture Get(string key)
+        public DatabaseConnectionFixture Get([NotNull] string key)
         {
             ThrowIfDisposed();
 
             if (!Connections.TryGetValue(key, out var targetConnection))
             {
-                var databaseName = Guid.NewGuid().ToString("N");
-
-                using (var connection = new SqlConnection($"{ConnectionStringTemplate}master"))
+                lock (SyncLock)
                 {
-                    using (var command = new SqlCommand())
+                    var databaseName = Guid.NewGuid().ToString("N");
+
+                    using (var connection = new SqlConnection($"{ConnectionStringTemplate}master"))
                     {
-                        command.CommandTimeout = 120;
-                        command.Connection = connection;
-                        command.CommandText = $"CREATE DATABASE [{databaseName}]";
+                        using (var command = new SqlCommand())
+                        {
+                            command.CommandTimeout = 120;
+                            command.Connection = connection;
+                            command.CommandText = $"CREATE DATABASE [{databaseName}]";
 
-                        connection.Open();
+                            connection.Open();
 
-                        command.ExecuteNonQuery();
+                            command.ExecuteNonQuery();
+                        }
                     }
+
+                    targetConnection = new DatabaseConnectionFixture(databaseName);
                 }
 
-                targetConnection = new DatabaseConnectionFixture(databaseName);
                 Connections.Add(key, targetConnection);
             }
 
