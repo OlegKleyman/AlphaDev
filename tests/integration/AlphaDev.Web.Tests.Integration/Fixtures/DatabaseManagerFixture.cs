@@ -40,6 +40,7 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
                 {
                     using (var command = new SqlCommand())
                     {
+                        command.CommandTimeout = 120;
                         command.Connection = connection;
                         command.CommandText = $"CREATE DATABASE [{databaseName}]";
 
