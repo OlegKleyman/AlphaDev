@@ -23,7 +23,8 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
                 DataSource = @"(LocalDB)\MSSQLLocalDB",
                 MultipleActiveResultSets = true,
                 InitialCatalog = database,
-                Pooling = false
+                Pooling = false,
+                ConnectTimeout = 120
             };
 
             String = builder.ToString();
