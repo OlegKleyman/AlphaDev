@@ -22,7 +22,8 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
                 IntegratedSecurity = true,
                 DataSource = @"(LocalDB)\MSSQLLocalDB",
                 MultipleActiveResultSets = true,
-                InitialCatalog = database
+                InitialCatalog = database,
+                Pooling = false
             };
 
             String = builder.ToString();
