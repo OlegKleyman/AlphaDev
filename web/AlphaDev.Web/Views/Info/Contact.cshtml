@@ -3,6 +3,7 @@
 
 @{
     ViewBag.Title = "Contact";
+    var displayValueViewModel = new DisplayValueViewModel("EditContact", "Info", Model, "Contact");
 }
 
-<partial name="_singleDisplay" model="@{ new DisplayValueViewModel("EditContact", "Info", Model, "Contact"); }"/>
+<partial name="_singleDisplay" model="@displayValueViewModel"/>
