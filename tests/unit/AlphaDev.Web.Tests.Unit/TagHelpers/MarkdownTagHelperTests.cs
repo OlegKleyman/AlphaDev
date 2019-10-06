@@ -89,7 +89,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             Action process = () => sut.Process(null, null);
 
             process.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null.\r\nParameter name: output")
+                .WithMessage("Value cannot be null. (Parameter 'output')")
                 .Which.ParamName.Should().BeEquivalentTo("output");
         }
     }
