@@ -28,7 +28,7 @@
     <PackageReference Include="Omego.Extensions" Version="2.0.21" />
     <PackageReference Include="Selenium.PhantomJS.WebDriver" Version="2.1.1" />
     <PackageReference Include="Selenium.Support" Version="3.141.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="76.0.3809.12600" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="77.0.3865.4000" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="3.0.0-dev-00732" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
