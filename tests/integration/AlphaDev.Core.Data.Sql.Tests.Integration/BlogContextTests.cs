@@ -8,6 +8,7 @@ using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Sql.Support;
 using FluentAssertions;
 using JetBrains.Annotations;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Xunit;
@@ -61,7 +62,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             {
                 Enumerable.Range(1, 10).ToList().ForEach(
                     // ReSharper disable once AccessToDisposedClosure - Executes eagerly
-                    i => context.Database.ExecuteSqlCommand(
+                    i => context.Database.ExecuteSqlRaw(
                         $"INSERT INTO Blogs(Content, Title) VALUES('test {i}', 'Title {i}')"));
             }
         }

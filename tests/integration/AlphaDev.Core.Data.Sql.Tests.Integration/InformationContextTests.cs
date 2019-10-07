@@ -8,6 +8,7 @@ using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Sql.Support;
 using FluentAssertions;
 using JetBrains.Annotations;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Xunit;
@@ -59,7 +60,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
 
             using (var context = new DbContext(optionsBuilder.Options))
             {
-                context.Database.ExecuteSqlCommand(
+                context.Database.ExecuteSqlRaw(
                     $"INSERT INTO Abouts(Id, Value) VALUES(1, 'test')");
             }
         }
@@ -71,7 +72,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
 
             using (var context = new DbContext(optionsBuilder.Options))
             {
-                context.Database.ExecuteSqlCommand(
+                context.Database.ExecuteSqlRaw(
                     $"INSERT INTO Contacts(Id, Value) VALUES(1, 'test')");
             }
         }

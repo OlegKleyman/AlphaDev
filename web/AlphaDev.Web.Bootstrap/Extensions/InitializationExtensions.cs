@@ -26,7 +26,7 @@ namespace AlphaDev.Web.Bootstrap.Extensions
                 {
                     var context = scope.ServiceProvider.GetService<BlogContext>();
 
-                    context.Database.ExecuteSqlCommand("TRUNCATE TABLE Blogs");
+                    context.Database.ExecuteSqlRaw("TRUNCATE TABLE Blogs");
                     context.Blogs.AddRange(
                         Enumerable.Range(1, 412).Select(x => new Blog
                         {
