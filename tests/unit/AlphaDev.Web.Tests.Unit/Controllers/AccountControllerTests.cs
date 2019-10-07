@@ -41,7 +41,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var signInManager = Substitute.For<SignInManager<User>>(
                 userManager,
                 new HttpContextAccessor(), Substitute.For<IUserClaimsPrincipalFactory<User>>(), null,
-                Substitute.For<ILogger<SignInManager<User>>>(), null);
+                Substitute.For<ILogger<SignInManager<User>>>(), null, null);
 
             signInManager.PasswordSignInAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>())
                 .Returns(Task.FromResult(SignInResult.Failed));

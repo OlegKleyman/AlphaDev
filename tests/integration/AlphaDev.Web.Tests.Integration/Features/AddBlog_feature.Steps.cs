@@ -38,7 +38,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_be_saved_in_the_datastore()
         {
-            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.LastOrDefault().Should()
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.AsEnumerable().LastOrDefault().Should()
                 .BeEquivalentTo(new
                 {
                     Title = _addedBlogTitle,

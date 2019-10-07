@@ -98,12 +98,14 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
                     var reader = command.ExecuteReader();
 
                     while (reader.Read())
+                    {
                         yield return Enumerable.Range(0, reader.FieldCount)
                             .ToDictionary(reader.GetName, i =>
                             {
                                 var value = reader.GetValue(i);
                                 return value == DBNull.Value ? null : value;
                             });
+                    }
                 }
             }
         }
@@ -157,7 +159,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
                 SeedAbouts();
                 var abouts = context.Abouts;
 
-                var aboutsDictionary = abouts.Select(
+                var aboutsDictionary = abouts.AsEnumerable().Select(
                     about => about.GetType().GetProperties()
                         .ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(about, null)));
 
@@ -252,7 +254,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             using (var context = GetInformationContext())
             {
                 SeedContacts();
-                var aboutsDictionary = context.Contacts.Select(
+                var aboutsDictionary = context.Contacts.AsEnumerable().Select(
                     about => about.GetType().GetProperties()
                         .ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(about, null)));
 
