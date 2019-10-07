@@ -56,7 +56,7 @@ namespace AlphaDev.Web.Bootstrap
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         [UsedImplicitly]
-        public void Configure([NotNull] IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure([NotNull] IApplicationBuilder app)
         {
             app.UseExceptionHandling()
                 .UseStatusCodePagesWithReExecute("/default/error/{0}")

@@ -10,10 +10,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Serilog;
+using Microsoft.Extensions.Hosting;
 
 namespace AlphaDev.Web.Bootstrap.Extensions
 {
@@ -24,7 +22,7 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         {
             using (var scope = builder.ApplicationServices.CreateScope())
             {
-                if (scope.ServiceProvider.GetService<IHostingEnvironment>().IsDevelopment())
+                if (scope.ServiceProvider.GetService<IWebHostEnvironment>().IsDevelopment())
                 {
                     var context = scope.ServiceProvider.GetService<BlogContext>();
 
@@ -50,7 +48,7 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         {
             using (var scope = builder.ApplicationServices.CreateScope())
             {
-                if (scope.ServiceProvider.GetService<IHostingEnvironment>().IsDevelopment())
+                if (scope.ServiceProvider.GetService<IWebHostEnvironment>().IsDevelopment())
                 {
                     var context = scope.ServiceProvider.GetService<InformationContext>();
 
@@ -78,7 +76,7 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         {
             using (var scope = builder.ApplicationServices.CreateScope())
             {
-                if (scope.ServiceProvider.GetService<IHostingEnvironment>().IsDevelopment())
+                if (scope.ServiceProvider.GetService<IWebHostEnvironment>().IsDevelopment())
                 {
                     scope.ServiceProvider.GetService<BlogContext>().Database.EnsureDeleted();
                     scope.ServiceProvider.GetService<InformationContext>().Database.EnsureDeleted();
@@ -98,7 +96,7 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         {
             using (var scope = builder.ApplicationServices.CreateScope())
             {
-                if (scope.ServiceProvider.GetService<IHostingEnvironment>().IsDevelopment())
+                if (scope.ServiceProvider.GetService<IWebHostEnvironment>().IsDevelopment())
                 {
                     builder.UseDeveloperExceptionPage();
                 }
@@ -113,7 +111,7 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         {
             using (var scope = builder.ApplicationServices.CreateScope())
             {
-                if (scope.ServiceProvider.GetService<IHostingEnvironment>().IsDevelopment())
+                if (scope.ServiceProvider.GetService<IWebHostEnvironment>().IsDevelopment())
                 {
                     var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
 
