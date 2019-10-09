@@ -134,7 +134,7 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
             var context = Substitute.For<DbContext>();
             Action saveSingleOrThrow = () => context.SaveSingleOrThrow();
             saveSingleOrThrow.Should().Throw<ArgumentException>()
-                .WithMessage("Database is null.\r\nParameter name: context").Which.ParamName.Should().Be("context");
+                .WithMessage("Database is null. (Parameter 'context')").Which.ParamName.Should().Be("context");
         }
 
         [Fact]

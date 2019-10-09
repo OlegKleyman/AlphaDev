@@ -53,7 +53,7 @@ namespace AlphaDev.Core.Tests.Unit
         public void ConstructorShouldThrowArgumentExceptionWhenValueIsLessThanOne()
         {
             Action constructor = () => new PositiveInteger(-1).EmptyCall();
-            constructor.Should().Throw<ArgumentException>().WithMessage("Must be positive.\r\nParameter name: value")
+            constructor.Should().Throw<ArgumentException>().WithMessage("Must be positive. (Parameter 'value')")
                 .Which.ParamName.Should().Be("value");
         }
 

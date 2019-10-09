@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Sql.Support;
 using FluentAssertions;
 using JetBrains.Annotations;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Xunit;
@@ -61,7 +63,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             {
                 Enumerable.Range(1, 10).ToList().ForEach(
                     // ReSharper disable once AccessToDisposedClosure - Executes eagerly
-                    i => context.Database.ExecuteSqlCommand(
+                    i => context.Database.ExecuteSqlRaw(
                         $"INSERT INTO Blogs(Content, Title) VALUES('test {i}', 'Title {i}')"));
             }
         }
@@ -89,12 +91,14 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
                     var reader = command.ExecuteReader();
 
                     while (reader.Read())
+                    {
                         yield return Enumerable.Range(0, reader.FieldCount)
                             .ToDictionary(reader.GetName, i =>
                             {
                                 var value = reader.GetValue(i);
                                 return value == DBNull.Value ? null : value;
                             });
+                    }
                 }
             }
         }
@@ -157,9 +161,8 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             {
                 var blogs = context.Blogs;
 
-                var blogsDictionary = blogs.Select(
-                    blog => blog.GetType().GetProperties()
-                        .ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(blog, null)));
+                var blogsDictionary = blogs.ToArray().Select(blog =>
+                    blog.GetType().GetProperties().ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(blog, null)));
 
                 GetTable("Blogs").Should().BeEquivalentTo(blogsDictionary);
             }

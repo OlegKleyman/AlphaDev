@@ -82,7 +82,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
             Action bindModelAsync = () => binder.BindModelAsync(GetContext());
             bindModelAsync.Should().Throw<ArgumentException>()
-                .WithMessage("ValueProvider cannot be null.\r\nParameter name: bindingContext").Which
+                .WithMessage("ValueProvider cannot be null. (Parameter 'bindingContext')").Which
                 .ParamName.Should()
                 .BeEquivalentTo("bindingContext");
         }
