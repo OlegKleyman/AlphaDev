@@ -26,8 +26,8 @@ namespace AlphaDev.Core
             using var context = _contextFactory.Create();
             return context.Blogs.OrderByDescending(blog => blog.Created).FirstOrNone().Map(blog =>
                 (BlogBase) new Blog(blog.Id,
-                    blog.Title ?? string.Empty,
-                    blog.Content ?? string.Empty,
+                    blog.Title,
+                    blog.Content,
                     new Dates(blog.Created, blog.Modified.ToOption())));
         }
 

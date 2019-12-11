@@ -76,7 +76,7 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
             context.Database.Returns(Substitute.For<DatabaseFacade>(context));
             context.SaveChanges().Returns(1);
             var target = new object();
-            context.Remove<object>(Arg.Any<object>()).Returns((EntityEntry<object>) null);
+            context.Remove<object>(Arg.Any<object>()).Returns((EntityEntry<object>?) null);
             Action deleteSingleOrThrow = () => context.DeleteSingleOrThrow(target);
             deleteSingleOrThrow.Should().Throw<InvalidOperationException>().WithMessage("Object not found.");
         }
@@ -155,7 +155,7 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
             context.Database.Returns(Substitute.For<DatabaseFacade>(context));
             context.SaveChanges().Returns(1);
             Action updateAndSaveSingleOrThrow =
-                () => context.UpdateAndSaveSingleOrThrow(x => (TestEntity) null, x => { });
+                () => context.UpdateAndSaveSingleOrThrow(x => (TestEntity?) null, x => { });
             updateAndSaveSingleOrThrow.Should().Throw<InvalidOperationException>()
                 .WithMessage("TestEntity not found.");
         }

@@ -20,7 +20,7 @@ namespace AlphaDev.Core
         public Option<string> GetDetails()
         {
             using var context = _contextFactory.Create();
-            return context.Contact.SomeWhenNotNull().Map(contact => contact.Value).NotNull();
+            return context.Contact.SomeWhenNotNull().Map(contact => contact.Value).FilterNotNull();
         }
 
         public void Edit(string value)

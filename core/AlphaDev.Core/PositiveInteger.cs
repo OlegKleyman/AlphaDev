@@ -15,7 +15,7 @@ namespace AlphaDev.Core
 
         public int Value { get; }
 
-        public bool Equals([CanBeNull] PositiveInteger other)
+        public bool Equals(PositiveInteger? other)
         {
             return !(other is null) && Value == other.Value;
         }

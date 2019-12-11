@@ -5,14 +5,7 @@ namespace AlphaDev.Core.Data.Entities
 {
     public class Contact
     {
-        private string? _value;
-
-        [NotNull]
-        public string Value
-        {
-            get => _value ?? throw new InvalidOperationException($"{nameof(Value)} is not initialized.");
-            set => _value = value;
-        }
+        public string? Value { get; set; }
 
         public bool Id { get; set; }
     }

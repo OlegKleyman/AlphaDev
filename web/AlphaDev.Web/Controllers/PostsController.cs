@@ -65,11 +65,11 @@ namespace AlphaDev.Web.Controllers
         public ActionResult Create(CreatePostViewModel? post)
         {
             return post
-                .SomeWhenNotNull()
-                .Filter(x => ModelState.IsValid)
-                .Map(x => _blogService.Add(new Blog(x.Title, x.Content)))
-                .Map(blog => (ActionResult) RedirectToAction(nameof(Index), new { id = blog.Id }))
-                .ValueOr(View(nameof(Create), post));
+                   .SomeWhenNotNull()
+                   .Filter(x => ModelState.IsValid)
+                   .Map(x => _blogService.Add(new Blog(x.Title, x.Content)))
+                   .Map(blog => (ActionResult) RedirectToAction(nameof(Index), new { id = blog.Id }))
+                   .ValueOr(View(nameof(Create), post));
         }
 
         [Authorize]
@@ -98,15 +98,16 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         public IActionResult Edit(int id, [CanBeNull] EditPostViewModel model)
         {
-            return model.SomeWhenNotNull()
-                .Filter(x => ModelState.IsValid)
-                .MapToAction(x => _blogService.Edit(id, arguments =>
-                {
-                    arguments.Content = x.Content;
-                    arguments.Title = x.Title;
-                }))
-                .Map(dictionary => (IActionResult) RedirectToAction(nameof(Index), new { id }))
-                .ValueOr(View(nameof(Edit), model));
+            return model
+                   .SomeWhenNotNull()
+                   .Filter(x => ModelState.IsValid)
+                   .MapToAction(x => _blogService.Edit(id, arguments =>
+                   {
+                       arguments.Content = x.Content;
+                       arguments.Title = x.Title;
+                   }))
+                   .Map(dictionary => (IActionResult) RedirectToAction(nameof(Index), new { id }))
+                   .ValueOr(View(nameof(Edit), model));
         }
     }
 }

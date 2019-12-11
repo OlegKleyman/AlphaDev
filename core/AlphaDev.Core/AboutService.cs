@@ -20,7 +20,7 @@ namespace AlphaDev.Core
         public Option<string> GetAboutDetails()
         {
             using var context = _contextFactory.Create();
-            return context.About.SomeWhenNotNull().Map(about => about.Value).NotNull();
+            return context.About.SomeWhenNotNull().Map(about => about.Value).FilterNotNull();
         }
 
         public void Edit(string value)
