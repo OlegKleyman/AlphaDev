@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AlphaDev.Web.Support;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
@@ -24,11 +25,24 @@ namespace AlphaDev.Web.TagHelpers
             _editorView = editorView;
         }
 
+        private ViewContext? _context;
+
         [NotNull]
         [ViewContext]
-        public ViewContext Context { get; set; }
+        public ViewContext Context
+        {
+            get => _context ?? throw new InvalidOperationException($"{nameof(Context)} is not initialized.");
+            set => _context = value;
+        }
 
-        public object Model { get; set; }
+        private object? _model;
+
+        [NotNull]
+        public object Model
+        {
+            get => _model ?? throw new InvalidOperationException($"{nameof(Model)} is not initialized.");
+            set => _model = value;
+        }
 
         public sealed override void Process(TagHelperContext context, [NotNull] TagHelperOutput output)
         {

@@ -19,7 +19,7 @@ namespace AlphaDev.Web.Controllers
             _signInManager = signInManager;
         }
 
-        public ViewResult Login([CanBeNull] string returnUrl = null)
+        public ViewResult Login([CanBeNull] string? returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             return View("Login", new LoginViewModel());
@@ -28,7 +28,7 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public IActionResult Login([CanBeNull] LoginViewModel model, [CanBeNull] string returnUrl = null)
+        public IActionResult Login([CanBeNull] LoginViewModel model, [CanBeNull] string? returnUrl = null)
         {
             return ModelState.IsValid.SomeWhen(b => b)
                 .Map(b => _signInManager.PasswordSignInAsync(model?.Username, model?.Password, false, false)

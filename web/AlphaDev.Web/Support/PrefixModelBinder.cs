@@ -16,7 +16,7 @@ namespace AlphaDev.Web.Support
                 throw new ArgumentException("ValueProvider cannot be null.", nameof(bindingContext));
             }
 
-            var prefix = (bindingContext.ValueProvider?.GetValue("prefix").FirstValue)
+            var prefix = bindingContext.ValueProvider.GetValue("prefix").FirstValue
                 .SomeWhen(s => !string.IsNullOrWhiteSpace(s))
                 .Map(s => s + ".")
                 .ValueOr(string.Empty);
