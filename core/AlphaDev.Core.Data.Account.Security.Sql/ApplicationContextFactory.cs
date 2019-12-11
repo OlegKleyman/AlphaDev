@@ -12,7 +12,7 @@ namespace AlphaDev.Core.Data.Account.Security.Sql
         {
         }
 
-        public ApplicationContextFactory(Configurer configurer) : base(configurer)
+        public ApplicationContextFactory(Configurer? configurer) : base(configurer)
         {
         }
     }

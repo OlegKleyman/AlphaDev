@@ -1,5 +1,7 @@
+using System;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Support;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlphaDev.Core.Data.Contexts
@@ -10,6 +12,13 @@ namespace AlphaDev.Core.Data.Contexts
         {
         }
 
-        public DbSet<Blog> Blogs { get; set; }
+        private DbSet<Blog>? _blogs;
+
+        [NotNull]
+        public DbSet<Blog> Blogs
+        {
+            get => _blogs ?? throw new InvalidOperationException($"{nameof(Blogs)} is null.");
+            set => _blogs = value;
+        }
     }
 }

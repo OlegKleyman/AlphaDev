@@ -11,7 +11,7 @@ namespace AlphaDev.Core.Data.Sql
         {
         }
 
-        public InformationContextFactory(Configurer configurer) : base(configurer)
+        public InformationContextFactory(Configurer? configurer) : base(configurer)
         {
         }
     }

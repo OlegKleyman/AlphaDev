@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 
 namespace AlphaDev.Core.Data.Entities
 {
@@ -8,9 +9,23 @@ namespace AlphaDev.Core.Data.Entities
 
         public DateTime Created { get; set; }
 
-        public string Content { get; set; }
+        private string? _content;
 
-        public string Title { get; set; }
+        [NotNull]
+        public string Content
+        {
+            get => _content ?? throw new InvalidOperationException($"{nameof(Content)} is not initialized.");
+            set => _content = value;
+        }
+
+        private string? _title;
+
+        [NotNull]
+        public string Title
+        {
+            get => _title ?? throw new InvalidOperationException($"{nameof(Title)} is not initialized.");
+            set => _title = value;
+        }
 
         public DateTime? Modified { get; set; }
     }

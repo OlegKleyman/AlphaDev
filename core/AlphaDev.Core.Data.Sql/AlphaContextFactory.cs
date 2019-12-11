@@ -10,9 +10,9 @@ namespace AlphaDev.Core.Data.Sql
     public abstract class AlphaContextFactory<T> : IDesignTimeDbContextFactory<T> where T : DbContext
     {
         private static readonly SqlConfigurer Configurer = new SqlConfigurer(@"Data Source=(LocalDB)\v11.0;");
-        private readonly Configurer _configurer;
+        private readonly Configurer? _configurer;
 
-        protected AlphaContextFactory(Configurer configurer)
+        protected AlphaContextFactory(Configurer? configurer)
         {
             _configurer = configurer;
         }
