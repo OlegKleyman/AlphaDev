@@ -2,6 +2,7 @@
 using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Extensions;
+using AlphaDev.Optional.Extensions;
 using JetBrains.Annotations;
 using Optional;
 
@@ -19,7 +20,7 @@ namespace AlphaDev.Core
         public Option<string> GetAboutDetails()
         {
             using var context = _contextFactory.Create();
-            return context.About.SomeNotNull().Map(about => about.Value).NotNull();
+            return context.About.SomeWhenNotNull().Map(about => about.Value).NotNull();
         }
 
         public void Edit(string value)

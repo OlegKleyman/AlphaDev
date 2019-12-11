@@ -1,4 +1,5 @@
 ﻿using System;
+using AlphaDev.Optional.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -23,12 +24,12 @@ namespace AlphaDev.Core.Extensions
         }
 
         public static void UpdateAndSaveSingleOrThrow<TContext, TEntity>([NotNull] this TContext context,
-            [NotNull] Func<TContext, TEntity> getEntity, [NotNull] Action<TEntity> editEntity)
+            [NotNull] Func<TContext, TEntity?> getEntity, [NotNull] Action<TEntity> editEntity)
             where TContext : DbContext where TEntity : class
         {
-            getEntity(context).SomeNotNull(GetEntityNotFoundException<TEntity>())
-                .MapToAction(editEntity)
-                .Match(entity => SaveSingleOrThrow(context), exception => throw exception);
+            var option = getEntity(context).SomeWhenNotNull(GetEntityNotFoundException<TEntity>());
+            option.MatchSome(editEntity);
+            option.Match(entity => SaveSingleOrThrow(context), exception => throw exception);
         }
 
         [NotNull]
@@ -44,13 +45,11 @@ namespace AlphaDev.Core.Extensions
                 throw new ArgumentException($"{nameof(context.Database)} is null.", nameof(context));
             }
 
-            using (var transaction = context.Database.BeginTransaction())
-            {
-                context.SaveChanges().Some().Map(changes => changes.SomeWhen(i => i == 1,
-                        () => new InvalidOperationException($"Inconsistent change count of {changes}.")))
-                    .MatchSome(option => option.MatchNone(exception => throw exception));
-                transaction.Commit();
-            }
+            using var transaction = context.Database.BeginTransaction();
+            context.SaveChanges().Some().Map(changes => changes.SomeWhen(i => i == 1,
+                       () => new InvalidOperationException($"Inconsistent change count of {changes}.")))
+                   .MatchSome(option => option.MatchNone(exception => throw exception));
+            transaction.Commit();
         }
 
         [NotNull]

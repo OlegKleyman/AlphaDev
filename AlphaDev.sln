@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A8CC5FA8-7A37-4FC8-9C7E-D6800DBC0157}"
 EndProject
@@ -47,7 +47,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Core.Data.Account.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Core.Data.Account.Security.Sql.Tests.Unit", "tests\unit\AlphaDev.Core.Data.Account.Security.Sql.Tests.Unit\AlphaDev.Core.Data.Account.Security.Sql.Tests.Unit.csproj", "{4B06EB86-6C4D-4483-BF02-18726579C9D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Core.Tests.Integration", "tests\integration\AlphaDev.Core.Tests.Integration\AlphaDev.Core.Tests.Integration.csproj", "{362B8524-B4EF-45B4-97CF-E08E236C897B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Core.Tests.Integration", "tests\integration\AlphaDev.Core.Tests.Integration\AlphaDev.Core.Tests.Integration.csproj", "{362B8524-B4EF-45B4-97CF-E08E236C897B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Optional.Extensions", "core\AlphaDev.Optional.Extensions\AlphaDev.Optional.Extensions.csproj", "{BF6B07AC-7394-4C13-AEAA-463B6479E0C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Optional.Extensions.Tests.Unit", "tests\unit\AlphaDev.Optional.Extensions.Tests.Unit\AlphaDev.Optional.Extensions.Tests.Unit.csproj", "{957FAF93-41F1-4BF1-9D6A-30A1230C6A0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -119,6 +123,14 @@ Global
 		{362B8524-B4EF-45B4-97CF-E08E236C897B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{362B8524-B4EF-45B4-97CF-E08E236C897B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{362B8524-B4EF-45B4-97CF-E08E236C897B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF6B07AC-7394-4C13-AEAA-463B6479E0C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF6B07AC-7394-4C13-AEAA-463B6479E0C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF6B07AC-7394-4C13-AEAA-463B6479E0C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF6B07AC-7394-4C13-AEAA-463B6479E0C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{957FAF93-41F1-4BF1-9D6A-30A1230C6A0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{957FAF93-41F1-4BF1-9D6A-30A1230C6A0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{957FAF93-41F1-4BF1-9D6A-30A1230C6A0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{957FAF93-41F1-4BF1-9D6A-30A1230C6A0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -143,6 +155,8 @@ Global
 		{2F4C4D9E-A17B-44B2-9A7C-2B2073F8B7D9} = {8561F13A-FB6E-45CE-8020-CEDCC9EA77DB}
 		{4B06EB86-6C4D-4483-BF02-18726579C9D9} = {E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}
 		{362B8524-B4EF-45B4-97CF-E08E236C897B} = {6041D273-6E6B-4F68-B316-646209191525}
+		{BF6B07AC-7394-4C13-AEAA-463B6479E0C6} = {8561F13A-FB6E-45CE-8020-CEDCC9EA77DB}
+		{957FAF93-41F1-4BF1-9D6A-30A1230C6A0F} = {E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FC791FD-FD6E-4ABB-90D8-6B566DF49780}
