@@ -11,9 +11,9 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Support
     public class Sql2008ConfigurerTests
     {
         [NotNull]
-        private static Sql2008Configurer GetSqlConfigurer(string connectionString)
+        private static SqlConfigurer GetSqlConfigurer(string connectionString)
         {
-            return new Sql2008Configurer(connectionString);
+            return new SqlConfigurer(connectionString);
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Support
         [Fact]
         public void ConstructorShouldInitializeSqlConfigurer()
         {
-            Action constructor = () => new Sql2008Configurer(default);
+            Action constructor = () => new SqlConfigurer(default);
             constructor.Should().NotThrow();
         }
     }
