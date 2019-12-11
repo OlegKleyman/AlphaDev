@@ -200,9 +200,11 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var controller = GetPostsController(Substitute.For<IBlogService>());
 
-            controller.Edit(default, default)
-                .Should().BeOfType<RedirectToActionResult>()
-                .Which.ActionName.Should().BeEquivalentTo("Index");
+            controller.Edit(default, new EditPostViewModel(string.Empty, string.Empty, default))
+                      .Should()
+                      .BeOfType<RedirectToActionResult>()
+                      .Which.ActionName.Should()
+                      .BeEquivalentTo("Index");
         }
 
         [Fact]

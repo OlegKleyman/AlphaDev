@@ -35,14 +35,7 @@ namespace AlphaDev.Web.TagHelpers
             set => _context = value;
         }
 
-        private object? _model;
-
-        [NotNull]
-        public object Model
-        {
-            get => _model ?? throw new InvalidOperationException($"{nameof(Model)} is not initialized.");
-            set => _model = value;
-        }
+        public object? Model { get; set; }
 
         public sealed override void Process(TagHelperContext context, [NotNull] TagHelperOutput output)
         {

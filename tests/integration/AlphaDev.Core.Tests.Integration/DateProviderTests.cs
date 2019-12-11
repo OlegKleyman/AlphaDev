@@ -18,7 +18,7 @@ namespace AlphaDev.Core.Tests.Integration
         {
             var provider = GetDateProvider();
 
-            provider.UtcNow.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(.5));
+            provider.UtcNow.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(1));
         }
     }
 }

@@ -337,7 +337,10 @@ namespace AlphaDev.Core.Tests.Unit
         [Fact]
         public void GetOrderedByDatesShouldReturnBlogsStartingFromTheStartArgument()
         {
-            var entities = Enumerable.Range(1, 10).Select(x => new Data.Entities.Blog { Id = x }).ToArray();
+            var entities = Enumerable.Range(1, 10)
+                                     .Select(x => new Data.Entities.Blog
+                                         { Id = x, Title = string.Empty, Content = string.Empty })
+                                     .ToArray();
 
             var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
                 .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
@@ -370,7 +373,8 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var testValue = new DateTime(2017, 1, 1);
 
-            var entities = new[] { new Data.Entities.Blog { Modified = testValue } };
+            var entities = new[]
+                { new Data.Entities.Blog { Modified = testValue, Title = string.Empty, Content = string.Empty } };
             var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
                 .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
 
@@ -400,7 +404,8 @@ namespace AlphaDev.Core.Tests.Unit
         {
             const string testValue = "test";
 
-            var entities = new[] { new Data.Entities.Blog { Title = testValue } };
+            var entities = new[]
+                { new Data.Entities.Blog { Title = testValue, Content = string.Empty } };
             var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
                 .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
 
@@ -463,7 +468,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var testValue = new DateTime(2017, 1, 1);
 
-            var blog = new Data.Entities.Blog { Created = testValue };
+            var blog = new Data.Entities.Blog { Created = testValue, Title = string.Empty, Content = string.Empty };
             var entities = new[] { blog };
             var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
                 .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
@@ -501,7 +506,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var testValue = new DateTime(2017, 1, 1);
 
-            var blog = new Data.Entities.Blog { Modified = testValue };
+            var blog = new Data.Entities.Blog { Modified = testValue, Title = string.Empty, Content = string.Empty };
             var entities = new[] { blog };
             var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
                 .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
@@ -519,7 +524,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             const int id = 1;
 
-            var blog = new Data.Entities.Blog { Modified = null };
+            var blog = new Data.Entities.Blog { Modified = null, Title = string.Empty, Content = string.Empty };
             var entities = new[] { blog };
             var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
                 .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
@@ -539,7 +544,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var testValue = "test";
 
-            var blog = new Data.Entities.Blog { Title = testValue };
+            var blog = new Data.Entities.Blog { Title = testValue, Content = string.Empty };
             var entities = new[] { blog };
             var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
                 .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
