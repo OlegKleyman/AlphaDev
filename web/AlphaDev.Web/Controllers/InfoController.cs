@@ -1,5 +1,6 @@
 ﻿using AlphaDev.Core;
 using AlphaDev.Core.Extensions;
+using AlphaDev.Optional.Extensions;
 using AlphaDev.Web.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
@@ -48,10 +49,10 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         public IActionResult EditAbout(AboutEditViewModel model)
         {
-            return ModelState.SomeWhen(dictionary => dictionary.IsValid)
-                             .MapToAction(dictionary => _aboutService.Edit(model.Value))
-                             .Map(dictionary => (IActionResult) RedirectToAction(nameof(About)))
-                             .ValueOr(() => View(nameof(EditAbout), model));
+            var option = ModelState.SomeWhen(dictionary => dictionary.IsValid)
+                                   .WithException(() => View(nameof(EditAbout), model));
+            option.MatchSome(dictionary => _aboutService.Edit(model.Value));
+            return option.Map<IActionResult>(dictionary => RedirectToAction(nameof(About))).GetValueOrException();
         }
 
         [Route("about/create")]
@@ -66,10 +67,9 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         public IActionResult CreateAbout([NotNull] AboutCreateViewModel model)
         {
-            return ModelState.IsValid.SomeWhen(b => b)
-                             .MapToAction(b => _aboutService.Create(model.Value))
-                             .Map<IActionResult>(b => RedirectToAction(nameof(About)))
-                             .ValueOr(() => View(nameof(CreateAbout), model));
+            var option = ModelState.IsValid.SomeWhen(b => b, () => View(nameof(CreateAbout), model));
+            option.MatchSome(b => _aboutService.Create(model.Value));
+            return option.Map<IActionResult>(b => RedirectToAction(nameof(About))).GetValueOrException();
         }
 
         [AllowAnonymous]
@@ -99,10 +99,9 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         public IActionResult EditContact(ContactEditViewModel model)
         {
-            return ModelState.SomeWhen(dictionary => dictionary.IsValid)
-                             .MapToAction(dictionary => _contactService.Edit(model.Value))
-                             .Map<IActionResult>(dictionary => RedirectToAction(nameof(Contact)))
-                             .ValueOr(() => View(nameof(EditContact), model));
+            var option = ModelState.SomeWhen(dictionary => dictionary.IsValid, () => View(nameof(EditContact), model));
+            option.MatchSome(dictionary => _contactService.Edit(model.Value));
+            return option.Map<IActionResult>(dictionary => RedirectToAction(nameof(Contact))).GetValueOrException();
         }
 
         [Route("contact/create")]
@@ -117,10 +116,9 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         public IActionResult CreateContact([NotNull] ContactCreateViewModel model)
         {
-            return ModelState.IsValid.SomeWhen(b => b)
-                             .MapToAction(b => _contactService.Create(model.Value))
-                             .Map<IActionResult>(b => RedirectToAction(nameof(Contact)))
-                             .ValueOr(() => View(nameof(CreateContact), model));
+            var option = ModelState.IsValid.SomeWhen(b => b, () => View(nameof(CreateContact), model));
+            option.MatchSome(b => _contactService.Create(model.Value));
+            return option.Map<IActionResult>(b => RedirectToAction(nameof(Contact))).GetValueOrException();
         }
     }
 }

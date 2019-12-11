@@ -7,25 +7,25 @@ namespace AlphaDev.Optional.Extensions.Tests.Unit
     public class ObjectExtensionsTests
     {
         [Fact]
-        public void SomeWhenNotNullShouldReturnNoneWhenObjectIsNull()
+        public void SomeWhenNotNullReturnNoneWhenObjectIsNull()
         {
             ((object?) null).SomeWhenNotNull().Should().Be(Option.None<object>());
         }
 
         [Fact]
-        public void SomeWhenNotNullShouldReturnSomeWhenObjectIsNotNull()
+        public void SomeWhenNotNullReturnSomeWhenObjectIsNotNull()
         {
             "test".SomeWhenNotNull().Should().Be("test".Some());
         }
 
         [Fact]
-        public void SomeWhenNotNullWithExceptionShouldReturnNoneWithExceptionObjectWhenTargetObjectIsNull()
+        public void SomeWhenNotNullWithExceptionReturnNoneWithExceptionObjectWhenTargetObjectIsNull()
         {
             ((string?) null).SomeWhenNotNull(() => "exception").ValueOrException().Should().Be("exception");
         }
 
         [Fact]
-        public void SomeWhenNotNullWithExceptionShouldReturnSomeWhenTargetObjectIsNotNull()
+        public void SomeWhenNotNullWithExceptionReturnSomeWhenTargetObjectIsNotNull()
         {
             "test".SomeWhenNotNull(() => "exception").ValueOrException().Should().Be("test");
         }

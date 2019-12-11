@@ -18,5 +18,18 @@ namespace AlphaDev.Optional.Extensions.Tests.Unit
             // ReSharper disable once RedundantCast - need to convert to nullable reference type to use extension method
             ((object?) new object()).Some().FilterNotNull().HasValue.Should().BeTrue();
         }
+
+        [Fact]
+        public void GetValueOrExceptionReturnsExceptionValueWhenOptionIsNone()
+        {
+            Option.None<object>().WithException(() => "test").GetValueOrException().Should().Be("test");
+        }
+
+        [Fact]
+        public void GetValueOrExceptionReturnsSomeValueWhenOptionIsSome()
+        {
+            var target = new object();
+            target.Some().WithException(() => "test").GetValueOrException().Should().Be(target);
+        }
     }
 }

@@ -40,14 +40,14 @@ namespace AlphaDev.Web.Controllers
         [Route("{id}")]
         public ActionResult Index(int id)
         {
-            return _blogService.Get(id)
-                               .Map(foundBlog => new BlogViewModel(foundBlog.Id,
-                                   foundBlog.Title,
-                                   foundBlog.Content,
-                                   new DatesViewModel(foundBlog.Dates.Created, foundBlog.Dates.Modified)))
-                               .MapToAction(model => ViewBag.Title = model.Title)
-                               .Map(model => (ActionResult) View("Post", model))
-                               .ValueOr(NotFound);
+            var option = _blogService.Get(id)
+                                     .WithException(NotFound)
+                                     .Map(foundBlog => new BlogViewModel(foundBlog.Id,
+                                         foundBlog.Title,
+                                         foundBlog.Content,
+                                         new DatesViewModel(foundBlog.Dates.Created, foundBlog.Dates.Modified)));
+            option.MatchSome(model => ViewBag.Title = model.Title);
+            return option.Map<ActionResult>(model => View("Post", model)).GetValueOrException();
         }
 
         [Authorize]
@@ -93,16 +93,19 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         public IActionResult Edit(int id, [CanBeNull] EditPostViewModel model)
         {
-            return model
-                   .SomeWhenNotNull()
-                   .Filter(x => ModelState.IsValid)
-                   .MapToAction(x => _blogService.Edit(id, arguments =>
-                   {
-                       arguments.Content = x.Content;
-                       arguments.Title = x.Title;
-                   }))
+            var option = model.SomeWhenNotNull()
+                              .Filter(x => ModelState.IsValid)
+                              .WithException(() => View(nameof(Edit), model));
+
+            option.MatchSome(x => _blogService.Edit(id, arguments =>
+            {
+                arguments.Content = x.Content;
+                arguments.Title = x.Title;
+            }));
+
+            return option
                    .Map(dictionary => (IActionResult) RedirectToAction(nameof(Index), new { id }))
-                   .ValueOr(View(nameof(Edit), model));
+                   .GetValueOrException();
         }
     }
 }
