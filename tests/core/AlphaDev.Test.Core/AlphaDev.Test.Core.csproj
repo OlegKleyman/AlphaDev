@@ -15,10 +15,4 @@
     <ProjectReference Include="..\..\..\core\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Optional">
-      <HintPath>..\..\..\..\..\.nuget\packages\optional\4.0.0\lib\netstandard2.0\Optional.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
