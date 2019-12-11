@@ -13,10 +13,7 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
     public class BlogViewComponentTests
     {
         [NotNull]
-        private BlogViewComponent GetBlogViewComponent()
-        {
-            return new BlogViewComponent();
-        }
+        private BlogViewComponent GetBlogViewComponent() => new BlogViewComponent();
 
         [Fact]
         public async Task InvokeAsyncShouldReturnBlogViewComponentResult()
@@ -48,7 +45,7 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
                 default, new DatesViewModel(default, Option.None<DateTime>())));
 
             result.ViewData.Model.Should()
-                .BeOfType<BlogViewModel>();
+                  .BeOfType<BlogViewModel>();
         }
 
         [Fact]
@@ -59,7 +56,7 @@ namespace AlphaDev.Web.Tests.Unit.ViewComponents
             var blogViewModel = new BlogViewModel(default, default, default,
                 new DatesViewModel(default, Option.None<DateTime>()));
             var result = (BlogViewModel) ((ViewViewComponentResult) await sut.InvokeAsync(blogViewModel)).ViewData
-                .Model;
+                                                                                                         .Model;
             result.Should().BeSameAs(blogViewModel);
         }
     }

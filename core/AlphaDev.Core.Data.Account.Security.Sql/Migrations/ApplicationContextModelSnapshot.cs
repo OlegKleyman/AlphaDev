@@ -23,15 +23,15 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
             modelBuilder.Entity("AlphaDev.Core.Data.Account.Security.Sql.Entities.User", b =>
             {
                 b.Property<string>("Id")
-                    .ValueGeneratedOnAdd();
+                 .ValueGeneratedOnAdd();
 
                 b.Property<int>("AccessFailedCount");
 
                 b.Property<string>("ConcurrencyStamp")
-                    .IsConcurrencyToken();
+                 .IsConcurrencyToken();
 
                 b.Property<string>("Email")
-                    .HasMaxLength(256);
+                 .HasMaxLength(256);
 
                 b.Property<bool>("EmailConfirmed");
 
@@ -40,10 +40,10 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
                 b.Property<DateTimeOffset?>("LockoutEnd");
 
                 b.Property<string>("NormalizedEmail")
-                    .HasMaxLength(256);
+                 .HasMaxLength(256);
 
                 b.Property<string>("NormalizedUserName")
-                    .HasMaxLength(256);
+                 .HasMaxLength(256);
 
                 b.Property<string>("PasswordHash");
 
@@ -56,17 +56,17 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
                 b.Property<bool>("TwoFactorEnabled");
 
                 b.Property<string>("UserName")
-                    .HasMaxLength(256);
+                 .HasMaxLength(256);
 
                 b.HasKey("Id");
 
                 b.HasIndex("NormalizedEmail")
-                    .HasName("EmailIndex");
+                 .HasName("EmailIndex");
 
                 b.HasIndex("NormalizedUserName")
-                    .IsUnique()
-                    .HasName("UserNameIndex")
-                    .HasFilter("[NormalizedUserName] IS NOT NULL");
+                 .IsUnique()
+                 .HasName("UserNameIndex")
+                 .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                 b.ToTable("AspNetUsers");
             });
@@ -74,23 +74,23 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
             {
                 b.Property<string>("Id")
-                    .ValueGeneratedOnAdd();
+                 .ValueGeneratedOnAdd();
 
                 b.Property<string>("ConcurrencyStamp")
-                    .IsConcurrencyToken();
+                 .IsConcurrencyToken();
 
                 b.Property<string>("Name")
-                    .HasMaxLength(256);
+                 .HasMaxLength(256);
 
                 b.Property<string>("NormalizedName")
-                    .HasMaxLength(256);
+                 .HasMaxLength(256);
 
                 b.HasKey("Id");
 
                 b.HasIndex("NormalizedName")
-                    .IsUnique()
-                    .HasName("RoleNameIndex")
-                    .HasFilter("[NormalizedName] IS NOT NULL");
+                 .IsUnique()
+                 .HasName("RoleNameIndex")
+                 .HasFilter("[NormalizedName] IS NOT NULL");
 
                 b.ToTable("AspNetRoles");
             });
@@ -98,14 +98,14 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
             {
                 b.Property<int>("Id")
-                    .ValueGeneratedOnAdd();
+                 .ValueGeneratedOnAdd();
 
                 b.Property<string>("ClaimType");
 
                 b.Property<string>("ClaimValue");
 
                 b.Property<string>("RoleId")
-                    .IsRequired();
+                 .IsRequired();
 
                 b.HasKey("Id");
 
@@ -117,14 +117,14 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
             {
                 b.Property<int>("Id")
-                    .ValueGeneratedOnAdd();
+                 .ValueGeneratedOnAdd();
 
                 b.Property<string>("ClaimType");
 
                 b.Property<string>("ClaimValue");
 
                 b.Property<string>("UserId")
-                    .IsRequired();
+                 .IsRequired();
 
                 b.HasKey("Id");
 
@@ -142,7 +142,7 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
                 b.Property<string>("ProviderDisplayName");
 
                 b.Property<string>("UserId")
-                    .IsRequired();
+                 .IsRequired();
 
                 b.HasKey("LoginProvider", "ProviderKey");
 
@@ -182,46 +182,46 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
             {
                 b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
-                    .WithMany()
-                    .HasForeignKey("RoleId")
-                    .OnDelete(DeleteBehavior.Cascade);
+                 .WithMany()
+                 .HasForeignKey("RoleId")
+                 .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
             {
                 b.HasOne("AlphaDev.Core.Data.Account.Security.Sql.Entities.User")
-                    .WithMany()
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade);
+                 .WithMany()
+                 .HasForeignKey("UserId")
+                 .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
             {
                 b.HasOne("AlphaDev.Core.Data.Account.Security.Sql.Entities.User")
-                    .WithMany()
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade);
+                 .WithMany()
+                 .HasForeignKey("UserId")
+                 .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
             {
                 b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
-                    .WithMany()
-                    .HasForeignKey("RoleId")
-                    .OnDelete(DeleteBehavior.Cascade);
+                 .WithMany()
+                 .HasForeignKey("RoleId")
+                 .OnDelete(DeleteBehavior.Cascade);
 
                 b.HasOne("AlphaDev.Core.Data.Account.Security.Sql.Entities.User")
-                    .WithMany()
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade);
+                 .WithMany()
+                 .HasForeignKey("UserId")
+                 .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
             {
                 b.HasOne("AlphaDev.Core.Data.Account.Security.Sql.Entities.User")
-                    .WithMany()
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade);
+                 .WithMany()
+                 .HasForeignKey("UserId")
+                 .OnDelete(DeleteBehavior.Cascade);
             });
 #pragma warning restore 612, 618
         }

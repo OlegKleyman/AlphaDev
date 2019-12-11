@@ -11,10 +11,8 @@ namespace AlphaDev.Web.Tests.Unit.Support
     public class PrefixValueProviderTests
     {
         [NotNull]
-        private PrefixValueProvider GetPrefixValueProvider([NotNull] IValueProvider provider, string prefix)
-        {
-            return new PrefixValueProvider(provider, prefix);
-        }
+        private PrefixValueProvider GetPrefixValueProvider([NotNull] IValueProvider provider, string prefix) =>
+            new PrefixValueProvider(provider, prefix);
 
         [Fact]
         public void ContainsPrefixShouldReturnTrue()

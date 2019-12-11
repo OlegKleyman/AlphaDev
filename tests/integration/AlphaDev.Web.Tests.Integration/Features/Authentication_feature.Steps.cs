@@ -40,9 +40,9 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_I_should_be_redirected_back_to_the_admin_area()
         {
             SiteTester.Driver.Url.Should()
-                .BeEquivalentTo(
-                    SiteTester.Admin.BaseUrl
-                        .AbsoluteUri);
+                      .BeEquivalentTo(
+                          SiteTester.Admin.BaseUrl
+                                    .AbsoluteUri);
         }
 
         private void And_submit_the_login_form()
@@ -53,13 +53,14 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_errors_for_the_required_field()
         {
             SiteTester.Login.ValidationSummary.Should()
-                .BeEquivalentTo("The Username field is required.", "The Password field is required.");
+                      .BeEquivalentTo("The Username field is required.", "The Password field is required.");
         }
 
         private void Then_I_should_see_create_post_navigation_menu_link()
         {
-            SiteTester.Admin.Navigation.Select(element => element.Text).Should()
-                .Contain("Create Post");
+            SiteTester.Admin.Navigation.Select(element => element.Text)
+                      .Should()
+                      .Contain("Create Post");
         }
 
         private void Then_I_should_see_logout_option()

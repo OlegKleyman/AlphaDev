@@ -11,8 +11,9 @@ namespace AlphaDev.Web.TagHelpers
         public override void Process(TagHelperContext context, [CanBeNull] TagHelperOutput output)
         {
             var content = (output ?? throw new ArgumentNullException(nameof(output)))
-                .GetChildContentAsync(NullHtmlEncoder.Default)
-                ?.GetAwaiter().GetResult();
+                          .GetChildContentAsync(NullHtmlEncoder.Default)
+                          ?.GetAwaiter()
+                          .GetResult();
 
             output.Content.SetHtmlContent(Markdown.ToHtml(content?.GetContent()?.Trim()));
 

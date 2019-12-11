@@ -21,17 +21,12 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
     {
         [NotNull]
         private EditorTagHelper GetEditorTagHelperHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory,
-            EditorView editorView)
-        {
-            return Substitute.For<EditorTagHelper>(htmlHelper, urlHelperFactory, editorView);
-        }
+            EditorView editorView) => Substitute.For<EditorTagHelper>(htmlHelper, urlHelperFactory, editorView);
 
         [NotNull]
-        private EditorTagHelper GetEditorTagHelperHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory)
-        {
-            return GetEditorTagHelperHelper(htmlHelper, urlHelperFactory,
+        private EditorTagHelper GetEditorTagHelperHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory) =>
+            GetEditorTagHelperHelper(htmlHelper, urlHelperFactory,
                 new EditorView("testView", "testPrefix", "testElementName"));
-        }
 
         [Fact]
         public void ContextShouldGetAndSetViewContext()
@@ -71,11 +66,13 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             helper.Process(default, tagHelperOutput);
 
             helper.Context.ViewData
-                .Should().ContainKey("AllLinks")
-                .WhichValue.Should().BeEquivalentTo(new HashSet<string>
-                {
-                    "/lib/bootstrap-markdown/css/bootstrap-markdown.min.css"
-                });
+                  .Should()
+                  .ContainKey("AllLinks")
+                  .WhichValue.Should()
+                  .BeEquivalentTo(new HashSet<string>
+                  {
+                      "/lib/bootstrap-markdown/css/bootstrap-markdown.min.css"
+                  });
         }
 
         [Fact]
@@ -96,12 +93,14 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             helper.Process(default, tagHelperOutput);
 
             helper.Context.ViewData
-                .Should().ContainKey("AllScripts")
-                .WhichValue.Should().BeEquivalentTo(new HashSet<string>
-                {
-                    "/lib/marked/marked.min.js",
-                    "/lib/bootstrap-markdown/js/bootstrap-markdown.js"
-                });
+                  .Should()
+                  .ContainKey("AllScripts")
+                  .WhichValue.Should()
+                  .BeEquivalentTo(new HashSet<string>
+                  {
+                      "/lib/marked/marked.min.js",
+                      "/lib/bootstrap-markdown/js/bootstrap-markdown.js"
+                  });
         }
 
         [Fact]
@@ -121,7 +120,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             // ReSharper disable once Mvc.PartialViewNotResolved - no need for a valid view in unit test
             htmlHelper.PartialAsync(editorView.Name, Arg.Any<object>(), helper.Context.ViewData)
-                .Returns(Task.FromResult((IHtmlContent) new StringHtmlContent("test")));
+                      .Returns(Task.FromResult((IHtmlContent) new StringHtmlContent("test")));
 
             urlHelperFactory.GetUrlHelper(helper.Context).Returns(urlHelper);
 
@@ -172,8 +171,10 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             helper.Process(default, tagHelperOutput);
 
             helper.Context.ViewData
-                .Should().ContainKey("InlineScripts")
-                .WhichValue.Should().BeEquivalentTo(@"<script type=""text/javascript"">
+                  .Should()
+                  .ContainKey("InlineScripts")
+                  .WhichValue.Should()
+                  .BeEquivalentTo(@"<script type=""text/javascript"">
                                                     $('#').markdown({
                                                                 savable: true,
                                                         onChange: function() {

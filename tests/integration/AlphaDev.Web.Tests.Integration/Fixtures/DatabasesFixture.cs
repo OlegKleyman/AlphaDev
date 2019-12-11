@@ -16,8 +16,11 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         }
 
         public BlogContextDatabaseFixture BlogContextDatabaseFixture { get; }
+
         public ApplicationContextDatabaseFixture ApplicationContextDatabaseFixture { get; }
+
         public DatabaseManagerFixture DatabaseManager { get; }
+
         public InformationContextDatabaseFixture InformationContextDatabaseFixture { get; }
 
         public void Dispose()

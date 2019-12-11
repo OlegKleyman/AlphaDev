@@ -10,10 +10,7 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Contexts
     {
         private readonly Configurer _configurer;
 
-        public ApplicationContext(Configurer configurer)
-        {
-            _configurer = configurer;
-        }
+        public ApplicationContext(Configurer configurer) => _configurer = configurer;
 
         protected sealed override void OnConfiguring([NotNull] DbContextOptionsBuilder optionsBuilder)
         {

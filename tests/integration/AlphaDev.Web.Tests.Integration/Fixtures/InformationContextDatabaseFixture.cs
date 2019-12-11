@@ -21,16 +21,18 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         public InformationContext InformationContext { get; set; }
 
         [NotNull]
-        public About DefaultAbout => new About
-        {
-            Value = "* test about"
-        };
+        public About DefaultAbout =>
+            new About
+            {
+                Value = "* test about"
+            };
 
         [NotNull]
-        public Contact DefaultContact => new Contact
-        {
-            Value = "* test about"
-        };
+        public Contact DefaultContact =>
+            new Contact
+            {
+                Value = "* test about"
+            };
 
         public void Dispose()
         {

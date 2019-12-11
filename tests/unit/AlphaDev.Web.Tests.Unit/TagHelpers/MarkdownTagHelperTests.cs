@@ -59,10 +59,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
         }
 
         [NotNull]
-        private MarkdownTagHelper GetMarkdownTagHelper()
-        {
-            return new MarkdownTagHelper();
-        }
+        private MarkdownTagHelper GetMarkdownTagHelper() => new MarkdownTagHelper();
 
         [Fact]
         public void ProcessShouldSetTagNameToEmptyString()
@@ -88,9 +85,11 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             Action process = () => sut.Process(null, null);
 
-            process.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'output')")
-                .Which.ParamName.Should().BeEquivalentTo("output");
+            process.Should()
+                   .Throw<ArgumentNullException>()
+                   .WithMessage("Value cannot be null. (Parameter 'output')")
+                   .Which.ParamName.Should()
+                   .BeEquivalentTo("output");
         }
     }
 }

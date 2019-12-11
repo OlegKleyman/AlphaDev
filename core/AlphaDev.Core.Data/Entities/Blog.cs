@@ -5,11 +5,13 @@ namespace AlphaDev.Core.Data.Entities
 {
     public class Blog
     {
+        private string? _content;
+
+        private string? _title;
+
         public int Id { get; set; }
 
         public DateTime Created { get; set; }
-
-        private string? _content;
 
         [NotNull]
         public string Content
@@ -17,8 +19,6 @@ namespace AlphaDev.Core.Data.Entities
             get => _content ?? throw new InvalidOperationException($"{nameof(Content)} is not initialized.");
             set => _content = value;
         }
-
-        private string? _title;
 
         [NotNull]
         public string Title

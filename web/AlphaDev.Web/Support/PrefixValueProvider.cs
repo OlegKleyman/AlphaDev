@@ -14,14 +14,8 @@ namespace AlphaDev.Web.Support
             _prefix = prefix;
         }
 
-        public bool ContainsPrefix(string prefix)
-        {
-            return true;
-        }
+        public bool ContainsPrefix(string prefix) => true;
 
-        public ValueProviderResult GetValue(string key)
-        {
-            return _valueProvider.GetValue(_prefix + key);
-        }
+        public ValueProviderResult GetValue(string key) => _valueProvider.GetValue(_prefix + key);
     }
 }

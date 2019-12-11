@@ -13,12 +13,13 @@ namespace AlphaDev.Web.Tests.Unit.Support
             const string prefix = "prefix";
             const string editorElementName = "editorElementName";
 
-            new EditorView(name, prefix, editorElementName).Should().BeEquivalentTo(new
-            {
-                Name = name,
-                Prefix = prefix,
-                EditorElementName = editorElementName
-            });
+            new EditorView(name, prefix, editorElementName).Should()
+                                                           .BeEquivalentTo(new
+                                                           {
+                                                               Name = name,
+                                                               Prefix = prefix,
+                                                               EditorElementName = editorElementName
+                                                           });
         }
     }
 }

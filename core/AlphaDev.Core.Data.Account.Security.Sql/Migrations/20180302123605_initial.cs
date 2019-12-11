@@ -12,7 +12,7 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
                 "AspNetRoles",
                 table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<string>(),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true)
@@ -23,20 +23,20 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
                 "AspNetUsers",
                 table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
+                    Id = table.Column<string>(),
+                    AccessFailedCount = table.Column<int>(),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    EmailConfirmed = table.Column<bool>(),
+                    LockoutEnabled = table.Column<bool>(),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    PhoneNumberConfirmed = table.Column<bool>(),
                     SecurityStamp = table.Column<string>(nullable: true),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(),
                     UserName = table.Column<string>(maxLength: 256, nullable: true)
                 },
                 constraints: table => { table.PrimaryKey("PK_AspNetUsers", x => x.Id); });
@@ -45,12 +45,12 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
                 "AspNetRoleClaims",
                 table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy",
-                            SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>()
+                              .Annotation("SqlServer:ValueGenerationStrategy",
+                                  SqlServerValueGenerationStrategy.IdentityColumn),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
-                    RoleId = table.Column<string>(nullable: false)
+                    RoleId = table.Column<string>()
                 },
                 constraints: table =>
                 {
@@ -67,12 +67,12 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
                 "AspNetUserClaims",
                 table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy",
-                            SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>()
+                              .Annotation("SqlServer:ValueGenerationStrategy",
+                                  SqlServerValueGenerationStrategy.IdentityColumn),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>()
                 },
                 constraints: table =>
                 {
@@ -89,10 +89,10 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
                 "AspNetUserLogins",
                 table => new
                 {
-                    LoginProvider = table.Column<string>(nullable: false),
-                    ProviderKey = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(),
+                    ProviderKey = table.Column<string>(),
                     ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>()
                 },
                 constraints: table =>
                 {
@@ -109,8 +109,8 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
                 "AspNetUserRoles",
                 table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>(),
+                    RoleId = table.Column<string>()
                 },
                 constraints: table =>
                 {
@@ -133,9 +133,9 @@ namespace AlphaDev.Core.Data.Account.Security.Sql.Migrations
                 "AspNetUserTokens",
                 table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(),
+                    LoginProvider = table.Column<string>(),
+                    Name = table.Column<string>(),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

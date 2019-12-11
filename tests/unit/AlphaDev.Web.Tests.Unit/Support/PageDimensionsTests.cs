@@ -14,17 +14,20 @@ namespace AlphaDev.Web.Tests.Unit.Support
             var maxPageTotal = PositiveInteger.MaxValue;
             var pageDimensions =
                 new PageDimensions(PositiveInteger.MinValue, new PageBoundaries(maxItemCount, maxPageTotal));
-            pageDimensions.Should().BeEquivalentTo(new
-            {
-                Start = PositiveInteger.MinValue, Boundaries = new { Count = maxItemCount, MaxTotal = maxPageTotal }
-            });
+            pageDimensions.Should()
+                          .BeEquivalentTo(new
+                          {
+                              Start = PositiveInteger.MinValue,
+                              Boundaries = new { Count = maxItemCount, MaxTotal = maxPageTotal }
+                          });
         }
 
         [Fact]
         public void MinValueShouldBeCorrect()
         {
-            PageDimensions.MinValue.Should().BeEquivalentTo(new
-                { Start = PositiveInteger.MinValue, Boundaries = PageBoundaries.MinValue });
+            PageDimensions.MinValue.Should()
+                          .BeEquivalentTo(new
+                              { Start = PositiveInteger.MinValue, Boundaries = PageBoundaries.MinValue });
         }
     }
 }

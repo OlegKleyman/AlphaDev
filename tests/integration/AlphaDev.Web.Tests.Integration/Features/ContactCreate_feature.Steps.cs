@@ -33,7 +33,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_be_rendered_to_html()
         {
             SiteTester.Contact.Edit.Preview.Should()
-                .BeEquivalentTo(Markdown.ToHtml(_contactValue).NormalizeToWindowsLineEndings().Trim());
+                      .BeEquivalentTo(Markdown.ToHtml(_contactValue).NormalizeToWindowsLineEndings().Trim());
         }
 
         private void And_am_on_the_create_contact_page()
@@ -53,9 +53,11 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_be_saved_in_the_datastore()
         {
-            DatabasesFixture.InformationContextDatabaseFixture.InformationContext.Contacts.AsNoTracking().Single().Value
-                .Should()
-                .BeEquivalentTo(_contactValue);
+            DatabasesFixture.InformationContextDatabaseFixture.InformationContext.Contacts.AsNoTracking()
+                            .Single()
+                            .Value
+                            .Should()
+                            .BeEquivalentTo(_contactValue);
         }
 
         private void When_I_go_to_contact_create_page()

@@ -30,11 +30,10 @@ namespace AlphaDev.Web.Tests.Integration.Features
         }
 
         [UsedImplicitly]
-        private CompositeStep When_I_save_a_blog()
-        {
-            return CompositeStep.DefineNew()
-                .AddSteps(When_I_fill_in_required_fields, When_I_click_save).Build();
-        }
+        private CompositeStep When_I_save_a_blog() => CompositeStep.DefineNew()
+                                                                   .AddSteps(When_I_fill_in_required_fields,
+                                                                       When_I_click_save)
+                                                                   .Build();
 
         private void And_I_entered_markdown_content()
         {
@@ -50,7 +49,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_be_rendered_to_html()
         {
             SiteTester.Posts.Edit.Preview.Should()
-                .BeEquivalentTo(Markdown.ToHtml(_blogContent).NormalizeToWindowsLineEndings().Trim());
+                      .BeEquivalentTo(Markdown.ToHtml(_blogContent).NormalizeToWindowsLineEndings().Trim());
         }
 
         private void When_I_click_save()
@@ -61,7 +60,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_errors_under_the_required_fields_not_filled_in()
         {
             SiteTester.Posts.Edit.PageErrors.Should()
-                .BeEquivalentTo("The Title field is required.", "The Content field is required.");
+                      .BeEquivalentTo("The Title field is required.", "The Content field is required.");
         }
 
         private void When_I_click_the_edit_icon()
@@ -73,7 +72,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             var blog = (Blog) CommonSteps.Data["AddedBlog"];
             SiteTester.Driver.Url.Should()
-                .MatchRegex($@"{Regex.Escape(SiteTester.Posts.Edit.BaseUrl.AbsoluteUri)}/{blog.Id}");
+                      .MatchRegex($@"{Regex.Escape(SiteTester.Posts.Edit.BaseUrl.AbsoluteUri)}/{blog.Id}");
         }
 
         private void And_am_editing_the_blog()
@@ -92,7 +91,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             var blog = (Blog) CommonSteps.Data["AddedBlog"];
             SiteTester.Driver.Url.Should()
-                .MatchRegex($"{Regex.Escape(SiteTester.Posts.PostBaseUrl.AbsoluteUri)}{blog.Id}$");
+                      .MatchRegex($"{Regex.Escape(SiteTester.Posts.PostBaseUrl.AbsoluteUri)}{blog.Id}$");
         }
 
         private void And_I_try_to_edit_a_blog_post_that_doesnt_exist()

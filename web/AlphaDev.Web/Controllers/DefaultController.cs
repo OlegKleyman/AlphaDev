@@ -11,18 +11,16 @@ namespace AlphaDev.Web.Controllers
     {
         private readonly IBlogService _blogService;
 
-        public DefaultController([NotNull] IBlogService blogService)
-        {
-            _blogService = blogService;
-        }
+        public DefaultController([NotNull] IBlogService blogService) => _blogService = blogService;
 
         public ViewResult Index()
         {
-            var view = _blogService.GetLatest().Map(blogBase => new BlogViewModel(
-                blogBase.Id,
-                blogBase.Title,
-                blogBase.Content,
-                new DatesViewModel(blogBase.Dates.Created, blogBase.Dates.Modified)));
+            var view = _blogService.GetLatest()
+                                   .Map(blogBase => new BlogViewModel(
+                                       blogBase.Id,
+                                       blogBase.Title,
+                                       blogBase.Content,
+                                       new DatesViewModel(blogBase.Dates.Created, blogBase.Dates.Modified)));
 
             return View(nameof(Index), view.ValueOr(() => BlogViewModel.Welcome));
         }

@@ -12,10 +12,8 @@ namespace AlphaDev.Core
     {
         private readonly IContextFactory<InformationContext> _contextFactory;
 
-        public ContactService([NotNull] IContextFactory<InformationContext> contextFactory)
-        {
+        public ContactService([NotNull] IContextFactory<InformationContext> contextFactory) =>
             _contextFactory = contextFactory;
-        }
 
         public Option<string> GetDetails()
         {

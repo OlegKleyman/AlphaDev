@@ -8,10 +8,7 @@ namespace AlphaDev.Web.Tests.Unit.Models
     public class SimpleEditorViewModelTests
     {
         [NotNull]
-        private SimpleEditorViewModel GetSimpleEditorViewModel()
-        {
-            return new SimpleEditorViewModel();
-        }
+        private SimpleEditorViewModel GetSimpleEditorViewModel() => new SimpleEditorViewModel();
 
         [Fact]
         public void ValueShouldGetAndSetValue()

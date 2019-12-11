@@ -16,6 +16,8 @@ namespace AlphaDev.Web.TagHelpers
         private readonly IHtmlHelper _htmlHelper;
         private readonly IUrlHelperFactory _urlHelperFactory;
 
+        private ViewContext? _context;
+
         // ReSharper disable once NotNullMemberIsNotInitialized - initialized implicitly
         protected EditorTagHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory,
             EditorView editorView)
@@ -24,8 +26,6 @@ namespace AlphaDev.Web.TagHelpers
             _urlHelperFactory = urlHelperFactory;
             _editorView = editorView;
         }
-
-        private ViewContext? _context;
 
         [NotNull]
         [ViewContext]

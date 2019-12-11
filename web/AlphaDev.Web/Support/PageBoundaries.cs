@@ -15,11 +15,9 @@ namespace AlphaDev.Web.Support
         }
 
         public PositiveInteger Count { get; }
+
         public PositiveInteger MaxTotal { get; }
 
-        public int GetTotalPages(int itemCount)
-        {
-            return (int) Math.Ceiling(itemCount / (decimal) Count.Value);
-        }
+        public int GetTotalPages(int itemCount) => (int) Math.Ceiling(itemCount / (decimal) Count.Value);
     }
 }

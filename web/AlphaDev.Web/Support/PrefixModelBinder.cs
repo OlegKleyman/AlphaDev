@@ -16,10 +16,11 @@ namespace AlphaDev.Web.Support
                 throw new ArgumentException("ValueProvider cannot be null.", nameof(bindingContext));
             }
 
-            var prefix = bindingContext.ValueProvider.GetValue("prefix").FirstValue
-                .SomeWhen(s => !string.IsNullOrWhiteSpace(s))
-                .Map(s => s + ".")
-                .ValueOr(string.Empty);
+            var prefix = bindingContext.ValueProvider.GetValue("prefix")
+                                       .FirstValue
+                                       .SomeWhen(s => !string.IsNullOrWhiteSpace(s))
+                                       .Map(s => s + ".")
+                                       .ValueOr(string.Empty);
             bindingContext.ValueProvider = new PrefixValueProvider(bindingContext.ValueProvider, prefix);
             BindModel(bindingContext);
             return Task.CompletedTask;

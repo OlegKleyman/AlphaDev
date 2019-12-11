@@ -4,16 +4,10 @@ namespace AlphaDev.Web.Tests.Integration.Support
 {
     public struct Page
     {
-        public bool Equals(Page other)
-        {
-            return Identity.Equals(other.Identity) && DisplayFormat == other.DisplayFormat &&
-                   Attributes == other.Attributes;
-        }
+        public bool Equals(Page other) => Identity.Equals(other.Identity) && DisplayFormat == other.DisplayFormat &&
+                                          Attributes == other.Attributes;
 
-        public override bool Equals([CanBeNull] object obj)
-        {
-            return !(obj is null) && obj is Page other && Equals(other);
-        }
+        public override bool Equals([CanBeNull] object obj) => !(obj is null) && obj is Page other && Equals(other);
 
         public override int GetHashCode()
         {
@@ -27,7 +21,9 @@ namespace AlphaDev.Web.Tests.Integration.Support
         }
 
         public PageIdentity Identity { get; }
+
         public DisplayFormat DisplayFormat { get; }
+
         public PageAttributes Attributes { get; }
 
         public Page(PageIdentity identity, DisplayFormat displayFormat, PageAttributes attributes)
@@ -37,14 +33,9 @@ namespace AlphaDev.Web.Tests.Integration.Support
             Attributes = attributes;
         }
 
-        public static bool operator ==(Page x, Page y)
-        {
-            return x.Attributes == y.Attributes && x.DisplayFormat == y.DisplayFormat && x.Identity == y.Identity;
-        }
+        public static bool operator ==(Page x, Page y) =>
+            x.Attributes == y.Attributes && x.DisplayFormat == y.DisplayFormat && x.Identity == y.Identity;
 
-        public static bool operator !=(Page x, Page y)
-        {
-            return !(x == y);
-        }
+        public static bool operator !=(Page x, Page y) => !(x == y);
     }
 }

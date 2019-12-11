@@ -14,10 +14,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.ContextBuilders
     {
         [NotNull]
         private ContextFactory<DbContext> GetContextFactory(
-            [NotNull] IDesignTimeDbContextFactory<DbContext> factory)
-        {
-            return new ContextFactory<DbContext>(factory);
-        }
+            [NotNull] IDesignTimeDbContextFactory<DbContext> factory) => new ContextFactory<DbContext>(factory);
 
         [Fact]
         public void ConstructorShouldInitializeNewObject()

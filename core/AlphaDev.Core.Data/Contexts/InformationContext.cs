@@ -9,11 +9,13 @@ namespace AlphaDev.Core.Data.Contexts
 {
     public abstract class InformationContext : AlphaContext
     {
+        private DbSet<About>? _abouts;
+
+        private DbSet<Contact>? _contacts;
+
         protected InformationContext(Configurer configurer) : base(configurer)
         {
         }
-
-        private DbSet<About>? _abouts;
 
         [NotNull]
         public DbSet<About> Abouts
@@ -24,8 +26,6 @@ namespace AlphaDev.Core.Data.Contexts
 
         [CanBeNull]
         public About? About => Abouts.SingleOrDefault();
-
-        private DbSet<Contact>? _contacts;
 
         public DbSet<Contact> Contacts
         {

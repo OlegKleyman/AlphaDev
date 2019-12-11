@@ -9,10 +9,7 @@ namespace AlphaDev.Core.Tests.Unit
     public class PositiveIntegerTests
     {
         [NotNull]
-        private static PositiveInteger GetPositiveInteger(int value)
-        {
-            return new PositiveInteger(value);
-        }
+        private static PositiveInteger GetPositiveInteger(int value) => new PositiveInteger(value);
 
         [Theory]
         [InlineData(1, 1, true)]
@@ -53,8 +50,11 @@ namespace AlphaDev.Core.Tests.Unit
         public void ConstructorShouldThrowArgumentExceptionWhenValueIsLessThanOne()
         {
             Action constructor = () => new PositiveInteger(-1).EmptyCall();
-            constructor.Should().Throw<ArgumentException>().WithMessage("Must be positive. (Parameter 'value')")
-                .Which.ParamName.Should().Be("value");
+            constructor.Should()
+                       .Throw<ArgumentException>()
+                       .WithMessage("Must be positive. (Parameter 'value')")
+                       .Which.ParamName.Should()
+                       .Be("value");
         }
 
         [Fact]

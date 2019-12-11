@@ -8,10 +8,7 @@ namespace AlphaDev.Core.Tests.Integration
     public class DateProviderTests
     {
         [NotNull]
-        private DateProvider GetDateProvider()
-        {
-            return new DateProvider();
-        }
+        private DateProvider GetDateProvider() => new DateProvider();
 
         [Fact]
         public void UtcNowShouldReturnCurrentTimeInUtc()

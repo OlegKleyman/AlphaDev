@@ -6,9 +6,6 @@ namespace AlphaDev.Web.Controllers
     [Authorize]
     public class AdminController : Controller
     {
-        public ViewResult Index()
-        {
-            return View("Index");
-        }
+        public ViewResult Index() => View("Index");
     }
 }

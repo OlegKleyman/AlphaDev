@@ -29,8 +29,10 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
             // ReSharper disable once Mvc.PartialViewNotResolved - no need for a valid view in unit test
             // ReSharper disable once MustUseReturnValue - don't care about return value
             helper.Context.ViewData
-                .Should().ContainKey("InlineScripts")
-                .WhichValue.Should().BeEquivalentTo(@"<script type=""text/javascript"">
+                  .Should()
+                  .ContainKey("InlineScripts")
+                  .WhichValue.Should()
+                  .BeEquivalentTo(@"<script type=""text/javascript"">
                                                     $('#Content').markdown({
                                                                 savable: true,
                                                         onChange: function() {

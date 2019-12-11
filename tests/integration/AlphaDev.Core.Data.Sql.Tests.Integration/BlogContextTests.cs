@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Sql.Support;
@@ -21,7 +19,8 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
         public BlogContextTests()
         {
             var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("connectionstrings.json", false, true).Build();
+                                                          .AddJsonFile("connectionstrings.json", false, true)
+                                                          .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder();
             var connectionBuilder =
@@ -56,10 +55,12 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             var options = optionsBuilder.UseSqlServer(_connectionString).Options;
 
             using var context = new DbContext(options);
-            Enumerable.Range(1, 10).ToList().ForEach(
-                // ReSharper disable once AccessToDisposedClosure - Executes eagerly
-                i => context.Database.ExecuteSqlRaw(
-                    $"INSERT INTO Blogs(Content, Title) VALUES('test {i}', 'Title {i}')"));
+            Enumerable.Range(1, 10)
+                      .ToList()
+                      .ForEach(
+                          // ReSharper disable once AccessToDisposedClosure - Executes eagerly
+                          i => context.Database.ExecuteSqlRaw(
+                              $"INSERT INTO Blogs(Content, Title) VALUES('test {i}', 'Title {i}')"));
         }
 
         [NotNull]
@@ -124,8 +125,12 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
 
             context.SaveChanges();
 
-            GetTable("Blogs").Last()["Created"].Should().BeOfType<DateTime>().Which.Should()
-                             .BeCloseTo(DateTime.UtcNow, 1000).And.Be(blog.Created);
+            GetTable("Blogs").Last()["Created"]
+                             .Should()
+                             .BeOfType<DateTime>()
+                             .Which.Should()
+                             .BeCloseTo(DateTime.UtcNow, 1000)
+                             .And.Be(blog.Created);
         }
 
         [Fact]
@@ -144,8 +149,11 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             using var context = GetBlogContext();
             var blogs = context.Blogs;
 
-            var blogsDictionary = blogs.ToArray().Select(blog =>
-                blog.GetType().GetProperties().ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(blog, null)));
+            var blogsDictionary = blogs.ToArray()
+                                       .Select(blog =>
+                                           blog.GetType()
+                                               .GetProperties()
+                                               .ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(blog, null)));
 
             GetTable("Blogs").Should().BeEquivalentTo(blogsDictionary);
         }
@@ -161,10 +169,15 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
 
             context.SaveChanges();
 
-            GetTable("Blogs").First().Should().BeEquivalentTo(
-                targetBlog.GetType().GetProperties().ToDictionary(
-                    x => x.Name,
-                    x => x.GetGetMethod().Invoke(targetBlog, null)));
+            GetTable("Blogs")
+                .First()
+                .Should()
+                .BeEquivalentTo(
+                    targetBlog.GetType()
+                              .GetProperties()
+                              .ToDictionary(
+                                  x => x.Name,
+                                  x => x.GetGetMethod().Invoke(targetBlog, null)));
         }
     }
 }

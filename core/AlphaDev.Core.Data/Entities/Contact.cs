@@ -1,7 +1,4 @@
-﻿using System;
-using JetBrains.Annotations;
-
-namespace AlphaDev.Core.Data.Entities
+﻿namespace AlphaDev.Core.Data.Entities
 {
     public class Contact
     {

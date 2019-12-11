@@ -6,9 +6,7 @@ namespace AlphaDev.Web.Extensions
     {
         [NotNull]
         public static Core.PositiveInteger ToStartPosition([NotNull] this Core.PositiveInteger page,
-            [NotNull] Core.PositiveInteger itemCount)
-        {
-            return new Core.PositiveInteger((page.Value - 1) * itemCount.Value + 1);
-        }
+            [NotNull] Core.PositiveInteger itemCount) =>
+            new Core.PositiveInteger((page.Value - 1) * itemCount.Value + 1);
     }
 }

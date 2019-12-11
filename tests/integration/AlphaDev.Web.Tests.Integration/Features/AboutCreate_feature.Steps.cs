@@ -33,7 +33,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_be_rendered_to_html()
         {
             SiteTester.About.Edit.Preview.Should()
-                .BeEquivalentTo(Markdown.ToHtml(_aboutValue).NormalizeToWindowsLineEndings().Trim());
+                      .BeEquivalentTo(Markdown.ToHtml(_aboutValue).NormalizeToWindowsLineEndings().Trim());
         }
 
         private void And_am_on_the_create_about_page()
@@ -53,9 +53,11 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_be_saved_in_the_datastore()
         {
-            DatabasesFixture.InformationContextDatabaseFixture.InformationContext.Abouts.AsNoTracking().Single().Value
-                .Should()
-                .BeEquivalentTo(_aboutValue);
+            DatabasesFixture.InformationContextDatabaseFixture.InformationContext.Abouts.AsNoTracking()
+                            .Single()
+                            .Value
+                            .Should()
+                            .BeEquivalentTo(_aboutValue);
         }
 
         private void When_I_go_to_about_create_page()

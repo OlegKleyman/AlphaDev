@@ -12,10 +12,7 @@ namespace AlphaDev.Core.Data.Sql
         private static readonly SqlConfigurer Configurer = new SqlConfigurer(@"Data Source=(LocalDB)\v11.0;");
         private readonly Configurer? _configurer;
 
-        protected AlphaContextFactory(Configurer? configurer)
-        {
-            _configurer = configurer;
-        }
+        protected AlphaContextFactory(Configurer? configurer) => _configurer = configurer;
 
         [NotNull]
         public T CreateDbContext([CanBeNull] params string[] args)
@@ -24,11 +21,15 @@ namespace AlphaDev.Core.Data.Sql
             var configurerType = typeof(Configurer);
 
             if (type.IsAbstract)
+            {
                 throw new InvalidOperationException($"Unable to instantiate {type.FullName} because it is abstract.");
+            }
 
             if (type.GetConstructor(new[] { configurerType }) == null)
+            {
                 throw new MissingMethodException(
                     $"Unable to find a public constructor with a single {configurerType.FullName} argument.");
+            }
 
             return (T) Activator.CreateInstance(typeof(T), _configurer ?? Configurer);
         }

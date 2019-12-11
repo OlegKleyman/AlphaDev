@@ -21,9 +21,9 @@ namespace AlphaDev.Web.Support
                 var content = context.ValueProvider.GetValue("Content").FirstValue;
 
                 var modified = DateTime
-                    .TryParse(context.ValueProvider.GetValue("Modified").FirstValue, out var modDate)
-                    .SomeWhen(isValidDate => isValidDate)
-                    .Map(b => modDate);
+                               .TryParse(context.ValueProvider.GetValue("Modified").FirstValue, out var modDate)
+                               .SomeWhen(isValidDate => isValidDate)
+                               .Map(b => modDate);
 
                 var model = new EditPostViewModel(title ?? string.Empty, content ?? string.Empty,
                     new DatesViewModel(created, modified));

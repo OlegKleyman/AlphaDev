@@ -12,13 +12,14 @@ namespace AlphaDev.Core.Data.Sql.Migrations
                 "Blogs",
                 table => new
                 {
-                    Id = table.Column<int>(nullable: false).Annotation(
-                        "SqlServer:ValueGenerationStrategy",
-                        SqlServerValueGenerationStrategy.IdentityColumn),
-                    Content = table.Column<string>(nullable: false),
+                    Id = table.Column<int>()
+                              .Annotation(
+                                  "SqlServer:ValueGenerationStrategy",
+                                  SqlServerValueGenerationStrategy.IdentityColumn),
+                    Content = table.Column<string>(),
                     Created =
                         table.Column<DateTime>(nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    Title = table.Column<string>(nullable: false)
+                    Title = table.Column<string>()
                 },
                 constraints: table => { table.PrimaryKey("PK_Blogs", x => x.Id); });
         }

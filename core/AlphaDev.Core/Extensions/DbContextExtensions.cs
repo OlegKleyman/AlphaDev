@@ -14,13 +14,15 @@ namespace AlphaDev.Core.Extensions
             [NotNull] Func<TContext, DbSet<TEntity>> set, [NotNull] TEntity toAdd)
             where TContext : DbContext where TEntity : class
         {
-            return set(context).Add(toAdd).SomeNotNull(() =>
-                    new InvalidOperationException("Unable to retrieve added entry."))
-                .Match(entry =>
-                {
-                    context.SaveSingleOrThrow();
-                    return entry;
-                }, exception => throw exception);
+            return set(context)
+                   .Add(toAdd)
+                   .SomeNotNull(() =>
+                       new InvalidOperationException("Unable to retrieve added entry."))
+                   .Match(entry =>
+                   {
+                       context.SaveSingleOrThrow();
+                       return entry;
+                   }, exception => throw exception);
         }
 
         public static void UpdateAndSaveSingleOrThrow<TContext, TEntity>([NotNull] this TContext context,
@@ -46,7 +48,9 @@ namespace AlphaDev.Core.Extensions
             }
 
             using var transaction = context.Database.BeginTransaction();
-            context.SaveChanges().Some().Map(changes => changes.SomeWhen(i => i == 1,
+            context.SaveChanges()
+                   .Some()
+                   .Map(changes => changes.SomeWhen(i => i == 1,
                        () => new InvalidOperationException($"Inconsistent change count of {changes}.")))
                    .MatchSome(option => option.MatchNone(exception => throw exception));
             transaction.Commit();
@@ -57,11 +61,13 @@ namespace AlphaDev.Core.Extensions
             [NotNull] TEntity entity)
             where TEntity : class
         {
-            return context.Remove(entity).SomeNotNull(GetEntityNotFoundException<TEntity>()).Match(entry =>
-            {
-                context.SaveSingleOrThrow();
-                return entry;
-            }, exception => throw exception);
+            return context.Remove(entity)
+                          .SomeNotNull(GetEntityNotFoundException<TEntity>())
+                          .Match(entry =>
+                          {
+                              context.SaveSingleOrThrow();
+                              return entry;
+                          }, exception => throw exception);
         }
     }
 }

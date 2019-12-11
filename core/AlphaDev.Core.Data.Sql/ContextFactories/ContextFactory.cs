@@ -8,14 +8,8 @@ namespace AlphaDev.Core.Data.Sql.ContextFactories
     {
         private readonly IDesignTimeDbContextFactory<T> _factory;
 
-        public ContextFactory([NotNull] IDesignTimeDbContextFactory<T> factory)
-        {
-            _factory = factory;
-        }
+        public ContextFactory([NotNull] IDesignTimeDbContextFactory<T> factory) => _factory = factory;
 
-        public T Create()
-        {
-            return _factory.CreateDbContext(new string[0]);
-        }
+        public T Create() => _factory.CreateDbContext(new string[0]);
     }
 }

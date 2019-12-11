@@ -23,10 +23,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [NotNull]
-        private AboutCreateModelBinderMock GetAboutCreateModelBinder()
-        {
-            return new AboutCreateModelBinderMock();
-        }
+        private AboutCreateModelBinderMock GetAboutCreateModelBinder() => new AboutCreateModelBinderMock();
 
         public class AboutCreateModelBinderMock : AboutCreateModelBinder
         {

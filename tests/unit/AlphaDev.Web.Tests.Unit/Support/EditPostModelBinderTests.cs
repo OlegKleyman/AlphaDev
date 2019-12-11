@@ -26,10 +26,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [NotNull]
-        private EditPostModelBinderMock GetEditPostModelBinder()
-        {
-            return new EditPostModelBinderMock();
-        }
+        private EditPostModelBinderMock GetEditPostModelBinder() => new EditPostModelBinderMock();
 
         public class EditPostModelBinderMock : EditPostModelBinder
         {
@@ -78,10 +75,11 @@ namespace AlphaDev.Web.Tests.Unit.Support
             var context = GetContext(valueProvider);
 
             binder.BindModelMock(context);
-            context.Result.Model.Should().BeEquivalentTo(new
-            {
-                Dates = new DatesViewModel(new DateTime(2018, 1, 1), Option.Some(new DateTime(2018, 2, 1)))
-            });
+            context.Result.Model.Should()
+                   .BeEquivalentTo(new
+                   {
+                       Dates = new DatesViewModel(new DateTime(2018, 1, 1), Option.Some(new DateTime(2018, 2, 1)))
+                   });
         }
 
         [Fact]
@@ -96,10 +94,11 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
             binder.BindModelMock(context);
 
-            context.Result.Model.Should().BeEquivalentTo(new
-            {
-                Dates = new DatesViewModel(new DateTime(2018, 1, 1), default)
-            });
+            context.Result.Model.Should()
+                   .BeEquivalentTo(new
+                   {
+                       Dates = new DatesViewModel(new DateTime(2018, 1, 1), default)
+                   });
         }
 
         [Fact]
@@ -116,8 +115,9 @@ namespace AlphaDev.Web.Tests.Unit.Support
             var context = GetContext(valueProvider);
 
             binder.BindModelMock(context);
-            context.Result.Model.Should().BeEquivalentTo(new { Title = "title", Content = "content" },
-                options => options.ExcludingMissingMembers());
+            context.Result.Model.Should()
+                   .BeEquivalentTo(new { Title = "title", Content = "content" },
+                       options => options.ExcludingMissingMembers());
         }
 
         [Fact]

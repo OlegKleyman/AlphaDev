@@ -23,9 +23,9 @@ namespace AlphaDev.Web.TagHelpers
                 links.Select(s => $"<link href=\"{s}\" rel=\"stylesheet\" />")));
 
             string.Join('\n', inlineStyles)
-                .SomeWhen(s => !string.IsNullOrWhiteSpace(s))
-                .Map(s => $"<style>{s}</style>")
-                .MatchSome(s => output.Content.AppendHtml(s));
+                  .SomeWhen(s => !string.IsNullOrWhiteSpace(s))
+                  .Map(s => $"<style>{s}</style>")
+                  .MatchSome(s => output.Content.AppendHtml(s));
         }
     }
 }

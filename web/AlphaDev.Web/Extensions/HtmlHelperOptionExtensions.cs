@@ -12,7 +12,7 @@ namespace AlphaDev.Web.Extensions
             Option<TResult> option)
         {
             return option.Map(result => htmlHelper.DisplayFor(model => result))
-                .ValueOr(() => htmlHelper.Raw(string.Empty));
+                         .ValueOr(() => htmlHelper.Raw(string.Empty));
         }
 
         public static IHtmlContent Hidden<TModel, TResult>([NotNull] this IHtmlHelper<TModel> htmlHelper,
@@ -20,7 +20,7 @@ namespace AlphaDev.Web.Extensions
             Option<TResult> option, object htmlAttributes)
         {
             return option.Map(result => htmlHelper.Hidden(expression, result, htmlAttributes))
-                .ValueOr(() => htmlHelper.Raw(string.Empty));
+                         .ValueOr(() => htmlHelper.Raw(string.Empty));
         }
 
         public static IHtmlContent ActionLink<TModel, TResult>([NotNull] this IHtmlHelper<TModel> htmlHelper,
@@ -28,8 +28,8 @@ namespace AlphaDev.Web.Extensions
             Func<TResult, object> routeValues, object htmlAttributes)
         {
             return option.Map(result => htmlHelper.ActionLink(linkText, actionName, controllerName, null, null, null,
-                    routeValues(result), htmlAttributes))
-                .ValueOr(() => htmlHelper.Raw(string.Empty));
+                             routeValues(result), htmlAttributes))
+                         .ValueOr(() => htmlHelper.Raw(string.Empty));
         }
     }
 }

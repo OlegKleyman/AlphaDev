@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Update;
@@ -31,75 +30,49 @@ namespace AlphaDev.Test.Core.Support
             throw new NotImplementedException();
         }
 
-        public virtual Task ResetStateAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
+        public virtual Task ResetStateAsync(CancellationToken cancellationToken = new CancellationToken()) =>
             throw new NotImplementedException();
-        }
 
-        public virtual InternalEntityEntry GetOrCreateEntry(object entity)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual InternalEntityEntry GetOrCreateEntry(object entity) => throw new NotImplementedException();
 
-        public virtual InternalEntityEntry GetOrCreateEntry(object entity, IEntityType entityType)
-        {
+        public virtual InternalEntityEntry GetOrCreateEntry(object entity, IEntityType entityType) =>
             throw new NotImplementedException();
-        }
 
-        public virtual InternalEntityEntry CreateEntry(IDictionary<string, object> values, IEntityType entityType)
-        {
+        public virtual InternalEntityEntry CreateEntry(IDictionary<string, object> values, IEntityType entityType) =>
             throw new NotImplementedException();
-        }
 
-        public virtual InternalEntityEntry StartTrackingFromQuery(IEntityType baseEntityType, object entity, in ValueBuffer valueBuffer)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual InternalEntityEntry StartTrackingFromQuery(IEntityType baseEntityType, object entity,
+            in ValueBuffer valueBuffer) => throw new NotImplementedException();
 
-        public virtual InternalEntityEntry TryGetEntry(IKey key, object[] keyValues)
-        {
+        public virtual InternalEntityEntry TryGetEntry(IKey key, object[] keyValues) =>
             throw new NotImplementedException();
-        }
 
-        public virtual InternalEntityEntry TryGetEntry(IKey key, object[] keyValues, bool throwOnNullKey, out bool hasNullKey)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual InternalEntityEntry TryGetEntry(IKey key, object[] keyValues, bool throwOnNullKey,
+            out bool hasNullKey) => throw new NotImplementedException();
 
-        public virtual InternalEntityEntry TryGetEntry(object entity, bool throwOnNonUniqueness = true)
-        {
+        public virtual InternalEntityEntry TryGetEntry(object entity, bool throwOnNonUniqueness = true) =>
             throw new NotImplementedException();
-        }
 
-        public virtual InternalEntityEntry TryGetEntry(object entity, IEntityType type, bool throwOnTypeMismatch = true)
-        {
+        public virtual InternalEntityEntry
+            TryGetEntry(object entity, IEntityType type, bool throwOnTypeMismatch = true) =>
             throw new NotImplementedException();
-        }
 
-        public virtual IEnumerable<InternalEntityEntry> GetEntriesForState(bool added = false, bool modified = false, bool deleted = false, bool unchanged = false)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual IEnumerable<InternalEntityEntry> GetEntriesForState(bool added = false, bool modified = false,
+            bool deleted = false, bool unchanged = false) => throw new NotImplementedException();
 
-        public virtual int GetCountForState(bool added = false, bool modified = false, bool deleted = false, bool unchanged = false)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual int GetCountForState(bool added = false, bool modified = false, bool deleted = false,
+            bool unchanged = false) => throw new NotImplementedException();
 
-        public virtual IEnumerable<TEntity> GetNonDeletedEntities<TEntity>() where TEntity : class
-        {
+        public virtual IEnumerable<TEntity> GetNonDeletedEntities<TEntity>() where TEntity : class =>
             throw new NotImplementedException();
-        }
 
         public virtual void StateChanging(InternalEntityEntry entry, EntityState newState)
         {
             throw new NotImplementedException();
         }
 
-        public virtual InternalEntityEntry StartTracking(InternalEntityEntry entry)
-        {
+        public virtual InternalEntityEntry StartTracking(InternalEntityEntry entry) =>
             throw new NotImplementedException();
-        }
 
         public virtual void StopTracking(InternalEntityEntry entry, EntityState oldState)
         {
@@ -112,26 +85,17 @@ namespace AlphaDev.Test.Core.Support
             throw new NotImplementedException();
         }
 
-        public virtual IEnumerable<Tuple<INavigation, InternalEntityEntry>> GetRecordedReferrers(object referencedEntity, bool clear)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual IEnumerable<Tuple<INavigation, InternalEntityEntry>> GetRecordedReferrers(
+            object referencedEntity, bool clear) => throw new NotImplementedException();
 
-        public virtual InternalEntityEntry FindPrincipal(InternalEntityEntry dependentEntry, IForeignKey foreignKey)
-        {
+        public virtual InternalEntityEntry FindPrincipal(InternalEntityEntry dependentEntry, IForeignKey foreignKey) =>
             throw new NotImplementedException();
-        }
 
         public virtual InternalEntityEntry FindPrincipalUsingPreStoreGeneratedValues(InternalEntityEntry dependentEntry,
-            IForeignKey foreignKey)
-        {
-            throw new NotImplementedException();
-        }
+            IForeignKey foreignKey) => throw new NotImplementedException();
 
-        public virtual InternalEntityEntry FindPrincipalUsingRelationshipSnapshot(InternalEntityEntry dependentEntry, IForeignKey foreignKey)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual InternalEntityEntry FindPrincipalUsingRelationshipSnapshot(InternalEntityEntry dependentEntry,
+            IForeignKey foreignKey) => throw new NotImplementedException();
 
         public virtual void UpdateIdentityMap(InternalEntityEntry entry, IKey principalKey)
         {
@@ -143,45 +107,28 @@ namespace AlphaDev.Test.Core.Support
             throw new NotImplementedException();
         }
 
-        public virtual IEnumerable<InternalEntityEntry> GetDependentsFromNavigation(InternalEntityEntry principalEntry, IForeignKey foreignKey)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual IEnumerable<InternalEntityEntry> GetDependentsFromNavigation(InternalEntityEntry principalEntry,
+            IForeignKey foreignKey) => throw new NotImplementedException();
 
-        public virtual IEnumerable<InternalEntityEntry> GetDependents(InternalEntityEntry principalEntry, IForeignKey foreignKey)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual IEnumerable<InternalEntityEntry> GetDependents(InternalEntityEntry principalEntry,
+            IForeignKey foreignKey) => throw new NotImplementedException();
 
-        public virtual IEnumerable<InternalEntityEntry> GetDependentsUsingRelationshipSnapshot(InternalEntityEntry principalEntry, IForeignKey foreignKey)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual IEnumerable<InternalEntityEntry> GetDependentsUsingRelationshipSnapshot(
+            InternalEntityEntry principalEntry, IForeignKey foreignKey) => throw new NotImplementedException();
 
-        public virtual IList<IUpdateEntry> GetEntriesToSave(bool cascadeChanges)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual IList<IUpdateEntry> GetEntriesToSave(bool cascadeChanges) => throw new NotImplementedException();
 
-        public virtual int SaveChanges(bool acceptAllChangesOnSuccess)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual int SaveChanges(bool acceptAllChangesOnSuccess) => throw new NotImplementedException();
 
-        public virtual Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
-        {
-            throw new NotImplementedException();
-        }
+        public virtual Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
+            CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
 
         public virtual void AcceptAllChanges()
         {
             throw new NotImplementedException();
         }
 
-        public virtual IEntityFinder CreateEntityFinder(IEntityType entityType)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual IEntityFinder CreateEntityFinder(IEntityType entityType) => throw new NotImplementedException();
 
         public virtual void Unsubscribe()
         {
@@ -203,7 +150,8 @@ namespace AlphaDev.Test.Core.Support
             throw new NotImplementedException();
         }
 
-        public virtual void CascadeDelete(InternalEntityEntry entry, bool force, IEnumerable<IForeignKey> foreignKeys = null)
+        public virtual void CascadeDelete(InternalEntityEntry entry, bool force,
+            IEnumerable<IForeignKey> foreignKeys = null)
         {
             throw new NotImplementedException();
         }

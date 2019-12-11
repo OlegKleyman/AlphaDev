@@ -12,8 +12,9 @@ namespace AlphaDev.Test.Core.Extensions
             ICollection<TEntity> collection)
             where TEntity : class
         {
-            set.Add(Arg.Any<TEntity>()).Returns(info => info.Arg<TEntity>().ToMockEntityEntry())
-                .AndDoes(info => collection.Add(info.Arg<TEntity>()));
+            set.Add(Arg.Any<TEntity>())
+               .Returns(info => info.Arg<TEntity>().ToMockEntityEntry())
+               .AndDoes(info => collection.Add(info.Arg<TEntity>()));
 
             return set;
         }

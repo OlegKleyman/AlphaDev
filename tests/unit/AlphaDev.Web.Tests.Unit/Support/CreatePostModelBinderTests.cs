@@ -23,10 +23,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [NotNull]
-        private MockCreatePostModelBinder GetCreatePostModelBinder()
-        {
-            return new MockCreatePostModelBinder();
-        }
+        private MockCreatePostModelBinder GetCreatePostModelBinder() => new MockCreatePostModelBinder();
 
         public class MockCreatePostModelBinder : CreatePostModelBinder
         {

@@ -18,8 +18,8 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         public static IServiceCollection AddServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IBlogService, BlogService>()
-                .AddScoped<IAboutService, AboutService>()
-                .AddScoped<IContactService, ContactService>();
+                             .AddScoped<IAboutService, AboutService>()
+                             .AddScoped<IContactService, ContactService>();
             return serviceCollection;
         }
 
@@ -27,9 +27,9 @@ namespace AlphaDev.Web.Bootstrap.Extensions
             Configurer configurer)
         {
             serviceCollection.AddScoped<BlogContext, Core.Data.Sql.Contexts.BlogContext>(
-                    provider => new BlogContextFactory(configurer).CreateDbContext())
-                .AddScoped<InformationContext, Core.Data.Sql.Contexts.InformationContext>(
-                    provider => new InformationContextFactory(configurer).CreateDbContext());
+                                 provider => new BlogContextFactory(configurer).CreateDbContext())
+                             .AddScoped<InformationContext, Core.Data.Sql.Contexts.InformationContext>(
+                                 provider => new InformationContextFactory(configurer).CreateDbContext());
             return serviceCollection;
         }
 
@@ -56,13 +56,11 @@ namespace AlphaDev.Web.Bootstrap.Extensions
             return serviceCollection;
         }
 
-        public static IServiceCollection AddContextFactories(this IServiceCollection serviceCollection)
-        {
-            return serviceCollection
+        public static IServiceCollection AddContextFactories(this IServiceCollection serviceCollection) =>
+            serviceCollection
                 .AddSingleton<IContextFactory<InformationContext>,
                     ContextFactory<Core.Data.Sql.Contexts.InformationContext>>()
                 .AddSingleton<IContextFactory<BlogContext>,
                     ContextFactory<Core.Data.Sql.Contexts.BlogContext>>();
-        }
     }
 }

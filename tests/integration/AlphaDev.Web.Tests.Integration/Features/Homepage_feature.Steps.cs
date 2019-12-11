@@ -36,23 +36,29 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_navigation_links()
         {
-            SiteTester.HomePage.Navigation.Select(element => element.Text).Should()
-                .BeEquivalentTo("Posts", "About", "Contact");
+            SiteTester.HomePage.Navigation.Select(element => element.Text)
+                      .Should()
+                      .BeEquivalentTo("Posts", "About", "Contact");
         }
 
         private void Then_it_should_display_the_latest_blog_post()
         {
-            SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
-                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created)
-                    .ToList().Select(blog => new
-                    {
-                        Dates = new
-                        {
-                            Created = blog.Created.ToString(FullDateFormatString, CultureInfo.InvariantCulture)
-                        }
-                    })
-                    .FirstOrThrow(new InvalidOperationException("No blogs found.")),
-                options => options.Including(post => post.Dates.Created));
+            SiteTester.HomePage.LatestBlog.ValueOrFailure()
+                      .Should()
+                      .BeEquivalentTo(
+                          DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs
+                                          .OrderByDescending(blog => blog.Created)
+                                          .ToList()
+                                          .Select(blog => new
+                                          {
+                                              Dates = new
+                                              {
+                                                  Created = blog.Created.ToString(FullDateFormatString,
+                                                      CultureInfo.InvariantCulture)
+                                              }
+                                          })
+                                          .FirstOrThrow(new InvalidOperationException("No blogs found.")),
+                          options => options.Including(post => post.Dates.Created));
         }
 
         private void And_the_latest_blog_post_was(ModifiedState modifiedState)
@@ -60,24 +66,32 @@ namespace AlphaDev.Web.Tests.Integration.Features
             var modified = modifiedState == ModifiedState.Modified ? new DateTime(2017, 7, 12) : (DateTime?) null;
 
             DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created)
-                .First().Modified = modified;
+                            .First()
+                            .Modified = modified;
 
             DatabasesFixture.BlogContextDatabaseFixture.BlogContext.SaveChanges();
         }
 
         private void Then_it_should_display_the_blog_with_a_modification_date_if_it_exists()
         {
-            SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
-                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created)
-                    .ToList().Select(blog => new
-                    {
-                        Dates = new
-                        {
-                            Modified = blog.Modified.ToOption().FlatMap(time =>
-                                Option.Some(time.ToString(FullDateFormatString, CultureInfo.InvariantCulture)))
-                        }
-                    }).FirstOrThrow(new InvalidOperationException("No blogs found.")),
-                options => options.ExcludingMissingMembers());
+            SiteTester.HomePage.LatestBlog.ValueOrFailure()
+                      .Should()
+                      .BeEquivalentTo(
+                          DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs
+                                          .OrderByDescending(blog => blog.Created)
+                                          .ToList()
+                                          .Select(blog => new
+                                          {
+                                              Dates = new
+                                              {
+                                                  Modified = blog.Modified.ToOption()
+                                                                 .FlatMap(time =>
+                                                                     Option.Some(time.ToString(FullDateFormatString,
+                                                                         CultureInfo.InvariantCulture)))
+                                              }
+                                          })
+                                          .FirstOrThrow(new InvalidOperationException("No blogs found.")),
+                          options => options.ExcludingMissingMembers());
         }
 
         private void Given_the_website_has_a_problem()
@@ -99,14 +113,18 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_blog_post_with_markdown_parsed_to_html()
         {
-            SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
-                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created)
-                    .ToList().Select(blog => new
-                    {
-                        Content = Markdown.ToHtml(blog.Content).Trim()
-                    })
-                    .FirstOrThrow(new InvalidOperationException("No blogs found.")),
-                options => options.Including(post => post.Content));
+            SiteTester.HomePage.LatestBlog.ValueOrFailure()
+                      .Should()
+                      .BeEquivalentTo(
+                          DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs
+                                          .OrderByDescending(blog => blog.Created)
+                                          .ToList()
+                                          .Select(blog => new
+                                          {
+                                              Content = Markdown.ToHtml(blog.Content).Trim()
+                                          })
+                                          .FirstOrThrow(new InvalidOperationException("No blogs found.")),
+                          options => options.Including(post => post.Content));
         }
 
         private void And_the_latest_blog_post_contains_markdown()
@@ -140,15 +158,18 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_two_digits_for_day_for_created()
         {
-            SiteTester.HomePage.LatestBlog.ValueOrFailure().Dates.Created.Should()
-                .MatchRegex(FullDateFormatRegularExpression);
+            SiteTester.HomePage.LatestBlog.ValueOrFailure()
+                      .Dates.Created.Should()
+                      .MatchRegex(FullDateFormatRegularExpression);
         }
 
         private void And_it_should_display_two_digits_for_day_for_modified()
         {
-            SiteTester.HomePage.LatestBlog.ValueOrFailure().Dates.Modified
-                .ValueOr(() => throw new InvalidOperationException("No modified date found.")).Should()
-                .MatchRegex(FullDateFormatRegularExpression);
+            SiteTester.HomePage.LatestBlog.ValueOrFailure()
+                      .Dates.Modified
+                      .ValueOr(() => throw new InvalidOperationException("No modified date found."))
+                      .Should()
+                      .MatchRegex(FullDateFormatRegularExpression);
         }
 
         private void And_there_is_a_blog_post()
@@ -159,16 +180,19 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_title()
         {
-            SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
-                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs
-                    .FirstOrThrow(new InvalidOperationException("No blogs found.")),
-                options => options.Including(post => post.Title));
+            SiteTester.HomePage.LatestBlog.ValueOrFailure()
+                      .Should()
+                      .BeEquivalentTo(
+                          DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs
+                                          .FirstOrThrow(new InvalidOperationException("No blogs found.")),
+                          options => options.Including(post => post.Title));
         }
 
         private void And_there_are_no_blog_posts()
         {
             DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.RemoveRange(DatabasesFixture
-                .BlogContextDatabaseFixture.BlogContext.Blogs);
+                                                                                      .BlogContextDatabaseFixture
+                                                                                      .BlogContext.Blogs);
         }
 
         private void Then_it_should_display_welcome_post()
@@ -184,18 +208,20 @@ namespace AlphaDev.Web.Tests.Integration.Features
                                    "</span><span class=\"token punctuation\">;</span>\r\n<span " +
                                    "class=\"token punctuation\">}</span>\r\n</code></pre>";
 
-            SiteTester.HomePage.LatestBlog.ValueOrFailure().Should().BeEquivalentTo(
-                new
-                {
-                    Title = "Welcome to my blog.",
-                    Content = content,
-                    Dates = new
-                    {
-                        Created = "Monday, January 01, 0001",
-                        Modified = Option.None<string>()
-                    }
-                }
-            );
+            SiteTester.HomePage.LatestBlog.ValueOrFailure()
+                      .Should()
+                      .BeEquivalentTo(
+                          new
+                          {
+                              Title = "Welcome to my blog.",
+                              Content = content,
+                              Dates = new
+                              {
+                                  Created = "Monday, January 01, 0001",
+                                  Modified = Option.None<string>()
+                              }
+                          }
+                      );
         }
     }
 }

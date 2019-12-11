@@ -27,8 +27,10 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             helper.Process(default, tagHelperOutput);
             helper.Context.ViewData
-                .Should().ContainKey("InlineScripts")
-                .WhichValue.Should().BeEquivalentTo(@"<script type=""text/javascript"">
+                  .Should()
+                  .ContainKey("InlineScripts")
+                  .WhichValue.Should()
+                  .BeEquivalentTo(@"<script type=""text/javascript"">
                                                     $('#Value').markdown({
                                                                 savable: true,
                                                         onChange: function() {

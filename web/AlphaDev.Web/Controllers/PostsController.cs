@@ -17,10 +17,7 @@ namespace AlphaDev.Web.Controllers
     {
         private readonly IBlogService _blogService;
 
-        public PostsController([NotNull] IBlogService blogService)
-        {
-            _blogService = blogService;
-        }
+        public PostsController([NotNull] IBlogService blogService) => _blogService = blogService;
 
         [Route("page/{page}")]
         public IActionResult Page(int page)
@@ -31,33 +28,31 @@ namespace AlphaDev.Web.Controllers
             var startPosition = startPage.ToStartPosition(itemsPerPage.ToPositiveInteger());
             var blogs = _blogService.GetOrderedByDates(startPosition.Value, itemsPerPage);
             return blogs.Select(blog => new BlogViewModel(blog.Id,
-                    blog.Title,
-                    blog.Content,
-                    new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)))
-                .SomeWhen(x => x.Any(), NotFound())
-                .Match(x => (ActionResult) View("Index", x.ToPager(new PageDimensions(startPage,
-                        new PageBoundaries(itemsPerPage.ToPositiveInteger(), maxPagesToDisplay)),
-                    _blogService.GetCount(startPosition.Value).ToPositiveInteger())), x => x);
+                            blog.Title,
+                            blog.Content,
+                            new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)))
+                        .SomeWhen(x => x.Any(), NotFound())
+                        .Match(x => (ActionResult) View("Index", x.ToPager(new PageDimensions(startPage,
+                                new PageBoundaries(itemsPerPage.ToPositiveInteger(), maxPagesToDisplay)),
+                            _blogService.GetCount(startPosition.Value).ToPositiveInteger())), x => x);
         }
 
         [Route("{id}")]
         public ActionResult Index(int id)
         {
             return _blogService.Get(id)
-                .Map(foundBlog => new BlogViewModel(foundBlog.Id,
-                    foundBlog.Title,
-                    foundBlog.Content,
-                    new DatesViewModel(foundBlog.Dates.Created, foundBlog.Dates.Modified)))
-                .MapToAction(model => ViewBag.Title = model.Title)
-                .Map(model => (ActionResult) View("Post", model)).ValueOr(NotFound);
+                               .Map(foundBlog => new BlogViewModel(foundBlog.Id,
+                                   foundBlog.Title,
+                                   foundBlog.Content,
+                                   new DatesViewModel(foundBlog.Dates.Created, foundBlog.Dates.Modified)))
+                               .MapToAction(model => ViewBag.Title = model.Title)
+                               .Map(model => (ActionResult) View("Post", model))
+                               .ValueOr(NotFound);
         }
 
         [Authorize]
         [Route("create")]
-        public ViewResult Create()
-        {
-            return View(nameof(Create));
-        }
+        public ViewResult Create() => View(nameof(Create));
 
         [Authorize]
         [Route("create")]
@@ -87,10 +82,10 @@ namespace AlphaDev.Web.Controllers
         public IActionResult Edit(int id)
         {
             return _blogService
-                .Get(id)
-                .Map(b => new EditPostViewModel(b.Title, b.Content,
-                    new DatesViewModel(b.Dates.Created, b.Dates.Modified)))
-                .Match(model => (IActionResult) View(nameof(Edit), model), NotFound);
+                   .Get(id)
+                   .Map(b => new EditPostViewModel(b.Title, b.Content,
+                       new DatesViewModel(b.Dates.Created, b.Dates.Modified)))
+                   .Match(model => (IActionResult) View(nameof(Edit), model), NotFound);
         }
 
         [Authorize]

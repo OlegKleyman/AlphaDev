@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using AlphaDev.Core.Data.Entities;
@@ -20,7 +19,8 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
         public InformationContextTests()
         {
             var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("connectionstrings.json", false, true).Build();
+                                                          .AddJsonFile("connectionstrings.json", false, true)
+                                                          .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder();
             var connectionBuilder =
@@ -56,7 +56,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
 
             using var context = new DbContext(optionsBuilder.Options);
             context.Database.ExecuteSqlRaw(
-                $"INSERT INTO Abouts(Id, Value) VALUES(1, 'test')");
+                "INSERT INTO Abouts(Id, Value) VALUES(1, 'test')");
         }
 
         private void SeedContacts()
@@ -66,7 +66,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
 
             using var context = new DbContext(optionsBuilder.Options);
             context.Database.ExecuteSqlRaw(
-                $"INSERT INTO Contacts(Id, Value) VALUES(1, 'test')");
+                "INSERT INTO Contacts(Id, Value) VALUES(1, 'test')");
         }
 
         [NotNull]
@@ -140,9 +140,12 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             SeedAbouts();
             var abouts = context.Abouts;
 
-            var aboutsDictionary = abouts.AsEnumerable().Select(
-                about => about.GetType().GetProperties()
-                              .ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(about, null)));
+            var aboutsDictionary = abouts.AsEnumerable()
+                                         .Select(
+                                             about => about.GetType()
+                                                           .GetProperties()
+                                                           .ToDictionary(x => x.Name,
+                                                               x => x.GetGetMethod().Invoke(about, null)));
 
             GetTable("Abouts").Should().BeEquivalentTo(aboutsDictionary);
         }
@@ -161,8 +164,12 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             context.Abouts.Add(about);
 
             Action saveChanges = () => context.SaveChanges();
-            saveChanges.Should().Throw<DbUpdateException>().WithInnerException<SqlException>().Which.Message
-                       .Should().MatchRegex(
+            saveChanges.Should()
+                       .Throw<DbUpdateException>()
+                       .WithInnerException<SqlException>()
+                       .Which.Message
+                       .Should()
+                       .MatchRegex(
                            @"The INSERT statement conflicted with the CHECK constraint ""CK_ABOUTS_SIZE""\. The conflict occurred in database "".*"", table ""dbo.Abouts""");
         }
 
@@ -177,10 +184,15 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
 
             context.SaveChanges();
 
-            GetTable("Abouts").First().Should().BeEquivalentTo(
-                targetAbout.GetType().GetProperties().ToDictionary(
-                    x => x.Name,
-                    x => x.GetGetMethod().Invoke(targetAbout, null)));
+            GetTable("Abouts")
+                .First()
+                .Should()
+                .BeEquivalentTo(
+                    targetAbout.GetType()
+                               .GetProperties()
+                               .ToDictionary(
+                                   x => x.Name,
+                                   x => x.GetGetMethod().Invoke(targetAbout, null)));
         }
 
         [Fact]
@@ -223,9 +235,12 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
         {
             using var context = GetInformationContext();
             SeedContacts();
-            var aboutsDictionary = context.Contacts.AsEnumerable().Select(
-                about => about.GetType().GetProperties()
-                              .ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(about, null)));
+            var aboutsDictionary = context.Contacts.AsEnumerable()
+                                          .Select(
+                                              about => about.GetType()
+                                                            .GetProperties()
+                                                            .ToDictionary(x => x.Name,
+                                                                x => x.GetGetMethod().Invoke(about, null)));
 
             GetTable("Contacts").Should().BeEquivalentTo(aboutsDictionary);
         }
@@ -244,8 +259,12 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             context.Contacts.Add(contact);
 
             Action saveChanges = () => context.SaveChanges();
-            saveChanges.Should().Throw<DbUpdateException>().WithInnerException<SqlException>().Which.Message
-                       .Should().MatchRegex(
+            saveChanges.Should()
+                       .Throw<DbUpdateException>()
+                       .WithInnerException<SqlException>()
+                       .Which.Message
+                       .Should()
+                       .MatchRegex(
                            @"The INSERT statement conflicted with the CHECK constraint ""CK_CONTACTS_SIZE""\. The conflict occurred in database "".*"", table ""dbo.Contacts""");
         }
 
@@ -261,10 +280,15 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
 
             context.SaveChanges();
 
-            GetTable("Contacts").First().Should().BeEquivalentTo(
-                targetContact.GetType().GetProperties().ToDictionary(
-                    x => x.Name,
-                    x => x.GetGetMethod().Invoke(targetContact, null)));
+            GetTable("Contacts")
+                .First()
+                .Should()
+                .BeEquivalentTo(
+                    targetContact.GetType()
+                                 .GetProperties()
+                                 .ToDictionary(
+                                     x => x.Name,
+                                     x => x.GetGetMethod().Invoke(targetContact, null)));
         }
     }
 }

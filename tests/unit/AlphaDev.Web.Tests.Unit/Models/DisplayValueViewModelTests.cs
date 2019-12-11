@@ -14,8 +14,9 @@ namespace AlphaDev.Web.Tests.Unit.Models
             const string value = "value";
             const string title = "title";
             var model = new DisplayValueViewModel(editAction, controller, value, title);
-            model.Should().BeEquivalentTo(new
-                { EditAction = editAction, Controller = controller, Value = value, Title = title });
+            model.Should()
+                 .BeEquivalentTo(new
+                     { EditAction = editAction, Controller = controller, Value = value, Title = title });
         }
     }
 }

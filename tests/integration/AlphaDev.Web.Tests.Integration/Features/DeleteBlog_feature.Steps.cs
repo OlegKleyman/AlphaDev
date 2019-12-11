@@ -27,8 +27,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
         {
             var addedBlog = (Blog) CommonSteps.Data["AddedBlog"];
             DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.Where(blog => blog.Id == addedBlog.Id)
-                .Should()
-                .BeEmpty();
+                            .Should()
+                            .BeEmpty();
         }
 
         private void Then_should_be_directed_to_the_posts_page()

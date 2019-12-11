@@ -23,10 +23,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [NotNull]
-        private ContactEditModelBinderMock GetContactEditModelBinder()
-        {
-            return new ContactEditModelBinderMock();
-        }
+        private ContactEditModelBinderMock GetContactEditModelBinder() => new ContactEditModelBinderMock();
 
         public class ContactEditModelBinderMock : ContactEditModelBinder
         {

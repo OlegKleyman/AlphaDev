@@ -23,7 +23,7 @@ namespace AlphaDev.Core.Data.Sql.Migrations.Information
                 b.Property<bool>("Id");
 
                 b.Property<string>("Value")
-                    .IsRequired();
+                 .IsRequired();
 
                 b.HasKey("Id");
 
@@ -35,7 +35,7 @@ namespace AlphaDev.Core.Data.Sql.Migrations.Information
                 b.Property<bool>("Id");
 
                 b.Property<string>("Value")
-                    .IsRequired();
+                 .IsRequired();
 
                 b.HasKey("Id");
 

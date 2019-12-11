@@ -17,10 +17,7 @@ namespace AlphaDev.Core.Tests.Unit
 {
     public class BlogServiceTests
     {
-        public BlogServiceTests()
-        {
-            _dateProvider = Substitute.For<IDateProvider>();
-        }
+        public BlogServiceTests() => _dateProvider = Substitute.For<IDateProvider>();
 
         private readonly IDateProvider _dateProvider;
 
@@ -48,13 +45,14 @@ namespace AlphaDev.Core.Tests.Unit
             context.Blogs = blogs.ToMockDbSet().WithAddReturns(blogs);
             var addedBlog = service.Add(blog);
 
-            addedBlog.Should().BeEquivalentTo(new
-            {
-                Id = 0,
-                Title = title,
-                Content = content,
-                Dates = new { Created = default(DateTime), Modified = Option.None<DateTime>() }
-            }, options => options.ExcludingMissingMembers());
+            addedBlog.Should()
+                     .BeEquivalentTo(new
+                     {
+                         Id = 0,
+                         Title = title,
+                         Content = content,
+                         Dates = new { Created = default(DateTime), Modified = Option.None<DateTime>() }
+                     }, options => options.ExcludingMissingMembers());
         }
 
         [Fact]
@@ -75,8 +73,9 @@ namespace AlphaDev.Core.Tests.Unit
         [Fact]
         public void DeleteShouldDeleteBlog()
         {
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .With<BlogContext, Data.Entities.Blog>();
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .With<BlogContext, Data.Entities.Blog>();
             context.SaveChanges().Returns(1);
             var service = GetBlogService(context);
             service.Delete(1);
@@ -107,8 +106,10 @@ namespace AlphaDev.Core.Tests.Unit
         public void EditShouldSetModifiedFromDateProvider()
         {
             var entities = new[] { new Data.Entities.Blog() };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock().SuccessSingle()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .SuccessSingle()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
             const int id = default;
             var blog = new Data.Entities.Blog();
             context.Blogs.Find(id).Returns(blog);
@@ -128,8 +129,10 @@ namespace AlphaDev.Core.Tests.Unit
         [Fact]
         public void EditShouldThrowInvalidOperationExceptionWhenBlogWasNotFound()
         {
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(new Data.Entities.Blog[0], (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(new Data.Entities.Blog[0],
+                                        (blogContext, set) => blogContext.Blogs = set);
 
             var service = GetBlogService(context);
 
@@ -142,8 +145,9 @@ namespace AlphaDev.Core.Tests.Unit
         public void EditShouldThrowInvalidOperationExceptionWhenBlogWasNotModified()
         {
             var entities = new[] { new Data.Entities.Blog() };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
             context.Blogs.Find(Arg.Any<int>()).Returns(new Data.Entities.Blog());
             var service = GetBlogService(context);
 
@@ -162,14 +166,18 @@ namespace AlphaDev.Core.Tests.Unit
             const string testValue = "test content";
 
             var entities = new[] { new Data.Entities.Blog { Content = testValue, Title = string.Empty } };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
 
             var service = GetBlogService(context);
 
-            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
-                new { Content = testValue },
-                options => options.Including(info => info.Content));
+            service.GetLatest()
+                   .ValueOrFailure()
+                   .Should()
+                   .BeEquivalentTo(
+                       new { Content = testValue },
+                       options => options.Including(info => info.Content));
         }
 
         [Fact]
@@ -178,14 +186,18 @@ namespace AlphaDev.Core.Tests.Unit
             var testValue = new DateTime(2017, 1, 1);
             var entities = new[]
                 { new Data.Entities.Blog { Created = testValue, Title = string.Empty, Content = string.Empty } };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
 
             var service = GetBlogService(context);
 
-            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
-                new { Dates = new { Created = testValue } },
-                options => options.Including(info => info.Dates.Created));
+            service.GetLatest()
+                   .ValueOrFailure()
+                   .Should()
+                   .BeEquivalentTo(
+                       new { Dates = new { Created = testValue } },
+                       options => options.Including(info => info.Dates.Created));
         }
 
         [Fact]
@@ -194,14 +206,18 @@ namespace AlphaDev.Core.Tests.Unit
             const int testValue = 1;
             var entities = new[]
                 { new Data.Entities.Blog { Id = testValue, Title = string.Empty, Content = string.Empty } };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
 
             var service = GetBlogService(context);
 
-            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
-                new { Id = testValue },
-                options => options.Including(info => info.Id));
+            service.GetLatest()
+                   .ValueOrFailure()
+                   .Should()
+                   .BeEquivalentTo(
+                       new { Id = testValue },
+                       options => options.Including(info => info.Id));
         }
 
         [Fact]
@@ -215,9 +231,12 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
-                new { Dates = new { Modified = Option.Some(testValue) } },
-                options => options.Including(info => info.Dates.Modified));
+            service.GetLatest()
+                   .ValueOrFailure()
+                   .Should()
+                   .BeEquivalentTo(
+                       new { Dates = new { Modified = Option.Some(testValue) } },
+                       options => options.Including(info => info.Dates.Modified));
         }
 
         [Fact]
@@ -230,9 +249,12 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
-                new { Dates = new { Modified = Option.None<DateTime>() } },
-                options => options.Including(info => info.Dates.Modified));
+            service.GetLatest()
+                   .ValueOrFailure()
+                   .Should()
+                   .BeEquivalentTo(
+                       new { Dates = new { Modified = Option.None<DateTime>() } },
+                       options => options.Including(info => info.Dates.Modified));
         }
 
         [Fact]
@@ -246,9 +268,12 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(context);
 
-            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
-                new { Title = testValue },
-                options => options.Including(info => info.Title));
+            service.GetLatest()
+                   .ValueOrFailure()
+                   .Should()
+                   .BeEquivalentTo(
+                       new { Title = testValue },
+                       options => options.Including(info => info.Title));
         }
 
         [Fact]
@@ -266,13 +291,16 @@ namespace AlphaDev.Core.Tests.Unit
                 new Data.Entities.Blog
                     { Created = new DateTime(2014, 1, 1), Title = string.Empty, Content = string.Empty }
             };
-            
+
             context.Blogs = blogs.ToMockDbSet();
             var service = GetBlogService(context);
 
-            service.GetLatest().ValueOrFailure().Should().BeEquivalentTo(
-                new { Dates = new { Created = new DateTime(2017, 6, 20) } },
-                options => options.Including(info => info.Dates.Created));
+            service.GetLatest()
+                   .ValueOrFailure()
+                   .Should()
+                   .BeEquivalentTo(
+                       new { Dates = new { Created = new DateTime(2017, 6, 20) } },
+                       options => options.Including(info => info.Dates.Created));
         }
 
         [Fact]
@@ -293,13 +321,18 @@ namespace AlphaDev.Core.Tests.Unit
                                          { Id = x, Title = string.Empty, Content = string.Empty })
                                      .ToArray();
 
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
 
             var service = GetBlogService(context);
 
-            service.GetOrderedByDates(1, 4).Should().HaveCount(4).And.Subject.Select(x => x.Id).Should()
-                .BeEquivalentTo(entities.Take(4).Select(x => x.Id));
+            service.GetOrderedByDates(1, 4)
+                   .Should()
+                   .HaveCount(4)
+                   .And.Subject.Select(x => x.Id)
+                   .Should()
+                   .BeEquivalentTo(entities.Take(4).Select(x => x.Id));
         }
 
         [Fact]
@@ -324,14 +357,18 @@ namespace AlphaDev.Core.Tests.Unit
                     { Created = new DateTime(2010, 11, 1), Title = string.Empty, Content = string.Empty }
             };
 
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
 
             var service = GetBlogService(context);
 
-            service.GetOrderedByDates(1, entities.Length).Select(x => x.Dates).Should()
-                .BeEquivalentTo(entities.OrderByDescending(x => x.Modified).ThenByDescending(x => x.Created)
-                    .Select(x => new { x.Created, Modified = x.Modified.ToOption() }));
+            service.GetOrderedByDates(1, entities.Length)
+                   .Select(x => x.Dates)
+                   .Should()
+                   .BeEquivalentTo(entities.OrderByDescending(x => x.Modified)
+                                           .ThenByDescending(x => x.Created)
+                                           .Select(x => new { x.Created, Modified = x.Modified.ToOption() }));
         }
 
         [Fact]
@@ -342,13 +379,18 @@ namespace AlphaDev.Core.Tests.Unit
                                          { Id = x, Title = string.Empty, Content = string.Empty })
                                      .ToArray();
 
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
 
             var service = GetBlogService(context);
 
-            service.GetOrderedByDates(7, 10).Should().HaveCount(4).And.Subject.Select(x => x.Id).Should()
-                .BeEquivalentTo(entities.Skip(6).Select(x => x.Id));
+            service.GetOrderedByDates(7, 10)
+                   .Should()
+                   .HaveCount(4)
+                   .And.Subject.Select(x => x.Id)
+                   .Should()
+                   .BeEquivalentTo(entities.Skip(6).Select(x => x.Id));
         }
 
         [Fact]
@@ -358,14 +400,17 @@ namespace AlphaDev.Core.Tests.Unit
 
             var blog = new Data.Entities.Blog { Created = testValue, Title = string.Empty, Content = string.Empty };
             var entities = new[] { blog };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
 
             var service = GetBlogService(context);
 
-            service.GetOrderedByDates(1, 1).Should().BeEquivalentTo(
-                new[] { new { Dates = new { Created = testValue } } },
-                options => options.ExcludingMissingMembers());
+            service.GetOrderedByDates(1, 1)
+                   .Should()
+                   .BeEquivalentTo(
+                       new[] { new { Dates = new { Created = testValue } } },
+                       options => options.ExcludingMissingMembers());
         }
 
         [Fact]
@@ -375,28 +420,34 @@ namespace AlphaDev.Core.Tests.Unit
 
             var entities = new[]
                 { new Data.Entities.Blog { Modified = testValue, Title = string.Empty, Content = string.Empty } };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
 
             var service = GetBlogService(context);
 
-            service.GetOrderedByDates(1, 1).Should().BeEquivalentTo(
-                new[] { new { Dates = new { Modified = Option.Some(testValue) } } },
-                options => options.ExcludingMissingMembers());
+            service.GetOrderedByDates(1, 1)
+                   .Should()
+                   .BeEquivalentTo(
+                       new[] { new { Dates = new { Modified = Option.Some(testValue) } } },
+                       options => options.ExcludingMissingMembers());
         }
 
         [Fact]
         public void GetOrderedByDatesShouldReturnBlogsWithNoModifiedDateWhenDbModifiedDateIsNull()
         {
-            var entities = new[] { new Data.Entities.Blog{ Title = string.Empty, Content = string.Empty } };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var entities = new[] { new Data.Entities.Blog { Title = string.Empty, Content = string.Empty } };
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
 
             var service = GetBlogService(context);
 
-            service.GetOrderedByDates(1, 1).Should().BeEquivalentTo(
-                new[] { new { Dates = new { Modified = Option.None<DateTime>() } } },
-                options => options.ExcludingMissingMembers());
+            service.GetOrderedByDates(1, 1)
+                   .Should()
+                   .BeEquivalentTo(
+                       new[] { new { Dates = new { Modified = Option.None<DateTime>() } } },
+                       options => options.ExcludingMissingMembers());
         }
 
         [Fact]
@@ -406,14 +457,17 @@ namespace AlphaDev.Core.Tests.Unit
 
             var entities = new[]
                 { new Data.Entities.Blog { Title = testValue, Content = string.Empty } };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
 
             var service = GetBlogService(context);
 
-            service.GetOrderedByDates(1, 1).Should().BeEquivalentTo(
-                new[] { new { Title = testValue } },
-                options => options.ExcludingMissingMembers());
+            service.GetOrderedByDates(1, 1)
+                   .Should()
+                   .BeEquivalentTo(
+                       new[] { new { Title = testValue } },
+                       options => options.ExcludingMissingMembers());
         }
 
         [Fact]
@@ -422,21 +476,26 @@ namespace AlphaDev.Core.Tests.Unit
             const string testValue = "test content";
 
             var entities = new[] { new Data.Entities.Blog { Title = string.Empty, Content = testValue } };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
 
             var service = GetBlogService(context);
 
-            service.GetOrderedByDates(1, 1).Should().BeEquivalentTo(
-                new[] { new { Content = "test content" } },
-                options => options.Including(info => info.Content));
+            service.GetOrderedByDates(1, 1)
+                   .Should()
+                   .BeEquivalentTo(
+                       new[] { new { Content = "test content" } },
+                       options => options.Including(info => info.Content));
         }
 
         [Fact]
         public void GetOrderedByDatesShouldReturnEmptyBlogsWhenNoBlogIsFound()
         {
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(new Data.Entities.Blog[0], (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(new Data.Entities.Blog[0],
+                                        (blogContext, set) => blogContext.Blogs = set);
             var service = GetBlogService(context);
 
             service.GetOrderedByDates(1, 1).Should().BeEmpty();
@@ -449,16 +508,20 @@ namespace AlphaDev.Core.Tests.Unit
 
             var testValue = "test";
 
-            var blog = new Data.Entities.Blog { Content = testValue, Title = string.Empty};
+            var blog = new Data.Entities.Blog { Content = testValue, Title = string.Empty };
             var entities = new[] { blog };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
             context.Blogs.Find(id).Returns(blog);
             var service = GetBlogService(context);
 
-            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
-                new { Content = testValue },
-                options => options.ExcludingMissingMembers());
+            service.Get(id)
+                   .ValueOr(BlogBase.Empty)
+                   .Should()
+                   .BeEquivalentTo(
+                       new { Content = testValue },
+                       options => options.ExcludingMissingMembers());
         }
 
         [Fact]
@@ -470,15 +533,19 @@ namespace AlphaDev.Core.Tests.Unit
 
             var blog = new Data.Entities.Blog { Created = testValue, Title = string.Empty, Content = string.Empty };
             var entities = new[] { blog };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
             context.Blogs.Find(id).Returns(blog);
 
             var service = GetBlogService(context);
 
-            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
-                new { Dates = new { Created = testValue } },
-                options => options.ExcludingMissingMembers());
+            service.Get(id)
+                   .ValueOr(BlogBase.Empty)
+                   .Should()
+                   .BeEquivalentTo(
+                       new { Dates = new { Created = testValue } },
+                       options => options.ExcludingMissingMembers());
         }
 
         [Fact]
@@ -488,15 +555,19 @@ namespace AlphaDev.Core.Tests.Unit
 
             var blog = new Data.Entities.Blog { Id = id, Title = string.Empty, Content = string.Empty };
             var entities = new[] { blog };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
             context.Blogs.Find(id).Returns(blog);
 
             var service = GetBlogService(context);
 
-            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
-                new { Id = id },
-                options => options.ExcludingMissingMembers());
+            service.Get(id)
+                   .ValueOr(BlogBase.Empty)
+                   .Should()
+                   .BeEquivalentTo(
+                       new { Id = id },
+                       options => options.ExcludingMissingMembers());
         }
 
         [Fact]
@@ -508,15 +579,19 @@ namespace AlphaDev.Core.Tests.Unit
 
             var blog = new Data.Entities.Blog { Modified = testValue, Title = string.Empty, Content = string.Empty };
             var entities = new[] { blog };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
             context.Blogs.Find(id).Returns(blog);
 
             var service = GetBlogService(context);
 
-            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
-                new { Dates = new { Modified = testValue.Some() } },
-                options => options.ExcludingMissingMembers());
+            service.Get(id)
+                   .ValueOr(BlogBase.Empty)
+                   .Should()
+                   .BeEquivalentTo(
+                       new { Dates = new { Modified = testValue.Some() } },
+                       options => options.ExcludingMissingMembers());
         }
 
         [Fact]
@@ -526,15 +601,19 @@ namespace AlphaDev.Core.Tests.Unit
 
             var blog = new Data.Entities.Blog { Modified = null, Title = string.Empty, Content = string.Empty };
             var entities = new[] { blog };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
             context.Blogs.Find(id).Returns(blog);
 
             var service = GetBlogService(context);
 
-            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
-                new { Dates = new { Modified = Option.None<DateTime>() } },
-                options => options.Including(info => info.Dates.Modified));
+            service.Get(id)
+                   .ValueOr(BlogBase.Empty)
+                   .Should()
+                   .BeEquivalentTo(
+                       new { Dates = new { Modified = Option.None<DateTime>() } },
+                       options => options.Including(info => info.Dates.Modified));
         }
 
         [Fact]
@@ -546,15 +625,19 @@ namespace AlphaDev.Core.Tests.Unit
 
             var blog = new Data.Entities.Blog { Title = testValue, Content = string.Empty };
             var entities = new[] { blog };
-            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>()).Mock()
-                .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
+            var context = Substitute.For<BlogContext>(Substitute.For<Configurer>())
+                                    .Mock()
+                                    .WithDbSet(entities, (blogContext, set) => blogContext.Blogs = set);
             context.Blogs.Find(id).Returns(blog);
 
             var service = GetBlogService(context);
 
-            service.Get(id).ValueOr(BlogBase.Empty).Should().BeEquivalentTo(
-                new { Title = testValue },
-                options => options.ExcludingMissingMembers());
+            service.Get(id)
+                   .ValueOr(BlogBase.Empty)
+                   .Should()
+                   .BeEquivalentTo(
+                       new { Title = testValue },
+                       options => options.ExcludingMissingMembers());
         }
     }
 }

@@ -23,37 +23,54 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [NotNull]
-        private DefaultController GetDefaultController([NotNull] IBlogService blogService)
-        {
-            return new DefaultController(blogService);
-        }
+        private DefaultController GetDefaultController([NotNull] IBlogService blogService) =>
+            new DefaultController(blogService);
 
         [Fact]
         public void ErrorShouldReturnErrorModelWithErrorMessage()
         {
-            GetDefaultController().Error(500).Should().BeOfType<ViewResult>().Which.Model.Should()
-                .BeOfType<ErrorModel>().Which.Message.Should()
+            GetDefaultController()
+                .Error(500)
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeOfType<ErrorModel>()
+                .Which.Message.Should()
                 .BeEquivalentTo("An error occurred while processing your request.");
         }
 
         [Fact]
         public void ErrorShouldReturnErrorModelWithStatus()
         {
-            GetDefaultController().Error(500).Should().BeOfType<ViewResult>().Which.Model.Should()
-                .BeOfType<ErrorModel>().Which.Status.Should().Be(500);
+            GetDefaultController()
+                .Error(500)
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeOfType<ErrorModel>()
+                .Which.Status.Should()
+                .Be(500);
         }
 
         [Fact]
         public void ErrorShouldReturnErrorView()
         {
-            GetDefaultController().Error(default).Should().BeOfType<ViewResult>().Which.ViewName.Should()
+            GetDefaultController()
+                .Error(default)
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should()
                 .BeEquivalentTo("Error");
         }
 
         [Fact]
         public void ErrorShouldReturnWithErrorModel()
         {
-            GetDefaultController().Error(default).Should().BeOfType<ViewResult>().Which.Model.Should()
+            GetDefaultController()
+                .Error(default)
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
                 .BeOfType<ErrorModel>();
         }
 
@@ -78,8 +95,14 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var controller = GetDefaultController(blogService);
 
-            controller.Index().Model.Should().BeEquivalentTo(
-                new { blog.Id, blog.Title, blog.Content, Dates = new { blog.Dates.Created, blog.Dates.Modified } });
+            controller.Index()
+                      .Model.Should()
+                      .BeEquivalentTo(
+                          new
+                          {
+                              blog.Id, blog.Title, blog.Content,
+                              Dates = new { blog.Dates.Created, blog.Dates.Modified }
+                          });
         }
 
         [Fact]
@@ -96,8 +119,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var service = Substitute.For<IBlogService>();
             var controller = GetDefaultController(service);
 
-            controller.Index().Model.Should().BeEquivalentTo(
-                BlogViewModel.Welcome);
+            controller.Index()
+                      .Model.Should()
+                      .BeEquivalentTo(
+                          BlogViewModel.Welcome);
         }
     }
 }

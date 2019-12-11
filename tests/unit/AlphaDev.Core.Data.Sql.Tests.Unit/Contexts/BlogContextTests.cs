@@ -13,16 +13,10 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
     public class BlogContextTests
     {
         [NotNull]
-        private static MockBlogContext GetBlogContext()
-        {
-            return new MockBlogContext();
-        }
+        private static MockBlogContext GetBlogContext() => new MockBlogContext();
 
         [NotNull]
-        private static MockBlogContext GetBlogContext(Configurer configurer)
-        {
-            return new MockBlogContext(configurer);
-        }
+        private static MockBlogContext GetBlogContext(Configurer configurer) => new MockBlogContext(configurer);
 
         [Fact]
         public void OnConfiguringShouldConfigureDbContextOptionsBuilder()
@@ -44,23 +38,25 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
 
             var blogMetaData = modelBuilder.Entity<Blog>().Metadata;
             new
-            {
-                PrimaryKeyName = blogMetaData.FindPrimaryKey().Properties[0].Name,
-                CreatedDefaultValue = blogMetaData.FindProperty("Created").FindAnnotation("Relational:DefaultValueSql")
-                    .Value,
-                CreatedGenerated = blogMetaData.FindProperty("Created").ValueGenerated,
-                ModifiedNullable = blogMetaData.FindProperty("Modified").IsNullable,
-                ContentNullable = blogMetaData.FindProperty("Content").IsNullable,
-                TitleNullable = blogMetaData.FindProperty("Title").IsNullable
-            }.Should().BeEquivalentTo(new
-            {
-                PrimaryKeyName = "Id",
-                CreatedDefaultValue = "GETUTCDATE()",
-                CreatedGenerated = ValueGenerated.OnAdd,
-                ModifiedNullable = true,
-                ContentNullable = false,
-                TitleNullable = false
-            });
+                {
+                    PrimaryKeyName = blogMetaData.FindPrimaryKey().Properties[0].Name,
+                    CreatedDefaultValue = blogMetaData.FindProperty("Created")
+                                                      .FindAnnotation("Relational:DefaultValueSql")
+                                                      .Value,
+                    CreatedGenerated = blogMetaData.FindProperty("Created").ValueGenerated,
+                    ModifiedNullable = blogMetaData.FindProperty("Modified").IsNullable,
+                    ContentNullable = blogMetaData.FindProperty("Content").IsNullable,
+                    TitleNullable = blogMetaData.FindProperty("Title").IsNullable
+                }.Should()
+                 .BeEquivalentTo(new
+                 {
+                     PrimaryKeyName = "Id",
+                     CreatedDefaultValue = "GETUTCDATE()",
+                     CreatedGenerated = ValueGenerated.OnAdd,
+                     ModifiedNullable = true,
+                     ContentNullable = false,
+                     TitleNullable = false
+                 });
         }
     }
 }

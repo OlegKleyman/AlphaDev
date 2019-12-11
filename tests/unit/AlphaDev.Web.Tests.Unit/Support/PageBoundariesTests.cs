@@ -18,10 +18,8 @@ namespace AlphaDev.Web.Tests.Unit.Support
             boundaries.GetTotalPages(itemCount).Should().Be(expected);
         }
 
-        private PageBoundaries GetPageBoundaries(PositiveInteger count, PositiveInteger maxTotal)
-        {
-            return new PageBoundaries(count, maxTotal);
-        }
+        private PageBoundaries GetPageBoundaries(PositiveInteger count, PositiveInteger maxTotal) =>
+            new PageBoundaries(count, maxTotal);
 
         [Fact]
         public void ConstructorShouldInitializeProperties()
@@ -35,8 +33,9 @@ namespace AlphaDev.Web.Tests.Unit.Support
         [Fact]
         public void MinValueShouldBeCorrect()
         {
-            PageBoundaries.MinValue.Should().BeEquivalentTo(new
-                { Count = PositiveInteger.MinValue, MaxTotal = PositiveInteger.MinValue });
+            PageBoundaries.MinValue.Should()
+                          .BeEquivalentTo(new
+                              { Count = PositiveInteger.MinValue, MaxTotal = PositiveInteger.MinValue });
         }
     }
 }

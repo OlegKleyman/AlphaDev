@@ -8,11 +8,11 @@ namespace AlphaDev.Core.Data.Contexts
 {
     public abstract class BlogContext : AlphaContext
     {
+        private DbSet<Blog>? _blogs;
+
         protected BlogContext(Configurer configurer) : base(configurer)
         {
         }
-
-        private DbSet<Blog>? _blogs;
 
         [NotNull]
         public DbSet<Blog> Blogs

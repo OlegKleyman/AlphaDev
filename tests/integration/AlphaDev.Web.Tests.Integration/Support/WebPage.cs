@@ -21,9 +21,10 @@ namespace AlphaDev.Web.Tests.Integration.Support
         public string Title => Driver.Title;
 
         [NotNull]
-        public IEnumerable<NavigationElement> Navigation => Driver
-            .FindElements(By.CssSelector("div.navbar-collapse a, div.navbar-collapse button"))
-            .Select(NavigationElement.FromWebElement);
+        public IEnumerable<NavigationElement> Navigation =>
+            Driver
+                .FindElements(By.CssSelector("div.navbar-collapse a, div.navbar-collapse button"))
+                .Select(NavigationElement.FromWebElement);
 
         [NotNull]
         public virtual WebPage GoTo()

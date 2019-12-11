@@ -12,10 +12,8 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
 {
     public class AlphaContextFactoryTests
     {
-        private static AlphaContextFactory<T> GetAlphaContextFactory<T>(Configurer configurer) where T : DbContext
-        {
-            return Substitute.For<AlphaContextFactory<T>>(configurer);
-        }
+        private static AlphaContextFactory<T> GetAlphaContextFactory<T>(Configurer configurer) where T : DbContext =>
+            Substitute.For<AlphaContextFactory<T>>(configurer);
 
         public class TestContext2 : TestContext
         {
@@ -26,10 +24,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
 
         public class TestContext : AlphaContext
         {
-            public TestContext(Configurer configurer) : base(configurer)
-            {
-                Configurer = configurer;
-            }
+            public TestContext(Configurer configurer) : base(configurer) => Configurer = configurer;
 
             public Configurer Configurer { get; }
 
@@ -66,8 +61,9 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
             var factory = GetAlphaContextFactory<TestContext>(null);
             var optionsBuilder = new DbContextOptionsBuilder();
             factory.CreateDbContext().Configurer.Configure(optionsBuilder);
-            optionsBuilder.Options.FindExtension<SqlServerOptionsExtension>().ConnectionString.Should()
-                .BeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
+            optionsBuilder.Options.FindExtension<SqlServerOptionsExtension>()
+                          .ConnectionString.Should()
+                          .BeEquivalentTo(@"Data Source=(LocalDB)\v11.0;");
         }
 
         [Fact]
@@ -75,8 +71,10 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
         {
             var factory = GetAlphaContextFactory<AlphaContext>(null);
             Action createDbContext = () => factory.CreateDbContext();
-            createDbContext.Should().Throw<InvalidOperationException>().WithMessage(
-                $"Unable to instantiate {typeof(AlphaContext).FullName} because it is abstract.");
+            createDbContext.Should()
+                           .Throw<InvalidOperationException>()
+                           .WithMessage(
+                               $"Unable to instantiate {typeof(AlphaContext).FullName} because it is abstract.");
         }
 
         [Fact]
@@ -84,8 +82,10 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit
         {
             var factory = GetAlphaContextFactory<TestContext2>(null);
             Action createDbContext = () => factory.CreateDbContext();
-            createDbContext.Should().Throw<MissingMethodException>().WithMessage(
-                $"Unable to find a public constructor with a single {typeof(Configurer).FullName} argument.");
+            createDbContext.Should()
+                           .Throw<MissingMethodException>()
+                           .WithMessage(
+                               $"Unable to find a public constructor with a single {typeof(Configurer).FullName} argument.");
         }
     }
 }

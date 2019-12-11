@@ -17,37 +17,38 @@ namespace AlphaDev.Web.Tests.Unit.Support
         private static class PagerTestsFixture
         {
             [NotNull]
-            public static object[][] ConstructorShouldInitializeWithTheCorrectNumberOfNextPagesTestCases => new[]
-            {
-                new object[]
+            public static object[][] ConstructorShouldInitializeWithTheCorrectNumberOfNextPagesTestCases =>
+                new[]
                 {
-                    1,
-                    new PageBoundaries(10.ToPositiveInteger(), 10.ToPositiveInteger()),
-                    200,
-                    9
-                },
-                new object[]
-                {
-                    1,
-                    new PageBoundaries(10.ToPositiveInteger(), 10.ToPositiveInteger()),
-                    7,
-                    0
-                },
-                new object[]
-                {
-                    8,
-                    new PageBoundaries(10.ToPositiveInteger(), 10.ToPositiveInteger()),
-                    7,
-                    0
-                },
-                new object[]
-                {
-                    8,
-                    new PageBoundaries(3.ToPositiveInteger(), 5.ToPositiveInteger()),
-                    7,
-                    2
-                }
-            };
+                    new object[]
+                    {
+                        1,
+                        new PageBoundaries(10.ToPositiveInteger(), 10.ToPositiveInteger()),
+                        200,
+                        9
+                    },
+                    new object[]
+                    {
+                        1,
+                        new PageBoundaries(10.ToPositiveInteger(), 10.ToPositiveInteger()),
+                        7,
+                        0
+                    },
+                    new object[]
+                    {
+                        8,
+                        new PageBoundaries(10.ToPositiveInteger(), 10.ToPositiveInteger()),
+                        7,
+                        0
+                    },
+                    new object[]
+                    {
+                        8,
+                        new PageBoundaries(3.ToPositiveInteger(), 5.ToPositiveInteger()),
+                        7,
+                        2
+                    }
+                };
         }
 
         [Theory]
@@ -125,13 +126,10 @@ namespace AlphaDev.Web.Tests.Unit.Support
 
         [NotNull]
         private static Pager<T> GetPager<T>([NotNull] ICollection<T> testValues, int total = default,
-            int maxItemsPerPage = 1)
-        {
-            return new Pager<T>(testValues,
-                new PageDimensions(PositiveInteger.MinValue,
-                    new PageBoundaries(maxItemsPerPage.ToPositiveInteger(), 1.ToPositiveInteger())),
-                total.ToPositiveInteger());
-        }
+            int maxItemsPerPage = 1) => new Pager<T>(testValues,
+            new PageDimensions(PositiveInteger.MinValue,
+                new PageBoundaries(maxItemsPerPage.ToPositiveInteger(), 1.ToPositiveInteger())),
+            total.ToPositiveInteger());
 
         [Fact]
         public void ConstructorShouldInitializeNextPagesWithOneAfterTheCurrentPage()
