@@ -8,8 +8,9 @@ namespace AlphaDev.Test.Integration.Core.Extensions
     {
         public static void DetachAll([NotNull] this Microsoft.EntityFrameworkCore.DbContext context)
         {
-            context.ChangeTracker.Entries().ToList()
-                .ForEach(entry => context.Entry(entry.Entity).State = EntityState.Detached);
+            context.ChangeTracker.Entries()
+                   .ToList()
+                   .ForEach(entry => context.Entry(entry.Entity).State = EntityState.Detached);
         }
     }
 }

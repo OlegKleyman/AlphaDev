@@ -6,15 +6,10 @@ namespace AlphaDev.Web.Tests.Integration.Support
 {
     public struct PageAttributes
     {
-        public bool Equals(PageAttributes other)
-        {
-            return Active == other.Active && Url.Equals(other.Url);
-        }
+        public bool Equals(PageAttributes other) => Active == other.Active && Url.Equals(other.Url);
 
-        public override bool Equals([CanBeNull] object obj)
-        {
-            return !(obj is null) && obj is PageAttributes other && Equals(other);
-        }
+        public override bool Equals([CanBeNull] object obj) =>
+            !(obj is null) && obj is PageAttributes other && Equals(other);
 
         public override int GetHashCode()
         {
@@ -25,6 +20,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
         }
 
         public ActivityStatus Active { get; }
+
         public Option<Uri> Url { get; }
 
         public PageAttributes(Uri baseUrl, int number)
@@ -33,19 +29,10 @@ namespace AlphaDev.Web.Tests.Integration.Support
             Url = new Uri(baseUrl, $"page/{number}").Some();
         }
 
-        public PageAttributes ToActive(int pageNumber)
-        {
-            return new PageAttributes();
-        }
+        public PageAttributes ToActive(int pageNumber) => new PageAttributes();
 
-        public static bool operator ==(PageAttributes x, PageAttributes y)
-        {
-            return x.Equals(y);
-        }
+        public static bool operator ==(PageAttributes x, PageAttributes y) => x.Equals(y);
 
-        public static bool operator !=(PageAttributes x, PageAttributes y)
-        {
-            return !(x == y);
-        }
+        public static bool operator !=(PageAttributes x, PageAttributes y) => !(x == y);
     }
 }

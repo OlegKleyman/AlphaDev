@@ -16,10 +16,7 @@ namespace AlphaDev.Web.Tests.Integration
         private readonly ITakesScreenshot _screenshotTaker;
         private string _scenarioName;
 
-        public SeleniumNotifier(ITakesScreenshot screenshotTaker)
-        {
-            _screenshotTaker = screenshotTaker;
-        }
+        public SeleniumNotifier(ITakesScreenshot screenshotTaker) => _screenshotTaker = screenshotTaker;
 
         public void NotifyScenarioStart([NotNull] IScenarioInfo scenario)
         {
@@ -51,14 +48,16 @@ namespace AlphaDev.Web.Tests.Integration
                 const string screenshotsDirectoryName = "sout";
 
                 if (!Directory.Exists(screenshotsDirectoryName))
+                {
                     Directory.CreateDirectory(screenshotsDirectoryName);
+                }
 
                 var escapedStepFileName = NameCleanser.Replace(step.Name.ToString(), string.Empty);
 
                 _screenshotTaker.GetScreenshot()
-                    ?.SaveAsFile(
-                        $@"{screenshotsDirectoryName}/{_scenarioName}{step.Number}{escapedStepFileName}{suffix}.png",
-                        ScreenshotImageFormat.Png);
+                                ?.SaveAsFile(
+                                    $@"{screenshotsDirectoryName}/{_scenarioName}{step.Number}{escapedStepFileName}{suffix}.png",
+                                    ScreenshotImageFormat.Png);
             }
         }
     }

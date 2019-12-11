@@ -11,10 +11,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Support
     public class Sql2008ConfigurerTests
     {
         [NotNull]
-        private static Sql2008Configurer GetSqlConfigurer(string connectionString)
-        {
-            return new Sql2008Configurer(connectionString);
-        }
+        private static SqlConfigurer GetSqlConfigurer(string connectionString) => new SqlConfigurer(connectionString);
 
         [Fact]
         public void ConfigureShouldConfigureSqlOptions()
@@ -23,15 +20,17 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Support
             var configurer = GetSqlConfigurer(connectionString);
             var builder = new DbContextOptionsBuilder();
             configurer.Configure(builder);
-            builder.Options.GetExtension<SqlServerOptionsExtension>().Should().BeEquivalentTo(new
-                    { ConnectionString = connectionString, LogFragment = "RowNumberPaging " },
-                options => options.ExcludingMissingMembers());
+            builder.Options.GetExtension<SqlServerOptionsExtension>()
+                   .Should()
+                   .BeEquivalentTo(new
+                           { ConnectionString = connectionString, LogFragment = "RowNumberPaging " },
+                       options => options.ExcludingMissingMembers());
         }
 
         [Fact]
         public void ConstructorShouldInitializeSqlConfigurer()
         {
-            Action constructor = () => new Sql2008Configurer(default);
+            Action constructor = () => new SqlConfigurer(default);
             constructor.Should().NotThrow();
         }
     }

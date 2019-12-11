@@ -16,6 +16,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         }
 
         public SiteTester SiteTester { get; }
+
         public DatabasesFixture DatabasesFixture { get; }
 
         public Dictionary<string, object> Data { get; }

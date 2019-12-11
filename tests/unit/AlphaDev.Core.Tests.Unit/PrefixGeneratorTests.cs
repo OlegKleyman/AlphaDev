@@ -7,10 +7,7 @@ namespace AlphaDev.Core.Tests.Unit
     public class PrefixGeneratorTests
     {
         [NotNull]
-        private PrefixGenerator GetPrefixGenerator()
-        {
-            return new PrefixGenerator();
-        }
+        private PrefixGenerator GetPrefixGenerator() => new PrefixGenerator();
 
         [Fact]
         public void GenerateShouldGeneratePrefix()

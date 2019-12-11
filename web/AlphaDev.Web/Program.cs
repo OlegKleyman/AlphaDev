@@ -10,11 +10,12 @@ namespace AlphaDev.Web
     {
         public static void Main(string[] args)
         {
-            WebHost.CreateDefaultBuilder().UseStartup<Startup>()
-                .ConfigureAppConfiguration(builder => builder.AddJsonFile("connectionstrings.json", true, true))
-                .UseSetting(WebHostDefaults.ApplicationKey, typeof(Program).GetTypeInfo().Assembly.FullName)
-                .Build()
-                .Run();
+            WebHost.CreateDefaultBuilder()
+                   .UseStartup<Startup>()
+                   .ConfigureAppConfiguration(builder => builder.AddJsonFile("connectionstrings.json", true, true))
+                   .UseSetting(WebHostDefaults.ApplicationKey, typeof(Program).GetTypeInfo().Assembly.FullName)
+                   .Build()
+                   .Run();
         }
     }
 }

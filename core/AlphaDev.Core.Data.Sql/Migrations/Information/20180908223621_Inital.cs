@@ -10,8 +10,8 @@ namespace AlphaDev.Core.Data.Sql.Migrations.Information
                 "Abouts",
                 table => new
                 {
-                    Id = table.Column<bool>(nullable: false),
-                    Value = table.Column<string>(nullable: false)
+                    Id = table.Column<bool>(),
+                    Value = table.Column<string>()
                 },
                 constraints: table => { table.PrimaryKey("PK_Abouts", x => x.Id); });
 

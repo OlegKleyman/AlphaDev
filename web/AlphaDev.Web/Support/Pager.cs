@@ -19,8 +19,10 @@ namespace AlphaDev.Web.Support
             var pagesToDisplay = Math.Min(dimensions.Boundaries.MaxTotal.Value, totalPages);
 
             PreviousPages = Enumerable
-                .Range(dimensions.Start.Value - dimensions.Boundaries.MaxTotal.Value,
-                    dimensions.Boundaries.MaxTotal.Value).Where(x => x > 0).ToArray();
+                            .Range(dimensions.Start.Value - dimensions.Boundaries.MaxTotal.Value,
+                                dimensions.Boundaries.MaxTotal.Value)
+                            .Where(x => x > 0)
+                            .ToArray();
             CurrentPage = dimensions.Start;
             NextPages = Enumerable.Range(dimensions.Start.Value + 1, Math.Max(pagesToDisplay - 1, 0)).ToArray();
             AuxiliaryPage = totalPages > pagesToDisplay
@@ -33,17 +35,13 @@ namespace AlphaDev.Web.Support
         public int[] PreviousPages { get; set; }
 
         public int[] NextPages { get; }
+
         public Option<int> AuxiliaryPage { get; }
+
         public PositiveInteger CurrentPage { get; }
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _collection.GetEnumerator();
-        }
+        public IEnumerator<T> GetEnumerator() => _collection.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

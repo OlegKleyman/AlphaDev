@@ -21,6 +21,7 @@
         public override Dates Dates { get; }
 
         public override string Content { get; }
+
         public override int Id { get; }
     }
 }

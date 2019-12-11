@@ -29,10 +29,8 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [NotNull]
-        private PostsController GetPostsController([NotNull] IBlogService blogService)
-        {
-            return new PostsController(blogService);
-        }
+        private PostsController GetPostsController([NotNull] IBlogService blogService) =>
+            new PostsController(blogService);
 
         [Fact]
         public void CreateShouldReturnCreateView()
@@ -49,8 +47,11 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             controller.ModelState.AddModelError("test", "test");
 
-            controller.Create(default).Should().BeOfType<ViewResult>().Which.ViewName.Should()
-                .BeEquivalentTo("Create");
+            controller.Create(default)
+                      .Should()
+                      .BeOfType<ViewResult>()
+                      .Which.ViewName.Should()
+                      .BeEquivalentTo("Create");
         }
 
         [Fact]
@@ -74,8 +75,13 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var post = new CreatePostViewModel("title", "content");
 
-            controller.Create(post).Should().BeOfType<RedirectToActionResult>().Which.RouteValues.Should()
-                .ContainKey("id").WhichValue.Should().BeEquivalentTo(default(int));
+            controller.Create(post)
+                      .Should()
+                      .BeOfType<RedirectToActionResult>()
+                      .Which.RouteValues.Should()
+                      .ContainKey("id")
+                      .WhichValue.Should()
+                      .BeEquivalentTo(default(int));
         }
 
         [Fact]
@@ -87,8 +93,11 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var post = new CreatePostViewModel("title", "content");
 
-            controller.Create(post).Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should()
-                .BeEquivalentTo("Index");
+            controller.Create(post)
+                      .Should()
+                      .BeOfType<RedirectToActionResult>()
+                      .Which.ActionName.Should()
+                      .BeEquivalentTo("Index");
         }
 
         [Fact]
@@ -137,9 +146,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetPostsController(blogService);
 
             controller.Edit(default)
-                .Should()
-                .BeOfType<ViewResult>()
-                .Which.ViewName.Should().BeEquivalentTo("Edit");
+                      .Should()
+                      .BeOfType<ViewResult>()
+                      .Which.ViewName.Should()
+                      .BeEquivalentTo("Edit");
         }
 
         [Fact]
@@ -151,8 +161,11 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var post = new EditPostViewModel("title", "content", new DatesViewModel());
 
-            controller.Edit(default, post).Should().BeOfType<ViewResult>().Which.ViewName.Should()
-                .BeEquivalentTo("Edit");
+            controller.Edit(default, post)
+                      .Should()
+                      .BeOfType<ViewResult>()
+                      .Which.ViewName.Should()
+                      .BeEquivalentTo("Edit");
         }
 
         [Fact]
@@ -200,9 +213,11 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var controller = GetPostsController(Substitute.For<IBlogService>());
 
-            controller.Edit(default, default)
-                .Should().BeOfType<RedirectToActionResult>()
-                .Which.ActionName.Should().BeEquivalentTo("Index");
+            controller.Edit(default, new EditPostViewModel(string.Empty, string.Empty, default))
+                      .Should()
+                      .BeOfType<RedirectToActionResult>()
+                      .Which.ActionName.Should()
+                      .BeEquivalentTo("Index");
         }
 
         [Fact]
@@ -230,8 +245,16 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var controller = GetPostsController(blogService);
 
-            controller.Index(id).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(
-                new { blog.Id, blog.Title, blog.Content, Dates = new { blog.Dates.Created, blog.Dates.Modified } });
+            controller.Index(id)
+                      .Should()
+                      .BeOfType<ViewResult>()
+                      .Which.Model.Should()
+                      .BeEquivalentTo(
+                          new
+                          {
+                              blog.Id, blog.Title, blog.Content,
+                              Dates = new { blog.Dates.Created, blog.Dates.Modified }
+                          });
         }
 
         [Fact]
@@ -264,8 +287,12 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var controller = GetPostsController(blogService);
 
-            controller.Index(id).Should().BeOfType<ViewResult>().Which.ViewData["Title"].Should()
-                .BeEquivalentTo("title");
+            controller.Index(id)
+                      .Should()
+                      .BeOfType<ViewResult>()
+                      .Which.ViewData["Title"]
+                      .Should()
+                      .BeEquivalentTo("title");
         }
 
         [Fact]
@@ -276,7 +303,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             const int page = 9;
             GetPostsController(blogService).Page(page);
             var value = PositiveInteger.ToStartPosition(Int32.ToPositiveInteger(page), Int32.ToPositiveInteger(10))
-                .Value;
+                                       .Value;
             blogService.Received(1).GetOrderedByDates(Arg.Is(value), Arg.Is(10));
         }
 
@@ -285,11 +312,14 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var blogService = Substitute.For<IBlogService>();
             blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>())
-                .Returns(new[] { new Blog(string.Empty, string.Empty) });
+                       .Returns(new[] { new Blog(string.Empty, string.Empty) });
             blogService.GetCount(Arg.Any<int>()).Returns(1);
             var controller = GetPostsController(blogService);
-            controller.Page(Core.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>().Which.Model.Should()
-                .BeAssignableTo<IEnumerable<BlogViewModel>>();
+            controller.Page(Core.PositiveInteger.MinValue.Value)
+                      .Should()
+                      .BeOfType<ViewResult>()
+                      .Which.Model.Should()
+                      .BeAssignableTo<IEnumerable<BlogViewModel>>();
         }
 
         [Fact]
@@ -297,13 +327,17 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var blogService = Substitute.For<IBlogService>();
             blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>())
-                .Returns(new[] { new Blog(string.Empty, string.Empty) });
+                       .Returns(new[] { new Blog(string.Empty, string.Empty) });
             blogService.GetCount(Arg.Any<int>()).Returns(101);
             var controller = GetPostsController(blogService);
 
-            controller.Page(Core.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>().Which.Model.Should()
-                .BeAssignableTo<Pager<BlogViewModel>>().Which.AuxiliaryPage.Should()
-                .Be(11.Some());
+            controller.Page(Core.PositiveInteger.MinValue.Value)
+                      .Should()
+                      .BeOfType<ViewResult>()
+                      .Which.Model.Should()
+                      .BeAssignableTo<Pager<BlogViewModel>>()
+                      .Which.AuxiliaryPage.Should()
+                      .Be(11.Some());
         }
 
         [Fact]
@@ -320,9 +354,13 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             blogService.GetCount(Arg.Any<int>()).Returns(1);
             var controller = GetPostsController(blogService);
 
-            controller.Page(1).Should().BeOfType<ViewResult>().Which.Model.Should()
-                .BeAssignableTo<Pager<BlogViewModel>>().Which.AuxiliaryPage.Should()
-                .Be(Option.None<int>());
+            controller.Page(1)
+                      .Should()
+                      .BeOfType<ViewResult>()
+                      .Which.Model.Should()
+                      .BeAssignableTo<Pager<BlogViewModel>>()
+                      .Which.AuxiliaryPage.Should()
+                      .Be(Option.None<int>());
         }
 
         [Fact]
@@ -339,15 +377,19 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var controller = GetPostsController(blogService);
 
-            controller.Page(Core.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>().Which.Model.Should()
-                .BeEquivalentTo(
-                    new[]
-                    {
-                        new
-                        {
-                            blog.Id, blog.Title, blog.Content, Dates = new { blog.Dates.Created, blog.Dates.Modified }
-                        }
-                    });
+            controller.Page(Core.PositiveInteger.MinValue.Value)
+                      .Should()
+                      .BeOfType<ViewResult>()
+                      .Which.Model.Should()
+                      .BeEquivalentTo(
+                          new[]
+                          {
+                              new
+                              {
+                                  blog.Id, blog.Title, blog.Content,
+                                  Dates = new { blog.Dates.Created, blog.Dates.Modified }
+                              }
+                          });
         }
 
         [Fact]
@@ -362,7 +404,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var blogService = Substitute.For<IBlogService>();
             blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>())
-                .Returns(new[] { new Blog(string.Empty, string.Empty) });
+                       .Returns(new[] { new Blog(string.Empty, string.Empty) });
             blogService.GetCount(Arg.Any<int>()).Returns(101);
             var controller = GetPostsController(blogService);
 

@@ -2,7 +2,8 @@
 {
     public class Contact
     {
-        public string Value { get; set; }
+        public string? Value { get; set; }
+
         public bool Id { get; set; }
     }
 }

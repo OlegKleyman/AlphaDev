@@ -10,7 +10,9 @@
         }
 
         public string Prefix { get; }
+
         public string Name { get; }
+
         public string EditorElementName { get; }
     }
 }

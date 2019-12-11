@@ -17,12 +17,13 @@ namespace AlphaDev.Web.Tests.Unit.Models
 
             var model = new BlogEditorViewModel(dates, content, title);
 
-            model.Should().BeEquivalentTo(new
-            {
-                Title = title,
-                Content = content,
-                Dates = dates
-            });
+            model.Should()
+                 .BeEquivalentTo(new
+                 {
+                     Title = title,
+                     Content = content,
+                     Dates = dates
+                 });
         }
     }
 }

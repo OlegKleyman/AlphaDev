@@ -8,10 +8,7 @@ namespace AlphaDev.Core.Data.Contexts
     {
         private readonly Configurer _configurer;
 
-        protected AlphaContext(Configurer configurer)
-        {
-            _configurer = configurer;
-        }
+        protected AlphaContext(Configurer configurer) => _configurer = configurer;
 
         protected override void OnConfiguring([NotNull] DbContextOptionsBuilder optionsBuilder)
         {

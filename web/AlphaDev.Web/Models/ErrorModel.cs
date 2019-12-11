@@ -9,6 +9,7 @@
         }
 
         public int Status { get; }
+
         public string Message { get; }
     }
 }

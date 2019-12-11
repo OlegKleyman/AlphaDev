@@ -10,14 +10,15 @@ namespace AlphaDev.Core.Tests.Unit
         [Fact]
         public void EmptyShouldReturnEmptyBlog()
         {
-            BlogBase.Empty.Should().BeEquivalentTo(
-                new
-                {
-                    Id = default(int),
-                    Title = string.Empty,
-                    Content = string.Empty,
-                    Dates = new Dates(default, Option.None<DateTime>())
-                });
+            BlogBase.Empty.Should()
+                    .BeEquivalentTo(
+                        new
+                        {
+                            Id = default(int),
+                            Title = string.Empty,
+                            Content = string.Empty,
+                            Dates = new Dates(default, Option.None<DateTime>())
+                        });
         }
     }
 }

@@ -5,7 +5,7 @@ namespace AlphaDev.Web.Models
 {
     public class BlogEditorViewModel
     {
-        public BlogEditorViewModel(Option<DatesViewModel> dates, string content, string title)
+        public BlogEditorViewModel(Option<DatesViewModel> dates, string? content, string? title)
         {
             Dates = dates;
             Content = content;
@@ -13,11 +13,11 @@ namespace AlphaDev.Web.Models
         }
 
         [Required]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [Required]
         [DataType(DataType.MultilineText)]
-        public string Content { get; set; }
+        public string? Content { get; set; }
 
         public Option<DatesViewModel> Dates { get; set; }
     }

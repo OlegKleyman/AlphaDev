@@ -11,8 +11,11 @@
         }
 
         public string EditAction { get; set; }
+
         public string Controller { get; set; }
+
         public string Value { get; set; }
+
         public string Title { get; set; }
     }
 }

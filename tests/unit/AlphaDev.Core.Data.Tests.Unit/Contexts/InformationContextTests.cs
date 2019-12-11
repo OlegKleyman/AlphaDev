@@ -11,10 +11,7 @@ namespace AlphaDev.Core.Data.Tests.Unit.Contexts
 {
     public class InformationContextTests
     {
-        private InformationContext GetInformationContext()
-        {
-            return Substitute.For<InformationContext>((Configurer) default);
-        }
+        private InformationContext GetInformationContext() => Substitute.For<InformationContext>((Configurer) default);
 
         [Fact]
         public void AboutShouldReturnAboutWhenExists()

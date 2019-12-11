@@ -8,17 +8,14 @@ namespace AlphaDev.Core.Tests.Integration
     public class DateProviderTests
     {
         [NotNull]
-        private DateProvider GetDateProvider()
-        {
-            return new DateProvider();
-        }
+        private DateProvider GetDateProvider() => new DateProvider();
 
         [Fact]
         public void UtcNowShouldReturnCurrentTimeInUtc()
         {
             var provider = GetDateProvider();
 
-            provider.UtcNow.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(.5));
+            provider.UtcNow.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(1));
         }
     }
 }

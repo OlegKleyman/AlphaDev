@@ -23,10 +23,7 @@ namespace AlphaDev.Web.Tests.Unit.Support
         }
 
         [NotNull]
-        private ContactCreateModelBinderMock GetContactCreateModelBinder()
-        {
-            return new ContactCreateModelBinderMock();
-        }
+        private ContactCreateModelBinderMock GetContactCreateModelBinder() => new ContactCreateModelBinderMock();
 
         public class ContactCreateModelBinderMock : ContactCreateModelBinder
         {

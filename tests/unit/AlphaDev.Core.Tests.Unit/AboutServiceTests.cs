@@ -58,7 +58,7 @@ namespace AlphaDev.Core.Tests.Unit
             context.Abouts = new List<About>().ToMockDbSet();
             context.Abouts.Add(Arg.Any<About>()).Returns(info => new About().ToMockEntityEntry());
             var service = GetAboutService(context);
-            Action create = () => service.Create(default);
+            Action create = () => service.Create(string.Empty);
             create.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count of 0.");
         }
 
@@ -66,9 +66,9 @@ namespace AlphaDev.Core.Tests.Unit
         public void CreateShouldThrowInvalidOperationExceptionWhenUnableToRetrieveAddedEntityDetails()
         {
             var context = Substitute.For<InformationContext>(Substitute.For<Configurer>());
-            context.Abouts.Add(Arg.Any<About>()).Returns((EntityEntry<About>) null);
+            context.Abouts.Add(Arg.Any<About>()).Returns((EntityEntry<About>?) null);
             var service = GetAboutService(context);
-            Action create = () => service.Create(default);
+            Action create = () => service.Create(string.Empty);
             create.Should().Throw<InvalidOperationException>().WithMessage("Unable to retrieve added entry.");
         }
 
@@ -82,7 +82,7 @@ namespace AlphaDev.Core.Tests.Unit
             var service = GetAboutService(context);
             service.Edit("new value");
             // ReSharper disable once PossibleNullReferenceException -- value must be set for test to pass
-            context.About.Value.Should().BeEquivalentTo("new value");
+            context.About?.Value.Should().BeEquivalentTo("new value");
         }
 
         [Fact]
@@ -93,7 +93,7 @@ namespace AlphaDev.Core.Tests.Unit
             context.Abouts = abouts;
             context.SaveChanges().Returns(1);
             var service = GetAboutService(context);
-            service.Edit(default);
+            service.Edit(string.Empty);
             context.Received(1).SaveChanges();
         }
 
@@ -104,7 +104,7 @@ namespace AlphaDev.Core.Tests.Unit
             var abouts = new About[0].ToMockDbSet();
             context.Abouts = abouts;
             var service = GetAboutService(context);
-            Action edit = () => service.Edit(default);
+            Action edit = () => service.Edit(string.Empty);
             edit.Should().Throw<InvalidOperationException>().WithMessage("About not found.");
         }
 
@@ -116,7 +116,7 @@ namespace AlphaDev.Core.Tests.Unit
             context.Abouts = abouts;
             context.SaveChanges().Returns(0);
             var service = GetAboutService(context);
-            Action edit = () => service.Edit(default);
+            Action edit = () => service.Edit(string.Empty);
             edit.Should().Throw<InvalidOperationException>().WithMessage("Inconsistent change count of 0.");
         }
 

@@ -30,6 +30,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         public string Log => _server.Log;
 
         public SiteTester SiteTester { get; }
+
         public CommonSteps CommonSteps { get; }
 
         public void Dispose()

@@ -33,23 +33,29 @@ namespace AlphaDev.Web.Tests.Integration.Support
         {
             get
             {
-                return Driver.FindElements(By.CssSelector(".blog .bubble")).Select(element =>
-                    new BlogPost(element.FindElement(By.CssSelector(".title h3")).Text,
-                        element.FindElement(By.CssSelector(".bubble-content")).GetAttribute("innerHTML").Trim(),
-                        new BlogDate(element.FindElement(By.CssSelector(".created-date")).Text,
-                            (element.FindElements(By.CssSelector(".modified-date")).FirstOrDefault()?.Text)
-                            .SomeNotNull()),
-                        new NavigationLink(element.FindElement(By.CssSelector(".navigation-link a"))
-                            .GetAttribute("href"))));
+                return Driver.FindElements(By.CssSelector(".blog .bubble"))
+                             .Select(element =>
+                                 new BlogPost(element.FindElement(By.CssSelector(".title h3")).Text,
+                                     element.FindElement(By.CssSelector(".bubble-content"))
+                                            .GetAttribute("innerHTML")
+                                            .Trim(),
+                                     new BlogDate(element.FindElement(By.CssSelector(".created-date")).Text,
+                                         (element.FindElements(By.CssSelector(".modified-date"))
+                                                 .FirstOrDefault()
+                                                 ?.Text)
+                                         .SomeNotNull()),
+                                     new NavigationLink(element.FindElement(By.CssSelector(".navigation-link a"))
+                                                               .GetAttribute("href"))));
             }
         }
 
         [NotNull]
-        public BlogPost Post => new BlogPost(Driver.FindElement(By.CssSelector(".blog .title h3")).Text,
-            Driver.FindElement(By.CssSelector(".blog .bubble-content")).GetAttribute("innerHTML").Trim(),
-            new BlogDate(Driver.FindElement(By.CssSelector(".blog .created-date")).Text,
-                (Driver.FindElements(By.CssSelector(".blog .modified-date")).FirstOrDefault()?.Text)
-                .SomeNotNull()));
+        public BlogPost Post =>
+            new BlogPost(Driver.FindElement(By.CssSelector(".blog .title h3")).Text,
+                Driver.FindElement(By.CssSelector(".blog .bubble-content")).GetAttribute("innerHTML").Trim(),
+                new BlogDate(Driver.FindElement(By.CssSelector(".blog .created-date")).Text,
+                    (Driver.FindElements(By.CssSelector(".blog .modified-date")).FirstOrDefault()?.Text)
+                    .SomeNotNull()));
 
         public BlogEditorWebPage Create { get; }
 
@@ -61,38 +67,40 @@ namespace AlphaDev.Web.Tests.Integration.Support
             get
             {
                 return Driver.FindElements(By.CssSelector(".pages .page"))
-                    .Select(x =>
-                    {
-                        var isActive = !x.TagName.Equals("a", StringComparison.OrdinalIgnoreCase);
-                        int pageNumber;
-                        var displayFormat = x.Text.IsEllipses() ? DisplayFormat.Text : DisplayFormat.Number;
+                             .Select(x =>
+                             {
+                                 var isActive = !x.TagName.Equals("a", StringComparison.OrdinalIgnoreCase);
+                                 int pageNumber;
+                                 var displayFormat = x.Text.IsEllipses() ? DisplayFormat.Text : DisplayFormat.Number;
 
-                        if (isActive)
-                        {
-                            if (!int.TryParse(x.Text, NumberStyles.Integer, CultureInfo.InvariantCulture,
-                                out pageNumber))
-                            {
-                                throw new InvalidCastException($"Page text \"{x.Text}\" does not contain number.");
-                            }
-                        }
-                        else
-                        {
-                            var href = new Uri(x.GetAttribute("href"));
-                            var urlPageNumber = href.Segments.Last();
+                                 if (isActive)
+                                 {
+                                     if (!int.TryParse(x.Text, NumberStyles.Integer, CultureInfo.InvariantCulture,
+                                         out pageNumber))
+                                     {
+                                         throw new InvalidCastException(
+                                             $"Page text \"{x.Text}\" does not contain number.");
+                                     }
+                                 }
+                                 else
+                                 {
+                                     var href = new Uri(x.GetAttribute("href"));
+                                     var urlPageNumber = href.Segments.Last();
 
-                            if (!int.TryParse(urlPageNumber, NumberStyles.Integer, CultureInfo.InvariantCulture,
-                                out pageNumber))
-                            {
-                                throw new InvalidCastException(
-                                    $"Page text \"{urlPageNumber}\" does not contain number.");
-                            }
-                        }
+                                     if (!int.TryParse(urlPageNumber, NumberStyles.Integer,
+                                         CultureInfo.InvariantCulture,
+                                         out pageNumber))
+                                     {
+                                         throw new InvalidCastException(
+                                             $"Page text \"{urlPageNumber}\" does not contain number.");
+                                     }
+                                 }
 
-                        var pageAttributes =
-                            isActive ? new PageAttributes() : new PageAttributes(PostBaseUrl, pageNumber);
-                        return new PostsWebPageLink(Driver,
-                            new Page(new PageIdentity(x.Text, pageNumber), displayFormat, pageAttributes));
-                    });
+                                 var pageAttributes =
+                                     isActive ? new PageAttributes() : new PageAttributes(PostBaseUrl, pageNumber);
+                                 return new PostsWebPageLink(Driver,
+                                     new Page(new PageIdentity(x.Text, pageNumber), displayFormat, pageAttributes));
+                             });
             }
         }
 

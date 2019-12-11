@@ -2,10 +2,7 @@
 {
     public class NavigationLink
     {
-        public NavigationLink(string href)
-        {
-            Href = href;
-        }
+        public NavigationLink(string href) => Href = href;
 
         public string Href { get; }
     }

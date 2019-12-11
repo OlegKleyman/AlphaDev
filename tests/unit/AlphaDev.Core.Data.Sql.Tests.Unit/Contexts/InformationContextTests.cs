@@ -12,16 +12,11 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
     public class InformationContextTests
     {
         [NotNull]
-        private static MockInformationContext GetInformationContext()
-        {
-            return new MockInformationContext();
-        }
+        private static MockInformationContext GetInformationContext() => new MockInformationContext();
 
         [NotNull]
-        private static MockInformationContext GetInformationContext(Configurer configurer)
-        {
-            return new MockInformationContext(configurer);
-        }
+        private static MockInformationContext GetInformationContext(Configurer configurer) =>
+            new MockInformationContext(configurer);
 
         [Fact]
         public void OnConfiguringShouldConfigureDbContextOptionsBuilder()
@@ -43,16 +38,17 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
 
             var informationMetaData = modelBuilder.Entity<About>().Metadata;
             new
-            {
-                PrimaryKeyName = informationMetaData.FindPrimaryKey().Properties[0].Name,
-                PrimaryKeyType = informationMetaData.FindPrimaryKey().Properties[0].ClrType,
-                ValueNullable = informationMetaData.FindProperty("Value").IsNullable
-            }.Should().BeEquivalentTo(new
-            {
-                PrimaryKeyName = "Id",
-                PrimaryKeyType = typeof(bool),
-                ValueNullable = false
-            });
+                {
+                    PrimaryKeyName = informationMetaData.FindPrimaryKey().Properties[0].Name,
+                    PrimaryKeyType = informationMetaData.FindPrimaryKey().Properties[0].ClrType,
+                    ValueNullable = informationMetaData.FindProperty("Value").IsNullable
+                }.Should()
+                 .BeEquivalentTo(new
+                 {
+                     PrimaryKeyName = "Id",
+                     PrimaryKeyType = typeof(bool),
+                     ValueNullable = false
+                 });
         }
 
         [Fact]
@@ -65,16 +61,17 @@ namespace AlphaDev.Core.Data.Sql.Tests.Unit.Contexts
 
             var informationMetaData = modelBuilder.Entity<Contact>().Metadata;
             new
-            {
-                PrimaryKeyName = informationMetaData.FindPrimaryKey().Properties[0].Name,
-                PrimaryKeyType = informationMetaData.FindPrimaryKey().Properties[0].ClrType,
-                ValueNullable = informationMetaData.FindProperty("Value").IsNullable
-            }.Should().BeEquivalentTo(new
-            {
-                PrimaryKeyName = "Id",
-                PrimaryKeyType = typeof(bool),
-                ValueNullable = false
-            });
+                {
+                    PrimaryKeyName = informationMetaData.FindPrimaryKey().Properties[0].Name,
+                    PrimaryKeyType = informationMetaData.FindPrimaryKey().Properties[0].ClrType,
+                    ValueNullable = informationMetaData.FindProperty("Value").IsNullable
+                }.Should()
+                 .BeEquivalentTo(new
+                 {
+                     PrimaryKeyName = "Id",
+                     PrimaryKeyType = typeof(bool),
+                     ValueNullable = false
+                 });
         }
     }
 }

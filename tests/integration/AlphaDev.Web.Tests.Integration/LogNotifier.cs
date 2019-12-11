@@ -9,10 +9,7 @@ namespace AlphaDev.Web.Tests.Integration
     {
         private readonly WebFeatureFixture _tester;
 
-        public LogNotifier(WebFeatureFixture tester)
-        {
-            _tester = tester;
-        }
+        public LogNotifier(WebFeatureFixture tester) => _tester = tester;
 
         public void NotifyScenarioStart(IScenarioInfo scenario)
         {

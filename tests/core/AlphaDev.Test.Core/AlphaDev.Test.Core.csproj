@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -13,12 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\core\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Optional">
-      <HintPath>..\..\..\..\..\.nuget\packages\optional\4.0.0\lib\netstandard2.0\Optional.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

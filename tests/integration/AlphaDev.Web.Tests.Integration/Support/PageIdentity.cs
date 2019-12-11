@@ -4,15 +4,11 @@ namespace AlphaDev.Web.Tests.Integration.Support
 {
     public struct PageIdentity
     {
-        public bool Equals(PageIdentity other)
-        {
-            return string.Equals(DisplayValue, other.DisplayValue) && Number == other.Number;
-        }
+        public bool Equals(PageIdentity other) =>
+            string.Equals(DisplayValue, other.DisplayValue) && Number == other.Number;
 
-        public override bool Equals([CanBeNull] object obj)
-        {
-            return !(obj is null) && obj is PageIdentity other && Equals(other);
-        }
+        public override bool Equals([CanBeNull] object obj) =>
+            !(obj is null) && obj is PageIdentity other && Equals(other);
 
         public override int GetHashCode()
         {
@@ -23,6 +19,7 @@ namespace AlphaDev.Web.Tests.Integration.Support
         }
 
         public string DisplayValue { get; }
+
         public int Number { get; }
 
         public PageIdentity(string displayValue, int number)
@@ -31,14 +28,9 @@ namespace AlphaDev.Web.Tests.Integration.Support
             Number = number;
         }
 
-        public static bool operator ==(PageIdentity x, PageIdentity y)
-        {
-            return x.DisplayValue == y.DisplayValue && x.Number == y.Number;
-        }
+        public static bool operator ==(PageIdentity x, PageIdentity y) =>
+            x.DisplayValue == y.DisplayValue && x.Number == y.Number;
 
-        public static bool operator !=(PageIdentity x, PageIdentity y)
-        {
-            return !(x == y);
-        }
+        public static bool operator !=(PageIdentity x, PageIdentity y) => !(x == y);
     }
 }

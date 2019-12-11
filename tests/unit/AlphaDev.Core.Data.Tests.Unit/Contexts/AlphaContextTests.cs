@@ -10,10 +10,7 @@ namespace AlphaDev.Core.Data.Tests.Unit.Contexts
 {
     public class AlphaContextTests
     {
-        private TestAlphaContext GetAlphaContext(Configurer configurer)
-        {
-            return new TestAlphaContext(configurer);
-        }
+        private TestAlphaContext GetAlphaContext(Configurer configurer) => new TestAlphaContext(configurer);
 
         public class TestAlphaContext : AlphaContext
         {

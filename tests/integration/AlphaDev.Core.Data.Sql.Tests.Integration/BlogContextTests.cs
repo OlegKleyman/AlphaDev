@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Core.Data.Sql.Contexts;
 using AlphaDev.Core.Data.Sql.Support;
@@ -21,7 +19,8 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
         public BlogContextTests()
         {
             var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("connectionstrings.json", false, true).Build();
+                                                          .AddJsonFile("connectionstrings.json", false, true)
+                                                          .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder();
             var connectionBuilder =
@@ -31,13 +30,11 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
                 };
 
             _connectionString = connectionBuilder.ToString();
-            _configurer = new Sql2008Configurer(connectionBuilder.ToString());
+            _configurer = new SqlConfigurer(connectionBuilder.ToString());
             _configurer.Configure(optionsBuilder);
 
-            using (var context = new DbContext(optionsBuilder.Options))
-            {
-                context.Database.EnsureCreated();
-            }
+            using var context = new DbContext(optionsBuilder.Options);
+            context.Database.EnsureCreated();
         }
 
         public void Dispose()
@@ -45,27 +42,25 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             var optionsBuilder = new DbContextOptionsBuilder();
             var options = optionsBuilder.UseSqlServer(_connectionString).Options;
 
-            using (var context = new DbContext(options))
-            {
-                context.Database.EnsureDeleted();
-            }
+            using var context = new DbContext(options);
+            context.Database.EnsureDeleted();
         }
 
         private readonly string _connectionString;
-        private readonly Sql2008Configurer _configurer;
+        private readonly SqlConfigurer _configurer;
 
         private void SeedBlogs()
         {
             var optionsBuilder = new DbContextOptionsBuilder();
             var options = optionsBuilder.UseSqlServer(_connectionString).Options;
 
-            using (var context = new DbContext(options))
-            {
-                Enumerable.Range(1, 10).ToList().ForEach(
-                    // ReSharper disable once AccessToDisposedClosure - Executes eagerly
-                    i => context.Database.ExecuteSqlRaw(
-                        $"INSERT INTO Blogs(Content, Title) VALUES('test {i}', 'Title {i}')"));
-            }
+            using var context = new DbContext(options);
+            Enumerable.Range(1, 10)
+                      .ToList()
+                      .ForEach(
+                          // ReSharper disable once AccessToDisposedClosure - Executes eagerly
+                          i => context.Database.ExecuteSqlRaw(
+                              $"INSERT INTO Blogs(Content, Title) VALUES('test {i}', 'Title {i}')"));
         }
 
         [NotNull]
@@ -82,109 +77,107 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
         [ItemNotNull]
         private IEnumerable<IDictionary<string, object>> GetTable(string tableName)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using var connection = new SqlConnection(_connectionString);
+            using var command = new SqlCommand($"SELECT * FROM {tableName}", connection);
+            connection.Open();
+
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
             {
-                using (var command = new SqlCommand($"SELECT * FROM {tableName}", connection))
-                {
-                    connection.Open();
-
-                    var reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        yield return Enumerable.Range(0, reader.FieldCount)
-                            .ToDictionary(reader.GetName, i =>
-                            {
-                                var value = reader.GetValue(i);
-                                return value == DBNull.Value ? null : value;
-                            });
-                    }
-                }
+                yield return Enumerable.Range(0, reader.FieldCount)
+                                       .ToDictionary(reader.GetName, i =>
+                                       {
+                                           var value = reader.GetValue(i);
+                                           return value == DBNull.Value ? null : value;
+                                       });
             }
         }
 
         [Fact]
         public void BlogsShouldAddBlog()
         {
-            using (var context = GetBlogContext())
+            using var context = GetBlogContext();
+            var blog = new Blog
             {
-                var blog = new Blog
-                {
-                    Content = string.Empty,
-                    Title = string.Empty
-                };
+                Content = string.Empty,
+                Title = string.Empty
+            };
 
-                context.Blogs.Add(blog);
+            context.Blogs.Add(blog);
 
-                context.SaveChanges();
+            context.SaveChanges();
 
-                GetTable("Blogs").Should().HaveCount(11);
-            }
+            GetTable("Blogs").Should().HaveCount(11);
         }
 
         [Fact]
         public void BlogsShouldAddBlogWithCurrentDate()
         {
-            using (var context = GetBlogContext())
+            using var context = GetBlogContext();
+            var blog = new Blog
             {
-                var blog = new Blog
-                {
-                    Content = string.Empty,
-                    Title = string.Empty
-                };
+                Content = string.Empty,
+                Title = string.Empty
+            };
 
-                context.Blogs.Add(blog);
+            context.Blogs.Add(blog);
 
-                context.SaveChanges();
+            context.SaveChanges();
 
-                GetTable("Blogs").Last()["Created"].Should().BeOfType<DateTime>().Which.Should()
-                    .BeCloseTo(DateTime.UtcNow, 1000).And.Be(blog.Created);
-            }
+            GetTable("Blogs").Last()["Created"]
+                             .Should()
+                             .BeOfType<DateTime>()
+                             .Which.Should()
+                             .BeCloseTo(DateTime.UtcNow, 1000)
+                             .And.Be(blog.Created);
         }
 
         [Fact]
         public void BlogsShouldDeleteBlogs()
         {
-            using (var context = GetBlogContext())
-            {
-                context.Blogs.RemoveRange(context.Blogs);
-                context.SaveChanges();
+            using var context = GetBlogContext();
+            context.Blogs.RemoveRange(context.Blogs);
+            context.SaveChanges();
 
-                GetTable("Blogs").Should().BeEmpty();
-            }
+            GetTable("Blogs").Should().BeEmpty();
         }
 
         [Fact]
         public void BlogsShouldReturnBlogs()
         {
-            using (var context = GetBlogContext())
-            {
-                var blogs = context.Blogs;
+            using var context = GetBlogContext();
+            var blogs = context.Blogs;
 
-                var blogsDictionary = blogs.ToArray().Select(blog =>
-                    blog.GetType().GetProperties().ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(blog, null)));
+            var blogsDictionary = blogs.ToArray()
+                                       .Select(blog =>
+                                           blog.GetType()
+                                               .GetProperties()
+                                               .ToDictionary(x => x.Name, x => x.GetGetMethod().Invoke(blog, null)));
 
-                GetTable("Blogs").Should().BeEquivalentTo(blogsDictionary);
-            }
+            GetTable("Blogs").Should().BeEquivalentTo(blogsDictionary);
         }
 
         [Fact]
         public void BlogsShouldUpdateBlogs()
         {
-            using (var context = GetBlogContext())
-            {
-                var targetBlog = context.Blogs.First();
+            using var context = GetBlogContext();
+            var targetBlog = context.Blogs.First();
 
-                targetBlog.Title = "Updated Title";
-                targetBlog.Content = "Updated Content";
+            targetBlog.Title = "Updated Title";
+            targetBlog.Content = "Updated Content";
 
-                context.SaveChanges();
+            context.SaveChanges();
 
-                GetTable("Blogs").First().Should().BeEquivalentTo(
-                    targetBlog.GetType().GetProperties().ToDictionary(
-                        x => x.Name,
-                        x => x.GetGetMethod().Invoke(targetBlog, null)));
-            }
+            GetTable("Blogs")
+                .First()
+                .Should()
+                .BeEquivalentTo(
+                    targetBlog.GetType()
+                              .GetProperties()
+                              .ToDictionary(
+                                  x => x.Name,
+                                  x => x.GetGetMethod().Invoke(targetBlog, null)));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using AlphaDev.Optional.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -13,22 +14,24 @@ namespace AlphaDev.Core.Extensions
             [NotNull] Func<TContext, DbSet<TEntity>> set, [NotNull] TEntity toAdd)
             where TContext : DbContext where TEntity : class
         {
-            return set(context).Add(toAdd).SomeNotNull(() =>
-                    new InvalidOperationException("Unable to retrieve added entry."))
-                .Match(entry =>
-                {
-                    context.SaveSingleOrThrow();
-                    return entry;
-                }, exception => throw exception);
+            return set(context)
+                   .Add(toAdd)
+                   .SomeNotNull(() =>
+                       new InvalidOperationException("Unable to retrieve added entry."))
+                   .Match(entry =>
+                   {
+                       context.SaveSingleOrThrow();
+                       return entry;
+                   }, exception => throw exception);
         }
 
         public static void UpdateAndSaveSingleOrThrow<TContext, TEntity>([NotNull] this TContext context,
-            [NotNull] Func<TContext, TEntity> getEntity, [NotNull] Action<TEntity> editEntity)
+            [NotNull] Func<TContext, TEntity?> getEntity, [NotNull] Action<TEntity> editEntity)
             where TContext : DbContext where TEntity : class
         {
-            getEntity(context).SomeNotNull(GetEntityNotFoundException<TEntity>())
-                .MapToAction(editEntity)
-                .Match(entity => SaveSingleOrThrow(context), exception => throw exception);
+            var option = getEntity(context).SomeWhenNotNull(GetEntityNotFoundException<TEntity>());
+            option.MatchSome(editEntity);
+            option.Match(entity => SaveSingleOrThrow(context), exception => throw exception);
         }
 
         [NotNull]
@@ -44,13 +47,13 @@ namespace AlphaDev.Core.Extensions
                 throw new ArgumentException($"{nameof(context.Database)} is null.", nameof(context));
             }
 
-            using (var transaction = context.Database.BeginTransaction())
-            {
-                context.SaveChanges().Some().Map(changes => changes.SomeWhen(i => i == 1,
-                        () => new InvalidOperationException($"Inconsistent change count of {changes}.")))
-                    .MatchSome(option => option.MatchNone(exception => throw exception));
-                transaction.Commit();
-            }
+            using var transaction = context.Database.BeginTransaction();
+            context.SaveChanges()
+                   .Some()
+                   .Map(changes => changes.SomeWhen(i => i == 1,
+                       () => new InvalidOperationException($"Inconsistent change count of {changes}.")))
+                   .MatchSome(option => option.MatchNone(exception => throw exception));
+            transaction.Commit();
         }
 
         [NotNull]
@@ -58,11 +61,13 @@ namespace AlphaDev.Core.Extensions
             [NotNull] TEntity entity)
             where TEntity : class
         {
-            return context.Remove(entity).SomeNotNull(GetEntityNotFoundException<TEntity>()).Match(entry =>
-            {
-                context.SaveSingleOrThrow();
-                return entry;
-            }, exception => throw exception);
+            return context.Remove(entity)
+                          .SomeNotNull(GetEntityNotFoundException<TEntity>())
+                          .Match(entry =>
+                          {
+                              context.SaveSingleOrThrow();
+                              return entry;
+                          }, exception => throw exception);
         }
     }
 }

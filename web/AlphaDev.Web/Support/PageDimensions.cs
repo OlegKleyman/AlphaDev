@@ -5,6 +5,7 @@ namespace AlphaDev.Web.Support
     public struct PageDimensions
     {
         public PositiveInteger Start { get; }
+
         public PageBoundaries Boundaries { get; }
 
         public static readonly PageDimensions MinValue =

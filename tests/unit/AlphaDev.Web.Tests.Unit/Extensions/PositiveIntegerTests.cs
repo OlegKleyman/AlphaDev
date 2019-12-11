@@ -14,7 +14,9 @@ namespace AlphaDev.Web.Tests.Unit.Extensions
         public void ToStartPositionShouldReturnTheStartPositionBasedOnTheItemCount(int page, int itemCount,
             int expected)
         {
-            page.ToPositiveInteger().ToStartPosition(itemCount.ToPositiveInteger()).Should()
+            page.ToPositiveInteger()
+                .ToStartPosition(itemCount.ToPositiveInteger())
+                .Should()
                 .Be(expected.ToPositiveInteger());
         }
     }

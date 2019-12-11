@@ -14,10 +14,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
     public class ScriptsTagHelperTests
     {
         [NotNull]
-        private ScriptsTagHelper GetScriptsTagHelper()
-        {
-            return new ScriptsTagHelper();
-        }
+        private ScriptsTagHelper GetScriptsTagHelper() => new ScriptsTagHelper();
 
         [Fact]
         public void ContextShouldGetAndSetViewContext()

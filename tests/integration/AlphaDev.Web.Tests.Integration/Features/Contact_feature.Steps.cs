@@ -27,21 +27,26 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private CompositeStep When_I_go_to_a_configured_contact_page()
         {
             return CompositeStep.DefineNew()
-                .AddSteps(_ => CommonSteps.And_there_is_contact_information(),
-                    _ => CommonSteps.When_I_go_to_the_contact_page()).Build();
+                                .AddSteps(_ => CommonSteps.And_there_is_contact_information(),
+                                    _ => CommonSteps.When_I_go_to_the_contact_page())
+                                .Build();
         }
 
         private void Then_i_should_see_contact_details()
         {
-            SiteTester.Contact.Details.Should().BeEquivalentTo(Markdown.ToHtml(DatabasesFixture
-                .InformationContextDatabaseFixture
-                .InformationContext.Contacts.Single().Value).NormalizeToWindowsLineEndings().Trim());
+            SiteTester.Contact.Details.Should()
+                      .BeEquivalentTo(Markdown.ToHtml(DatabasesFixture
+                                                      .InformationContextDatabaseFixture
+                                                      .InformationContext.Contacts.Single()
+                                                      .Value)
+                                              .NormalizeToWindowsLineEndings()
+                                              .Trim());
         }
 
         private void Then_it_should_display_no_details()
         {
             SiteTester.Contact.Details.Should()
-                .BeEquivalentTo("No details".ToHtmlFromMarkdown().NormalizeToWindowsLineEndings().Trim());
+                      .BeEquivalentTo("No details".ToHtmlFromMarkdown().NormalizeToWindowsLineEndings().Trim());
         }
 
         private void When_I_click_the_edit_icon()

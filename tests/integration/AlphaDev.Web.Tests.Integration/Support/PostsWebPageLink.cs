@@ -20,8 +20,8 @@ namespace AlphaDev.Web.Tests.Integration.Support
         public Page GoTo()
         {
             _driver.Navigate()
-                .GoToUrl(Page.Attributes.Url.ValueOr(() =>
-                    throw new InvalidOperationException("This page is not a link.")));
+                   .GoToUrl(Page.Attributes.Url.ValueOr(() =>
+                       throw new InvalidOperationException("This page is not a link.")));
             return new Page(Page.Identity, Page.DisplayFormat, Page.Attributes.ToActive(Page.Identity.Number));
         }
     }

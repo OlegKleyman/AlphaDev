@@ -21,11 +21,12 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_I_am_redirected_to_a_login_page()
         {
             SiteTester.Driver.Url.Should()
-                .BeEquivalentTo(
-                    new Uri(
-                            new Uri(SiteTester.Login.BaseUrl.AbsoluteUri.Trim(
-                                '/' /* trim last slash to connect URL get variable */)), "?ReturnUrl=%2Fadmin%2F")
-                        .AbsoluteUri);
+                      .BeEquivalentTo(
+                          new Uri(
+                                  new Uri(SiteTester.Login.BaseUrl.AbsoluteUri.Trim(
+                                      '/' /* trim last slash to connect URL get variable */)),
+                                  "?ReturnUrl=%2Fadmin%2F")
+                              .AbsoluteUri);
         }
     }
 }

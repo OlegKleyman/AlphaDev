@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AlphaDev.Web.Support;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,8 @@ namespace AlphaDev.Web.TagHelpers
         private readonly IHtmlHelper _htmlHelper;
         private readonly IUrlHelperFactory _urlHelperFactory;
 
+        private ViewContext? _context;
+
         // ReSharper disable once NotNullMemberIsNotInitialized - initialized implicitly
         protected EditorTagHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory,
             EditorView editorView)
@@ -26,9 +29,13 @@ namespace AlphaDev.Web.TagHelpers
 
         [NotNull]
         [ViewContext]
-        public ViewContext Context { get; set; }
+        public ViewContext Context
+        {
+            get => _context ?? throw new InvalidOperationException($"{nameof(Context)} is not initialized.");
+            set => _context = value;
+        }
 
-        public object Model { get; set; }
+        public object? Model { get; set; }
 
         public sealed override void Process(TagHelperContext context, [NotNull] TagHelperOutput output)
         {

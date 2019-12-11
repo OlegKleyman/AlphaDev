@@ -54,8 +54,9 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
             var mockSet = mocks.ToMockDbSet();
             mockSet.Add(Arg.Any<object>()).ReturnsNullForAnyArgs();
             Action addAndSaveSingleOrThrow = () => context.AddAndSaveSingleOrThrow(x => mockSet, new object());
-            addAndSaveSingleOrThrow.Should().Throw<InvalidOperationException>()
-                .WithMessage("Unable to retrieve added entry.");
+            addAndSaveSingleOrThrow.Should()
+                                   .Throw<InvalidOperationException>()
+                                   .WithMessage("Unable to retrieve added entry.");
         }
 
         [Fact]
@@ -76,7 +77,7 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
             context.Database.Returns(Substitute.For<DatabaseFacade>(context));
             context.SaveChanges().Returns(1);
             var target = new object();
-            context.Remove<object>(Arg.Any<object>()).Returns((EntityEntry<object>) null);
+            context.Remove<object>(Arg.Any<object>()).Returns((EntityEntry<object>?) null);
             Action deleteSingleOrThrow = () => context.DeleteSingleOrThrow(target);
             deleteSingleOrThrow.Should().Throw<InvalidOperationException>().WithMessage("Object not found.");
         }
@@ -133,8 +134,11 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
         {
             var context = Substitute.For<DbContext>();
             Action saveSingleOrThrow = () => context.SaveSingleOrThrow();
-            saveSingleOrThrow.Should().Throw<ArgumentException>()
-                .WithMessage("Database is null. (Parameter 'context')").Which.ParamName.Should().Be("context");
+            saveSingleOrThrow.Should()
+                             .Throw<ArgumentException>()
+                             .WithMessage("Database is null. (Parameter 'context')")
+                             .Which.ParamName.Should()
+                             .Be("context");
         }
 
         [Fact]
@@ -144,8 +148,9 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
             context.Database.Returns(Substitute.For<DatabaseFacade>(context));
             context.SaveChanges().Returns(0);
             Action saveSingleOrThrow = () => context.SaveSingleOrThrow();
-            saveSingleOrThrow.Should().Throw<InvalidOperationException>()
-                .WithMessage("Inconsistent change count of 0.");
+            saveSingleOrThrow.Should()
+                             .Throw<InvalidOperationException>()
+                             .WithMessage("Inconsistent change count of 0.");
         }
 
         [Fact]
@@ -155,9 +160,10 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
             context.Database.Returns(Substitute.For<DatabaseFacade>(context));
             context.SaveChanges().Returns(1);
             Action updateAndSaveSingleOrThrow =
-                () => context.UpdateAndSaveSingleOrThrow(x => (TestEntity) null, x => { });
-            updateAndSaveSingleOrThrow.Should().Throw<InvalidOperationException>()
-                .WithMessage("TestEntity not found.");
+                () => context.UpdateAndSaveSingleOrThrow(x => (TestEntity?) null, x => { });
+            updateAndSaveSingleOrThrow.Should()
+                                      .Throw<InvalidOperationException>()
+                                      .WithMessage("TestEntity not found.");
         }
 
         [Fact]

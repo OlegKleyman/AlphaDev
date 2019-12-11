@@ -30,20 +30,21 @@ namespace AlphaDev.Web.Tests.Integration.Features
         }
 
         [UsedImplicitly]
-        private CompositeStep When_I_save_a_blog()
-        {
-            return CompositeStep.DefineNew()
-                .AddSteps(When_I_fill_in_required_fields, When_I_click_save).Build();
-        }
+        private CompositeStep When_I_save_a_blog() => CompositeStep.DefineNew()
+                                                                   .AddSteps(When_I_fill_in_required_fields,
+                                                                       When_I_click_save)
+                                                                   .Build();
 
         private void Then_it_should_be_saved_in_the_datastore()
         {
-            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.AsEnumerable().LastOrDefault().Should()
-                .BeEquivalentTo(new
-                {
-                    Title = _addedBlogTitle,
-                    Content = _addedBlogContent
-                }, options => options.ExcludingMissingMembers());
+            DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.AsEnumerable()
+                            .LastOrDefault()
+                            .Should()
+                            .BeEquivalentTo(new
+                            {
+                                Title = _addedBlogTitle,
+                                Content = _addedBlogContent
+                            }, options => options.ExcludingMissingMembers());
         }
 
         private void And_am_on_the_create_blog_page()
@@ -64,7 +65,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_be_rendered_to_html()
         {
             SiteTester.Posts.Create.Preview.Should()
-                .BeEquivalentTo(Markdown.ToHtml(_addedBlogContent).NormalizeToWindowsLineEndings().Trim());
+                      .BeEquivalentTo(Markdown.ToHtml(_addedBlogContent).NormalizeToWindowsLineEndings().Trim());
         }
 
         private void When_I_click_save()
@@ -75,7 +76,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_errors_under_the_required_fields_not_filled_in()
         {
             SiteTester.Posts.Create.PageErrors.Should()
-                .BeEquivalentTo("The Title field is required.", "The Content field is required.");
+                      .BeEquivalentTo("The Title field is required.", "The Content field is required.");
         }
 
         private void Then_I_should_be_redirected_to_the_post()

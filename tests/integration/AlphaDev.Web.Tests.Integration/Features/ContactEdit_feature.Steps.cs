@@ -36,7 +36,9 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private CompositeStep And_I_edit_contact_info()
         {
             return CompositeStep.DefineNew()
-                .AddSteps(_ => And_am_editing_the_contact_info(), _ => And_I_entered_markdown_content()).Build();
+                                .AddSteps(_ => And_am_editing_the_contact_info(),
+                                    _ => And_I_entered_markdown_content())
+                                .Build();
         }
 
         private void And_I_entered_markdown_content()
@@ -53,7 +55,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_be_rendered_to_html()
         {
             SiteTester.Contact.Edit.Preview.Should()
-                .BeEquivalentTo(Markdown.ToHtml(_value).NormalizeToWindowsLineEndings().Trim());
+                      .BeEquivalentTo(Markdown.ToHtml(_value).NormalizeToWindowsLineEndings().Trim());
         }
 
         private void And_I_empty_all_required_fields()
@@ -78,9 +80,11 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_be_saved_in_the_datastore()
         {
-            DatabasesFixture.InformationContextDatabaseFixture.InformationContext.Contacts.AsNoTracking().Single().Value
-                .Should()
-                .BeEquivalentTo(_value);
+            DatabasesFixture.InformationContextDatabaseFixture.InformationContext.Contacts.AsNoTracking()
+                            .Single()
+                            .Value
+                            .Should()
+                            .BeEquivalentTo(_value);
         }
     }
 }

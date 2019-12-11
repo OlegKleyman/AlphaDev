@@ -33,11 +33,17 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         public IWebDriver Driver { get; }
 
         public HomePageWebPage HomePage { get; }
+
         public PostsWebPage Posts { get; }
+
         public ErrorWebPage Error { get; }
+
         public AdminWebPage Admin { get; }
+
         public LoginWebPage Login { get; }
+
         public AboutWebPage About { get; }
+
         public ContactWebPage Contact { get; }
 
         public void Dispose()

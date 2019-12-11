@@ -48,24 +48,28 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_all_posts()
         {
             SiteTester.Posts.Posts.Should()
-                .HaveSameCount(DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs);
+                      .HaveSameCount(DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs);
         }
 
         private void Then_it_should_display_all_posts_ordered_by_creation_date_descending()
         {
-            SiteTester.Posts.Posts.Select(post => DateTime.Parse(post.Dates.Created)).Should()
-                .BeInDescendingOrder(createdDate => createdDate);
+            SiteTester.Posts.Posts.Select(post => DateTime.Parse(post.Dates.Created))
+                      .Should()
+                      .BeInDescendingOrder(createdDate => createdDate);
         }
 
         private void Then_it_should_display_all_posts_with_markdown_parsed_to_html()
         {
-            SiteTester.Posts.Posts.Should().BeEquivalentTo(
-                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.OrderByDescending(blog => blog.Created)
-                    .ToList().Select(blog => new
-                    {
-                        Content = Markdown.ToHtml(blog.Content).Trim()
-                    }),
-                options => options.ExcludingMissingMembers());
+            SiteTester.Posts.Posts.Should()
+                      .BeEquivalentTo(
+                          DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs
+                                          .OrderByDescending(blog => blog.Created)
+                                          .ToList()
+                                          .Select(blog => new
+                                          {
+                                              Content = Markdown.ToHtml(blog.Content).Trim()
+                                          }),
+                          options => options.ExcludingMissingMembers());
         }
 
         private void And_there_are_multiple_posts_with_markdown()
@@ -73,7 +77,9 @@ namespace AlphaDev.Web.Tests.Integration.Features
             var blogs = BlogContextDatabaseFixture.DefaultBlogs;
 
             for (var i = 0; i < blogs.Length; i++)
+            {
                 blogs[i].Content = $"Content integration `<test{i}>testing</test{i}>`.";
+            }
 
             DatabasesFixture.BlogContextDatabaseFixture.BlogContext.AddRangeAndSave(
                 blogs);
@@ -81,26 +87,32 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_all_posts_with_modification_date_if_it_exists()
         {
-            SiteTester.Posts.Posts.Should().BeEquivalentTo(
-                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
-                {
-                    Dates = new
-                    {
-                        Modified = blog.Modified.ToOption().FlatMap(time =>
-                            Option.Some(time.ToString(FullDateFormatString, CultureInfo.InvariantCulture)))
-                    }
-                }),
-                options => options.ExcludingMissingMembers());
+            SiteTester.Posts.Posts.Should()
+                      .BeEquivalentTo(
+                          DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.ToList()
+                                          .Select(blog => new
+                                          {
+                                              Dates = new
+                                              {
+                                                  Modified = blog.Modified.ToOption()
+                                                                 .FlatMap(time =>
+                                                                     Option.Some(time.ToString(FullDateFormatString,
+                                                                         CultureInfo.InvariantCulture)))
+                                              }
+                                          }),
+                          options => options.ExcludingMissingMembers());
         }
 
         private void Then_it_should_display_all_posts_with_a_title()
         {
-            SiteTester.Posts.Posts.Should().BeEquivalentTo(
-                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
-                {
-                    blog.Title
-                }),
-                options => options.ExcludingMissingMembers());
+            SiteTester.Posts.Posts.Should()
+                      .BeEquivalentTo(
+                          DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.ToList()
+                                          .Select(blog => new
+                                          {
+                                              blog.Title
+                                          }),
+                          options => options.ExcludingMissingMembers());
         }
 
         private void And_all_posts_were(ModifiedState modifiedState)
@@ -108,9 +120,11 @@ namespace AlphaDev.Web.Tests.Integration.Features
             var blogs = BlogContextDatabaseFixture.DefaultBlogs;
 
             for (var i = 0; i < blogs.Length; i++)
+            {
                 blogs[i].Modified = modifiedState == ModifiedState.Modified
                     ? new DateTime(2017, 7, i + 1)
                     : (DateTime?) null;
+            }
 
             DatabasesFixture.BlogContextDatabaseFixture.BlogContext.AddRangeAndSave(
                 blogs);
@@ -118,16 +132,18 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_all_posts_with_a_navigation_link_to_the_entire_post()
         {
-            SiteTester.Posts.Posts.Should().BeEquivalentTo(
-                DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.ToList().Select(blog => new
-                {
-                    NavigationLink = new
-                    {
-                        Href = new Uri(SiteTester.Posts.PostBaseUrl,
-                            blog.Id.ToString(CultureInfo.InvariantCulture)).AbsoluteUri
-                    }
-                }),
-                options => options.ExcludingMissingMembers());
+            SiteTester.Posts.Posts.Should()
+                      .BeEquivalentTo(
+                          DatabasesFixture.BlogContextDatabaseFixture.BlogContext.Blogs.ToList()
+                                          .Select(blog => new
+                                          {
+                                              NavigationLink = new
+                                              {
+                                                  Href = new Uri(SiteTester.Posts.PostBaseUrl,
+                                                      blog.Id.ToString(CultureInfo.InvariantCulture)).AbsoluteUri
+                                              }
+                                          }),
+                          options => options.ExcludingMissingMembers());
         }
 
         private void And_there_are_PAGES_pages_of_posts(int pages)
@@ -147,11 +163,16 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_display_all_the_pages()
         {
             const int maxPages = 10;
-            SiteTester.Posts.Pages.Take(maxPages).Select((x, i) =>
-                    new { x.Page.Identity.Number, TextFormat = x.Page.DisplayFormat, Position = i + 1 })
-                .Should().OnlyContain(x => x.TextFormat == DisplayFormat.Number || _pages == 0).And.Subject
-                .Should().HaveCount(Math.Min(_pages, maxPages)).And.Subject.Should()
-                .OnlyContain(x => x.Number == x.Position);
+            SiteTester.Posts.Pages.Take(maxPages)
+                      .Select((x, i) =>
+                          new { x.Page.Identity.Number, TextFormat = x.Page.DisplayFormat, Position = i + 1 })
+                      .Should()
+                      .OnlyContain(x => x.TextFormat == DisplayFormat.Number || _pages == 0)
+                      .And.Subject
+                      .Should()
+                      .HaveCount(Math.Min(_pages, maxPages))
+                      .And.Subject.Should()
+                      .OnlyContain(x => x.Number == x.Position);
         }
 
         private void Then_it_should_display_pages_before_the_current_page()
@@ -159,29 +180,39 @@ namespace AlphaDev.Web.Tests.Integration.Features
             const int maxPreviousPages = 10;
             var pages = SiteTester.Posts.Pages.ToLookup(x => x.Page.Attributes.Active);
             var activePageNumber = pages[ActivityStatus.Active].Should().ContainSingle().Subject.Page.Identity.Number;
-            var previousPages = pages[ActivityStatus.Inactive].Where(x => x.Page.Identity.Number < activePageNumber)
-                .Select((x, i) => new { x.Page.Identity.Number, x.Page.DisplayFormat, Position = i + 1 });
-            previousPages.Should().OnlyContain(x => x.DisplayFormat == DisplayFormat.Number || _pages == 0).And
-                .HaveCount(Math.Min(maxPreviousPages, activePageNumber - 1)).And.Subject.Should()
-                .BeInAscendingOrder(arg => arg.Number);
+            var previousPages = pages[ActivityStatus.Inactive]
+                                .Where(x => x.Page.Identity.Number < activePageNumber)
+                                .Select((x, i) => new
+                                    { x.Page.Identity.Number, x.Page.DisplayFormat, Position = i + 1 });
+            previousPages.Should()
+                         .OnlyContain(x => x.DisplayFormat == DisplayFormat.Number || _pages == 0)
+                         .And
+                         .HaveCount(Math.Min(maxPreviousPages, activePageNumber - 1))
+                         .And.Subject.Should()
+                         .BeInAscendingOrder(arg => arg.Number);
         }
 
         private void Then_it_should_display_ellipses_after_the_last_max_page()
         {
             SiteTester.Posts.Pages.LastOrNone()
-                .WithException(() => new InvalidOperationException("No page links found"))
-                .Map(x => x.Page.Identity.DisplayValue.IsEllipses().Should()).ValueOr(x => throw x).BeTrue();
+                      .WithException(() => new InvalidOperationException("No page links found"))
+                      .Map(x => x.Page.Identity.DisplayValue.IsEllipses().Should())
+                      .ValueOr(x => throw x)
+                      .BeTrue();
         }
 
         private void Then_it_should_display_the_current_page_as_grayed_out()
         {
             var postsWebPageLinks = SiteTester.Posts.Pages.ToArray();
             postsWebPageLinks.Where(x =>
-                {
-                    var postsCurrentPage = SiteTester.Posts.CurrentPage;
-                    return x.Page == postsCurrentPage;
-                }).Should()
-                .ContainSingle().Which.Page.Attributes.Active.Should().Be(ActivityStatus.Active);
+                             {
+                                 var postsCurrentPage = SiteTester.Posts.CurrentPage;
+                                 return x.Page == postsCurrentPage;
+                             })
+                             .Should()
+                             .ContainSingle()
+                             .Which.Page.Attributes.Active.Should()
+                             .Be(ActivityStatus.Active);
         }
 
         [UsedImplicitly]

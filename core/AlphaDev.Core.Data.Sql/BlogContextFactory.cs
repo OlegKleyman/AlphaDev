@@ -11,7 +11,7 @@ namespace AlphaDev.Core.Data.Sql
         {
         }
 
-        public BlogContextFactory(Configurer configurer) : base(configurer)
+        public BlogContextFactory(Configurer? configurer) : base(configurer)
         {
         }
     }

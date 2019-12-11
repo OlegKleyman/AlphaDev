@@ -32,10 +32,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
         }
 
         [NotNull]
-        private DisplayTagHelper GetDisplayTagHelper()
-        {
-            return new DisplayTagHelper();
-        }
+        private DisplayTagHelper GetDisplayTagHelper() => new DisplayTagHelper();
 
         [Fact]
         public void ProcessAsyncShouldThrowArgumentNullExceptionWhenOutputArgumentIsNull()
@@ -47,15 +44,18 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
                 await sut.ProcessAsync(null, null);
             }
 
-            new Func<Task>(ProcessAsync).Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'output')");
+            new Func<Task>(ProcessAsync).Should()
+                                        .Throw<ArgumentNullException>()
+                                        .WithMessage("Value cannot be null. (Parameter 'output')");
         }
 
         [Fact]
         public void ProcessShouldSetValuePropertyToTrueByDefault()
         {
-            GetDisplayTagHelper().Value
-                .Should().Be(true);
+            GetDisplayTagHelper()
+                .Value
+                .Should()
+                .Be(true);
         }
 
         [Fact]
@@ -65,9 +65,11 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
 
             Action process = () => sut.Process(null, null);
 
-            process.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'output')")
-                .Which.ParamName.Should().BeEquivalentTo("output");
+            process.Should()
+                   .Throw<ArgumentNullException>()
+                   .WithMessage("Value cannot be null. (Parameter 'output')")
+                   .Which.ParamName.Should()
+                   .BeEquivalentTo("output");
         }
     }
 }

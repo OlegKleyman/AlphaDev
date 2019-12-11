@@ -19,6 +19,7 @@ namespace AlphaDev.Web.Models
         public DatesViewModel Dates { get; }
 
         public string Content { get; }
+
         public int Id { get; set; }
 
         [NotNull]

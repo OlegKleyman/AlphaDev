@@ -18,19 +18,19 @@ namespace AlphaDev.Core.Data.Sql.Migrations
             modelBuilder.Entity("AlphaDev.Core.Data.Entities.Blog", b =>
             {
                 b.Property<int>("Id")
-                    .ValueGeneratedOnAdd();
+                 .ValueGeneratedOnAdd();
 
                 b.Property<string>("Content")
-                    .IsRequired();
+                 .IsRequired();
 
                 b.Property<DateTime>("Created")
-                    .ValueGeneratedOnAdd()
-                    .HasDefaultValueSql("GETUTCDATE()");
+                 .ValueGeneratedOnAdd()
+                 .HasDefaultValueSql("GETUTCDATE()");
 
                 b.Property<DateTime?>("Modified");
 
                 b.Property<string>("Title")
-                    .IsRequired();
+                 .IsRequired();
 
                 b.HasKey("Id");
 

@@ -38,16 +38,18 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
             var url = $"http://127.0.0.1:{GetOpenPort()}";
 
             _host = new WebHostBuilder()
-                .ConfigureAppConfiguration(builder => builder
-                    .SetBasePath(Path.GetFullPath("."))
-                    .AddJsonFile("appsettings.json", true, true)
-                    .AddInMemoryCollection(connectionStrings.ToDictionary(pair => $"connectionStrings:{pair.Key}",
-                        pair => pair.Value)))
-                .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web")).UseKestrel()
-                .UseStartup<Startup>()
-                .UseUrls(url)
-                .UseSetting(WebHostDefaults.ApplicationKey, typeof(Program).GetTypeInfo().Assembly.FullName)
-                .Build();
+                    .ConfigureAppConfiguration(builder => builder
+                                                          .SetBasePath(Path.GetFullPath("."))
+                                                          .AddJsonFile("appsettings.json", true, true)
+                                                          .AddInMemoryCollection(connectionStrings.ToDictionary(
+                                                              pair => $"connectionStrings:{pair.Key}",
+                                                              pair => pair.Value)))
+                    .UseContentRoot(Path.GetFullPath(@"..\..\..\..\..\..\web\AlphaDev.Web"))
+                    .UseKestrel()
+                    .UseStartup<Startup>()
+                    .UseUrls(url)
+                    .UseSetting(WebHostDefaults.ApplicationKey, typeof(Program).GetTypeInfo().Assembly.FullName)
+                    .Build();
 
             _host.Start();
 

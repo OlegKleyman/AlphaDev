@@ -14,10 +14,7 @@ namespace AlphaDev.Web.Tests.Unit.TagHelpers
     public class LinksTagHelperTests
     {
         [NotNull]
-        private LinksTagHelper GetLinksTagHelper()
-        {
-            return new LinksTagHelper();
-        }
+        private LinksTagHelper GetLinksTagHelper() => new LinksTagHelper();
 
         [Fact]
         public void ContextShouldGetAndSetViewContext()

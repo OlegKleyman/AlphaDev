@@ -1,8 +1,26 @@
-﻿namespace AlphaDev.Core
+﻿using System;
+using JetBrains.Annotations;
+
+namespace AlphaDev.Core
 {
     public class BlogEditArguments
     {
-        public string Content { get; set; }
-        public string Title { get; set; }
+        private string? _content;
+
+        private string? _title;
+
+        [NotNull]
+        public string Content
+        {
+            get => _content ?? throw new InvalidOperationException($"{nameof(Content)} is not initialized.");
+            set => _content = value;
+        }
+
+        [NotNull]
+        public string Title
+        {
+            get => _title ?? throw new InvalidOperationException($"{nameof(Title)} is not initialized.");
+            set => _title = value;
+        }
     }
 }

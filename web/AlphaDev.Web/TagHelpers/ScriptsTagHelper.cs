@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,8 +10,14 @@ namespace AlphaDev.Web.TagHelpers
 {
     public class ScriptsTagHelper : TagHelper
     {
+        private ViewContext? _context;
+
         [ViewContext]
-        public ViewContext Context { get; set; }
+        public ViewContext Context
+        {
+            get => _context ?? throw new InvalidOperationException($"{nameof(Context)} is not initialized.");
+            set => _context = value;
+        }
 
         public override void Process(TagHelperContext context, [NotNull] TagHelperOutput output)
         {

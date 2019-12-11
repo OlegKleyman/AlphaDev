@@ -7,17 +7,14 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
 {
     public class DatabaseManagerFixture : IDisposable
     {
-        private static readonly object SyncLock = new object();
-
         private const string ConnectionStringTemplate =
             @"Data Source=(LocalDB)\MSSQLLocalDB;Integrated Security=True;MultipleActiveResultSets=true;Database=";
 
+        private static readonly object SyncLock = new object();
+
         private bool _disposed;
 
-        public DatabaseManagerFixture()
-        {
-            Connections = new Dictionary<string, DatabaseConnectionFixture>();
-        }
+        public DatabaseManagerFixture() => Connections = new Dictionary<string, DatabaseConnectionFixture>();
 
         public Dictionary<string, DatabaseConnectionFixture> Connections { get; }
 
@@ -25,7 +22,10 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         {
             if (!_disposed)
             {
-                foreach (var connection in Connections) connection.Value.Dispose();
+                foreach (var connection in Connections)
+                {
+                    connection.Value.Dispose();
+                }
 
                 _disposed = true;
             }
@@ -73,7 +73,10 @@ namespace AlphaDev.Web.Tests.Integration.Fixtures
         {
             ThrowIfDisposed();
 
-            foreach (var connection in Connections) connection.Value.ResetDatabase();
+            foreach (var connection in Connections)
+            {
+                connection.Value.ResetDatabase();
+            }
         }
     }
 }

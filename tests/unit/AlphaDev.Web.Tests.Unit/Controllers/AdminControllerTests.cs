@@ -9,10 +9,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
     public class AdminControllerTests
     {
         [NotNull]
-        private AdminController GetAdminController()
-        {
-            return new AdminController();
-        }
+        private AdminController GetAdminController() => new AdminController();
 
         [Fact]
         public void IndexShouldReturnIndexViewResult()

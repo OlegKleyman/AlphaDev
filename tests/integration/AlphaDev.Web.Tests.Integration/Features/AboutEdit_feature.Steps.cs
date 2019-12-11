@@ -46,7 +46,8 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private CompositeStep And_I_edit_about_info()
         {
             return CompositeStep.DefineNew()
-                .AddSteps(_ => And_am_editing_the_about_info(), _ => And_I_entered_markdown_content()).Build();
+                                .AddSteps(_ => And_am_editing_the_about_info(), _ => And_I_entered_markdown_content())
+                                .Build();
         }
 
         private void And_I_entered_markdown_content()
@@ -63,7 +64,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
         private void Then_it_should_be_rendered_to_html()
         {
             SiteTester.About.Edit.Preview.Should()
-                .BeEquivalentTo(Markdown.ToHtml(_aboutValue).NormalizeToWindowsLineEndings().Trim());
+                      .BeEquivalentTo(Markdown.ToHtml(_aboutValue).NormalizeToWindowsLineEndings().Trim());
         }
 
         private void And_I_empty_all_required_fields()
@@ -88,9 +89,11 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_be_saved_in_the_datastore()
         {
-            DatabasesFixture.InformationContextDatabaseFixture.InformationContext.Abouts.AsNoTracking().Single().Value
-                .Should()
-                .BeEquivalentTo(_aboutValue);
+            DatabasesFixture.InformationContextDatabaseFixture.InformationContext.Abouts.AsNoTracking()
+                            .Single()
+                            .Value
+                            .Should()
+                            .BeEquivalentTo(_aboutValue);
         }
     }
 }
