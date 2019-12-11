@@ -18,26 +18,20 @@ namespace AlphaDev.Core
 
         public Option<string> GetDetails()
         {
-            using (var context = _contextFactory.Create())
-            {
-                return context.Contact.SomeNotNull().Map(contact => contact.Value).NotNull();
-            }
+            using var context = _contextFactory.Create();
+            return context.Contact.SomeNotNull().Map(contact => contact.Value).NotNull();
         }
 
         public void Edit(string value)
         {
-            using (var context = _contextFactory.Create())
-            {
-                context.UpdateAndSaveSingleOrThrow(x => x.Contact, contact => contact.Value = value);
-            }
+            using var context = _contextFactory.Create();
+            context.UpdateAndSaveSingleOrThrow(x => x.Contact, contact => contact.Value = value);
         }
 
         public void Create(string value)
         {
-            using (var context = _contextFactory.Create())
-            {
-                context.AddAndSaveSingleOrThrow(x => x.Contacts, new Contact { Value = value });
-            }
+            using var context = _contextFactory.Create();
+            context.AddAndSaveSingleOrThrow(x => x.Contacts, new Contact { Value = value });
         }
     }
 }

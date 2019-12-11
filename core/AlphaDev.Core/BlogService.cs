@@ -23,84 +23,70 @@ namespace AlphaDev.Core
 
         public Option<BlogBase> GetLatest()
         {
-            using (var context = _contextFactory.Create())
-            {
-                return context.Blogs.OrderByDescending(blog => blog.Created).FirstOrNone().Map(blog =>
-                    (BlogBase) new Blog(blog.Id,
-                        blog.Title ?? string.Empty,
-                        blog.Content ?? string.Empty,
-                        new Dates(blog.Created, blog.Modified.ToOption())));
-            }
+            using var context = _contextFactory.Create();
+            return context.Blogs.OrderByDescending(blog => blog.Created).FirstOrNone().Map(blog =>
+                (BlogBase) new Blog(blog.Id,
+                    blog.Title ?? string.Empty,
+                    blog.Content ?? string.Empty,
+                    new Dates(blog.Created, blog.Modified.ToOption())));
         }
 
         public Option<BlogBase> Get(int id)
         {
-            using (var context = _contextFactory.Create())
-            {
-                return context.Blogs.Find(id).SomeNotNull().Map(blog =>
-                    (BlogBase) new Blog(blog.Id, blog.Title, blog.Content,
-                        new Dates(blog.Created, blog.Modified.ToOption())));
-            }
+            using var context = _contextFactory.Create();
+            return context.Blogs.Find(id).SomeNotNull().Map(blog =>
+                (BlogBase) new Blog(blog.Id, blog.Title, blog.Content,
+                    new Dates(blog.Created, blog.Modified.ToOption())));
         }
 
         [NotNull]
         public BlogBase Add([NotNull] BlogBase blog)
         {
-            using (var context = _contextFactory.Create())
+            using var context = _contextFactory.Create();
+            return context.AddAndSaveSingleOrThrow(x => x.Blogs, new Data.Entities.Blog
             {
-                return context.AddAndSaveSingleOrThrow(x => x.Blogs, new Data.Entities.Blog
-                {
-                    Title = blog.Title,
-                    Content = blog.Content
-                }).Map(entry => new Blog(entry.Entity.Id, entry.Entity.Title, entry.Entity.Content,
-                    new Dates(entry.Entity.Created, entry.Entity.Modified.ToOption())));
-            }
+                Title = blog.Title,
+                Content = blog.Content
+            }).Map(entry => new Blog(entry.Entity.Id, entry.Entity.Title, entry.Entity.Content,
+                new Dates(entry.Entity.Created, entry.Entity.Modified.ToOption())));
         }
 
         public void Delete(int id)
         {
-            using (var context = _contextFactory.Create())
-            {
-                context.DeleteSingleOrThrow(new Data.Entities.Blog { Id = id });
-            }
+            using var context = _contextFactory.Create();
+            context.DeleteSingleOrThrow(new Data.Entities.Blog { Id = id });
         }
 
         public void Edit(int id, Action<BlogEditArguments> edit)
         {
-            using (var context = _contextFactory.Create())
+            using var context = _contextFactory.Create();
+            context.UpdateAndSaveSingleOrThrow(x => x.Blogs.Find(id), blog =>
             {
-                context.UpdateAndSaveSingleOrThrow(x => x.Blogs.Find(id), blog =>
-                {
-                    var arguments = new BlogEditArguments();
-                    edit(arguments);
-                    blog.Content = arguments.Content;
-                    blog.Title = arguments.Title;
-                    blog.Modified = _dateProvider.UtcNow;
-                });
-            }
+                var arguments = new BlogEditArguments();
+                edit(arguments);
+                blog.Content = arguments.Content;
+                blog.Title = arguments.Title;
+                blog.Modified = _dateProvider.UtcNow;
+            });
         }
 
         public IEnumerable<BlogBase> GetOrderedByDates(int start, int count)
         {
-            using (var context = _contextFactory.Create())
-            {
-                return context.Blogs.OrderByDescending(x => x.Modified).ThenByDescending(x => x.Created)
-                    .Skip(start - 1).Take(count).SomeNotNull().Match(blogs => blogs.Select(targetBlog =>
-                            new Blog(targetBlog.Id,
-                                targetBlog.Title ?? string.Empty,
-                                targetBlog.Content ?? string.Empty,
-                                new Dates(targetBlog.Created, targetBlog.Modified.ToOption()))).ToArray(),
-                        Enumerable.Empty<BlogBase>);
-            }
+            using var context = _contextFactory.Create();
+            return context.Blogs.OrderByDescending(x => x.Modified).ThenByDescending(x => x.Created)
+                          .Skip(start - 1).Take(count).SomeNotNull().Match(blogs => blogs.Select(targetBlog =>
+                                  new Blog(targetBlog.Id,
+                                      targetBlog.Title ?? string.Empty,
+                                      targetBlog.Content ?? string.Empty,
+                                      new Dates(targetBlog.Created, targetBlog.Modified.ToOption()))).ToArray(),
+                              Enumerable.Empty<BlogBase>);
         }
 
         public int GetCount(int start)
         {
-            using (var context = _contextFactory.Create())
-            {
-                return context.Blogs.OrderByDescending(x => x.Modified).ThenByDescending(x => x.Created).Skip(start - 1)
-                    .Count();
-            }
+            using var context = _contextFactory.Create();
+            return context.Blogs.OrderByDescending(x => x.Modified).ThenByDescending(x => x.Created).Skip(start - 1)
+                          .Count();
         }
     }
 }
