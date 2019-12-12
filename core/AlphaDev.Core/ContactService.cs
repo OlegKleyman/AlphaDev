@@ -1,36 +1,38 @@
-﻿using AlphaDev.Core.Data;
-using AlphaDev.Core.Data.Contexts;
+﻿using System;
+using System.Linq;
 using AlphaDev.Core.Data.Entities;
-using AlphaDev.Core.Extensions;
 using AlphaDev.Optional.Extensions;
 using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using Optional;
 
 namespace AlphaDev.Core
 {
     public class ContactService : IContactService
     {
-        private readonly IContextFactory<InformationContext> _contextFactory;
-
-        public ContactService([NotNull] IContextFactory<InformationContext> contextFactory) =>
-            _contextFactory = contextFactory;
+        [NotNull] private readonly DbSet<Contact> _contacts;
+        
+        public ContactService([NotNull] DbSet<Contact> contacts) => _contacts = contacts;
 
         public Option<string> GetDetails()
         {
-            using var context = _contextFactory.Create();
-            return context.Contact.SomeWhenNotNull().Map(contact => contact.Value).FilterNotNull();
+            return _contacts.SingleOrDefault().SomeWhenNotNull().Map(contact => contact.Value).FilterNotNull();
         }
 
         public void Edit(string value)
         {
-            using var context = _contextFactory.Create();
-            context.UpdateAndSaveSingleOrThrow(x => x.Contact, contact => contact.Value = value);
+            _contacts.SingleOrDefault()
+                     .SomeNotNull()
+                     .Match(contact => contact.Value = value,
+                         () => throw new InvalidOperationException("Contact not found."));
         }
 
         public void Create(string value)
         {
-            using var context = _contextFactory.Create();
-            context.AddAndSaveSingleOrThrow(x => x.Contacts, new Contact { Value = value });
+            _contacts.Add(new Contact
+            {
+                Value = value
+            });
         }
     }
 }
