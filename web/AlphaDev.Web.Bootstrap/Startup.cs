@@ -1,5 +1,9 @@
-﻿using AlphaDev.Core;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using AlphaDev.Core;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
+using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Sql.Support;
 using AlphaDev.Web.Bootstrap.Extensions;
 using JetBrains.Annotations;
@@ -7,6 +11,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -30,6 +36,11 @@ namespace AlphaDev.Web.Bootstrap
             _ = services.AddSingleton<IPrefixGenerator, PrefixGenerator>()
                         .AddServices()
                         .AddContexts(defaultSqlConfigurer)
+                        .AddDbSets()
+                        .AddScoped<DbContext>(provider => provider.GetRequiredService<InformationContext>())
+                        // ReSharper disable once CoVariantArrayConversion - Can combine delegates of the same type
+                        .AddScoped(x => (SaveAction) Delegate.Combine(x.GetServices<DbContext>().Select(context => (SaveAction)(() => context.SaveChangesAsync())).ToArray()))
+                        .AddScoped<ISaveToken, SaveToken>()
                         .AddIdentityContexts(securitySqlConfigurer)
                         .AddContextFactories()
                         .AddSingleton<IDateProvider, DateProvider>()
@@ -49,7 +60,10 @@ namespace AlphaDev.Web.Bootstrap
                                          .CreateLogger();
                             builder.AddSerilog(logger);
                         })
-                        .AddMvc(options => options.EnableEndpointRouting = false)
+                        .AddMvc(options =>
+                        {
+                            options.EnableEndpointRouting = false;
+                        })
                         .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 

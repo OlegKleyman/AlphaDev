@@ -33,6 +33,13 @@ namespace AlphaDev.Web.Bootstrap.Extensions
             return serviceCollection;
         }
 
+        public static IServiceCollection AddDbSets(this IServiceCollection serviceCollection)
+        {
+            return serviceCollection.AddScoped(x => x.GetRequiredService<InformationContext>().Contacts)
+                                    .AddScoped(x => x.GetRequiredService<InformationContext>().Abouts)
+                                    .AddScoped(x => x.GetRequiredService<BlogContext>().Blogs);
+        }
+
         public static IServiceCollection AddIdentityContexts(this IServiceCollection serviceCollection,
             Configurer configurer)
         {

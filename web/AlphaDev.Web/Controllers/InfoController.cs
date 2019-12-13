@@ -1,6 +1,8 @@
 ﻿using AlphaDev.Core;
 using AlphaDev.Core.Extensions;
 using AlphaDev.Optional.Extensions;
+using AlphaDev.Web.Bootstrap;
+using AlphaDev.Web.Core;
 using AlphaDev.Web.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +17,7 @@ namespace AlphaDev.Web.Controllers
     {
         private readonly IAboutService _aboutService;
         private readonly IContactService _contactService;
-
+        
         public InfoController([NotNull] IAboutService aboutService, [NotNull] IContactService contactService)
         {
             _aboutService = aboutService;
@@ -95,6 +97,7 @@ namespace AlphaDev.Web.Controllers
                                   .ValueOr(() => RedirectToAction(nameof(Contact)));
         }
 
+        [SaveFilter]
         [Route("contact/edit")]
         [HttpPost]
         public IActionResult EditContact(ContactEditViewModel model)
@@ -112,6 +115,7 @@ namespace AlphaDev.Web.Controllers
                                   .ValueOr(() => View(nameof(CreateContact), new ContactCreateViewModel()));
         }
 
+        [SaveFilter]
         [Route("contact/create")]
         [HttpPost]
         public IActionResult CreateContact([NotNull] ContactCreateViewModel model)

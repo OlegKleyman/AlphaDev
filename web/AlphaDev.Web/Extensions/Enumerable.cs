@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AlphaDev.Core;
 using AlphaDev.Web.Support;
 using JetBrains.Annotations;
 
@@ -9,7 +10,7 @@ namespace AlphaDev.Web.Extensions
     {
         [NotNull]
         public static Pager<T> ToPager<T>([NotNull] this IEnumerable<T> enumerable, PageDimensions dimensions,
-            [NotNull] Core.PositiveInteger totalItemCount) =>
+            [NotNull] PositiveInteger totalItemCount) =>
             new Pager<T>(enumerable.ToArray(), dimensions, totalItemCount);
     }
 }
