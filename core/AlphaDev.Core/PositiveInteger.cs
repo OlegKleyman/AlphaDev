@@ -15,7 +15,7 @@ namespace AlphaDev.Core
 
         public bool Equals(PositiveInteger? other) => !(other is null) && Value == other.Value;
 
-        public override bool Equals([CanBeNull] object obj) => obj is PositiveInteger p && Equals(p);
+        public override bool Equals(object? obj) => obj is PositiveInteger p && Equals(p);
 
         public override int GetHashCode() => Value.GetHashCode();
 
