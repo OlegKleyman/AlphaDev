@@ -12,7 +12,12 @@ namespace AlphaDev.Core
 
         public async Task SaveAsync()
         {
-            await _save();
+            // ReSharper disable once PossibleInvalidCastExceptionInForeachLoop - _save will always
+            // contain delegates of SaveAction
+            foreach (SaveAction action in _save.GetInvocationList())
+            {
+                await action();
+            }
         }
     }
 }

@@ -39,6 +39,7 @@ namespace AlphaDev.Web.Bootstrap
                         .AddContexts(defaultSqlConfigurer)
                         .AddDbSets()
                         .AddScoped<DbContext>(provider => provider.GetRequiredService<InformationContext>())
+                        .AddScoped<DbContext>(provider => provider.GetRequiredService<BlogContext>())
                         // ReSharper disable once CoVariantArrayConversion - Can combine delegates of the same type
                         .AddScoped(x => x.GetServices<DbContext>().Select(context => (SaveAction)(() => context.SaveChangesAsync())).Combine())
                         .AddScoped<ISaveToken, SaveToken>()

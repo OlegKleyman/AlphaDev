@@ -2,6 +2,7 @@
 using AlphaDev.Core;
 using AlphaDev.Core.Extensions;
 using AlphaDev.Optional.Extensions;
+using AlphaDev.Web.Core;
 using AlphaDev.Web.Extensions;
 using AlphaDev.Web.Models;
 using AlphaDev.Web.Support;
@@ -55,6 +56,7 @@ namespace AlphaDev.Web.Controllers
         public ViewResult Create() => View(nameof(Create));
 
         [Authorize]
+        [SaveFilter]
         [Route("create")]
         [HttpPost]
         public ActionResult Create(CreatePostViewModel? post)
@@ -68,6 +70,7 @@ namespace AlphaDev.Web.Controllers
         }
 
         [Authorize]
+        [SaveFilter]
         [Route("delete/{id}")]
         [HttpPost]
         public IActionResult Delete(int id)
@@ -89,6 +92,7 @@ namespace AlphaDev.Web.Controllers
         }
 
         [Authorize]
+        [SaveFilter]
         [Route("edit/{id}")]
         [HttpPost]
         public IActionResult Edit(int id, [CanBeNull] EditPostViewModel model)
