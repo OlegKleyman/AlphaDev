@@ -14,7 +14,7 @@ namespace AlphaDev.Core
         
         public ContactService([NotNull] DbSet<Contact> contacts) => _contacts = contacts;
 
-        public Option<string> GetDetails()
+        public Option<string> GetContactDetails()
         {
             return _contacts.SingleOrDefault().SomeWhenNotNull().Map(contact => contact.Value).FilterNotNull();
         }

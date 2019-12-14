@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AlphaDev.Collections.Extensions;
 using AlphaDev.Core;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Core.Data.Contexts;
@@ -39,7 +40,7 @@ namespace AlphaDev.Web.Bootstrap
                         .AddDbSets()
                         .AddScoped<DbContext>(provider => provider.GetRequiredService<InformationContext>())
                         // ReSharper disable once CoVariantArrayConversion - Can combine delegates of the same type
-                        .AddScoped(x => (SaveAction) Delegate.Combine(x.GetServices<DbContext>().Select(context => (SaveAction)(() => context.SaveChangesAsync())).ToArray()))
+                        .AddScoped(x => x.GetServices<DbContext>().Select(context => (SaveAction)(() => context.SaveChangesAsync())).Combine())
                         .AddScoped<ISaveToken, SaveToken>()
                         .AddIdentityContexts(securitySqlConfigurer)
                         .AddContextFactories()

@@ -63,7 +63,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var contacts = new[] { new Contact { Value = "test" } }.ToMockDbSet();
             var service = GetContactService(contacts);
-            service.GetDetails().Should().BeEquivalentTo(Option.Some("test"));
+            service.GetContactDetails().Should().BeEquivalentTo(Option.Some("test"));
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var contacts = new List<Contact>().ToMockDbSet();
             var service = GetContactService(contacts);
-            service.GetDetails().Should().BeEquivalentTo(Option.None<string>());
+            service.GetContactDetails().Should().BeEquivalentTo(Option.None<string>());
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var contacts = new[] { new Contact() }.ToMockDbSet();
             var service = GetContactService(contacts);
-            service.GetDetails().Should().BeEquivalentTo(Option.None<string>());
+            service.GetContactDetails().Should().BeEquivalentTo(Option.None<string>());
         }
     }
 }

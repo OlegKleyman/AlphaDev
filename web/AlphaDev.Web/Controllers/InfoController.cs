@@ -47,6 +47,7 @@ namespace AlphaDev.Web.Controllers
                                 .ValueOr(() => RedirectToAction(nameof(About)));
         }
 
+        [SaveFilter]
         [Route("about/edit")]
         [HttpPost]
         public IActionResult EditAbout(AboutEditViewModel model)
@@ -65,6 +66,7 @@ namespace AlphaDev.Web.Controllers
                                 .ValueOr(() => View(nameof(CreateAbout), new AboutCreateViewModel()));
         }
 
+        [SaveFilter]
         [Route("about/create")]
         [HttpPost]
         public IActionResult CreateAbout([NotNull] AboutCreateViewModel model)
@@ -80,7 +82,7 @@ namespace AlphaDev.Web.Controllers
         {
             IActionResult GetContactView(string value) => View(nameof(Contact), value);
 
-            return _contactService.GetDetails()
+            return _contactService.GetContactDetails()
                                   .Map(s => GetContactView(s).Some())
                                   .ValueOr(() =>
                                       RedirectToAction(nameof(CreateContact))
@@ -91,7 +93,7 @@ namespace AlphaDev.Web.Controllers
         [Route("contact/edit")]
         public IActionResult EditContact()
         {
-            return _contactService.GetDetails()
+            return _contactService.GetContactDetails()
                                   .Map(s => new ContactEditViewModel(s))
                                   .Map<IActionResult>(model => View(nameof(EditContact), model))
                                   .ValueOr(() => RedirectToAction(nameof(Contact)));
@@ -110,7 +112,7 @@ namespace AlphaDev.Web.Controllers
         [Route("contact/create")]
         public IActionResult CreateContact()
         {
-            return _contactService.GetDetails()
+            return _contactService.GetContactDetails()
                                   .Map<IActionResult>(s => RedirectToAction(nameof(EditContact)))
                                   .ValueOr(() => View(nameof(CreateContact), new ContactCreateViewModel()));
         }

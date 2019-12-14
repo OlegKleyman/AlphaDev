@@ -81,7 +81,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         public void ContactShouldReturnContactView()
         {
             var contactService = Substitute.For<IContactService>();
-            contactService.GetDetails().Returns(Option.Some<string>(default));
+            contactService.GetContactDetails().Returns(Option.Some<string>(default));
             var controller = GetInfoController(default, contactService.Some());
             controller.Contact().Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("Contact");
         }
@@ -116,7 +116,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         public void ContactShouldReturnStringModelFromFromContactService()
         {
             var contactService = Substitute.For<IContactService>();
-            contactService.GetDetails().Returns(Option.Some("test"));
+            contactService.GetContactDetails().Returns(Option.Some("test"));
             var controller = GetInfoController(default, contactService.Some());
             controller.Contact().Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo("test");
         }
@@ -191,7 +191,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         public void CreateContactShouldRedirectToEditContactActionWhenThereIsExistingContact()
         {
             var contactService = Substitute.For<IContactService>();
-            contactService.GetDetails().Returns(Option.Some("test"));
+            contactService.GetContactDetails().Returns(Option.Some("test"));
             var controller = GetInfoController(default, contactService.Some());
 
             controller.CreateContact()
@@ -358,7 +358,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         public void EditContactShouldReturnEditContactView()
         {
             var contactService = Substitute.For<IContactService>();
-            contactService.GetDetails().Returns(Option.Some<string>(default));
+            contactService.GetContactDetails().Returns(Option.Some<string>(default));
             var controller = GetInfoController(default, contactService.Some());
 
             controller.EditContact()
@@ -372,7 +372,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         public void EditContactShouldReturnEditContactViewWithModelFromRepositoryWhenContactIsFound()
         {
             var contactService = Substitute.For<IContactService>();
-            contactService.GetDetails().Returns(Option.Some("test"));
+            contactService.GetContactDetails().Returns(Option.Some("test"));
 
             var controller = GetInfoController(default, contactService.Some());
 

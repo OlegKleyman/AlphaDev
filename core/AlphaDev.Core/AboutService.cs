@@ -1,36 +1,36 @@
-﻿using AlphaDev.Core.Data;
-using AlphaDev.Core.Data.Contexts;
+﻿using System;
 using AlphaDev.Core.Data.Entities;
-using AlphaDev.Core.Extensions;
 using AlphaDev.Optional.Extensions;
-using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using Optional;
+using Optional.Collections;
 
 namespace AlphaDev.Core
 {
     public class AboutService : IAboutService
     {
-        private readonly IContextFactory<InformationContext> _contextFactory;
-
-        public AboutService([NotNull] IContextFactory<InformationContext> contextFactory) =>
-            _contextFactory = contextFactory;
+        private readonly DbSet<About> _abouts;
+        
+        public AboutService(DbSet<About> abouts) => _abouts = abouts;
 
         public Option<string> GetAboutDetails()
         {
-            using var context = _contextFactory.Create();
-            return context.About.SomeWhenNotNull().Map(about => about.Value).FilterNotNull();
+            return _abouts.SingleOrNone().Map(about => about.Value).FilterNotNull();
         }
 
         public void Edit(string value)
         {
-            using var context = _contextFactory.Create();
-            context.UpdateAndSaveSingleOrThrow(x => x.About, about => about.Value = value);
+            _abouts.SingleOrNone()
+                   .Match(contact => contact.Value = value,
+                       () => throw new InvalidOperationException("About not found."));
         }
 
         public void Create(string value)
         {
-            using var context = _contextFactory.Create();
-            context.AddAndSaveSingleOrThrow(x => x.Abouts, new About { Value = value });
+            _abouts.Add(new About
+            {
+                Value = value
+            });
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace AlphaDev.Core.Tests.Unit
+namespace AlphaDev.Test.Core.Support
 {
     public class Switch<T>
     {
