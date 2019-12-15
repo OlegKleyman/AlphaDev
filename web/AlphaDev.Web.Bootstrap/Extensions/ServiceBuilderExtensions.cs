@@ -99,12 +99,5 @@ namespace AlphaDev.Web.Bootstrap.Extensions
 
             return serviceCollection;
         }
-
-        public static IServiceCollection AddContextFactories(this IServiceCollection serviceCollection) =>
-            serviceCollection
-                .AddSingleton<IContextFactory<InformationContext>,
-                    ContextFactory<Core.Data.Sql.Contexts.InformationContext>>()
-                .AddSingleton<IContextFactory<BlogContext>,
-                    ContextFactory<Core.Data.Sql.Contexts.BlogContext>>();
     }
 }

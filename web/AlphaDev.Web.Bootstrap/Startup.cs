@@ -33,7 +33,6 @@ namespace AlphaDev.Web.Bootstrap
                     .AddDbContextSaveToken()
                     .AddScoped<ISaveToken, SaveToken>()
                     .AddIdentityContexts(securitySqlConfigurer)
-                    .AddContextFactories()
                     .AddSingleton<IDateProvider, DateProvider>()
                     .AddDesignTimeFactories(defaultSqlConfigurer)
                     .AddIdentity<User, IdentityRole>()
