@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AlphaDev.Core.Data;
-using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
@@ -25,21 +23,21 @@ namespace AlphaDev.Core
         public Option<BlogBase> GetLatest()
         {
             return _blogs.OrderByDescending(blog => blog.Created)
-                          .FirstOrNone()
-                          .Map(blog =>
-                              (BlogBase)new Blog(blog.Id,
-                                  blog.Title,
-                                  blog.Content,
-                                  new Dates(blog.Created, blog.Modified.ToOption())));
+                         .FirstOrNone()
+                         .Map(blog =>
+                             (BlogBase) new Blog(blog.Id,
+                                 blog.Title,
+                                 blog.Content,
+                                 new Dates(blog.Created, blog.Modified.ToOption())));
         }
 
         public Option<BlogBase> Get(int id)
         {
             return _blogs.Find(id)
-                          .SomeNotNull()
-                          .Map(blog =>
-                              (BlogBase)new Blog(blog.Id, blog.Title, blog.Content,
-                                  new Dates(blog.Created, blog.Modified.ToOption())));
+                         .SomeNotNull()
+                         .Map(blog =>
+                             (BlogBase) new Blog(blog.Id, blog.Title, blog.Content,
+                                 new Dates(blog.Created, blog.Modified.ToOption())));
         }
 
         [NotNull]

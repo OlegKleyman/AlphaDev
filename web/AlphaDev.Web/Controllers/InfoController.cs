@@ -1,7 +1,5 @@
 ﻿using AlphaDev.Core;
-using AlphaDev.Core.Extensions;
 using AlphaDev.Optional.Extensions;
-using AlphaDev.Web.Bootstrap;
 using AlphaDev.Web.Core;
 using AlphaDev.Web.Models;
 using JetBrains.Annotations;
@@ -17,7 +15,7 @@ namespace AlphaDev.Web.Controllers
     {
         private readonly IAboutService _aboutService;
         private readonly IContactService _contactService;
-        
+
         public InfoController([NotNull] IAboutService aboutService, [NotNull] IContactService contactService)
         {
             _aboutService = aboutService;

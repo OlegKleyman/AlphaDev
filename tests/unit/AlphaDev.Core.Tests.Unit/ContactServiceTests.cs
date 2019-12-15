@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AlphaDev.Core.Data;
-using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Entities;
-using AlphaDev.Core.Data.Support;
-using AlphaDev.Core.Tests.Unit.Extensions.Support;
 using AlphaDev.Test.Core.Extensions;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NSubstitute;
 using Optional;
 using Xunit;

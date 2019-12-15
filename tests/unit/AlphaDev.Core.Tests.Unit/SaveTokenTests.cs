@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using AlphaDev.Collections.Extensions;
-using AlphaDev.Core.Tests.Unit.Extensions;
 using AlphaDev.Test.Core.Support;
 using FluentAssertions;
 using Xunit;
@@ -23,7 +21,7 @@ namespace AlphaDev.Core.Tests.Unit
             // ReSharper disable once CoVariantArrayConversion - Can combine delegates of the same type
             var saveAction = switches.Select(x => x.Target).Combine() ??
                              throw new InvalidOperationException("Delegate is null.");
-            
+
             var token = new SaveToken(saveAction);
             await token.SaveAsync();
             switches.Select(x => x.On).Should().AllBeEquivalentTo(true);

@@ -15,8 +15,10 @@ namespace AlphaDev.Web.Core.Tests.Unit
         public async Task CreateInstanceCreatesAnInstanceOfSaveFilterUsingTheSaveTokenDependency()
         {
             var saveToken = Substitute.For<ISaveToken>();
-            var context = (ActionExecutingContext)FormatterServices.GetSafeUninitializedObject(typeof(ActionExecutingContext));
-            var executedContext = (ActionExecutedContext)FormatterServices.GetSafeUninitializedObject(typeof(ActionExecutedContext));
+            var context =
+                (ActionExecutingContext) FormatterServices.GetSafeUninitializedObject(typeof(ActionExecutingContext));
+            var executedContext =
+                (ActionExecutedContext) FormatterServices.GetSafeUninitializedObject(typeof(ActionExecutedContext));
 
             await new SaveFilterAttribute
                 {

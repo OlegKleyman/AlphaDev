@@ -10,7 +10,7 @@ namespace AlphaDev.Core
     public class AboutService : IAboutService
     {
         private readonly DbSet<About> _abouts;
-        
+
         public AboutService(DbSet<About> abouts) => _abouts = abouts;
 
         public Option<string> GetAboutDetails()

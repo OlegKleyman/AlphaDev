@@ -15,9 +15,9 @@ namespace AlphaDev.Core.Tests.Integration
         {
             var now = DateTime.UtcNow;
             GetDateProvider()
-                           .UtcNow.Should()
-                           .BeOnOrAfter(now)
-                           .And.BeCloseTo(now, TimeSpan.FromMilliseconds(5));
+                .UtcNow.Should()
+                .BeOnOrAfter(now)
+                .And.BeCloseTo(now, TimeSpan.FromMilliseconds(5));
         }
     }
 }

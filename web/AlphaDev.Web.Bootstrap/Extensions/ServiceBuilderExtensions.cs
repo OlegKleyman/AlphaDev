@@ -42,7 +42,8 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         }
 
         [NotNull]
-        public static IServiceCollection AddDbSets<T>([NotNull] this IServiceCollection serviceCollection) where T : DbContext
+        public static IServiceCollection AddDbSets<T>([NotNull] this IServiceCollection serviceCollection)
+            where T : DbContext
         {
             var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
                                       .Where(info =>
@@ -59,7 +60,9 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         }
 
         [NotNull]
-        public static IServiceCollection AddScopedTo<TService1, TService2>([NotNull] this IServiceCollection serviceCollection, Func<IServiceProvider, TService1> factory) where TService1 : class, TService2 where TService2 : class
+        public static IServiceCollection AddScopedTo<TService1, TService2>(
+            [NotNull] this IServiceCollection serviceCollection, Func<IServiceProvider, TService1> factory)
+            where TService1 : class, TService2 where TService2 : class
         {
             return serviceCollection.AddScoped(factory)
                                     .AddScoped<TService2>(provider => provider.GetRequiredService<TService1>());

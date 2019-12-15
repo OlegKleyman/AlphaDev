@@ -1,11 +1,11 @@
 ﻿using System.Linq;
+using AlphaDev.Core;
 using AlphaDev.Core.Extensions;
 using AlphaDev.Web.Extensions;
 using AlphaDev.Web.Support;
 using FluentAssertions;
 using Xunit;
 using Enumerable = System.Linq.Enumerable;
-using PositiveInteger = AlphaDev.Core.PositiveInteger;
 
 namespace AlphaDev.Web.Tests.Unit.Extensions
 {

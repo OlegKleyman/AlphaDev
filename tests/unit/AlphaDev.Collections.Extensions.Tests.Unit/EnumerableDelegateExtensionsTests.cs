@@ -20,9 +20,14 @@ namespace AlphaDev.Collections.Extensions.Tests.Unit
         }
 
         [Fact]
-        public void CombineReturnsNullWhenEnumerableIsEmpty()
+        public void CombineCombinesNoneNullDelegatesIntoOneWhenEnumerableContainsNullElements()
         {
-            Enumerable.Empty<Action>().Combine().Should().BeNull();
+            var actionSwitch1 = new Switch<Action>(x => () => x.On = true);
+            var actionSwitch2 = new Switch<Action>(x => () => x.On = true);
+
+            new[] { actionSwitch1.Target, null, actionSwitch2.Target }.Combine()?.Invoke();
+            actionSwitch1.On.Should().BeTrue();
+            actionSwitch2.On.Should().BeTrue();
         }
 
         [Fact]
@@ -32,14 +37,9 @@ namespace AlphaDev.Collections.Extensions.Tests.Unit
         }
 
         [Fact]
-        public void CombineCombinesNoneNullDelegatesIntoOneWhenEnumerableContainsNullElements()
+        public void CombineReturnsNullWhenEnumerableIsEmpty()
         {
-            var actionSwitch1 = new Switch<Action>(x => () => x.On = true);
-            var actionSwitch2 = new Switch<Action>(x => () => x.On = true);
-
-            new[] { actionSwitch1.Target, null, actionSwitch2.Target }.Combine()?.Invoke();
-            actionSwitch1.On.Should().BeTrue();
-            actionSwitch2.On.Should().BeTrue();
+            Enumerable.Empty<Action>().Combine().Should().BeNull();
         }
     }
 }

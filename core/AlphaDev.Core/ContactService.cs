@@ -11,7 +11,7 @@ namespace AlphaDev.Core
     public class ContactService : IContactService
     {
         [NotNull] private readonly DbSet<Contact> _contacts;
-        
+
         public ContactService([NotNull] DbSet<Contact> contacts) => _contacts = contacts;
 
         public Option<string> GetContactDetails()
