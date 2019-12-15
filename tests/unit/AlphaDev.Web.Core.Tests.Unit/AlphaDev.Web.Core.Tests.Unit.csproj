@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\core\AlphaDev.Web.Core\AlphaDev.Web.Core.csproj" />
+    <ProjectReference Include="..\..\..\core\AlphaDev.Web.Core\AlphaDev.Web.Core.csproj" />
   </ItemGroup>
 
 </Project>
