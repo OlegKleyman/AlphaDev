@@ -24,7 +24,8 @@ namespace AlphaDev.Web.Core.Tests.Unit.TagHelpers
             EditorView editorView) => Substitute.For<EditorTagHelper>(htmlHelper, urlHelperFactory, editorView);
 
         [NotNull]
-        private EditorTagHelper GetEditorTagHelperHelper(IHtmlHelper? htmlHelper, IUrlHelperFactory? urlHelperFactory) =>
+        private EditorTagHelper
+            GetEditorTagHelperHelper(IHtmlHelper? htmlHelper, IUrlHelperFactory? urlHelperFactory) =>
             GetEditorTagHelperHelper(htmlHelper, urlHelperFactory,
                 new EditorView("testView", "testPrefix", "testElementName"));
 

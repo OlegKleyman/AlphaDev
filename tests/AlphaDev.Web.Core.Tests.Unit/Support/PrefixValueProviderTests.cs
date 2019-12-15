@@ -17,7 +17,10 @@ namespace AlphaDev.Web.Core.Tests.Unit.Support
         [Fact]
         public void ContainsPrefixShouldReturnTrue()
         {
-            GetPrefixValueProvider(Substitute.For<IValueProvider>(), string.Empty).ContainsPrefix(default).Should().BeTrue();
+            GetPrefixValueProvider(Substitute.For<IValueProvider>(), string.Empty)
+                .ContainsPrefix(default)
+                .Should()
+                .BeTrue();
         }
 
         [Fact]

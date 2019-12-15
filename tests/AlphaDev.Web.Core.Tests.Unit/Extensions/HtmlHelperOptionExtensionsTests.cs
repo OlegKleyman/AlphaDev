@@ -20,7 +20,7 @@ namespace AlphaDev.Web.Core.Tests.Unit.Extensions
             var target = Option.None<string>();
             var helper = Substitute.For<IHtmlHelper<object>>();
 
-            var content = helper.ActionLink(target, string.Empty, string.Empty, string.Empty, s => new{}, new{});
+            var content = helper.ActionLink(target, string.Empty, string.Empty, string.Empty, s => new { }, new { });
 
             var writer = new StringWriter();
             content.WriteTo(writer, HtmlEncoder.Default);
@@ -37,7 +37,7 @@ namespace AlphaDev.Web.Core.Tests.Unit.Extensions
             helper.ActionLink("text", "action", "controller", null, null, null, "routeValue", Arg.Any<object>())
                   .Returns(new StringHtmlContent("test"));
 
-            var content = helper.ActionLink(target, "text", "action", "controller", x => "routeValue", new{});
+            var content = helper.ActionLink(target, "text", "action", "controller", x => "routeValue", new { });
 
             var writer = new StringWriter();
             content.WriteTo(writer, HtmlEncoder.Default);
@@ -79,7 +79,7 @@ namespace AlphaDev.Web.Core.Tests.Unit.Extensions
             var target = Option.None<string>();
             var helper = Substitute.For<IHtmlHelper<object>>();
 
-            var content = HtmlHelperOptionExtensions.Hidden(helper, string.Empty, target, new{});
+            var content = HtmlHelperOptionExtensions.Hidden(helper, string.Empty, target, new { });
 
             var writer = new StringWriter();
             content.WriteTo(writer, HtmlEncoder.Default);
@@ -93,7 +93,7 @@ namespace AlphaDev.Web.Core.Tests.Unit.Extensions
             var helper = Substitute.For<IHtmlHelper<object>>();
             helper.Hidden("test", "test", Arg.Any<object>()).Returns(new StringHtmlContent("test"));
 
-            var content = HtmlHelperOptionExtensions.Hidden(helper, "test", target, new{});
+            var content = HtmlHelperOptionExtensions.Hidden(helper, "test", target, new { });
 
             var writer = new StringWriter();
             content.WriteTo(writer, HtmlEncoder.Default);
