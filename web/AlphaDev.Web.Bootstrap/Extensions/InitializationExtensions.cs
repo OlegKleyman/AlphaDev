@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AlphaDev.Core;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Entities;
@@ -8,10 +9,10 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Blog = AlphaDev.Core.Data.Entities.Blog;
 
 namespace AlphaDev.Web.Bootstrap.Extensions
 {
@@ -24,10 +25,10 @@ namespace AlphaDev.Web.Bootstrap.Extensions
             {
                 if (scope.ServiceProvider.GetService<IWebHostEnvironment>().IsDevelopment())
                 {
-                    var context = scope.ServiceProvider.GetService<BlogContext>();
+                    var blogs = scope.ServiceProvider.GetService<DbSet<Blog>>();
 
-                    context.Database.ExecuteSqlRaw("TRUNCATE TABLE Blogs");
-                    context.Blogs.AddRange(
+                    blogs.RemoveRange(blogs);
+                    blogs.AddRange(
                         Enumerable.Range(1, 412)
                                   .Select(x => new Blog
                                   {
@@ -37,7 +38,8 @@ namespace AlphaDev.Web.Bootstrap.Extensions
                                       Modified = new DateTime(2017, 7, 10)
                                   }));
 
-                    context.SaveChanges();
+                    var token = scope.ServiceProvider.GetRequiredService<ISaveToken>();
+                    token.SaveAsync().GetAwaiter().GetResult();
                 }
             }
 
@@ -77,16 +79,20 @@ namespace AlphaDev.Web.Bootstrap.Extensions
         {
             using (var scope = builder.ApplicationServices.CreateScope())
             {
+                var contexts = scope.ServiceProvider.GetServices<DbContext>().ToArray();
+
                 if (scope.ServiceProvider.GetService<IWebHostEnvironment>().IsDevelopment())
                 {
-                    scope.ServiceProvider.GetService<BlogContext>().Database.EnsureDeleted();
-                    scope.ServiceProvider.GetService<InformationContext>().Database.EnsureDeleted();
-                    scope.ServiceProvider.GetService<IdentityDbContext<User>>().Database.EnsureDeleted();
+                    foreach (var context in contexts)
+                    {
+                        context.Database.EnsureDeleted();
+                    }
                 }
 
-                scope.ServiceProvider.GetService<BlogContext>().Database.Migrate();
-                scope.ServiceProvider.GetService<InformationContext>().Database.Migrate();
-                scope.ServiceProvider.GetService<IdentityDbContext<User>>().Database.Migrate();
+                foreach (var context in contexts)
+                {
+                    context.Database.Migrate();
+                }
             }
 
             return builder;

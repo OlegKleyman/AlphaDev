@@ -4,7 +4,7 @@ namespace AlphaDev.Core
 {
     public interface IContactService
     {
-        Option<string> GetDetails();
+        Option<string> GetContactDetails();
 
         void Edit(string value);
 

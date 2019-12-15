@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\core\AlphaDev.Collections.Extensions\AlphaDev.Collections.Extensions.csproj" />
     <ProjectReference Include="..\..\..\core\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
     <ProjectReference Include="..\..\..\core\AlphaDev.Core\AlphaDev.Core.csproj" />
     <ProjectReference Include="..\..\core\AlphaDev.Test.Core\AlphaDev.Test.Core.csproj" />

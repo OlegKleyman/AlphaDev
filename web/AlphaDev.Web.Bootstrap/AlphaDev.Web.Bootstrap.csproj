@@ -5,6 +5,12 @@
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <Version></Version>
     <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\core\AlphaDev.Collections.Extensions\AlphaDev.Collections.Extensions.csproj" />
     <ProjectReference Include="..\..\core\AlphaDev.Core.Data.Account.Security.Sql\AlphaDev.Core.Data.Account.Security.Sql.csproj" />
     <ProjectReference Include="..\..\core\AlphaDev.Core.Data.Sql\AlphaDev.Core.Data.Sql.csproj" />
     <ProjectReference Include="..\..\core\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />

@@ -27,30 +27,31 @@ namespace AlphaDev.Web.Bootstrap
         {
             var securitySqlConfigurer = new SqlConfigurer(_configuration.GetConnectionString("defaultSecurity"));
             var defaultSqlConfigurer = new SqlConfigurer(_configuration.GetConnectionString("default"));
-            _ = services.AddSingleton<IPrefixGenerator, PrefixGenerator>()
-                        .AddServices()
-                        .AddContexts(defaultSqlConfigurer)
-                        .AddIdentityContexts(securitySqlConfigurer)
-                        .AddContextFactories()
-                        .AddSingleton<IDateProvider, DateProvider>()
-                        .AddDesignTimeFactories(defaultSqlConfigurer)
-                        .AddIdentity<User, IdentityRole>()
-                        .AddDefaultTokenProviders()
-                        .AddEntityFrameworkStores<IdentityDbContext<User>>()
-                        .Services
-                        .ConfigureApplicationCookie(options => { options.LoginPath = "/account/login"; })
-                        .AddLogging(builder =>
-                        {
-                            builder.AddConfiguration(_configuration.GetSection("Logging"));
-                            builder.AddConsole();
-                            builder.AddDebug();
-                            var logger = new LoggerConfiguration()
-                                         .ReadFrom.Configuration(_configuration)
-                                         .CreateLogger();
-                            builder.AddSerilog(logger);
-                        })
-                        .AddMvc(options => options.EnableEndpointRouting = false)
-                        .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddSingleton<IPrefixGenerator, PrefixGenerator>()
+                    .AddServices()
+                    .AddContexts(defaultSqlConfigurer)
+                    .AddDbContextSaveToken()
+                    .AddScoped<ISaveToken, SaveToken>()
+                    .AddIdentityContexts(securitySqlConfigurer)
+                    .AddSingleton<IDateProvider, DateProvider>()
+                    .AddDesignTimeFactories(defaultSqlConfigurer)
+                    .AddIdentity<User, IdentityRole>()
+                    .AddDefaultTokenProviders()
+                    .AddEntityFrameworkStores<IdentityDbContext<User>>()
+                    .Services
+                    .ConfigureApplicationCookie(options => { options.LoginPath = "/account/login"; })
+                    .AddLogging(builder =>
+                    {
+                        builder.AddConfiguration(_configuration.GetSection("Logging"));
+                        builder.AddConsole();
+                        builder.AddDebug();
+                        var logger = new LoggerConfiguration()
+                                     .ReadFrom.Configuration(_configuration)
+                                     .CreateLogger();
+                        builder.AddSerilog(logger);
+                    })
+                    .AddMvc(options => { options.EnableEndpointRouting = false; })
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

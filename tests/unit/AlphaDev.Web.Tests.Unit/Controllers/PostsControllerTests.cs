@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using AlphaDev.Core;
+using AlphaDev.Core.Extensions;
 using AlphaDev.Web.Controllers;
+using AlphaDev.Web.Core.Extensions;
+using AlphaDev.Web.Core.Support;
 using AlphaDev.Web.Models;
-using AlphaDev.Web.Support;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
@@ -12,8 +14,6 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NSubstitute;
 using Optional;
 using Xunit;
-using Int32 = AlphaDev.Core.Extensions.Int32;
-using PositiveInteger = AlphaDev.Web.Extensions.PositiveInteger;
 
 namespace AlphaDev.Web.Tests.Unit.Controllers
 {
@@ -302,8 +302,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             blogService.GetCount(Arg.Any<int>()).Returns(1);
             const int page = 9;
             GetPostsController(blogService).Page(page);
-            var value = PositiveInteger.ToStartPosition(Int32.ToPositiveInteger(page), Int32.ToPositiveInteger(10))
-                                       .Value;
+            var value = page.ToPositiveInteger().ToStartPosition(10.ToPositiveInteger()).Value;
             blogService.Received(1).GetOrderedByDates(Arg.Is(value), Arg.Is(10));
         }
 
@@ -315,7 +314,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                        .Returns(new[] { new Blog(string.Empty, string.Empty) });
             blogService.GetCount(Arg.Any<int>()).Returns(1);
             var controller = GetPostsController(blogService);
-            controller.Page(Core.PositiveInteger.MinValue.Value)
+            controller.Page(PositiveInteger.MinValue.Value)
                       .Should()
                       .BeOfType<ViewResult>()
                       .Which.Model.Should()
@@ -331,7 +330,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             blogService.GetCount(Arg.Any<int>()).Returns(101);
             var controller = GetPostsController(blogService);
 
-            controller.Page(Core.PositiveInteger.MinValue.Value)
+            controller.Page(PositiveInteger.MinValue.Value)
                       .Should()
                       .BeOfType<ViewResult>()
                       .Which.Model.Should()
@@ -377,7 +376,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var controller = GetPostsController(blogService);
 
-            controller.Page(Core.PositiveInteger.MinValue.Value)
+            controller.Page(PositiveInteger.MinValue.Value)
                       .Should()
                       .BeOfType<ViewResult>()
                       .Which.Model.Should()
@@ -408,7 +407,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             blogService.GetCount(Arg.Any<int>()).Returns(101);
             var controller = GetPostsController(blogService);
 
-            controller.Page(Core.PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>();
+            controller.Page(PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>();
         }
     }
 }
