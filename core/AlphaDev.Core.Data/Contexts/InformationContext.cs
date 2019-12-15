@@ -27,6 +27,7 @@ namespace AlphaDev.Core.Data.Contexts
         [CanBeNull]
         public About? About => Abouts.SingleOrDefault();
 
+        [NotNull]
         public DbSet<Contact> Contacts
         {
             get => _contacts ?? throw new InvalidOperationException($"{nameof(Contacts)} is null.");
