@@ -27,54 +27,64 @@ namespace AlphaDev.Web.Controllers
 
         [AllowAnonymous]
         [Route("about")]
-        public IActionResult About()
+        public async Task<IActionResult> About()
         {
             IActionResult GetAboutView(string value) => View(nameof(About), value);
-
-            return _aboutService.GetAboutDetails()
-                                .Map(s => GetAboutView(s).Some())
-                                .ValueOr(() =>
-                                    RedirectToAction(nameof(CreateAbout))
-                                        .SomeWhen<IActionResult>(result => User.Identity.IsAuthenticated))
-                                .ValueOr(() => GetAboutView("No details"));
+            return (await _aboutService.GetAboutDetailsAsync())
+                   .Map(s => GetAboutView(s).Some())
+                   .ValueOr(() =>
+                       RedirectToAction(nameof(CreateAbout))
+                           .SomeWhen<IActionResult>(result =>
+                               User.Identity.IsAuthenticated))
+                   .ValueOr(() => GetAboutView("No details"));
         }
 
         [Route("about/edit")]
-        public IActionResult EditAbout()
+        public async Task<IActionResult> EditAbout()
         {
-            return _aboutService.GetAboutDetails()
-                                .Map(s => new AboutEditViewModel(s))
-                                .Map<IActionResult>(model => View(nameof(EditAbout), model))
-                                .ValueOr(() => RedirectToAction(nameof(About)));
+            return await _aboutService.GetAboutDetailsAsync()
+                                        .WithExceptionAsync(() => RedirectToAction(nameof(About)))
+                                        .MapAsync(s => new AboutEditViewModel(s))
+                                        .MapAsync(model => (IActionResult)View(nameof(EditAbout), model))
+                                        .GetValueOrExceptionAsync();
         }
 
         [SaveFilter]
         [Route("about/edit")]
         [HttpPost]
-        public IActionResult EditAbout(AboutEditViewModel model)
+        public async Task<IActionResult> EditAbout(AboutEditViewModel model)
         {
-            var option = ModelState.SomeWhen(dictionary => dictionary.IsValid)
-                                   .WithException(() => View(nameof(EditAbout), model));
-            option.MatchSome(dictionary => _aboutService.Edit(model.Value));
-            return option.Map<IActionResult>(dictionary => RedirectToAction(nameof(About))).GetValueOrException();
+            var option = ModelState.IsValid
+                                   .Some()
+                                   .FilterAsync(Task.FromResult)
+                                   .WithExceptionAsync(() => View(nameof(EditAbout), model));
+            await option.MatchSomeAsync(b => _aboutService.EditAsync(model.Value));
+            return await option.MapAsync(dictionary => (IActionResult)RedirectToAction(nameof(About)))
+                               .GetValueOrExceptionAsync();
         }
 
         [Route("about/create")]
-        public IActionResult CreateAbout()
+        public async Task<IActionResult> CreateAbout()
         {
-            return _aboutService.GetAboutDetails()
-                                .Map<IActionResult>(s => RedirectToAction(nameof(EditAbout)))
-                                .ValueOr(() => View(nameof(CreateAbout), new AboutCreateViewModel()));
+            return await _aboutService.GetAboutDetailsAsync()
+                                      .WithExceptionAsync(() =>
+                                          View(nameof(CreateAbout), new AboutCreateViewModel()))
+                                      .MapAsync(s => (IActionResult) RedirectToAction(nameof(EditAbout)))
+                                      .GetValueOrExceptionAsync();
         }
 
         [SaveFilter]
         [Route("about/create")]
         [HttpPost]
-        public IActionResult CreateAbout([NotNull] AboutCreateViewModel model)
+        public async Task<IActionResult> CreateAbout([NotNull] AboutCreateViewModel model)
         {
-            var option = ModelState.IsValid.SomeWhen(b => b, () => View(nameof(CreateAbout), model));
-            option.MatchSome(b => _aboutService.Create(model.Value));
-            return option.Map<IActionResult>(b => RedirectToAction(nameof(About))).GetValueOrException();
+            var option = ModelState.IsValid
+                                   .Some()
+                                   .FilterAsync(Task.FromResult)
+                                   .WithExceptionAsync(() => View(nameof(CreateAbout), model));
+            await option.MatchSomeAsync(b => _aboutService.CreateAsync(model.Value));
+            return await option.MapAsync(b => (IActionResult) RedirectToAction(nameof(About)))
+                               .GetValueOrExceptionAsync();
         }
 
         [AllowAnonymous]
@@ -99,16 +109,6 @@ namespace AlphaDev.Web.Controllers
                                         .MapAsync(s => new ContactEditViewModel(s))
                                         .MapAsync(model => (IActionResult) View(nameof(EditContact), model))
                                         .GetValueOrExceptionAsync();
-        }
-
-        [Route("contact/edit")]
-        public async Task<IActionResult> EditContact1()
-        {
-            return await _contactService.GetContactDetailsAsync()
-                                 .WithExceptionAsync(() => RedirectToAction(nameof(Contact)))
-                                 .MapAsync(s => new ContactEditViewModel(s))
-                                 .MapAsync(model => (IActionResult)View(nameof(EditContact), model))
-                                 .GetValueOrExceptionAsync();
         }
 
         [SaveFilter]
