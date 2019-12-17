@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AlphaDev.EntityFramework.Unit.Testing.Extensions;
 using AlphaDev.Test.Core.Extensions;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -293,7 +294,7 @@ namespace AlphaDev.Core.Tests.Unit
                    .HaveCount(4)
                    .And.Subject.Select(x => x.Id)
                    .Should()
-                   .BeEquivalentTo(blogDbSet.Take(4).Select(x => x.Id));
+                   .BeEquivalentTo(Queryable.Take(blogDbSet, 4).Select(x => x.Id));
         }
 
         [Fact]
@@ -323,7 +324,7 @@ namespace AlphaDev.Core.Tests.Unit
             service.GetOrderedByDates(1, blogDbSet.Count())
                    .Select(x => x.Dates)
                    .Should()
-                   .BeEquivalentTo(blogDbSet.OrderByDescending(x => x.Modified)
+                   .BeEquivalentTo(Queryable.OrderByDescending(blogDbSet, x => x.Modified)
                                             .ThenByDescending(x => x.Created)
                                             .Select(x => new { x.Created, Modified = x.Modified.ToOption() }));
         }
@@ -344,7 +345,7 @@ namespace AlphaDev.Core.Tests.Unit
                    .HaveCount(4)
                    .And.Subject.Select(x => x.Id)
                    .Should()
-                   .BeEquivalentTo(blogDbSet.Skip(6).Select(x => x.Id));
+                   .BeEquivalentTo(Queryable.Skip(blogDbSet, 6).Select(x => x.Id));
         }
 
         [Fact]

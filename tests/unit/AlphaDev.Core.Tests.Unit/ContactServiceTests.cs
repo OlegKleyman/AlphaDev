@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Test.Core.Extensions;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using MockQueryable.NSubstitute;
 using NSubstitute;
 using Optional;
 using Xunit;
@@ -15,66 +17,65 @@ namespace AlphaDev.Core.Tests.Unit
     public class ContactServiceTests
     {
         [NotNull]
-        private ContactService GetContactService(DbSet<Contact> contacts) => new ContactService(contacts);
+        private ContactService GetContactService([NotNull] DbSet<Contact> contacts) => new ContactService(contacts);
 
         [Fact]
         public void ConstructorShouldInitializeContactService()
         {
-            Action constructor = () => new ContactService(Substitute.For<DbSet<Contact>>());
+            Action constructor = () => new ContactService(Substitute.For<DbSet<Contact>>()).EmptyCall();
 
             constructor.Should().NotThrow();
         }
 
         [Fact]
-        public void CreateShouldSaveContactToDataStore()
+        public async Task CreateShouldSaveContactToDataStore()
         {
-            var contacts = new List<Contact>();
-            var contactsDbSet = contacts.ToMockDbSet().WithAddReturns(contacts);
+            var contactsDbSet = Enumerable.Empty<Contact>().AsQueryable().BuildMockDbSet();
             var service = GetContactService(contactsDbSet);
-            service.Create("test");
-            contactsDbSet.Should().HaveCount(1).And.BeEquivalentTo(new { Value = "test" });
+            await service.CreateAsync("test");
+            await contactsDbSet.Received(1).AddAsync(Arg.Is<Contact>(contact => contact.Value == "test"));
         }
 
         [Fact]
-        public void EditShouldEditContactValue()
+        public async Task EditShouldEditContactValue()
         {
-            var contacts = new[] { new Contact() }.ToMockDbSet();
+            var contacts = new[] { new Contact() }.AsQueryable().BuildMockDbSet();
             var service = GetContactService(contacts);
-            service.Edit("new value");
+            await service.EditAsync("new value");
             contacts.Single().Value.Should().BeEquivalentTo("new value");
         }
 
         [Fact]
         public void EditShouldThrowInvalidOperationExceptionWhenContactWasNotFound()
         {
-            var contacts = new Contact[0].ToMockDbSet();
+            var contacts = new Contact[0].AsQueryable().BuildMockDbSet();
             var service = GetContactService(contacts);
-            Action edit = () => service.Edit(string.Empty);
+            Func<Task> edit = () => service.EditAsync(string.Empty);
             edit.Should().Throw<InvalidOperationException>().WithMessage("Contact not found.");
         }
 
         [Fact]
-        public void GetContactDetailsShouldReturnContactDetails()
+        public async Task GetContactDetailsAsyncShouldReturnContactDetails()
         {
-            var contacts = new[] { new Contact { Value = "test" } }.ToMockDbSet();
+            var contacts = new[] { new Contact { Value = "test" } }.AsQueryable().BuildMockDbSet();
             var service = GetContactService(contacts);
-            service.GetContactDetails().Should().BeEquivalentTo(Option.Some("test"));
+            (await service.GetContactDetailsAsync()).Should().BeEquivalentTo(Option.Some("test"));
         }
 
         [Fact]
-        public void GetContactDetailsShouldReturnNoneWhenContactIsNull()
+        public async Task GetContactDetailsAsyncShouldReturnNoneWhenContactIsNull()
         {
-            var contacts = new List<Contact>().ToMockDbSet();
+            var contacts = new List<Contact>().AsQueryable().BuildMockDbSet();
             var service = GetContactService(contacts);
-            service.GetContactDetails().Should().BeEquivalentTo(Option.None<string>());
+            (await service.GetContactDetailsAsync()).Should().BeEquivalentTo(Option.None<string>());
         }
 
         [Fact]
-        public void GetContactDetailsShouldReturnNoneWhenContactValueIsNull()
+        public async Task GetContactDetailsAsyncShouldReturnNoneWhenContactValueIsNull()
         {
-            var contacts = new[] { new Contact() }.ToMockDbSet();
+            var contacts = new[] { new Contact() }.AsQueryable().BuildMockDbSet();
             var service = GetContactService(contacts);
-            service.GetContactDetails().Should().BeEquivalentTo(Option.None<string>());
+            (await service.GetContactDetailsAsync()).Should().BeEquivalentTo(Option.None<string>());
         }
     }
 }

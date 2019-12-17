@@ -1,4 +1,7 @@
-﻿using Optional;
+﻿using System;
+using System.Threading.Tasks;
+using Optional;
+using Optional.Unsafe;
 
 namespace AlphaDev.Optional.Extensions
 {

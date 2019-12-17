@@ -1,4 +1,5 @@
-﻿using AlphaDev.Core;
+﻿using System.Threading.Tasks;
+using AlphaDev.Core;
 using AlphaDev.Optional.Extensions;
 using AlphaDev.Web.Core;
 using AlphaDev.Web.Models;
@@ -6,6 +7,8 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Optional;
+using Optional.Async;
+using OptionExtensions = AlphaDev.Optional.Extensions.OptionExtensions;
 
 namespace AlphaDev.Web.Controllers
 {
@@ -76,53 +79,74 @@ namespace AlphaDev.Web.Controllers
 
         [AllowAnonymous]
         [Route("contact")]
-        public IActionResult Contact()
+        public async Task<IActionResult> Contact()
         {
             IActionResult GetContactView(string value) => View(nameof(Contact), value);
-
-            return _contactService.GetContactDetails()
-                                  .Map(s => GetContactView(s).Some())
-                                  .ValueOr(() =>
-                                      RedirectToAction(nameof(CreateContact))
-                                          .SomeWhen<IActionResult>(result => User.Identity.IsAuthenticated))
-                                  .ValueOr(() => GetContactView("No details"));
+            return (await _contactService.GetContactDetailsAsync())
+                   .Map(s => GetContactView(s).Some())
+                   .ValueOr(() =>
+                       RedirectToAction(nameof(CreateContact))
+                           .SomeWhen<IActionResult>(result =>
+                               User.Identity.IsAuthenticated))
+                   .ValueOr(() => GetContactView("No details"));
         }
 
         [Route("contact/edit")]
-        public IActionResult EditContact()
+        public async Task<IActionResult> EditContact()
         {
-            return _contactService.GetContactDetails()
-                                  .Map(s => new ContactEditViewModel(s))
-                                  .Map<IActionResult>(model => View(nameof(EditContact), model))
-                                  .ValueOr(() => RedirectToAction(nameof(Contact)));
+            return await _contactService.GetContactDetailsAsync()
+                                        .WithExceptionAsync(() => RedirectToAction(nameof(Contact)))
+                                        .MapAsync(s => new ContactEditViewModel(s))
+                                        .MapAsync(model => (IActionResult) View(nameof(EditContact), model))
+                                        .GetValueOrExceptionAsync();
+        }
+
+        [Route("contact/edit")]
+        public async Task<IActionResult> EditContact1()
+        {
+            return await _contactService.GetContactDetailsAsync()
+                                 .WithExceptionAsync(() => RedirectToAction(nameof(Contact)))
+                                 .MapAsync(s => new ContactEditViewModel(s))
+                                 .MapAsync(model => (IActionResult)View(nameof(EditContact), model))
+                                 .GetValueOrExceptionAsync();
         }
 
         [SaveFilter]
         [Route("contact/edit")]
         [HttpPost]
-        public IActionResult EditContact(ContactEditViewModel model)
+        public async Task<IActionResult> EditContact(ContactEditViewModel model)
         {
-            var option = ModelState.SomeWhen(dictionary => dictionary.IsValid, () => View(nameof(EditContact), model));
-            option.MatchSome(dictionary => _contactService.Edit(model.Value));
-            return option.Map<IActionResult>(dictionary => RedirectToAction(nameof(Contact))).GetValueOrException();
+            var option = ModelState.IsValid
+                                   .Some()
+                                   .FilterAsync(Task.FromResult)
+                                   .WithExceptionAsync(() => View(nameof(EditContact), model));
+            await option.MatchSomeAsync(b => _contactService.EditAsync(model.Value));
+            return await option.MapAsync(dictionary => (IActionResult) RedirectToAction(nameof(Contact)))
+                               .GetValueOrExceptionAsync();
         }
 
         [Route("contact/create")]
-        public IActionResult CreateContact()
+        public async Task<IActionResult> CreateContact()
         {
-            return _contactService.GetContactDetails()
-                                  .Map<IActionResult>(s => RedirectToAction(nameof(EditContact)))
-                                  .ValueOr(() => View(nameof(CreateContact), new ContactCreateViewModel()));
+            return await _contactService.GetContactDetailsAsync()
+                                        .WithExceptionAsync(() =>
+                                            View(nameof(CreateContact), new ContactCreateViewModel()))
+                                        .MapAsync(s => (IActionResult) RedirectToAction(nameof(EditContact)))
+                                        .GetValueOrExceptionAsync();
         }
 
         [SaveFilter]
         [Route("contact/create")]
         [HttpPost]
-        public IActionResult CreateContact([NotNull] ContactCreateViewModel model)
+        public async Task<IActionResult> CreateContact([NotNull] ContactCreateViewModel model)
         {
-            var option = ModelState.IsValid.SomeWhen(b => b, () => View(nameof(CreateContact), model));
-            option.MatchSome(b => _contactService.Create(model.Value));
-            return option.Map<IActionResult>(b => RedirectToAction(nameof(Contact))).GetValueOrException();
+            var option = ModelState.IsValid
+                                   .Some()
+                                   .FilterAsync(Task.FromResult)
+                                   .WithExceptionAsync(() => View(nameof(CreateContact), model));
+            await option.MatchSomeAsync(b => _contactService.CreateAsync(model.Value));
+            return await option.MapAsync(dictionary => (IActionResult)RedirectToAction(nameof(Contact)))
+                               .GetValueOrExceptionAsync();
         }
     }
 }

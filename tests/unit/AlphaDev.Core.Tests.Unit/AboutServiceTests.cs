@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using AlphaDev.Core.Data.Entities;
+using AlphaDev.EntityFramework.Unit.Testing.Extensions;
 using AlphaDev.Test.Core.Extensions;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using MockQueryable.NSubstitute;
+using NSubstitute;
+using NSubstitute.ReceivedExtensions;
 using Optional;
 using Xunit;
 
@@ -19,11 +23,10 @@ namespace AlphaDev.Core.Tests.Unit
         [Fact]
         public void CreateShouldSaveAboutToDataStore()
         {
-            var abouts = new List<About>();
-            var aboutsDbSet = abouts.ToMockDbSet().WithAddReturns(abouts);
+            var aboutsDbSet = new List<About>().AsQueryable().BuildMockDbSet();
             var service = GetAboutService(aboutsDbSet);
             service.Create("test");
-            aboutsDbSet.Should().HaveCount(1).And.BeEquivalentTo(new { Value = "test" });
+            aboutsDbSet.Received(1).Add(Arg.Is<About>(about => about.Value == "test"));
         }
 
         [Fact]

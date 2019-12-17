@@ -1,13 +1,14 @@
-﻿using Optional;
+﻿using System.Threading.Tasks;
+using Optional;
 
 namespace AlphaDev.Core
 {
     public interface IContactService
     {
-        Option<string> GetContactDetails();
+        Task<Option<string>> GetContactDetailsAsync();
 
-        void Edit(string value);
+        Task EditAsync(string value);
 
-        void Create(string value);
+        Task CreateAsync(string value);
     }
 }

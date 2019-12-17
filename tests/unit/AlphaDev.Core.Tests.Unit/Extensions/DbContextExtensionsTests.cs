@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AlphaDev.Core.Extensions;
 using AlphaDev.Core.Tests.Unit.Extensions.Support;
+using AlphaDev.EntityFramework.Unit.Testing.Extensions;
 using AlphaDev.Test.Core.Extensions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -28,10 +29,11 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
             context.Database.Returns(Substitute.For<DatabaseFacade>(context));
             context.SaveChanges().Returns(1);
             var mocks = new List<object>();
-            var mockSet = mocks.ToMockDbSet().WithAddReturns(mocks);
+            var mockSet = mocks.ToMockDbSet();
             var target = new object();
+            mockSet.Add(Arg.Any<object>()).Returns(info => target.ToMockEntityEntry());
             context.AddAndSaveSingleOrThrow(x => mockSet, target);
-            mockSet.Should().ContainSingle().Which.Should().BeSameAs(target);
+            mockSet.Received(1).Add(target);
         }
 
         [Fact]
