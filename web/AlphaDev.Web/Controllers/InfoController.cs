@@ -30,13 +30,16 @@ namespace AlphaDev.Web.Controllers
         public async Task<IActionResult> About()
         {
             IActionResult GetAboutView(string value) => View(nameof(About), value);
-            return (await _aboutService.GetAboutDetailsAsync())
-                   .Map(s => GetAboutView(s).Some())
-                   .ValueOr(() =>
-                       RedirectToAction(nameof(CreateAbout))
-                           .SomeWhen<IActionResult>(result =>
-                               User.Identity.IsAuthenticated))
-                   .ValueOr(() => GetAboutView("No details"));
+            return await _aboutService.GetAboutDetailsAsync()
+                               .MapAsync(GetAboutView)
+                               .WithExceptionAsync(() =>
+                               {
+                                   return RedirectToAction(nameof(CreateAbout))
+                                          .SomeWhen<IActionResult>(result => User.Identity.IsAuthenticated)
+                                          .WithException(() => GetAboutView("No details"))
+                                          .ValueOrException();
+                               })
+                               .GetValueOrExceptionAsync();
         }
 
         [Route("about/edit")]
@@ -92,13 +95,17 @@ namespace AlphaDev.Web.Controllers
         public async Task<IActionResult> Contact()
         {
             IActionResult GetContactView(string value) => View(nameof(Contact), value);
-            return (await _contactService.GetContactDetailsAsync())
-                   .Map(s => GetContactView(s).Some())
-                   .ValueOr(() =>
-                       RedirectToAction(nameof(CreateContact))
-                           .SomeWhen<IActionResult>(result =>
-                               User.Identity.IsAuthenticated))
-                   .ValueOr(() => GetContactView("No details"));
+            return await _contactService.GetContactDetailsAsync()
+                                        .MapAsync(GetContactView)
+                                        .WithExceptionAsync(() =>
+                                        {
+                                            return RedirectToAction(nameof(CreateContact))
+                                                   .SomeWhen<IActionResult>(result =>
+                                                       User.Identity.IsAuthenticated)
+                                                   .WithException(() => GetContactView("No details"))
+                                                   .GetValueOrException();
+                                        })
+                                        .GetValueOrExceptionAsync();
         }
 
         [Route("contact/edit")]
