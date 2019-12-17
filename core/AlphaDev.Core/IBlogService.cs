@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Optional;
 
 namespace AlphaDev.Core
 {
     public interface IBlogService
     {
-        Option<BlogBase> GetLatest();
+        Task<Option<BlogBase>> GetLatestAsync();
 
         Option<BlogBase> Get(int id);
 

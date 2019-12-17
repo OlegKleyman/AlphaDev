@@ -19,5 +19,7 @@ namespace AlphaDev.Optional.Extensions
         {
             return (await option).ValueOr(x => x);
         }
+
+        public static TResult To<T, TResult>(this T target, Func<T, TResult> result) => result(target);
     }
 }

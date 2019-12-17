@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AlphaDev.EntityFramework.Unit.Testing.Extensions;
 using AlphaDev.Test.Core.Extensions;
 using FluentAssertions;
@@ -117,7 +118,7 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void GetLatestShouldReturnBlogWithContent()
+        public async Task GetLatestShouldReturnBlogWithContent()
         {
             const string testValue = "test content";
 
@@ -132,7 +133,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogsDbSet);
 
-            service.GetLatest()
+            (await service.GetLatestAsync())
                    .ValueOrFailure()
                    .Should()
                    .BeEquivalentTo(
@@ -141,7 +142,7 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void GetLatestShouldReturnBlogWithCreatedDate()
+        public async Task GetLatestShouldReturnBlogWithCreatedDate()
         {
             var testValue = new DateTime(2017, 1, 1);
             var blogDbSet = new[]
@@ -151,7 +152,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetLatest()
+            (await service.GetLatestAsync())
                    .ValueOrFailure()
                    .Should()
                    .BeEquivalentTo(
@@ -160,7 +161,7 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void GetLatestShouldReturnBlogWithId()
+        public async Task GetLatestShouldReturnBlogWithId()
         {
             const int testValue = 1;
             var blogDbSet = new[]
@@ -175,7 +176,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetLatest()
+            (await service.GetLatestAsync())
                    .ValueOrFailure()
                    .Should()
                    .BeEquivalentTo(
@@ -184,7 +185,7 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void GetLatestShouldReturnBlogWithModifiedDate()
+        public async Task GetLatestShouldReturnBlogWithModifiedDate()
         {
             var testValue = new DateTime(2017, 1, 1);
             var blogs = new List<Data.Entities.Blog>
@@ -199,7 +200,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetLatest()
+            (await service.GetLatestAsync())
                    .ValueOrFailure()
                    .Should()
                    .BeEquivalentTo(
@@ -208,7 +209,7 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void GetLatestShouldReturnBlogWithNoModifiedDateWhenDbModifiedDateIsNull()
+        public async Task GetLatestShouldReturnBlogWithNoModifiedDateWhenDbModifiedDateIsNull()
         {
             var blogs = new List<Data.Entities.Blog>
             {
@@ -219,7 +220,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetLatest()
+            (await service.GetLatestAsync())
                    .ValueOrFailure()
                    .Should()
                    .BeEquivalentTo(
@@ -228,7 +229,7 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void GetLatestShouldReturnBlogWithTitle()
+        public async Task GetLatestShouldReturnBlogWithTitle()
         {
             const string testValue = "test";
             var blogsDbSet = new List<Data.Entities.Blog>
@@ -236,7 +237,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogsDbSet);
 
-            service.GetLatest()
+            (await service.GetLatestAsync())
                    .ValueOrFailure()
                    .Should()
                    .BeEquivalentTo(
@@ -245,7 +246,7 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void GetLatestShouldReturnLatestBlog()
+        public async Task GetLatestShouldReturnLatestBlog()
         {
             var blogDbSet = new List<Data.Entities.Blog>
             {
@@ -261,7 +262,7 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetLatest()
+            (await service.GetLatestAsync())
                    .ValueOrFailure()
                    .Should()
                    .BeEquivalentTo(
@@ -270,12 +271,12 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void GetLatestShouldReturnNoBlogWhenNoBlogIsFound()
+        public async Task GetLatestShouldReturnNoBlogWhenNoBlogIsFound()
         {
             var blogDbSet = new List<Data.Entities.Blog>().ToMockDbSet();
             var service = GetBlogService(blogDbSet);
 
-            service.GetLatest().HasValue.Should().BeFalse();
+            (await service.GetLatestAsync()).HasValue.Should().BeFalse();
         }
 
         [Fact]

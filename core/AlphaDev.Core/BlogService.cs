@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AlphaDev.Core.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
@@ -20,14 +21,12 @@ namespace AlphaDev.Core
             _dateProvider = dateProvider;
         }
 
-        public Option<BlogBase> GetLatest()
+        public async Task<Option<BlogBase>> GetLatestAsync()
         {
-            return _blogs.OrderByDescending(blog => blog.Created)
-                         .FirstOrNone()
-                         .Map(blog =>
-                             (BlogBase) new Blog(blog.Id,
-                                 blog.Title,
-                                 blog.Content,
+            var latestBlog = await _blogs.OrderByDescending(blog => blog.Created).FirstOrDefaultAsync();
+
+            return latestBlog.SomeNotNull()
+                             .Map(blog => (BlogBase) new Blog(blog.Id, blog.Title, blog.Content,
                                  new Dates(blog.Created, blog.Modified.ToOption())));
         }
 
