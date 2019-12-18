@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
+using FluentAssertions.Optional.Extensions;
 using Optional;
 using Xunit;
 
@@ -76,34 +77,28 @@ namespace AlphaDev.Optional.Extensions.Tests.Unit
         public static async Task SomeNotNullAsyncValueTaskReturnsSomeWhenTargetNotNull()
         {
             var option = await new ValueTask<string>(Task.FromResult("test")).SomeNotNullAsync();
-            string? value = null;
-            option.MatchSome(s => value = s);
-            value.Should().Be("test");
+            option.Should().HaveSome().Which.Should().Be("test");
         }
 
         [Fact]
         public static async Task SomeNotNullAsyncValueTaskReturnsNoneWhenTargetNull()
         {
             var option = await new ValueTask<object?>(Task.FromResult(default(object?))).SomeNotNullAsync();
-            option.Should().Be(Option.None<object?>());
+            option.Should().BeNone();
         }
 
         [Fact]
         public static async Task SomeNotNullAsyncValueTaskWithExceptionReturnsSomeWhenTargetNotNull()
         {
             var option = await new ValueTask<string>(Task.FromResult("test")).SomeNotNullAsync(() => new object());
-            string? value = null;
-            option.MatchSome(s => value = s);
-            value.Should().Be("test");
+            option.Should().HaveSome().Which.Should().Be("test");
         }
 
         [Fact]
         public static async Task SomeNotNullAsyncValueTaskReturnsExceptionNoneWhenTargetNull()
         {
-            string? exception = null;
             var option = await new ValueTask<string?>(Task.FromResult(default(string?))).SomeNotNullAsync(() => "exception");
-            option.MatchNone(o => exception = o);
-            exception.Should().Be("exception");
+            option.Should().BeNone().Which.Should().Be("exception");
         }
 
         [Fact]
@@ -112,8 +107,6 @@ namespace AlphaDev.Optional.Extensions.Tests.Unit
             var result = await Task.FromResult("test".Some().WithException(default(string?))).ValueOrAsync(s => string.Empty);
             result.Should().Be("test");
         }
-
-
 
         [Fact]
         public static async Task ValueOrAsyncReturnsExceptionWhenOptionHasNone()
