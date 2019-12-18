@@ -61,23 +61,24 @@ namespace AlphaDev.Web.Controllers
         [SaveFilter]
         [Route("create")]
         [HttpPost]
-        public ActionResult Create(CreatePostViewModel? post)
+        public async Task<ActionResult> Create(CreatePostViewModel? post)
         {
-            return post
+            return await post
                    .SomeWhenNotNull()
                    .Filter(x => ModelState.IsValid)
-                   .Map(x => _blogService.Add(new Blog(x.Title, x.Content)))
-                   .Map(blog => (ActionResult) RedirectToAction(nameof(Index), new { id = blog.Id }))
-                   .ValueOr(View(nameof(Create), post));
+                   .MapAsync(model => _blogService.AddAsync(new Blog(model.Title, model.Content)))
+                   .MapAsync(blog => (ActionResult)RedirectToAction(nameof(Index), new { id = blog.Id }))
+                   .WithExceptionAsync(() => View(nameof(Create), post))
+                   .GetValueOrExceptionAsync();
         }
 
         [Authorize]
         [SaveFilter]
         [Route("delete/{id}")]
         [HttpPost]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _blogService.Delete(id);
+            await _blogService.DeleteAsync(id);
 
             return RedirectToAction(nameof(Page), new { page = 1 });
         }

@@ -42,13 +42,13 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void CreateShouldReturnCreateViewWhenModelStateIsInvalid()
+        public async Task CreateShouldReturnCreateViewWhenModelStateIsInvalid()
         {
             var controller = GetPostsController(Substitute.For<IBlogService>());
 
             controller.ModelState.AddModelError("test", "test");
 
-            controller.Create(default)
+            (await controller.Create(default))
                       .Should()
                       .BeOfType<ViewResult>()
                       .Which.ViewName.Should()
@@ -56,7 +56,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void CreateShouldReturnViewWithSameModelWhenModelStateIsInvalid()
+        public async Task CreateShouldReturnViewWithSameModelWhenModelStateIsInvalid()
         {
             var controller = GetPostsController(Substitute.For<IBlogService>());
 
@@ -64,11 +64,11 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var post = new CreatePostViewModel("title", "content");
 
-            controller.Create(post).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(post);
+            (await controller.Create(post)).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(post);
         }
 
         [Fact]
-        public void CreateShouldRouteIdArgument()
+        public async Task CreateShouldRouteIdArgument()
         {
             var controller = GetPostsController(Substitute.For<IBlogService>());
 
@@ -76,17 +76,17 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var post = new CreatePostViewModel("title", "content");
 
-            controller.Create(post)
-                      .Should()
-                      .BeOfType<RedirectToActionResult>()
-                      .Which.RouteValues.Should()
-                      .ContainKey("id")
-                      .WhichValue.Should()
-                      .BeEquivalentTo(default(int));
+            (await controller.Create(post))
+                             .Should()
+                             .BeOfType<RedirectToActionResult>()
+                             .Which.RouteValues.Should()
+                             .ContainKey("id")
+                             .WhichValue.Should()
+                             .BeEquivalentTo(default(int));
         }
 
         [Fact]
-        public void CreateShouldRouteToIndexAction()
+        public async Task CreateShouldRouteToIndexAction()
         {
             var controller = GetPostsController(Substitute.For<IBlogService>());
 
@@ -94,31 +94,31 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var post = new CreatePostViewModel("title", "content");
 
-            controller.Create(post)
-                      .Should()
-                      .BeOfType<RedirectToActionResult>()
-                      .Which.ActionName.Should()
-                      .BeEquivalentTo("Index");
+            (await controller.Create(post))
+                             .Should()
+                             .BeOfType<RedirectToActionResult>()
+                             .Which.ActionName.Should()
+                             .BeEquivalentTo("Index");
         }
 
         [Fact]
-        public void DeleteShouldDeleteBlogWithMatchingId()
+        public async Task DeleteShouldDeleteBlogWithMatchingId()
         {
             var service = Substitute.For<IBlogService>();
             var controller = GetPostsController(service);
 
             const int id = 10;
-            controller.Delete(id);
+            await controller.Delete(id);
 
-            service.Received().Delete(id);
+            await service.Received().DeleteAsync(id);
         }
 
         [Fact]
-        public void DeleteShouldRedirectToDefaultPageAction()
+        public async Task DeleteShouldRedirectToDefaultPageAction()
         {
             var controller = GetPostsController(Substitute.For<IBlogService>());
 
-            var result = controller.Delete(default).Should().BeOfType<RedirectToActionResult>();
+            var result = (await controller.Delete(default)).Should().BeOfType<RedirectToActionResult>();
             result.Which.ActionName.Should().BeEquivalentTo("Page");
             result.Which.RouteValues["id"].Should().BeNull();
         }

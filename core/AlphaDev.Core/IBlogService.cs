@@ -11,9 +11,9 @@ namespace AlphaDev.Core
 
         Task<Option<BlogBase>> GetAsync(int id);
 
-        BlogBase Add(BlogBase blog);
+        Task<BlogBase> AddAsync(BlogBase blog);
 
-        void Delete(int id);
+        Task DeleteAsync(int id);
 
         void Edit(int id, Action<BlogEditArguments> edit);
 

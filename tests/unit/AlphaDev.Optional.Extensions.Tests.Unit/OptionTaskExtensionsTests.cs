@@ -87,5 +87,39 @@ namespace AlphaDev.Optional.Extensions.Tests.Unit
             var option = await new ValueTask<object?>(Task.FromResult(default(object?))).SomeNotNullAsync();
             option.Should().Be(Option.None<object?>());
         }
+
+        [Fact]
+        public static async Task SomeNotNullAsyncValueTaskWithExceptionReturnsSomeWhenTargetNotNull()
+        {
+            var option = await new ValueTask<string>(Task.FromResult("test")).SomeNotNullAsync(() => new object());
+            string? value = null;
+            option.MatchSome(s => value = s);
+            value.Should().Be("test");
+        }
+
+        [Fact]
+        public static async Task SomeNotNullAsyncValueTaskReturnsExceptionNoneWhenTargetNull()
+        {
+            string? exception = null;
+            var option = await new ValueTask<string?>(Task.FromResult(default(string?))).SomeNotNullAsync(() => "exception");
+            option.MatchNone(o => exception = o);
+            exception.Should().Be("exception");
+        }
+
+        [Fact]
+        public static async Task ValueOrAsyncReturnsValueWhenOptionHasSome()
+        {
+            var result = await Task.FromResult("test".Some().WithException(default(string?))).ValueOrAsync(s => string.Empty);
+            result.Should().Be("test");
+        }
+
+
+
+        [Fact]
+        public static async Task ValueOrAsyncReturnsExceptionWhenOptionHasNone()
+        {
+            var result = await Task.FromResult(Option.None<string, string>("ex")).ValueOrAsync(s => s);
+            result.Should().Be("ex");
+        }
     }
 }

@@ -40,19 +40,24 @@ namespace AlphaDev.Core
                              new Dates(blog.Created, blog.Modified.ToOption())));
         }
 
-        [NotNull]
-        public BlogBase Add([NotNull] BlogBase blog)
+        public async Task<BlogBase> AddAsync([NotNull] BlogBase blog)
         {
-            return _blogs.Add(new Data.Entities.Blog
-                         {
-                             Title = blog.Title,
-                             Content = blog.Content
-                         })
-                         .To(entry => new Blog(entry.Entity.Id, entry.Entity.Title, entry.Entity.Content,
-                             new Dates(entry.Entity.Created, entry.Entity.Modified.ToOption())));
+            return await _blogs.AddAsync(new Data.Entities.Blog
+                               {
+                                   Title = blog.Title,
+                                   Content = blog.Content
+                               })
+                               .ToAsync(entry => new Blog(entry.Entity.Id, entry.Entity.Title, entry.Entity.Content,
+                                   new Dates(entry.Entity.Created, entry.Entity.Modified.ToOption())));
         }
 
-        public void Delete(int id) => _blogs.Remove(_blogs.Find(id));
+        public async Task DeleteAsync(int id)
+        {
+            var blog = await _blogs.FindAsync(id)
+                                   .SomeNotNullAsync(() => new InvalidOperationException($"Blog {id} was not found."))
+                                   .ValueOrAsync(exception => throw exception);
+            _blogs.Remove(blog);
+        }
 
         public void Edit(int id, [NotNull] Action<BlogEditArguments> edit)
         {

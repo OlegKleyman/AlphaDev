@@ -26,17 +26,17 @@ namespace AlphaDev.Core.Tests.Unit
             new BlogService(blogs, _dateProvider);
 
         [Fact]
-        public void AddShouldReturnBlog()
+        public async Task AddShouldReturnBlog()
         {
             const string title = "title";
             const string content = "content";
 
             var blog = new Blog(title, content);
-            var blogs = new List<Data.Entities.Blog>();
-            var blogsDbSet = blogs.AsQueryable().BuildMockDbSet().WithAddReturns(blogs);
-
+            var blogsDbSet = Enumerable.Empty<Data.Entities.Blog>().AsQueryable().BuildMockDbSet();
+            blogsDbSet.AddAsync(Arg.Is<Data.Entities.Blog>(b => b.Title == title && b.Content == content))
+                      .Returns(info => info.Arg<Data.Entities.Blog>().ToMockEntityEntry());
             var service = GetBlogService(blogsDbSet);
-            var addedBlog = service.Add(blog);
+            var addedBlog = await service.AddAsync(blog);
 
             addedBlog.Should()
                      .BeEquivalentTo(new
@@ -49,18 +49,29 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void DeleteShouldDeleteBlog()
+        public async Task DeleteShouldDeleteBlog()
         {
             var blogsDbSet = new List<Data.Entities.Blog>().AsQueryable().BuildMockDbSet();
-            blogsDbSet.Find(1)
+            blogsDbSet.FindAsync(1)
                       .Returns(new Data.Entities.Blog
                       {
                           Id = 1
                       });
 
             var service = GetBlogService(blogsDbSet);
-            service.Delete(1);
+            await service.DeleteAsync(1);
             blogsDbSet.Received(1).Remove(Arg.Is<Data.Entities.Blog>(blog => blog.Id == 1));
+        }
+
+        [Fact]
+        public void DeleteAsyncShouldThrowInvalidOperationExceptionWhenBlogIsNotFound()
+        {
+            var blogsDbSet = new List<Data.Entities.Blog>().AsQueryable().BuildMockDbSet();
+
+            var service = GetBlogService(blogsDbSet);
+            Func<Task> deleteAsync = () => service.DeleteAsync(1);
+
+            deleteAsync.Should().Throw<InvalidOperationException>().WithMessage("Blog 1 was not found.");
         }
 
         [Fact]
