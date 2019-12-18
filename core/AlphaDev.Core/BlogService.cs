@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AlphaDev.Core.Extensions;
+using AlphaDev.Optional.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Optional;
+using Optional.Async;
 using Optional.Collections;
 
 namespace AlphaDev.Core
@@ -30,13 +32,12 @@ namespace AlphaDev.Core
                                  new Dates(blog.Created, blog.Modified.ToOption())));
         }
 
-        public Option<BlogBase> Get(int id)
+        public Task<Option<BlogBase>> GetAsync(int id)
         {
-            return _blogs.Find(id)
-                         .SomeNotNull()
-                         .Map(blog =>
-                             (BlogBase) new Blog(blog.Id, blog.Title, blog.Content,
-                                 new Dates(blog.Created, blog.Modified.ToOption())));
+            return _blogs.FindAsync(id)
+                         .SomeNotNullAsync()
+                         .MapAsync(blog => (BlogBase) new Blog(blog.Id, blog.Title, blog.Content,
+                             new Dates(blog.Created, blog.Modified.ToOption())));
         }
 
         [NotNull]
@@ -47,7 +48,7 @@ namespace AlphaDev.Core
                              Title = blog.Title,
                              Content = blog.Content
                          })
-                         .Map(entry => new Blog(entry.Entity.Id, entry.Entity.Title, entry.Entity.Content,
+                         .To(entry => new Blog(entry.Entity.Id, entry.Entity.Title, entry.Entity.Content,
                              new Dates(entry.Entity.Created, entry.Entity.Modified.ToOption())));
         }
 

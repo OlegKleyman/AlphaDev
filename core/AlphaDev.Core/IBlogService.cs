@@ -9,7 +9,7 @@ namespace AlphaDev.Core
     {
         Task<Option<BlogBase>> GetLatestAsync();
 
-        Option<BlogBase> Get(int id);
+        Task<Option<BlogBase>> GetAsync(int id);
 
         BlogBase Add(BlogBase blog);
 

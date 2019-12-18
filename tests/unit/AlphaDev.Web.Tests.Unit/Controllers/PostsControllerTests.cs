@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AlphaDev.Core;
 using AlphaDev.Core.Extensions;
 using AlphaDev.Web.Controllers;
@@ -138,14 +139,14 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void EditShouldReturnEditViewWhenBlogIsFound()
+        public async Task EditShouldReturnEditViewWhenBlogIsFound()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.Get(Arg.Any<int>()).Returns(Option.Some(Substitute.For<BlogBase>()));
+            blogService.GetAsync(Arg.Any<int>()).Returns(Option.Some(Substitute.For<BlogBase>()));
 
             var controller = GetPostsController(blogService);
 
-            controller.Edit(default)
+            (await controller.Edit(default))
                       .Should()
                       .BeOfType<ViewResult>()
                       .Which.ViewName.Should()
@@ -169,7 +170,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void EditShouldReturnEditViewWithModelWhenBlogIsFound()
+        public async Task EditShouldReturnEditViewWithModelWhenBlogIsFound()
         {
             var blog = Substitute.For<BlogBase>();
             blog.Id.Returns(default(int));
@@ -178,22 +179,21 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             blog.Dates.Returns(default(Dates));
 
             var blogService = Substitute.For<IBlogService>();
-            blogService.Get(Arg.Any<int>()).Returns(Option.Some(blog));
+            blogService.GetAsync(Arg.Any<int>()).Returns(Option.Some(blog));
 
             var controller = GetPostsController(blogService);
 
-            controller
-                .Edit(default)
-                .Should()
-                .BeOfType<ViewResult>()
-                .Which.Model.Should()
-                .BeEquivalentTo(
-                    new
-                    {
-                        Title = "title",
-                        Content = "content",
-                        Dates = new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)
-                    });
+            (await controller.Edit(default))
+                      .Should()
+                      .BeOfType<ViewResult>()
+                      .Which.Model.Should()
+                      .BeEquivalentTo(
+                          new
+                          {
+                              Title = "title",
+                              Content = "content",
+                              Dates = new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)
+                          });
         }
 
         [Fact]
@@ -221,18 +221,18 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void IndexShouldReturn404StatusIfNoBlogFound()
+        public async Task IndexShouldReturn404StatusIfNoBlogFound()
         {
             var blogService = Substitute.For<IBlogService>();
             var controller = GetPostsController(blogService);
 
-            blogService.Get(Arg.Any<int>()).Returns(Option.None<BlogBase>());
+            blogService.GetAsync(Arg.Any<int>()).Returns(Option.None<BlogBase>());
 
-            controller.Index(default).Should().BeOfType<NotFoundResult>().Which.StatusCode.Should().Be(404);
+            (await controller.Index(default)).Should().BeOfType<NotFoundResult>().Which.StatusCode.Should().Be(404);
         }
 
         [Fact]
-        public void IndexShouldReturnBlogModelWithValuesSetFromTheBlogServiceWhenTempDataOrModelDontExist()
+        public async Task IndexShouldReturnBlogModelWithValuesSetFromTheBlogServiceWhenTempDataOrModelDontExist()
         {
             const int id = 123;
             BlogBase blog = new Blog(id,
@@ -241,11 +241,11 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
 
             var blogService = Substitute.For<IBlogService>();
-            blogService.Get(id).Returns(blog.Some());
+            blogService.GetAsync(id).Returns(blog.Some());
 
             var controller = GetPostsController(blogService);
 
-            controller.Index(id)
+            (await controller.Index(id))
                       .Should()
                       .BeOfType<ViewResult>()
                       .Which.Model.Should()
@@ -258,7 +258,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void IndexShouldReturnPostViewWhenPostIsFound()
+        public async Task IndexShouldReturnPostViewWhenPostIsFound()
         {
             BlogBase blog = new Blog(123,
                 "title",
@@ -266,15 +266,15 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
 
             var blogService = Substitute.For<IBlogService>();
-            blogService.Get(Arg.Any<int>()).Returns(Option.Some(blog));
+            blogService.GetAsync(Arg.Any<int>()).Returns(Option.Some(blog));
 
             var controller = GetPostsController(blogService);
 
-            controller.Index(default).Should().BeOfType<ViewResult>();
+            (await controller.Index(default)).Should().BeOfType<ViewResult>();
         }
 
         [Fact]
-        public void IndexShouldReturnPostViewWithBlogTitleAsPageTitle()
+        public async Task IndexShouldReturnPostViewWithBlogTitleAsPageTitle()
         {
             const int id = 123;
             BlogBase blog = new Blog(id,
@@ -283,11 +283,11 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
 
             var blogService = Substitute.For<IBlogService>();
-            blogService.Get(id).Returns(Option.Some(blog));
+            blogService.GetAsync(id).Returns(Option.Some(blog));
 
             var controller = GetPostsController(blogService);
 
-            controller.Index(id)
+            (await controller.Index(id))
                       .Should()
                       .BeOfType<ViewResult>()
                       .Which.ViewData["Title"]

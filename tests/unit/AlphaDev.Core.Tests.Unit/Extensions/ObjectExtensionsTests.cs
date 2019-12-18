@@ -7,9 +7,9 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
     public class ObjectExtensionsTests
     {
         [Fact]
-        public void MapShouldMapToSpecifiedToFuncReturnValue()
+        public void ToShouldMapToSpecifiedToFuncReturnValue()
         {
-            1.Map(i => i.ToString()).Should().Be("1");
+            1.To(i => i.ToString()).Should().Be("1");
         }
     }
 }

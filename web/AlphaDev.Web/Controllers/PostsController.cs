@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using AlphaDev.Core;
 using AlphaDev.Core.Extensions;
 using AlphaDev.Optional.Extensions;
@@ -10,6 +11,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Optional;
+using Optional.Async;
 
 namespace AlphaDev.Web.Controllers
 {
@@ -39,16 +41,16 @@ namespace AlphaDev.Web.Controllers
         }
 
         [Route("{id}")]
-        public ActionResult Index(int id)
+        public async Task<ActionResult> Index(int id)
         {
-            var option = _blogService.Get(id)
-                                     .WithException(NotFound)
-                                     .Map(foundBlog => new BlogViewModel(foundBlog.Id,
+            var option = _blogService.GetAsync(id)
+                                     .WithExceptionAsync(NotFound)
+                                     .MapAsync(foundBlog => new BlogViewModel(foundBlog.Id,
                                          foundBlog.Title,
                                          foundBlog.Content,
                                          new DatesViewModel(foundBlog.Dates.Created, foundBlog.Dates.Modified)));
-            option.MatchSome(model => ViewBag.Title = model.Title);
-            return option.Map<ActionResult>(model => View("Post", model)).GetValueOrException();
+            await option.MatchSomeAsync(model => ViewData["Title"] = model.Title);
+            return await option.MapAsync(model => (ActionResult)View("Post", model)).GetValueOrExceptionAsync();
         }
 
         [Authorize]
@@ -82,13 +84,14 @@ namespace AlphaDev.Web.Controllers
 
         [Authorize]
         [Route("edit/{id}")]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            return _blogService
-                   .Get(id)
-                   .Map(b => new EditPostViewModel(b.Title, b.Content,
-                       new DatesViewModel(b.Dates.Created, b.Dates.Modified)))
-                   .Match(model => (IActionResult) View(nameof(Edit), model), NotFound);
+            return await _blogService.GetAsync(id)
+                                     .MapAsync(b => new EditPostViewModel(b.Title, b.Content,
+                                         new DatesViewModel(b.Dates.Created, b.Dates.Modified)))
+                                     .MapAsync(model => (IActionResult) View(nameof(Edit), model))
+                                     .WithExceptionAsync(NotFound)
+                                     .GetValueOrExceptionAsync();
         }
 
         [Authorize]
