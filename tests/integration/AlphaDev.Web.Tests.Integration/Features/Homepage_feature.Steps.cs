@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using AlphaDev.Web.Tests.Integration.Support;
 using FluentAssertions;
@@ -14,7 +12,6 @@ using Omego.Extensions.QueryableExtensions;
 using Optional;
 using Optional.Unsafe;
 using Polly;
-using Polly.CircuitBreaker;
 using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
@@ -22,7 +19,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
     [UsedImplicitly]
     public partial class Homepage_feature : WebFeatureFixture
     {
-        public Homepage_feature(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture)
+        public Homepage_feature(ITestOutputHelper output, [NotNull] DatabaseWebServerFixture databaseWebServerFixture)
             : base(output, databaseWebServerFixture)
         {
         }
