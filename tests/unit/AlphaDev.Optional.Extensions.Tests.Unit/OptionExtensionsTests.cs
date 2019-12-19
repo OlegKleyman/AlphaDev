@@ -50,7 +50,7 @@ namespace AlphaDev.Optional.Extensions.Tests.Unit
         {
             int? result = null;
             await Option.None<int, int>(1).MatchSomeAsync(i => Task.Run(() => result = i));
-
+         
             result.Should().BeNull();
         }
     }

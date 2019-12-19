@@ -28,11 +28,6 @@ namespace AlphaDev.Optional.Extensions
             return (await option).ValueOr(x => x);
         }
 
-        public static async Task<Option<T>> SomeNotNullAsync<T>(this ValueTask<T> task) => (await task).SomeNotNull();
-
-        public static async Task<Option<T, TException>> SomeNotNullAsync<T, TException>(this ValueTask<T> task,
-            Func<TException> exception) => (await task).SomeNotNull(exception);
-
         public static async Task<T> ValueOrAsync<T, TException>(this Task<Option<T, TException>> option,
             Func<TException, T> exception) => (await option).ValueOr(exception);
     }
