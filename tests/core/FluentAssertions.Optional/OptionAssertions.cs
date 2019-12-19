@@ -6,9 +6,9 @@ namespace FluentAssertions.Optional
 {
     public class OptionAssertions<T>
     {
-        public Option<T> Subject { get; }
-
         public OptionAssertions(Option<T> subject) => Subject = subject;
+
+        public Option<T> Subject { get; }
 
         public AndWhichConstraint<OptionAssertions<T>, T> HaveSome(string because = "", params object[] becauseArgs)
         {

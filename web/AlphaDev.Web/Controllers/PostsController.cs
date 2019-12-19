@@ -10,7 +10,6 @@ using AlphaDev.Web.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Optional;
 using Optional.Async;
 
 namespace AlphaDev.Web.Controllers
@@ -55,7 +54,7 @@ namespace AlphaDev.Web.Controllers
                                          foundBlog.Content,
                                          new DatesViewModel(foundBlog.Dates.Created, foundBlog.Dates.Modified)));
             await option.MatchSomeAsync(model => ViewData["Title"] = model.Title);
-            return await option.MapAsync(model => (ActionResult)View("Post", model)).GetValueOrExceptionAsync();
+            return await option.MapAsync(model => (ActionResult) View("Post", model)).GetValueOrExceptionAsync();
         }
 
         [Authorize]
@@ -69,12 +68,12 @@ namespace AlphaDev.Web.Controllers
         public async Task<ActionResult> Create(CreatePostViewModel? post)
         {
             return await post
-                   .SomeWhenNotNull()
-                   .Filter(x => ModelState.IsValid)
-                   .MapAsync(model => _blogService.AddAsync(new Blog(model.Title, model.Content)))
-                   .MapAsync(blog => (ActionResult)RedirectToAction(nameof(Index), new { id = blog.Id }))
-                   .WithExceptionAsync(() => View(nameof(Create), post))
-                   .GetValueOrExceptionAsync();
+                         .SomeWhenNotNull()
+                         .Filter(x => ModelState.IsValid)
+                         .MapAsync(model => _blogService.AddAsync(new Blog(model.Title, model.Content)))
+                         .MapAsync(blog => (ActionResult) RedirectToAction(nameof(Index), new { id = blog.Id }))
+                         .WithExceptionAsync(() => View(nameof(Create), post))
+                         .GetValueOrExceptionAsync();
         }
 
         [Authorize]
@@ -117,7 +116,7 @@ namespace AlphaDev.Web.Controllers
             }));
 
             return option
-                   .Map(dictionary => (IActionResult)RedirectToAction(nameof(Index), new { id }))
+                   .Map(dictionary => (IActionResult) RedirectToAction(nameof(Index), new { id }))
                    .GetValueOrException();
         }
     }

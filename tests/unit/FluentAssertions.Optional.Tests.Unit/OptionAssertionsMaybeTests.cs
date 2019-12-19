@@ -7,11 +7,18 @@ namespace FluentAssertions.Optional.Tests.Unit
     public class OptionAssertionsMaybeTests
     {
         [Fact]
-        public void SubjectReturnsOptionUsedInConstructor()
+        public void BeNoneReturnsAndConstraintWithSelf()
         {
-            var option = "test".Some();
-            var assertions = new OptionAssertions<string>(option);
-            assertions.Subject.Should().Be(option);
+            var assertions = new OptionAssertions<string>(Option.None<string>());
+            assertions.BeNone().And.Should().Be(assertions);
+        }
+
+        [Fact]
+        public void BeNoneThrowsExceptionWhenOptionHasSome()
+        {
+            var assertions = new OptionAssertions<string?>(default(string).Some());
+            Action haveSome = () => assertions.BeNone();
+            haveSome.Should().Throw<Exception>().WithMessage("Option has a value.");
         }
 
         [Fact]
@@ -31,18 +38,11 @@ namespace FluentAssertions.Optional.Tests.Unit
         }
 
         [Fact]
-        public void BeNoneReturnsAndConstraintWithSelf()
+        public void SubjectReturnsOptionUsedInConstructor()
         {
-            var assertions = new OptionAssertions<string>(Option.None<string>());
-            assertions.BeNone().And.Should().Be(assertions);
-        }
-
-        [Fact]
-        public void BeNoneThrowsExceptionWhenOptionHasSome()
-        {
-            var assertions = new OptionAssertions<string?>(default(string).Some());
-            Action haveSome = () => assertions.BeNone();
-            haveSome.Should().Throw<Exception>().WithMessage("Option has a value.");
+            var option = "test".Some();
+            var assertions = new OptionAssertions<string>(option);
+            assertions.Subject.Should().Be(option);
         }
     }
 }

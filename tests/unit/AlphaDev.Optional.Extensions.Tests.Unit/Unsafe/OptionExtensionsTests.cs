@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using AlphaDev.Optional.Extensions.Unsafe;
 using FluentAssertions;
-using JetBrains.Annotations;
 using Optional;
-using Optional.Unsafe;
 using Xunit;
 
 namespace AlphaDev.Optional.Extensions.Tests.Unit.Unsafe

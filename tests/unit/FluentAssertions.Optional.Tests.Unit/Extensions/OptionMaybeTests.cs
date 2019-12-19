@@ -10,8 +10,8 @@ namespace FluentAssertions.Optional.Tests.Unit.Extensions
         public void ShouldReturnsOptionMaybeAssertions()
         {
             OptionMaybe.Should(Option.Some(default(object)))
-                        .Should()
-                        .NotBeNull();
+                       .Should()
+                       .NotBeNull();
         }
     }
 }

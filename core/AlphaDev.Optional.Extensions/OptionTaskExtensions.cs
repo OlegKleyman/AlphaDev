@@ -7,7 +7,8 @@ namespace AlphaDev.Optional.Extensions
 {
     public static class OptionTaskExtensions
     {
-        public static async Task MatchSomeAsync<T, TException>(this Task<Option<T, TException>> optionTask, Func<T, Task> some)
+        public static async Task MatchSomeAsync<T, TException>(this Task<Option<T, TException>> optionTask,
+            Func<T, Task> some)
         {
             if (await optionTask is { HasValue: true } option)
             {
@@ -15,7 +16,8 @@ namespace AlphaDev.Optional.Extensions
             }
         }
 
-        public static async Task MatchSomeAsync<T, TException>(this Task<Option<T, TException>> optionTask, Action<T> some)
+        public static async Task MatchSomeAsync<T, TException>(this Task<Option<T, TException>> optionTask,
+            Action<T> some)
         {
             if (await optionTask is { HasValue: true } option)
             {
@@ -23,7 +25,8 @@ namespace AlphaDev.Optional.Extensions
             }
         }
 
-        public static async Task<T> GetValueOrExceptionAsync<T, TException>(this Task<Option<T, TException>> option) where TException : T
+        public static async Task<T> GetValueOrExceptionAsync<T, TException>(this Task<Option<T, TException>> option)
+            where TException : T
         {
             return (await option).ValueOr(x => x);
         }

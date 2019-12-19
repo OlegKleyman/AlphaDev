@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AlphaDev.EntityFramework.Unit.Testing.Support;
 using Microsoft.EntityFrameworkCore;
 using MockQueryable.NSubstitute;
-using NSubstitute;
 
 namespace AlphaDev.EntityFramework.Unit.Testing.Extensions
 {

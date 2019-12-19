@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,15 +27,15 @@ namespace AlphaDev.EntityFramework.Unit.Testing.Support
             var expectedResultType = typeof(TResult).GetGenericArguments()[0];
             var executionResult = typeof(IQueryProvider)
                                   .GetMethod(
-                                      name: nameof(IQueryProvider.Execute),
-                                      genericParameterCount: 1,
-                                      types: new[] { typeof(Expression) })
+                                      nameof(IQueryProvider.Execute),
+                                      1,
+                                      new[] { typeof(Expression) })
                                   .MakeGenericMethod(expectedResultType)
                                   .Invoke(this, new[] { expression });
 
-            return (TResult)typeof(Task).GetMethod(nameof(Task.FromResult))
-                                        ?.MakeGenericMethod(expectedResultType)
-                                        .Invoke(null, new[] { executionResult });
+            return (TResult) typeof(Task).GetMethod(nameof(Task.FromResult))
+                                         ?.MakeGenericMethod(expectedResultType)
+                                         .Invoke(null, new[] { executionResult });
         }
     }
 }

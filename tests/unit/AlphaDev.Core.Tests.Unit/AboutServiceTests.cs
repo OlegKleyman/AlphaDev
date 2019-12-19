@@ -4,13 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.EntityFramework.Unit.Testing.Extensions;
-using AlphaDev.Test.Core.Extensions;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using MockQueryable.NSubstitute;
 using NSubstitute;
-using NSubstitute.ReceivedExtensions;
 using Optional;
 using Xunit;
 

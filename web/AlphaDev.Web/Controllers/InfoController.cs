@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Optional;
 using Optional.Async;
-using OptionExtensions = AlphaDev.Optional.Extensions.OptionExtensions;
 
 namespace AlphaDev.Web.Controllers
 {
@@ -31,25 +30,25 @@ namespace AlphaDev.Web.Controllers
         {
             IActionResult GetAboutView(string value) => View(nameof(About), value);
             return await _aboutService.GetAboutDetailsAsync()
-                               .MapAsync(GetAboutView)
-                               .WithExceptionAsync(() =>
-                               {
-                                   return RedirectToAction(nameof(CreateAbout))
-                                          .SomeWhen<IActionResult>(result => User.Identity.IsAuthenticated)
-                                          .WithException(() => GetAboutView("No details"))
-                                          .ValueOrException();
-                               })
-                               .GetValueOrExceptionAsync();
+                                      .MapAsync(GetAboutView)
+                                      .WithExceptionAsync(() =>
+                                      {
+                                          return RedirectToAction(nameof(CreateAbout))
+                                                 .SomeWhen<IActionResult>(result => User.Identity.IsAuthenticated)
+                                                 .WithException(() => GetAboutView("No details"))
+                                                 .ValueOrException();
+                                      })
+                                      .GetValueOrExceptionAsync();
         }
 
         [Route("about/edit")]
         public async Task<IActionResult> EditAbout()
         {
             return await _aboutService.GetAboutDetailsAsync()
-                                        .WithExceptionAsync(() => RedirectToAction(nameof(About)))
-                                        .MapAsync(s => new AboutEditViewModel(s))
-                                        .MapAsync(model => (IActionResult)View(nameof(EditAbout), model))
-                                        .GetValueOrExceptionAsync();
+                                      .WithExceptionAsync(() => RedirectToAction(nameof(About)))
+                                      .MapAsync(s => new AboutEditViewModel(s))
+                                      .MapAsync(model => (IActionResult) View(nameof(EditAbout), model))
+                                      .GetValueOrExceptionAsync();
         }
 
         [SaveFilter]
@@ -62,7 +61,7 @@ namespace AlphaDev.Web.Controllers
                                    .FilterAsync(Task.FromResult)
                                    .WithExceptionAsync(() => View(nameof(EditAbout), model));
             await option.MatchSomeAsync(b => _aboutService.EditAsync(model.Value));
-            return await option.MapAsync(dictionary => (IActionResult)RedirectToAction(nameof(About)))
+            return await option.MapAsync(dictionary => (IActionResult) RedirectToAction(nameof(About)))
                                .GetValueOrExceptionAsync();
         }
 
@@ -152,7 +151,7 @@ namespace AlphaDev.Web.Controllers
                                    .FilterAsync(Task.FromResult)
                                    .WithExceptionAsync(() => View(nameof(CreateContact), model));
             await option.MatchSomeAsync(b => _contactService.CreateAsync(model.Value));
-            return await option.MapAsync(dictionary => (IActionResult)RedirectToAction(nameof(Contact)))
+            return await option.MapAsync(dictionary => (IActionResult) RedirectToAction(nameof(Contact)))
                                .GetValueOrExceptionAsync();
         }
     }

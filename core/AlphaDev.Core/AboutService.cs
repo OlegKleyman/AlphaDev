@@ -4,7 +4,6 @@ using AlphaDev.Core.Data.Entities;
 using AlphaDev.Optional.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Optional;
-using Optional.Collections;
 
 namespace AlphaDev.Core
 {

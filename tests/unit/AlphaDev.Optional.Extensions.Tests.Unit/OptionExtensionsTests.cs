@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FluentAssertions;
 using Optional;
-using Optional.Async;
 using Xunit;
 
 namespace AlphaDev.Optional.Extensions.Tests.Unit
@@ -36,6 +34,15 @@ namespace AlphaDev.Optional.Extensions.Tests.Unit
         }
 
         [Fact]
+        public async Task MatchSomeAsyncDoesNotExecutesFuncWhenOptionIsNone()
+        {
+            int? result = null;
+            await Option.None<int, int>(1).MatchSomeAsync(i => Task.Run(() => result = i));
+
+            result.Should().BeNull();
+        }
+
+        [Fact]
         public async Task MatchSomeAsyncExecutesFuncWhenOptionHasSome()
         {
             int? result = null;
@@ -43,15 +50,6 @@ namespace AlphaDev.Optional.Extensions.Tests.Unit
             await 1.Some().WithException(() => 2).MatchSomeAsync(i => Task.Run(() => result = i));
 
             result.Should().Be(1);
-        }
-
-        [Fact]
-        public async Task MatchSomeAsyncDoesNotExecutesFuncWhenOptionIsNone()
-        {
-            int? result = null;
-            await Option.None<int, int>(1).MatchSomeAsync(i => Task.Run(() => result = i));
-         
-            result.Should().BeNull();
         }
     }
 }

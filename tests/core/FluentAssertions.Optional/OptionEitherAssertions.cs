@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using AlphaDev.Optional.Extensions.Unsafe;
+﻿using AlphaDev.Optional.Extensions.Unsafe;
 using FluentAssertions.Execution;
 using Optional;
 using Optional.Unsafe;
@@ -9,11 +7,12 @@ namespace FluentAssertions.Optional
 {
     public class OptionAssertions<T, TException>
     {
-        public Option<T, TException> Subject { get; }
-
         public OptionAssertions(Option<T, TException> subject) => Subject = subject;
 
-        public AndWhichConstraint<OptionAssertions<T, TException>, T> HaveSome(string because = "", params object[] becauseArgs)
+        public Option<T, TException> Subject { get; }
+
+        public AndWhichConstraint<OptionAssertions<T, TException>, T> HaveSome(string because = "",
+            params object[] becauseArgs)
         {
             Execute.Assertion.BecauseOf(because, becauseArgs)
                    .ForCondition(Subject.HasValue)
@@ -21,7 +20,8 @@ namespace FluentAssertions.Optional
             return new AndWhichConstraint<OptionAssertions<T, TException>, T>(this, Subject.ValueOrFailure());
         }
 
-        public AndWhichConstraint<OptionAssertions<T, TException>, TException> BeNone(string because = "", params object[] becauseArgs)
+        public AndWhichConstraint<OptionAssertions<T, TException>, TException> BeNone(string because = "",
+            params object[] becauseArgs)
         {
             Execute.Assertion.BecauseOf(because, becauseArgs)
                    .ForCondition(!Subject.HasValue)

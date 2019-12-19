@@ -97,13 +97,13 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetDefaultController(blogService);
 
             (await controller.Index())
-                      .Model.Should()
-                      .BeEquivalentTo(
-                          new
-                          {
-                              blog.Id, blog.Title, blog.Content,
-                              Dates = new { blog.Dates.Created, blog.Dates.Modified }
-                          });
+                .Model.Should()
+                .BeEquivalentTo(
+                    new
+                    {
+                        blog.Id, blog.Title, blog.Content,
+                        Dates = new { blog.Dates.Created, blog.Dates.Modified }
+                    });
         }
 
         [Fact]
@@ -121,9 +121,9 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetDefaultController(service);
 
             (await controller.Index())
-                      .Model.Should()
-                      .BeEquivalentTo(
-                          BlogViewModel.Welcome);
+                .Model.Should()
+                .BeEquivalentTo(
+                    BlogViewModel.Welcome);
         }
     }
 }

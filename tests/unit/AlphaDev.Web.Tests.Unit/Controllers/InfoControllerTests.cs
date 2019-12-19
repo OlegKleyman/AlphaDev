@@ -46,7 +46,11 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var informationService = Substitute.For<IAboutService>();
             var controller = GetInfoController(informationService.Some());
-            (await controller.About()).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo("No details");
+            (await controller.About())
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeEquivalentTo("No details");
         }
 
         [Fact]
@@ -56,10 +60,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetInfoController(informationService.Some());
             controller.User.Identity.IsAuthenticated.Returns(true);
             (await controller.About())
-                      .Should()
-                      .BeOfType<RedirectToActionResult>()
-                      .Which.ActionName.Should()
-                      .BeEquivalentTo("CreateAbout");
+                .Should()
+                .BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should()
+                .BeEquivalentTo("CreateAbout");
         }
 
         [Fact]
@@ -95,19 +99,24 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         public async Task ContactShouldReturnNoDetailsModelIfNoContactInformationExistsAndUserIsNotAuthenticated()
         {
             var controller = GetInfoController(default, Substitute.For<IContactService>().Some());
-            (await controller.Contact()).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo("No details");
+            (await controller.Contact())
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeEquivalentTo("No details");
         }
 
         [Fact]
-        public async Task ContactShouldReturnRedirectToCreateContactActionIfNoContactInformationExistsAndUserIsAuthenticated()
+        public async Task
+            ContactShouldReturnRedirectToCreateContactActionIfNoContactInformationExistsAndUserIsAuthenticated()
         {
             var controller = GetInfoController(Substitute.For<IAboutService>().Some());
             controller.User.Identity.IsAuthenticated.Returns(true);
             (await controller.Contact())
-                      .Should()
-                      .BeOfType<RedirectToActionResult>()
-                      .Which.ActionName.Should()
-                      .BeEquivalentTo("CreateContact");
+                .Should()
+                .BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should()
+                .BeEquivalentTo("CreateContact");
         }
 
         [Fact]
@@ -144,10 +153,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetInfoController(aboutService.Some());
 
             (await controller.CreateAbout())
-                      .Should()
-                      .BeOfType<RedirectToActionResult>()
-                      .Which.ActionName.Should()
-                      .BeEquivalentTo("EditAbout");
+                .Should()
+                .BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should()
+                .BeEquivalentTo("EditAbout");
         }
 
         [Fact]
@@ -167,10 +176,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetInfoController(informationService.Some());
 
             (await controller.CreateAbout())
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.ViewName.Should()
-                      .BeEquivalentTo("CreateAbout");
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should()
+                .BeEquivalentTo("CreateAbout");
         }
 
         [Fact]
@@ -200,10 +209,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetInfoController(default, contactService.Some());
 
             (await controller.CreateContact())
-                      .Should()
-                      .BeOfType<RedirectToActionResult>()
-                      .Which.ActionName.Should()
-                      .BeEquivalentTo("EditContact");
+                .Should()
+                .BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should()
+                .BeEquivalentTo("EditContact");
         }
 
         [Fact]
@@ -223,10 +232,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetInfoController(default, contactService.Some());
 
             (await controller.CreateContact())
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.ViewName.Should()
-                      .BeEquivalentTo("CreateContact");
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should()
+                .BeEquivalentTo("CreateContact");
         }
 
         [Fact]
@@ -282,10 +291,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetInfoController(informationService.Some());
 
             (await controller.EditAbout())
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.ViewName.Should()
-                      .BeEquivalentTo("EditAbout");
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should()
+                .BeEquivalentTo("EditAbout");
         }
 
         [Fact]
@@ -297,14 +306,14 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetInfoController(aboutService.Some());
 
             (await controller.EditAbout())
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.Model.Should()
-                      .BeEquivalentTo(
-                          new
-                          {
-                              Value = "test"
-                          });
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeEquivalentTo(
+                    new
+                    {
+                        Value = "test"
+                    });
         }
 
         [Fact]
@@ -315,10 +324,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetInfoController(informationService.Some());
 
             (await controller.EditAbout())
-                      .Should()
-                      .BeOfType<RedirectToActionResult>()
-                      .Which.ActionName.Should()
-                      .BeEquivalentTo("About");
+                .Should()
+                .BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should()
+                .BeEquivalentTo("About");
         }
 
         [Fact]
@@ -365,10 +374,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetInfoController(default, contactService.Some());
 
             (await controller.EditContact())
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.ViewName.Should()
-                      .BeEquivalentTo("EditContact");
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should()
+                .BeEquivalentTo("EditContact");
         }
 
         [Fact]
@@ -398,10 +407,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetInfoController(default, contactService.Some());
 
             (await controller.EditContact())
-                      .Should()
-                      .BeOfType<RedirectToActionResult>()
-                      .Which.ActionName.Should()
-                      .BeEquivalentTo("Contact");
+                .Should()
+                .BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should()
+                .BeEquivalentTo("Contact");
         }
     }
 }

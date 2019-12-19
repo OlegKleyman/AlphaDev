@@ -49,10 +49,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             controller.ModelState.AddModelError("test", "test");
 
             (await controller.Create(default))
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.ViewName.Should()
-                      .BeEquivalentTo("Create");
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should()
+                .BeEquivalentTo("Create");
         }
 
         [Fact]
@@ -77,12 +77,12 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var post = new CreatePostViewModel("title", "content");
 
             (await controller.Create(post))
-                             .Should()
-                             .BeOfType<RedirectToActionResult>()
-                             .Which.RouteValues.Should()
-                             .ContainKey("id")
-                             .WhichValue.Should()
-                             .BeEquivalentTo(default(int));
+                .Should()
+                .BeOfType<RedirectToActionResult>()
+                .Which.RouteValues.Should()
+                .ContainKey("id")
+                .WhichValue.Should()
+                .BeEquivalentTo(default(int));
         }
 
         [Fact]
@@ -95,10 +95,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var post = new CreatePostViewModel("title", "content");
 
             (await controller.Create(post))
-                             .Should()
-                             .BeOfType<RedirectToActionResult>()
-                             .Which.ActionName.Should()
-                             .BeEquivalentTo("Index");
+                .Should()
+                .BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should()
+                .BeEquivalentTo("Index");
         }
 
         [Fact]
@@ -147,10 +147,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetPostsController(blogService);
 
             (await controller.Edit(default))
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.ViewName.Should()
-                      .BeEquivalentTo("Edit");
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should()
+                .BeEquivalentTo("Edit");
         }
 
         [Fact]
@@ -163,10 +163,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var post = new EditPostViewModel("title", "content", new DatesViewModel());
 
             (await controller.Edit(default, post))
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.ViewName.Should()
-                      .BeEquivalentTo("Edit");
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should()
+                .BeEquivalentTo("Edit");
         }
 
         [Fact]
@@ -184,16 +184,16 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetPostsController(blogService);
 
             (await controller.Edit(default))
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.Model.Should()
-                      .BeEquivalentTo(
-                          new
-                          {
-                              Title = "title",
-                              Content = "content",
-                              Dates = new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)
-                          });
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeEquivalentTo(
+                    new
+                    {
+                        Title = "title",
+                        Content = "content",
+                        Dates = new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)
+                    });
         }
 
         [Fact]
@@ -205,7 +205,11 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var post = new EditPostViewModel("title", "content", new DatesViewModel());
 
-            (await controller.Edit(default, post)).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(post);
+            (await controller.Edit(default, post))
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeEquivalentTo(post);
         }
 
         [Fact]
@@ -214,10 +218,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetPostsController(Substitute.For<IBlogService>());
 
             (await controller.Edit(default, new EditPostViewModel(string.Empty, string.Empty, default)))
-                      .Should()
-                      .BeOfType<RedirectToActionResult>()
-                      .Which.ActionName.Should()
-                      .BeEquivalentTo("Index");
+                .Should()
+                .BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should()
+                .BeEquivalentTo("Index");
         }
 
         [Fact]
@@ -246,15 +250,15 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetPostsController(blogService);
 
             (await controller.Index(id))
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.Model.Should()
-                      .BeEquivalentTo(
-                          new
-                          {
-                              blog.Id, blog.Title, blog.Content,
-                              Dates = new { blog.Dates.Created, blog.Dates.Modified }
-                          });
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeEquivalentTo(
+                    new
+                    {
+                        blog.Id, blog.Title, blog.Content,
+                        Dates = new { blog.Dates.Created, blog.Dates.Modified }
+                    });
         }
 
         [Fact]
@@ -288,11 +292,11 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetPostsController(blogService);
 
             (await controller.Index(id))
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.ViewData["Title"]
-                      .Should()
-                      .BeEquivalentTo("title");
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewData["Title"]
+                .Should()
+                .BeEquivalentTo("title");
         }
 
         [Fact]
@@ -315,10 +319,10 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             blogService.GetCountAsync(Arg.Any<int>()).Returns(1);
             var controller = GetPostsController(blogService);
             (await controller.Page(PositiveInteger.MinValue.Value))
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.Model.Should()
-                      .BeAssignableTo<IEnumerable<BlogViewModel>>();
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeAssignableTo<IEnumerable<BlogViewModel>>();
         }
 
         [Fact]
@@ -331,12 +335,12 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetPostsController(blogService);
 
             (await controller.Page(PositiveInteger.MinValue.Value))
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.Model.Should()
-                      .BeAssignableTo<Pager<BlogViewModel>>()
-                      .Which.AuxiliaryPage.Should()
-                      .Be(11.Some());
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeAssignableTo<Pager<BlogViewModel>>()
+                .Which.AuxiliaryPage.Should()
+                .Be(11.Some());
         }
 
         [Fact]
@@ -354,12 +358,12 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetPostsController(blogService);
 
             (await controller.Page(1))
-                             .Should()
-                             .BeOfType<ViewResult>()
-                             .Which.Model.Should()
-                             .BeAssignableTo<Pager<BlogViewModel>>()
-                             .Which.AuxiliaryPage.Should()
-                             .Be(Option.None<int>());
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeAssignableTo<Pager<BlogViewModel>>()
+                .Which.AuxiliaryPage.Should()
+                .Be(Option.None<int>());
         }
 
         [Fact]
@@ -377,18 +381,18 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetPostsController(blogService);
 
             (await controller.Page(PositiveInteger.MinValue.Value))
-                             .Should()
-                             .BeOfType<ViewResult>()
-                             .Which.Model.Should()
-                             .BeEquivalentTo(
-                                 new[]
-                                 {
-                                     new
-                                     {
-                                         blog.Id, blog.Title, blog.Content,
-                                         Dates = new { blog.Dates.Created, blog.Dates.Modified }
-                                     }
-                                 });
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeEquivalentTo(
+                    new[]
+                    {
+                        new
+                        {
+                            blog.Id, blog.Title, blog.Content,
+                            Dates = new { blog.Dates.Created, blog.Dates.Modified }
+                        }
+                    });
         }
 
         [Fact]

@@ -1,12 +1,4 @@
-﻿using AlphaDev.Test.Core.Support;
-using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using NSubstitute;
-
-namespace AlphaDev.Test.Core.Extensions
+﻿namespace AlphaDev.Test.Core.Extensions
 {
     public static class ObjectExtensions
     {

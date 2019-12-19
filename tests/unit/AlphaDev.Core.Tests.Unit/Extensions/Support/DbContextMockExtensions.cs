@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using AlphaDev.EntityFramework.Unit.Testing.Extensions;
-using AlphaDev.Test.Core.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;

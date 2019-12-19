@@ -8,8 +8,6 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Optional;
 using Optional.Async;
-using Optional.Collections;
-using OptionTaskExtensions = AlphaDev.Optional.Extensions.OptionTaskExtensions;
 
 namespace AlphaDev.Core
 {
@@ -63,8 +61,8 @@ namespace AlphaDev.Core
         public async Task EditAsync(int id, [NotNull] Action<BlogEditArguments> edit)
         {
             var blog = await _blogs.FindAsync(id)
-                             .SomeNotNullAsync(() => new InvalidOperationException($"Blog {id} was not found."))
-                             .ValueOrAsync(exception => throw exception);
+                                   .SomeNotNullAsync(() => new InvalidOperationException($"Blog {id} was not found."))
+                                   .ValueOrAsync(exception => throw exception);
             var arguments = new BlogEditArguments();
             edit(arguments);
             blog.Content = arguments.Content;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using AlphaDev.Core.Extensions;
 using AlphaDev.Core.Tests.Unit.Extensions.Support;
 using AlphaDev.EntityFramework.Unit.Testing.Extensions;
-using AlphaDev.Test.Core.Extensions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using Optional;
 
 namespace AlphaDev.Optional.Extensions.Unsafe

@@ -7,11 +7,19 @@ namespace FluentAssertions.Optional.Tests.Unit
     public class OptionAssertionsEitherTests
     {
         [Fact]
-        public void SubjectReturnsOptionUsedInConstructor()
+        public void BeNoneReturnsAndWhichConstraintWithExceptionValueWhenOptionIsNone()
         {
-            var option = Option.Some<string, string>(string.Empty);
+            var option = Option.None<string, string>("test");
             var assertions = new OptionAssertions<string, string>(option);
-            assertions.Subject.Should().Be(option);
+            assertions.BeNone().Which.Should().Be("test");
+        }
+
+        [Fact]
+        public void BeNoneThrowsExceptionWhenOptionHasSome()
+        {
+            var assertions = new OptionAssertions<string?, string?>(Option.Some<string?, string?>(default));
+            Action haveSome = () => assertions.BeNone();
+            haveSome.Should().Throw<Exception>().WithMessage("Option has a value.");
         }
 
         [Fact]
@@ -31,19 +39,11 @@ namespace FluentAssertions.Optional.Tests.Unit
         }
 
         [Fact]
-        public void BeNoneReturnsAndWhichConstraintWithExceptionValueWhenOptionIsNone()
+        public void SubjectReturnsOptionUsedInConstructor()
         {
-            var option = Option.None<string, string>("test");
+            var option = Option.Some<string, string>(string.Empty);
             var assertions = new OptionAssertions<string, string>(option);
-            assertions.BeNone().Which.Should().Be("test");
-        }
-
-        [Fact]
-        public void BeNoneThrowsExceptionWhenOptionHasSome()
-        {
-            var assertions = new OptionAssertions<string?, string?>(Option.Some<string?, string?>(default));
-            Action haveSome = () => assertions.BeNone();
-            haveSome.Should().Throw<Exception>().WithMessage("Option has a value.");
+            assertions.Subject.Should().Be(option);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Optional.Extensions;
-using Optional;
 using Xunit;
 
 namespace AlphaDev.Optional.Extensions.Tests.Unit
