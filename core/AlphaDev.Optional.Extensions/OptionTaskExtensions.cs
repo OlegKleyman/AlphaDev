@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Optional;
-using Optional.Async;
 using Optional.Unsafe;
 
 namespace AlphaDev.Optional.Extensions

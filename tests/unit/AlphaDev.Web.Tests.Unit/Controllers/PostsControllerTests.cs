@@ -25,7 +25,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var blogService = Substitute.For<IBlogService>();
             blogService.GetLatestAsync().Returns(((BlogBase) new Blog(default, null, null, default)).Some());
-            blogService.GetCount(Arg.Any<int>()).Returns(1);
+            blogService.GetCountAsync(Arg.Any<int>()).Returns(1);
             return GetPostsController(blogService);
         }
 
@@ -124,16 +124,16 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void EditShouldEditPostWithModelData()
+        public async Task EditShouldEditPostWithModelData()
         {
             var blogService = Substitute.For<IBlogService>();
             var editArguments = new BlogEditArguments();
 
-            blogService.Edit(1, Arg.Invoke(editArguments));
+            await blogService.EditAsync(1, Arg.Invoke(editArguments));
             var controller = GetPostsController(blogService);
 
             var post = new EditPostViewModel("title", "content", default);
-            controller.Edit(1, post);
+            await controller.Edit(1, post);
 
             editArguments.Should().BeEquivalentTo(new { post.Content, post.Title });
         }
@@ -154,7 +154,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void EditShouldReturnEditViewWhenModelStateIsInvalid()
+        public async Task EditShouldReturnEditViewWhenModelStateIsInvalid()
         {
             var controller = GetPostsController(Substitute.For<IBlogService>());
 
@@ -162,7 +162,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var post = new EditPostViewModel("title", "content", new DatesViewModel());
 
-            controller.Edit(default, post)
+            (await controller.Edit(default, post))
                       .Should()
                       .BeOfType<ViewResult>()
                       .Which.ViewName.Should()
@@ -197,7 +197,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void EditShouldReturnViewWithSameModelWhenModelStateIsInvalid()
+        public async Task EditShouldReturnViewWithSameModelWhenModelStateIsInvalid()
         {
             var controller = GetPostsController(Substitute.For<IBlogService>());
 
@@ -205,15 +205,15 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
 
             var post = new EditPostViewModel("title", "content", new DatesViewModel());
 
-            controller.Edit(default, post).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(post);
+            (await controller.Edit(default, post)).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo(post);
         }
 
         [Fact]
-        public void EditShouldRouteToIndexActionWhenModelStateIsValid()
+        public async Task EditShouldRouteToIndexActionWhenModelStateIsValid()
         {
             var controller = GetPostsController(Substitute.For<IBlogService>());
 
-            controller.Edit(default, new EditPostViewModel(string.Empty, string.Empty, default))
+            (await controller.Edit(default, new EditPostViewModel(string.Empty, string.Empty, default)))
                       .Should()
                       .BeOfType<RedirectToActionResult>()
                       .Which.ActionName.Should()
@@ -296,25 +296,25 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void PageShouldGetLessThanElevenItems()
+        public async Task PageShouldGetLessThanElevenItems()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetCount(Arg.Any<int>()).Returns(1);
+            blogService.GetCountAsync(Arg.Any<int>()).Returns(1);
             const int page = 9;
-            GetPostsController(blogService).Page(page);
+            await GetPostsController(blogService).Page(page);
             var value = page.ToPositiveInteger().ToStartPosition(10.ToPositiveInteger()).Value;
-            blogService.Received(1).GetOrderedByDates(Arg.Is(value), Arg.Is(10));
+            await blogService.Received(1).GetOrderedByDatesAsync(Arg.Is(value), Arg.Is(10));
         }
 
         [Fact]
-        public void PageShouldReturnBlogModelsAssignableToEnumerableOfBlogViewModel()
+        public async Task PageShouldReturnBlogModelsAssignableToEnumerableOfBlogViewModel()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>())
+            blogService.GetOrderedByDatesAsync(Arg.Any<int>(), Arg.Any<int>())
                        .Returns(new[] { new Blog(string.Empty, string.Empty) });
-            blogService.GetCount(Arg.Any<int>()).Returns(1);
+            blogService.GetCountAsync(Arg.Any<int>()).Returns(1);
             var controller = GetPostsController(blogService);
-            controller.Page(PositiveInteger.MinValue.Value)
+            (await controller.Page(PositiveInteger.MinValue.Value))
                       .Should()
                       .BeOfType<ViewResult>()
                       .Which.Model.Should()
@@ -322,15 +322,15 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void PageShouldReturnBlogModelsWithAnAuxiliaryPageNumberWhenThereAreMoreThanTenPages()
+        public async Task PageShouldReturnBlogModelsWithAnAuxiliaryPageNumberWhenThereAreMoreThanTenPages()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>())
+            blogService.GetOrderedByDatesAsync(Arg.Any<int>(), Arg.Any<int>())
                        .Returns(new[] { new Blog(string.Empty, string.Empty) });
-            blogService.GetCount(Arg.Any<int>()).Returns(101);
+            blogService.GetCountAsync(Arg.Any<int>()).Returns(101);
             var controller = GetPostsController(blogService);
 
-            controller.Page(PositiveInteger.MinValue.Value)
+            (await controller.Page(PositiveInteger.MinValue.Value))
                       .Should()
                       .BeOfType<ViewResult>()
                       .Which.Model.Should()
@@ -340,7 +340,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void PageShouldReturnBlogModelsWithoutAnAuxiliaryPageNumberWhenThereAreLessThanElevenItems()
+        public async Task PageShouldReturnBlogModelsWithoutAnAuxiliaryPageNumberWhenThereAreLessThanElevenItems()
         {
             var blogs = new[]
             {
@@ -349,21 +349,21 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             };
 
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>()).Returns(blogs);
-            blogService.GetCount(Arg.Any<int>()).Returns(1);
+            blogService.GetOrderedByDatesAsync(Arg.Any<int>(), Arg.Any<int>()).Returns(blogs);
+            blogService.GetCountAsync(Arg.Any<int>()).Returns(1);
             var controller = GetPostsController(blogService);
 
-            controller.Page(1)
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.Model.Should()
-                      .BeAssignableTo<Pager<BlogViewModel>>()
-                      .Which.AuxiliaryPage.Should()
-                      .Be(Option.None<int>());
+            (await controller.Page(1))
+                             .Should()
+                             .BeOfType<ViewResult>()
+                             .Which.Model.Should()
+                             .BeAssignableTo<Pager<BlogViewModel>>()
+                             .Which.AuxiliaryPage.Should()
+                             .Be(Option.None<int>());
         }
 
         [Fact]
-        public void PageShouldReturnBlogModelsWithValuesSetFromTheBlogService()
+        public async Task PageShouldReturnBlogModelsWithValuesSetFromTheBlogService()
         {
             var blog = new Blog(123,
                 "title",
@@ -371,43 +371,43 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
 
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>()).Returns(new[] { blog });
-            blogService.GetCount(1).Returns(int.MaxValue);
+            blogService.GetOrderedByDatesAsync(Arg.Any<int>(), Arg.Any<int>()).Returns(new[] { blog });
+            blogService.GetCountAsync(1).Returns(int.MaxValue);
 
             var controller = GetPostsController(blogService);
 
-            controller.Page(PositiveInteger.MinValue.Value)
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.Model.Should()
-                      .BeEquivalentTo(
-                          new[]
-                          {
-                              new
-                              {
-                                  blog.Id, blog.Title, blog.Content,
-                                  Dates = new { blog.Dates.Created, blog.Dates.Modified }
-                              }
-                          });
+            (await controller.Page(PositiveInteger.MinValue.Value))
+                             .Should()
+                             .BeOfType<ViewResult>()
+                             .Which.Model.Should()
+                             .BeEquivalentTo(
+                                 new[]
+                                 {
+                                     new
+                                     {
+                                         blog.Id, blog.Title, blog.Content,
+                                         Dates = new { blog.Dates.Created, blog.Dates.Modified }
+                                     }
+                                 });
         }
 
         [Fact]
-        public void PageShouldReturnNotFoundResultWhenNoBlogsFound()
+        public async Task PageShouldReturnNotFoundResultWhenNoBlogsFound()
         {
             var blogService = Substitute.For<IBlogService>();
-            GetPostsController(blogService).Page(1).Should().BeOfType<NotFoundResult>();
+            (await GetPostsController(blogService).Page(1)).Should().BeOfType<NotFoundResult>();
         }
 
         [Fact]
-        public void PageShouldReturnPageView()
+        public async Task PageShouldReturnPageView()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetOrderedByDates(Arg.Any<int>(), Arg.Any<int>())
+            blogService.GetOrderedByDatesAsync(Arg.Any<int>(), Arg.Any<int>())
                        .Returns(new[] { new Blog(string.Empty, string.Empty) });
-            blogService.GetCount(Arg.Any<int>()).Returns(101);
+            blogService.GetCountAsync(Arg.Any<int>()).Returns(101);
             var controller = GetPostsController(blogService);
 
-            controller.Page(PositiveInteger.MinValue.Value).Should().BeOfType<ViewResult>();
+            (await controller.Page(PositiveInteger.MinValue.Value)).Should().BeOfType<ViewResult>();
         }
     }
 }

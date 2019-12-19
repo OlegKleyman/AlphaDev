@@ -23,21 +23,26 @@ namespace AlphaDev.Web.Controllers
         public PostsController([NotNull] IBlogService blogService) => _blogService = blogService;
 
         [Route("page/{page}")]
-        public IActionResult Page(int page)
+        public async Task<ActionResult> Page(int page)
         {
             const int itemsPerPage = 10;
-            var maxPagesToDisplay = 10.ToPositiveInteger();
+            const int maxPagesToDisplay = 10;
             var startPage = page.ToPositiveInteger();
             var startPosition = startPage.ToStartPosition(itemsPerPage.ToPositiveInteger());
-            var blogs = _blogService.GetOrderedByDates(startPosition.Value, itemsPerPage);
-            return blogs.Select(blog => new BlogViewModel(blog.Id,
-                            blog.Title,
-                            blog.Content,
-                            new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)))
-                        .SomeWhen(x => x.Any(), NotFound())
-                        .Match(x => (ActionResult) View("Index", x.ToPager(new PageDimensions(startPage,
-                                new PageBoundaries(itemsPerPage.ToPositiveInteger(), maxPagesToDisplay)),
-                            _blogService.GetCount(startPosition.Value).ToPositiveInteger())), x => x);
+            return await _blogService.GetOrderedByDatesAsync(startPosition.Value, itemsPerPage)
+                                     .SomeNotEmptyAsync(NotFound)
+                                     .MapAsync(bases => bases.Select(blog => new BlogViewModel(blog.Id,
+                                         blog.Title,
+                                         blog.Content,
+                                         new DatesViewModel(blog.Dates.Created, blog.Dates.Modified))))
+                                     .MapAsync(async x => x.ToPager(
+                                         new PageDimensions(startPage,
+                                             new PageBoundaries(itemsPerPage.ToPositiveInteger(),
+                                                 maxPagesToDisplay.ToPositiveInteger())),
+                                         (await _blogService.GetCountAsync(startPosition.Value))
+                                         .ToPositiveInteger()))
+                                     .MapAsync(x => (ActionResult) View("Index", x))
+                                     .GetValueOrExceptionAsync();
         }
 
         [Route("{id}")]
@@ -99,20 +104,20 @@ namespace AlphaDev.Web.Controllers
         [SaveFilter]
         [Route("edit/{id}")]
         [HttpPost]
-        public IActionResult Edit(int id, [CanBeNull] EditPostViewModel model)
+        public async Task<IActionResult> Edit(int id, [CanBeNull] EditPostViewModel model)
         {
             var option = model.SomeWhenNotNull()
                               .Filter(x => ModelState.IsValid)
                               .WithException(() => View(nameof(Edit), model));
 
-            option.MatchSome(x => _blogService.Edit(id, arguments =>
+            await option.MatchSomeAsync(x => _blogService.EditAsync(id, arguments =>
             {
                 arguments.Content = x.Content;
                 arguments.Title = x.Title;
             }));
 
             return option
-                   .Map(dictionary => (IActionResult) RedirectToAction(nameof(Index), new { id }))
+                   .Map(dictionary => (IActionResult)RedirectToAction(nameof(Index), new { id }))
                    .GetValueOrException();
         }
     }

@@ -15,10 +15,10 @@ namespace AlphaDev.Core
 
         Task DeleteAsync(int id);
 
-        void Edit(int id, Action<BlogEditArguments> edit);
+        Task EditAsync(int id, Action<BlogEditArguments> edit);
 
-        IEnumerable<BlogBase> GetOrderedByDates(int start, int count);
+        Task<IEnumerable<BlogBase>> GetOrderedByDatesAsync(int start, int count);
 
-        int GetCount(int start);
+        Task<int> GetCountAsync(int start);
     }
 }

@@ -13,5 +13,13 @@ namespace AlphaDev.Optional.Extensions
         {
             return option.ValueOr(x => x);
         }
+
+        public static async Task MatchSomeAsync<T, TException>(this Option<T, TException> option, Func<T, Task> some)
+        {
+            if (option.HasValue)
+            {
+                await some(option.ValueOrFailure());
+            }
+        }
     }
 }

@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\core\AlphaDev.Optional.Extensions\AlphaDev.Optional.Extensions.csproj" />
     <ProjectReference Include="..\..\core\FluentAssertions.Optional\FluentAssertions.Optional.csproj" />
+    <ProjectReference Include="..\FluentAssertions.Optional.Tests.Unit\FluentAssertions.Optional.Tests.Unit.csproj" />
   </ItemGroup>
 
 </Project>
