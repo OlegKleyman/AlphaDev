@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Security.Principal;
+using System.Threading.Tasks;
 using AlphaDev.Core;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
@@ -32,209 +33,222 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void AboutShouldReturnAboutView()
+        public async Task AboutShouldReturnAboutView()
         {
             var informationService = Substitute.For<IAboutService>();
-            informationService.GetAboutDetails().Returns(Option.Some<string>(default));
+            informationService.GetAboutDetailsAsync().Returns(Option.Some<string>(default));
             var controller = GetInfoController(informationService.Some());
-            controller.About().Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("About");
+            (await controller.About()).Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("About");
         }
 
         [Fact]
-        public void AboutShouldReturnNoDetailsModelIfNoAboutInformationExistsAndUserIsNotAuthenticated()
+        public async Task AboutShouldReturnNoDetailsModelIfNoAboutInformationExistsAndUserIsNotAuthenticated()
         {
             var informationService = Substitute.For<IAboutService>();
             var controller = GetInfoController(informationService.Some());
-            controller.About().Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo("No details");
+            (await controller.About())
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeEquivalentTo("No details");
         }
 
         [Fact]
-        public void AboutShouldReturnRedirectToCreateAboutActionIfNoAboutInformationExistsAndUserIsAuthenticated()
+        public async Task AboutShouldReturnRedirectToCreateAboutActionIfNoAboutInformationExistsAndUserIsAuthenticated()
         {
             var informationService = Substitute.For<IAboutService>();
             var controller = GetInfoController(informationService.Some());
             controller.User.Identity.IsAuthenticated.Returns(true);
-            controller.About()
-                      .Should()
-                      .BeOfType<RedirectToActionResult>()
-                      .Which.ActionName.Should()
-                      .BeEquivalentTo("CreateAbout");
+            (await controller.About())
+                .Should()
+                .BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should()
+                .BeEquivalentTo("CreateAbout");
         }
 
         [Fact]
-        public void AboutShouldReturnStringModel()
+        public async Task AboutShouldReturnStringModel()
         {
             var controller = GetInfoController(Substitute.For<IAboutService>().Some());
-            controller.About().Should().BeOfType<ViewResult>().Which.Model.Should().BeOfType<string>();
+            (await controller.About()).Should().BeOfType<ViewResult>().Which.Model.Should().BeOfType<string>();
         }
 
         [Fact]
-        public void AboutShouldReturnStringModelFromFromInformationService()
+        public async Task AboutShouldReturnStringModelFromFromInformationService()
         {
             var informationService = Substitute.For<IAboutService>();
-            informationService.GetAboutDetails().Returns(Option.Some("test"));
+            informationService.GetAboutDetailsAsync().Returns(Option.Some("test"));
             var controller = GetInfoController(informationService.Some());
-            controller.About().Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo("test");
+            (await controller.About()).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo("test");
         }
 
         [Fact]
-        public void ContactShouldReturnContactView()
+        public async Task ContactShouldReturnContactView()
         {
             var contactService = Substitute.For<IContactService>();
-            contactService.GetContactDetails().Returns(Option.Some<string>(default));
+            contactService.GetContactDetailsAsync().Returns(Option.Some<string>(default));
             var controller = GetInfoController(default, contactService.Some());
-            controller.Contact().Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("Contact");
+            (await controller.Contact())
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should()
+                .BeEquivalentTo("Contact");
         }
 
         [Fact]
-        public void ContactShouldReturnNoDetailsModelIfNoContactInformationExistsAndUserIsNotAuthenticated()
+        public async Task ContactShouldReturnNoDetailsModelIfNoContactInformationExistsAndUserIsNotAuthenticated()
         {
             var controller = GetInfoController(default, Substitute.For<IContactService>().Some());
-            controller.Contact().Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo("No details");
+            (await controller.Contact())
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.Model.Should()
+                .BeEquivalentTo("No details");
         }
 
         [Fact]
-        public void ContactShouldReturnRedirectToCreateContactActionIfNoContactInformationExistsAndUserIsAuthenticated()
+        public async Task
+            ContactShouldReturnRedirectToCreateContactActionIfNoContactInformationExistsAndUserIsAuthenticated()
         {
             var controller = GetInfoController(Substitute.For<IAboutService>().Some());
             controller.User.Identity.IsAuthenticated.Returns(true);
-            controller.Contact()
-                      .Should()
-                      .BeOfType<RedirectToActionResult>()
-                      .Which.ActionName.Should()
-                      .BeEquivalentTo("CreateContact");
+            (await controller.Contact())
+                .Should()
+                .BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should()
+                .BeEquivalentTo("CreateContact");
         }
 
         [Fact]
-        public void ContactShouldReturnStringModel()
+        public async Task ContactShouldReturnStringModel()
         {
             var controller = GetInfoController(default, Substitute.For<IContactService>().Some());
-            controller.Contact().Should().BeOfType<ViewResult>().Which.Model.Should().BeOfType<string>();
+            (await controller.Contact()).Should().BeOfType<ViewResult>().Which.Model.Should().BeOfType<string>();
         }
 
         [Fact]
-        public void ContactShouldReturnStringModelFromFromContactService()
+        public async Task ContactShouldReturnStringModelFromFromContactService()
         {
             var contactService = Substitute.For<IContactService>();
-            contactService.GetContactDetails().Returns(Option.Some("test"));
+            contactService.GetContactDetailsAsync().Returns(Option.Some("test"));
             var controller = GetInfoController(default, contactService.Some());
-            controller.Contact().Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo("test");
+            (await controller.Contact()).Should().BeOfType<ViewResult>().Which.Model.Should().BeEquivalentTo("test");
         }
 
         [Fact]
-        public void CreateAboutShouldCreateAboutWhenModelIsValid()
+        public async Task CreateAboutShouldCreateAboutWhenModelIsValid()
         {
             var informationService = Substitute.For<IAboutService>();
             var controller = GetInfoController(informationService.Some());
             const string value = "value";
-            controller.CreateAbout(new AboutCreateViewModel(value));
-            informationService.Received(1).Create(value);
+            await controller.CreateAbout(new AboutCreateViewModel(value));
+            await informationService.Received(1).CreateAsync(value);
         }
 
         [Fact]
-        public void CreateAboutShouldRedirectToEditAboutActionWhenThereIsExistingAbout()
+        public async Task CreateAboutShouldRedirectToEditAboutActionWhenThereIsExistingAbout()
         {
-            var informationService = Substitute.For<IAboutService>();
-            informationService.GetAboutDetails().Returns(Option.Some("test"));
-            var controller = GetInfoController(informationService.Some());
+            var aboutService = Substitute.For<IAboutService>();
+            aboutService.GetAboutDetailsAsync().Returns(Option.Some("test"));
+            var controller = GetInfoController(aboutService.Some());
 
-            controller.CreateAbout()
-                      .Should()
-                      .BeOfType<RedirectToActionResult>()
-                      .Which.ActionName.Should()
-                      .BeEquivalentTo("EditAbout");
+            (await controller.CreateAbout())
+                .Should()
+                .BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should()
+                .BeEquivalentTo("EditAbout");
         }
 
         [Fact]
-        public void CreateAboutShouldReturnCreateAboutViewWhenModelIsNotValid()
+        public async Task CreateAboutShouldReturnCreateAboutViewWhenModelIsNotValid()
         {
             var informationService = Substitute.For<IAboutService>();
             var controller = GetInfoController(informationService.Some());
             controller.ModelState.AddModelError("test", "test");
-            var result = controller.CreateAbout(new AboutCreateViewModel(default));
+            var result = await controller.CreateAbout(new AboutCreateViewModel(default));
             result.Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("CreateAbout");
         }
 
         [Fact]
-        public void CreateAboutShouldReturnCreateAboutViewWhenThereIsNoExistingAbout()
+        public async Task CreateAboutShouldReturnCreateAboutViewWhenThereIsNoExistingAbout()
         {
             var informationService = Substitute.For<IAboutService>();
             var controller = GetInfoController(informationService.Some());
 
-            controller.CreateAbout()
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.ViewName.Should()
-                      .BeEquivalentTo("CreateAbout");
+            (await controller.CreateAbout())
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should()
+                .BeEquivalentTo("CreateAbout");
         }
 
         [Fact]
-        public void CreateAboutShouldReturnRedirectToAboutActionWhenModelIsValid()
+        public async Task CreateAboutShouldReturnRedirectToAboutActionWhenModelIsValid()
         {
             var informationService = Substitute.For<IAboutService>();
             var controller = GetInfoController(informationService.Some());
-            var result = controller.CreateAbout(new AboutCreateViewModel(default));
+            var result = await controller.CreateAbout(new AboutCreateViewModel(default));
             result.Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should().BeEquivalentTo("About");
         }
 
         [Fact]
-        public void CreateContactShouldCreateContactWhenModelIsValid()
+        public async Task CreateContactShouldCreateContactWhenModelIsValid()
         {
             var contactService = Substitute.For<IContactService>();
             var controller = GetInfoController(default, contactService.Some());
             const string value = "value";
-            controller.CreateContact(new ContactCreateViewModel(value));
-            contactService.Received(1).Create(value);
+            await controller.CreateContact(new ContactCreateViewModel(value));
+            await contactService.Received(1).CreateAsync(value);
         }
 
         [Fact]
-        public void CreateContactShouldRedirectToEditContactActionWhenThereIsExistingContact()
+        public async Task CreateContactShouldRedirectToEditContactActionWhenThereIsExistingContact()
         {
             var contactService = Substitute.For<IContactService>();
-            contactService.GetContactDetails().Returns(Option.Some("test"));
+            contactService.GetContactDetailsAsync().Returns(Option.Some("test"));
             var controller = GetInfoController(default, contactService.Some());
 
-            controller.CreateContact()
-                      .Should()
-                      .BeOfType<RedirectToActionResult>()
-                      .Which.ActionName.Should()
-                      .BeEquivalentTo("EditContact");
+            (await controller.CreateContact())
+                .Should()
+                .BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should()
+                .BeEquivalentTo("EditContact");
         }
 
         [Fact]
-        public void CreateContactShouldReturnCreateContactViewWhenModelIsNotValid()
+        public async Task CreateContactShouldReturnCreateContactViewWhenModelIsNotValid()
         {
             var contactService = Substitute.For<IContactService>();
             var controller = GetInfoController(default, contactService.Some());
             controller.ModelState.AddModelError("test", "test");
-            var result = controller.CreateContact(new ContactCreateViewModel(default));
+            var result = await controller.CreateContact(new ContactCreateViewModel(default));
             result.Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("CreateContact");
         }
 
         [Fact]
-        public void CreateContactShouldReturnCreateContactViewWhenThereIsNoExistingContact()
+        public async Task CreateContactShouldReturnCreateContactViewWhenThereIsNoExistingContact()
         {
             var contactService = Substitute.For<IContactService>();
             var controller = GetInfoController(default, contactService.Some());
 
-            controller.CreateContact()
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.ViewName.Should()
-                      .BeEquivalentTo("CreateContact");
+            (await controller.CreateContact())
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should()
+                .BeEquivalentTo("CreateContact");
         }
 
         [Fact]
-        public void CreateContactShouldReturnRedirectToContactActionWhenModelIsValid()
+        public async Task CreateContactShouldReturnRedirectToContactActionWhenModelIsValid()
         {
             var contactService = Substitute.For<IContactService>();
             var controller = GetInfoController(default, contactService.Some());
-            var result = controller.CreateContact(new ContactCreateViewModel(default));
+            var result = await controller.CreateContact(new ContactCreateViewModel(default));
             result.Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should().BeEquivalentTo("Contact");
         }
 
         [Fact]
-        public void EditAboutShouldEditAboutWithModelData()
+        public async Task EditAboutShouldEditAboutWithModelData()
         {
             var informationService = Substitute.For<IAboutService>();
             const string editValue = "value";
@@ -242,57 +256,56 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetInfoController(informationService.Some());
 
             var post = new AboutEditViewModel(editValue);
-            controller.EditAbout(post);
+            await controller.EditAbout(post);
 
-            informationService.Received(1).Edit(editValue);
+            await informationService.Received(1).EditAsync(editValue);
         }
 
         [Fact]
-        public void EditAboutShouldReturnAboutRedirectToActionResultWhenModelIsValid()
+        public async Task EditAboutShouldReturnAboutRedirectToActionResultWhenModelIsValid()
         {
             var informationService = Substitute.For<IAboutService>();
             var controller = GetInfoController(informationService.Some());
 
             var post = new AboutEditViewModel(default);
-            var result = controller.EditAbout(post);
+            var result = await controller.EditAbout(post);
             result.Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should().BeEquivalentTo("About");
         }
 
         [Fact]
-        public void EditAboutShouldReturnAboutViewResultWhenModelIsValid()
+        public async Task EditAboutShouldReturnAboutViewResultWhenModelIsValid()
         {
             var informationService = Substitute.For<IAboutService>();
             var controller = GetInfoController(informationService.Some());
             controller.ModelState.AddModelError(string.Empty, string.Empty);
             var post = new AboutEditViewModel(default);
-            var result = controller.EditAbout(post);
+            var result = await controller.EditAbout(post);
             result.Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("EditAbout");
         }
 
         [Fact]
-        public void EditAboutShouldReturnEditAboutView()
+        public async Task EditAboutShouldReturnEditAboutView()
         {
             var informationService = Substitute.For<IAboutService>();
-            informationService.GetAboutDetails().Returns(Option.Some<string>(default));
+            informationService.GetAboutDetailsAsync().Returns(Option.Some<string>(default));
             var controller = GetInfoController(informationService.Some());
 
-            controller.EditAbout()
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.ViewName.Should()
-                      .BeEquivalentTo("EditAbout");
+            (await controller.EditAbout())
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should()
+                .BeEquivalentTo("EditAbout");
         }
 
         [Fact]
-        public void EditAboutShouldReturnEditAboutViewWithModelFromRepositoryWhenAboutIsFound()
+        public async Task EditAboutShouldReturnEditAboutViewWithModelFromRepositoryWhenAboutIsFound()
         {
-            var informationService = Substitute.For<IAboutService>();
-            informationService.GetAboutDetails().Returns(Option.Some("test"));
+            var aboutService = Substitute.For<IAboutService>();
+            aboutService.GetAboutDetailsAsync().Returns(Option.Some("test"));
 
-            var controller = GetInfoController(informationService.Some());
+            var controller = GetInfoController(aboutService.Some());
 
-            controller
-                .EditAbout()
+            (await controller.EditAbout())
                 .Should()
                 .BeOfType<ViewResult>()
                 .Which.Model.Should()
@@ -304,14 +317,13 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void EditAboutShouldReturnRedirectActionResultToAboutActionWhenAboutIsNotFound()
+        public async Task EditAboutShouldReturnRedirectActionResultToAboutActionWhenAboutIsNotFound()
         {
             var informationService = Substitute.For<IAboutService>();
 
             var controller = GetInfoController(informationService.Some());
 
-            controller
-                .EditAbout()
+            (await controller.EditAbout())
                 .Should()
                 .BeOfType<RedirectToActionResult>()
                 .Which.ActionName.Should()
@@ -319,7 +331,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void EditContactShouldEditContactWithModelData()
+        public async Task EditContactShouldEditContactWithModelData()
         {
             var contactService = Substitute.For<IContactService>();
             const string editValue = "value";
@@ -327,57 +339,56 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             var controller = GetInfoController(default, contactService.Some());
 
             var post = new ContactEditViewModel(editValue);
-            controller.EditContact(post);
+            await controller.EditContact(post);
 
-            contactService.Received(1).Edit(editValue);
+            await contactService.Received(1).EditAsync(editValue);
         }
 
         [Fact]
-        public void EditContactShouldReturnContactRedirectToActionResultWhenModelIsValid()
+        public async Task EditContactShouldReturnContactRedirectToActionResultWhenModelIsValid()
         {
             var contactService = Substitute.For<IContactService>();
             var controller = GetInfoController(default, contactService.Some());
 
             var post = new ContactEditViewModel(default);
-            var result = controller.EditContact(post);
+            var result = await controller.EditContact(post);
             result.Should().BeOfType<RedirectToActionResult>().Which.ActionName.Should().BeEquivalentTo("Contact");
         }
 
         [Fact]
-        public void EditContactShouldReturnContactViewResultWhenModelIsValid()
+        public async Task EditContactShouldReturnContactViewResultWhenModelIsValid()
         {
             var contactService = Substitute.For<IContactService>();
             var controller = GetInfoController(default, contactService.Some());
             controller.ModelState.AddModelError(string.Empty, string.Empty);
             var post = new ContactEditViewModel(default);
-            var result = controller.EditContact(post);
+            var result = await controller.EditContact(post);
             result.Should().BeOfType<ViewResult>().Which.ViewName.Should().BeEquivalentTo("EditContact");
         }
 
         [Fact]
-        public void EditContactShouldReturnEditContactView()
+        public async Task EditContactShouldReturnEditContactView()
         {
             var contactService = Substitute.For<IContactService>();
-            contactService.GetContactDetails().Returns(Option.Some<string>(default));
+            contactService.GetContactDetailsAsync().Returns(Option.Some<string>(default));
             var controller = GetInfoController(default, contactService.Some());
 
-            controller.EditContact()
-                      .Should()
-                      .BeOfType<ViewResult>()
-                      .Which.ViewName.Should()
-                      .BeEquivalentTo("EditContact");
+            (await controller.EditContact())
+                .Should()
+                .BeOfType<ViewResult>()
+                .Which.ViewName.Should()
+                .BeEquivalentTo("EditContact");
         }
 
         [Fact]
-        public void EditContactShouldReturnEditContactViewWithModelFromRepositoryWhenContactIsFound()
+        public async Task EditContactShouldReturnEditContactViewWithModelFromRepositoryWhenContactIsFound()
         {
             var contactService = Substitute.For<IContactService>();
-            contactService.GetContactDetails().Returns(Option.Some("test"));
+            contactService.GetContactDetailsAsync().Returns(Option.Some("test"));
 
             var controller = GetInfoController(default, contactService.Some());
 
-            controller
-                .EditContact()
+            (await controller.EditContact())
                 .Should()
                 .BeOfType<ViewResult>()
                 .Which.Model.Should()
@@ -389,14 +400,13 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public void EditContactShouldReturnRedirectActionResultToContactActionWhenContactIsNotFound()
+        public async Task EditContactShouldReturnRedirectActionResultToContactActionWhenContactIsNotFound()
         {
             var contactService = Substitute.For<IContactService>();
 
             var controller = GetInfoController(default, contactService.Some());
 
-            controller
-                .EditContact()
+            (await controller.EditContact())
                 .Should()
                 .BeOfType<RedirectToActionResult>()
                 .Which.ActionName.Should()

@@ -26,7 +26,7 @@ namespace AlphaDev.Web.Core.Support
             CurrentPage = dimensions.Start;
             NextPages = Enumerable.Range(dimensions.Start.Value + 1, Math.Max(pagesToDisplay - 1, 0)).ToArray();
             AuxiliaryPage = totalPages > pagesToDisplay
-                ? (NextPages.LastOrNone().ValueOr(CurrentPage.Value) + 1).Some()
+                ? NextPages.LastOrNone().Or(() => CurrentPage.Value).Map(i => i + 1)
                 : Option.None<int>();
 
             _collection = collection.Take(dimensions.Boundaries.Count.Value);

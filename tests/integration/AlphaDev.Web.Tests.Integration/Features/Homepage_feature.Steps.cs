@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using AlphaDev.Web.Tests.Integration.Fixtures;
 using AlphaDev.Web.Tests.Integration.Support;
 using FluentAssertions;
@@ -12,6 +11,7 @@ using Omego.Extensions.EnumerableExtensions;
 using Omego.Extensions.QueryableExtensions;
 using Optional;
 using Optional.Unsafe;
+using Polly;
 using Xunit.Abstractions;
 
 namespace AlphaDev.Web.Tests.Integration.Features
@@ -19,7 +19,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
     [UsedImplicitly]
     public partial class Homepage_feature : WebFeatureFixture
     {
-        public Homepage_feature(ITestOutputHelper output, DatabaseWebServerFixture databaseWebServerFixture)
+        public Homepage_feature(ITestOutputHelper output, [NotNull] DatabaseWebServerFixture databaseWebServerFixture)
             : base(output, databaseWebServerFixture)
         {
         }
@@ -106,9 +106,16 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_an_error_should_be_logged()
         {
-            // wait for error to be logged
-            Thread.Sleep(500);
-            Log.Should().Contain("[Error] An unhandled exception has occurred");
+            Policy.HandleResult<string>(s => !s.Contains("[Error] An unhandled exception has occurred"))
+                  .WaitAndRetry(11, i => TimeSpan.FromMilliseconds(100), (_, __, time, ___) =>
+                  {
+                      if (time == 11)
+                      {
+                          throw new InvalidOperationException(
+                              "Log does not contain unhandled error message.");
+                      }
+                  })
+                  .Execute(() => Log);
         }
 
         private void Then_it_should_display_blog_post_with_markdown_parsed_to_html()

@@ -1,4 +1,7 @@
-﻿using Optional;
+﻿using System;
+using System.Threading.Tasks;
+using Optional;
+using Optional.Unsafe;
 
 namespace AlphaDev.Optional.Extensions
 {
@@ -9,6 +12,14 @@ namespace AlphaDev.Optional.Extensions
         public static T GetValueOrException<T, TException>(this Option<T, TException> option) where TException : T
         {
             return option.ValueOr(x => x);
+        }
+
+        public static async Task MatchSomeAsync<T, TException>(this Option<T, TException> option, Func<T, Task> some)
+        {
+            if (option.HasValue)
+            {
+                await some(option.ValueOrFailure());
+            }
         }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AlphaDev.Test.Core.Extensions;
+using System.Threading.Tasks;
+using AlphaDev.EntityFramework.Unit.Testing.Extensions;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using MockQueryable.NSubstitute;
 using NSubstitute;
 using Optional;
 using Optional.Unsafe;
@@ -23,17 +25,17 @@ namespace AlphaDev.Core.Tests.Unit
             new BlogService(blogs, _dateProvider);
 
         [Fact]
-        public void AddShouldReturnBlog()
+        public async Task AddShouldReturnBlog()
         {
             const string title = "title";
             const string content = "content";
 
             var blog = new Blog(title, content);
-            var blogs = new List<Data.Entities.Blog>();
-            var blogsDbSet = blogs.ToMockDbSet().WithAddReturns(blogs);
-
+            var blogsDbSet = Enumerable.Empty<Data.Entities.Blog>().AsQueryable().BuildMockDbSet();
+            blogsDbSet.AddAsync(Arg.Is<Data.Entities.Blog>(b => b.Title == title && b.Content == content))
+                      .Returns(info => info.Arg<Data.Entities.Blog>().ToMockEntityEntry());
             var service = GetBlogService(blogsDbSet);
-            var addedBlog = service.Add(blog);
+            var addedBlog = await service.AddAsync(blog);
 
             addedBlog.Should()
                      .BeEquivalentTo(new
@@ -46,31 +48,42 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void DeleteShouldDeleteBlog()
+        public void DeleteAsyncShouldThrowInvalidOperationExceptionWhenBlogIsNotFound()
         {
-            var blogsDbSet = new List<Data.Entities.Blog>().ToMockDbSet();
-            blogsDbSet.Find(1)
+            var blogsDbSet = new List<Data.Entities.Blog>().AsQueryable().BuildMockDbSet();
+
+            var service = GetBlogService(blogsDbSet);
+            Func<Task> deleteAsync = () => service.DeleteAsync(1);
+
+            deleteAsync.Should().Throw<InvalidOperationException>().WithMessage("Blog 1 was not found.");
+        }
+
+        [Fact]
+        public async Task DeleteShouldDeleteBlog()
+        {
+            var blogsDbSet = new List<Data.Entities.Blog>().AsQueryable().BuildMockDbSet();
+            blogsDbSet.FindAsync(1)
                       .Returns(new Data.Entities.Blog
                       {
                           Id = 1
                       });
 
             var service = GetBlogService(blogsDbSet);
-            service.Delete(1);
+            await service.DeleteAsync(1);
             blogsDbSet.Received(1).Remove(Arg.Is<Data.Entities.Blog>(blog => blog.Id == 1));
         }
 
         [Fact]
-        public void EditShouldEditBlogTitleAndContentInDataStore()
+        public async Task EditShouldEditBlogTitleAndContentInDataStore()
         {
             var blogs = new List<Data.Entities.Blog>();
-            var blogsDbSet = blogs.ToMockDbSet();
+            var blogsDbSet = blogs.AsQueryable().BuildMockDbSet();
             const int id = default;
             var blog = new Data.Entities.Blog();
-            blogsDbSet.Find(id).Returns(blog);
+            blogsDbSet.FindAsync(id).Returns(blog);
             var service = GetBlogService(blogsDbSet);
 
-            service.Edit(id, arguments =>
+            await service.EditAsync(id, arguments =>
             {
                 arguments.Title = "Title";
                 arguments.Content = "Content";
@@ -85,18 +98,18 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void EditShouldSetModifiedFromDateProvider()
+        public async Task EditShouldSetModifiedFromDateProvider()
         {
             var entities = new[] { new Data.Entities.Blog() };
-            var blogsDbSet = entities.ToMockDbSet();
+            var blogsDbSet = entities.AsQueryable().BuildMockDbSet();
             const int id = default;
             var blog = new Data.Entities.Blog();
-            blogsDbSet.Find(id).Returns(blog);
+            blogsDbSet.FindAsync(id).Returns(blog);
 
             var service = GetBlogService(blogsDbSet);
             _dateProvider.UtcNow.Returns(new DateTime(2018, 1, 2));
 
-            service.Edit(id, arguments =>
+            await service.EditAsync(id, arguments =>
             {
                 arguments.Content = string.Empty;
                 arguments.Title = string.Empty;
@@ -108,82 +121,97 @@ namespace AlphaDev.Core.Tests.Unit
         [Fact]
         public void EditShouldThrowInvalidOperationExceptionWhenBlogWasNotFound()
         {
-            var service = GetBlogService(new Data.Entities.Blog[0].ToMockDbSet());
+            var service = GetBlogService(new Data.Entities.Blog[0].AsQueryable().BuildMockDbSet());
 
-            Action edit = () => service.Edit(default, arguments => { });
+            Func<Task> edit = () => service.EditAsync(default, arguments => { });
 
             edit.Should().Throw<InvalidOperationException>().WithMessage($"Blog {default(int)} was not found.");
         }
 
         [Fact]
-        public void GetLatestShouldReturnBlogWithContent()
+        public async Task GetCountAsyncReturnsCountFromTheStartPosition()
+        {
+            var blogDbSet = Enumerable.Range(1, 10)
+                                      .Select(i => new Data.Entities.Blog())
+                                      .AsQueryable()
+                                      .BuildMockDbSet();
+            var service = GetBlogService(blogDbSet);
+            var result = await service.GetCountAsync(7);
+            result.Should().Be(4);
+        }
+
+        [Fact]
+        public async Task GetLatestShouldReturnBlogWithContent()
         {
             const string testValue = "test content";
 
             var blogsDbSet = new[]
-            {
-                new Data.Entities.Blog
                 {
-                    Content = testValue,
-                    Title = string.Empty
-                }
-            }.ToMockDbSet();
+                    new Data.Entities.Blog
+                    {
+                        Content = testValue,
+                        Title = string.Empty
+                    }
+                }.AsQueryable()
+                 .BuildMockDbSet();
 
             var service = GetBlogService(blogsDbSet);
 
-            service.GetLatest()
-                   .ValueOrFailure()
-                   .Should()
-                   .BeEquivalentTo(
-                       new { Content = testValue },
-                       options => options.Including(info => info.Content));
+            (await service.GetLatestAsync())
+                .ValueOrFailure()
+                .Should()
+                .BeEquivalentTo(
+                    new { Content = testValue },
+                    options => options.Including(info => info.Content));
         }
 
         [Fact]
-        public void GetLatestShouldReturnBlogWithCreatedDate()
+        public async Task GetLatestShouldReturnBlogWithCreatedDate()
         {
             var testValue = new DateTime(2017, 1, 1);
             var blogDbSet = new[]
-            {
-                new Data.Entities.Blog { Created = testValue, Title = string.Empty, Content = string.Empty }
-            }.ToMockDbSet();
+                {
+                    new Data.Entities.Blog { Created = testValue, Title = string.Empty, Content = string.Empty }
+                }.AsQueryable()
+                 .BuildMockDbSet();
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetLatest()
-                   .ValueOrFailure()
-                   .Should()
-                   .BeEquivalentTo(
-                       new { Dates = new { Created = testValue } },
-                       options => options.Including(info => info.Dates.Created));
+            (await service.GetLatestAsync())
+                .ValueOrFailure()
+                .Should()
+                .BeEquivalentTo(
+                    new { Dates = new { Created = testValue } },
+                    options => options.Including(info => info.Dates.Created));
         }
 
         [Fact]
-        public void GetLatestShouldReturnBlogWithId()
+        public async Task GetLatestShouldReturnBlogWithId()
         {
             const int testValue = 1;
             var blogDbSet = new[]
-            {
-                new Data.Entities.Blog
                 {
-                    Id = testValue,
-                    Title = string.Empty,
-                    Content = string.Empty
-                }
-            }.ToMockDbSet();
+                    new Data.Entities.Blog
+                    {
+                        Id = testValue,
+                        Title = string.Empty,
+                        Content = string.Empty
+                    }
+                }.AsQueryable()
+                 .BuildMockDbSet();
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetLatest()
-                   .ValueOrFailure()
-                   .Should()
-                   .BeEquivalentTo(
-                       new { Id = testValue },
-                       options => options.Including(info => info.Id));
+            (await service.GetLatestAsync())
+                .ValueOrFailure()
+                .Should()
+                .BeEquivalentTo(
+                    new { Id = testValue },
+                    options => options.Including(info => info.Id));
         }
 
         [Fact]
-        public void GetLatestShouldReturnBlogWithModifiedDate()
+        public async Task GetLatestShouldReturnBlogWithModifiedDate()
         {
             var testValue = new DateTime(2017, 1, 1);
             var blogs = new List<Data.Entities.Blog>
@@ -194,370 +222,382 @@ namespace AlphaDev.Core.Tests.Unit
                 }
             };
 
-            var blogDbSet = blogs.ToMockDbSet();
+            var blogDbSet = blogs.AsQueryable().BuildMockDbSet();
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetLatest()
-                   .ValueOrFailure()
-                   .Should()
-                   .BeEquivalentTo(
-                       new { Dates = new { Modified = Option.Some(testValue) } },
-                       options => options.Including(info => info.Dates.Modified));
+            (await service.GetLatestAsync())
+                .ValueOrFailure()
+                .Should()
+                .BeEquivalentTo(
+                    new { Dates = new { Modified = Option.Some(testValue) } },
+                    options => options.Including(info => info.Dates.Modified));
         }
 
         [Fact]
-        public void GetLatestShouldReturnBlogWithNoModifiedDateWhenDbModifiedDateIsNull()
+        public async Task GetLatestShouldReturnBlogWithNoModifiedDateWhenDbModifiedDateIsNull()
         {
             var blogs = new List<Data.Entities.Blog>
             {
                 new Data.Entities.Blog { Modified = null, Title = string.Empty, Content = string.Empty }
             };
 
-            var blogDbSet = blogs.ToMockDbSet();
+            var blogDbSet = blogs.AsQueryable().BuildMockDbSet();
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetLatest()
-                   .ValueOrFailure()
-                   .Should()
-                   .BeEquivalentTo(
-                       new { Dates = new { Modified = Option.None<DateTime>() } },
-                       options => options.Including(info => info.Dates.Modified));
+            (await service.GetLatestAsync())
+                .ValueOrFailure()
+                .Should()
+                .BeEquivalentTo(
+                    new { Dates = new { Modified = Option.None<DateTime>() } },
+                    options => options.Including(info => info.Dates.Modified));
         }
 
         [Fact]
-        public void GetLatestShouldReturnBlogWithTitle()
+        public async Task GetLatestShouldReturnBlogWithTitle()
         {
             const string testValue = "test";
             var blogsDbSet = new List<Data.Entities.Blog>
-                { new Data.Entities.Blog { Title = testValue, Content = string.Empty } }.ToMockDbSet();
+                    { new Data.Entities.Blog { Title = testValue, Content = string.Empty } }.AsQueryable()
+                                                                                            .BuildMockDbSet();
 
             var service = GetBlogService(blogsDbSet);
 
-            service.GetLatest()
-                   .ValueOrFailure()
-                   .Should()
-                   .BeEquivalentTo(
-                       new { Title = testValue },
-                       options => options.Including(info => info.Title));
+            (await service.GetLatestAsync())
+                .ValueOrFailure()
+                .Should()
+                .BeEquivalentTo(
+                    new { Title = testValue },
+                    options => options.Including(info => info.Title));
         }
 
         [Fact]
-        public void GetLatestShouldReturnLatestBlog()
+        public async Task GetLatestShouldReturnLatestBlog()
         {
             var blogDbSet = new List<Data.Entities.Blog>
-            {
-                new Data.Entities.Blog
-                    { Created = new DateTime(2017, 1, 1), Title = string.Empty, Content = string.Empty },
-                new Data.Entities.Blog
-                    { Created = new DateTime(2013, 1, 1), Title = string.Empty, Content = string.Empty },
-                new Data.Entities.Blog
-                    { Created = new DateTime(2017, 6, 20), Title = string.Empty, Content = string.Empty },
-                new Data.Entities.Blog
-                    { Created = new DateTime(2014, 1, 1), Title = string.Empty, Content = string.Empty }
-            }.ToMockDbSet();
+                {
+                    new Data.Entities.Blog
+                        { Created = new DateTime(2017, 1, 1), Title = string.Empty, Content = string.Empty },
+                    new Data.Entities.Blog
+                        { Created = new DateTime(2013, 1, 1), Title = string.Empty, Content = string.Empty },
+                    new Data.Entities.Blog
+                        { Created = new DateTime(2017, 6, 20), Title = string.Empty, Content = string.Empty },
+                    new Data.Entities.Blog
+                        { Created = new DateTime(2014, 1, 1), Title = string.Empty, Content = string.Empty }
+                }.AsQueryable()
+                 .BuildMockDbSet();
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetLatest()
-                   .ValueOrFailure()
-                   .Should()
-                   .BeEquivalentTo(
-                       new { Dates = new { Created = new DateTime(2017, 6, 20) } },
-                       options => options.Including(info => info.Dates.Created));
+            (await service.GetLatestAsync())
+                .ValueOrFailure()
+                .Should()
+                .BeEquivalentTo(
+                    new { Dates = new { Created = new DateTime(2017, 6, 20) } },
+                    options => options.Including(info => info.Dates.Created));
         }
 
         [Fact]
-        public void GetLatestShouldReturnNoBlogWhenNoBlogIsFound()
+        public async Task GetLatestShouldReturnNoBlogWhenNoBlogIsFound()
         {
-            var blogDbSet = new List<Data.Entities.Blog>().ToMockDbSet();
+            var blogDbSet = new List<Data.Entities.Blog>().AsQueryable().BuildMockDbSet();
             var service = GetBlogService(blogDbSet);
 
-            service.GetLatest().HasValue.Should().BeFalse();
+            (await service.GetLatestAsync()).HasValue.Should().BeFalse();
         }
 
         [Fact]
-        public void GetOrderedByDatesShouldReturnBlogCountBasedOnTheCountArgument()
+        public async Task GetOrderedByDatesShouldReturnBlogCountBasedOnTheCountArgument()
         {
             var blogDbSet = Enumerable.Range(1, 10)
                                       .Select(x => new Data.Entities.Blog
                                           { Id = x, Title = string.Empty, Content = string.Empty })
                                       .ToArray()
-                                      .ToMockDbSet();
+                                      .AsQueryable()
+                                      .BuildMockDbSet();
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetOrderedByDates(1, 4)
-                   .Should()
-                   .HaveCount(4)
-                   .And.Subject.Select(x => x.Id)
-                   .Should()
-                   .BeEquivalentTo(blogDbSet.Take(4).Select(x => x.Id));
+            (await service.GetOrderedByDatesAsync(1, 4))
+                .Should()
+                .HaveCount(4)
+                .And.Subject.Select(x => x.Id)
+                .Should()
+                .BeEquivalentTo(Queryable.Take(blogDbSet, 4).Select(x => x.Id));
         }
 
         [Fact]
-        public void GetOrderedByDatesShouldReturnBlogsOrderedByModifiedThenByCreatedDateDescending()
+        public async Task GetOrderedByDatesShouldReturnBlogsOrderedByModifiedThenByCreatedDateDescending()
         {
             var blogDbSet = new[]
-            {
-                new Data.Entities.Blog
-                    { Created = new DateTime(2010, 5, 1), Title = string.Empty, Content = string.Empty },
-                new Data.Entities.Blog
-                    { Created = new DateTime(2010, 7, 1), Title = string.Empty, Content = string.Empty },
-                new Data.Entities.Blog
-                    { Created = new DateTime(2010, 4, 1), Title = string.Empty, Content = string.Empty },
-                new Data.Entities.Blog
                 {
-                    Created = new DateTime(2010, 1, 1), Modified = new DateTime(2011, 1, 1), Title = string.Empty,
-                    Content = string.Empty
-                },
-                new Data.Entities.Blog
-                    { Created = new DateTime(2010, 1, 1), Title = string.Empty, Content = string.Empty },
-                new Data.Entities.Blog
-                    { Created = new DateTime(2010, 11, 1), Title = string.Empty, Content = string.Empty }
-            }.ToMockDbSet();
+                    new Data.Entities.Blog
+                        { Created = new DateTime(2010, 5, 1), Title = string.Empty, Content = string.Empty },
+                    new Data.Entities.Blog
+                        { Created = new DateTime(2010, 7, 1), Title = string.Empty, Content = string.Empty },
+                    new Data.Entities.Blog
+                        { Created = new DateTime(2010, 4, 1), Title = string.Empty, Content = string.Empty },
+                    new Data.Entities.Blog
+                    {
+                        Created = new DateTime(2010, 1, 1), Modified = new DateTime(2011, 1, 1), Title = string.Empty,
+                        Content = string.Empty
+                    },
+                    new Data.Entities.Blog
+                        { Created = new DateTime(2010, 1, 1), Title = string.Empty, Content = string.Empty },
+                    new Data.Entities.Blog
+                        { Created = new DateTime(2010, 11, 1), Title = string.Empty, Content = string.Empty }
+                }.AsQueryable()
+                 .BuildMockDbSet();
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetOrderedByDates(1, blogDbSet.Count())
-                   .Select(x => x.Dates)
-                   .Should()
-                   .BeEquivalentTo(blogDbSet.OrderByDescending(x => x.Modified)
-                                            .ThenByDescending(x => x.Created)
-                                            .Select(x => new { x.Created, Modified = x.Modified.ToOption() }));
+            (await service.GetOrderedByDatesAsync(1, blogDbSet.Count()))
+                .Select(x => x.Dates)
+                .Should()
+                .BeEquivalentTo(Queryable.OrderByDescending(blogDbSet, x => x.Modified)
+                                         .ThenByDescending(x => x.Created)
+                                         .Select(x => new { x.Created, Modified = x.Modified.ToOption() }));
         }
 
         [Fact]
-        public void GetOrderedByDatesShouldReturnBlogsStartingFromTheStartArgument()
+        public async Task GetOrderedByDatesShouldReturnBlogsStartingFromTheStartArgument()
         {
             var blogDbSet = Enumerable.Range(1, 10)
                                       .Select(x => new Data.Entities.Blog
                                           { Id = x, Title = string.Empty, Content = string.Empty })
                                       .ToArray()
-                                      .ToMockDbSet();
+                                      .AsQueryable()
+                                      .BuildMockDbSet();
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetOrderedByDates(7, 10)
-                   .Should()
-                   .HaveCount(4)
-                   .And.Subject.Select(x => x.Id)
-                   .Should()
-                   .BeEquivalentTo(blogDbSet.Skip(6).Select(x => x.Id));
+            (await service.GetOrderedByDatesAsync(7, 10))
+                .Should()
+                .HaveCount(4)
+                .And.Subject.Select(x => x.Id)
+                .Should()
+                .BeEquivalentTo(Queryable.Skip(blogDbSet, 6).Select(x => x.Id));
         }
 
         [Fact]
-        public void GetOrderedByDatesShouldReturnBlogsWithCreatedDate()
+        public async Task GetOrderedByDatesShouldReturnBlogsWithCreatedDate()
         {
             var testValue = new DateTime(2017, 1, 1);
 
             var blog = new Data.Entities.Blog { Created = testValue, Title = string.Empty, Content = string.Empty };
-            var blogDbSet = new[] { blog }.ToMockDbSet();
+            var blogDbSet = new[] { blog }.AsQueryable().BuildMockDbSet();
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetOrderedByDates(1, 1)
-                   .Should()
-                   .BeEquivalentTo(
-                       new[] { new { Dates = new { Created = testValue } } },
-                       options => options.ExcludingMissingMembers());
+            (await service.GetOrderedByDatesAsync(1, 1))
+                .Should()
+                .BeEquivalentTo(
+                    new[] { new { Dates = new { Created = testValue } } },
+                    options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public void GetOrderedByDatesShouldReturnBlogsWithModifiedDate()
+        public async Task GetOrderedByDatesShouldReturnBlogsWithModifiedDate()
         {
             var testValue = new DateTime(2017, 1, 1);
 
             var blogDbSet = new[]
-                    { new Data.Entities.Blog { Modified = testValue, Title = string.Empty, Content = string.Empty } }
-                .ToMockDbSet();
+                            {
+                                new Data.Entities.Blog
+                                    { Modified = testValue, Title = string.Empty, Content = string.Empty }
+                            }
+                            .AsQueryable()
+                            .BuildMockDbSet();
             var service = GetBlogService(blogDbSet);
 
-            service.GetOrderedByDates(1, 1)
-                   .Should()
-                   .BeEquivalentTo(
-                       new[] { new { Dates = new { Modified = Option.Some(testValue) } } },
-                       options => options.ExcludingMissingMembers());
+            (await service.GetOrderedByDatesAsync(1, 1))
+                .Should()
+                .BeEquivalentTo(
+                    new[] { new { Dates = new { Modified = Option.Some(testValue) } } },
+                    options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public void GetOrderedByDatesShouldReturnBlogsWithNoModifiedDateWhenDbModifiedDateIsNull()
+        public async Task GetOrderedByDatesShouldReturnBlogsWithNoModifiedDateWhenDbModifiedDateIsNull()
         {
             var blogDbSet = new[] { new Data.Entities.Blog { Title = string.Empty, Content = string.Empty } }
-                .ToMockDbSet();
+                            .AsQueryable()
+                            .BuildMockDbSet();
             var service = GetBlogService(blogDbSet);
 
-            service.GetOrderedByDates(1, 1)
-                   .Should()
-                   .BeEquivalentTo(
-                       new[] { new { Dates = new { Modified = Option.None<DateTime>() } } },
-                       options => options.ExcludingMissingMembers());
+            (await service.GetOrderedByDatesAsync(1, 1))
+                .Should()
+                .BeEquivalentTo(
+                    new[] { new { Dates = new { Modified = Option.None<DateTime>() } } },
+                    options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public void GetOrderedByDatesShouldReturnBlogsWithTitle()
+        public async Task GetOrderedByDatesShouldReturnBlogsWithTitle()
         {
             const string testValue = "test";
 
             var blogDbSet = new[]
-                    { new Data.Entities.Blog { Title = testValue, Content = string.Empty } }
-                .ToMockDbSet();
+                                { new Data.Entities.Blog { Title = testValue, Content = string.Empty } }
+                            .AsQueryable()
+                            .BuildMockDbSet();
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetOrderedByDates(1, 1)
-                   .Should()
-                   .BeEquivalentTo(
-                       new[] { new { Title = testValue } },
-                       options => options.ExcludingMissingMembers());
+            (await service.GetOrderedByDatesAsync(1, 1))
+                .Should()
+                .BeEquivalentTo(
+                    new[] { new { Title = testValue } },
+                    options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public void GetOrderedByDatesShouldReturnBlogWithContent()
+        public async Task GetOrderedByDatesShouldReturnBlogWithContent()
         {
             const string testValue = "test content";
 
             var blogDbSet = new[] { new Data.Entities.Blog { Title = string.Empty, Content = testValue } }
-                .ToMockDbSet();
+                            .AsQueryable()
+                            .BuildMockDbSet();
 
             var service = GetBlogService(blogDbSet);
 
-            service.GetOrderedByDates(1, 1)
-                   .Should()
-                   .BeEquivalentTo(
-                       new[] { new { Content = "test content" } },
-                       options => options.Including(info => info.Content));
+            (await service.GetOrderedByDatesAsync(1, 1))
+                .Should()
+                .BeEquivalentTo(
+                    new[] { new { Content = "test content" } },
+                    options => options.Including(info => info.Content));
         }
 
         [Fact]
-        public void GetOrderedByDatesShouldReturnEmptyBlogsWhenNoBlogIsFound()
+        public async Task GetOrderedByDatesShouldReturnEmptyBlogsWhenNoBlogIsFound()
         {
-            var blogDbSet = new Data.Entities.Blog[0].ToMockDbSet();
+            var blogDbSet = new Data.Entities.Blog[0].AsQueryable().BuildMockDbSet();
             var service = GetBlogService(blogDbSet);
 
-            service.GetOrderedByDates(1, 1).Should().BeEmpty();
+            (await service.GetOrderedByDatesAsync(1, 1)).Should().BeEmpty();
         }
 
         [Fact]
-        public void GetShouldReturnBlogWithContent()
+        public async Task GetShouldReturnBlogWithContent()
         {
             const int id = default;
 
             var testValue = "test";
 
             var blog = new Data.Entities.Blog { Content = testValue, Title = string.Empty };
-            var blogDbSet = new[] { blog }.ToMockDbSet();
-            blogDbSet.Find(id).Returns(blog);
+            var blogDbSet = new[] { blog }.AsQueryable().BuildMockDbSet();
+            blogDbSet.FindAsync(id).Returns(blog);
             var service = GetBlogService(blogDbSet);
 
-            service.Get(id)
-                   .ValueOr(BlogBase.Empty)
-                   .Should()
-                   .BeEquivalentTo(
-                       new { Content = testValue },
-                       options => options.ExcludingMissingMembers());
+            (await service.GetAsync(id))
+                .ValueOr(BlogBase.Empty)
+                .Should()
+                .BeEquivalentTo(
+                    new { Content = testValue },
+                    options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public void GetShouldReturnBlogWithCreatedDate()
+        public async Task GetShouldReturnBlogWithCreatedDate()
         {
             const int id = default;
 
             var testValue = new DateTime(2017, 1, 1);
 
             var blog = new Data.Entities.Blog { Created = testValue, Title = string.Empty, Content = string.Empty };
-            var blogDbSet = new[] { blog }.ToMockDbSet();
-            blogDbSet.Find(id).Returns(blog);
+            var blogDbSet = new[] { blog }.AsQueryable().BuildMockDbSet();
+            blogDbSet.FindAsync(id).Returns(blog);
 
             var service = GetBlogService(blogDbSet);
 
-            service.Get(id)
-                   .ValueOr(BlogBase.Empty)
-                   .Should()
-                   .BeEquivalentTo(
-                       new { Dates = new { Created = testValue } },
-                       options => options.ExcludingMissingMembers());
+            (await service.GetAsync(id))
+                .ValueOr(BlogBase.Empty)
+                .Should()
+                .BeEquivalentTo(
+                    new { Dates = new { Created = testValue } },
+                    options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public void GetShouldReturnBlogWithId()
+        public async Task GetShouldReturnBlogWithId()
         {
             const int id = 1;
 
             var blog = new Data.Entities.Blog { Id = id, Title = string.Empty, Content = string.Empty };
-            var blogDbSet = new[] { blog }.ToMockDbSet();
-            blogDbSet.Find(id).Returns(blog);
+            var blogDbSet = new[] { blog }.AsQueryable().BuildMockDbSet();
+            blogDbSet.FindAsync(id).Returns(blog);
 
             var service = GetBlogService(blogDbSet);
 
-            service.Get(id)
-                   .ValueOr(BlogBase.Empty)
-                   .Should()
-                   .BeEquivalentTo(
-                       new { Id = id },
-                       options => options.ExcludingMissingMembers());
+            (await service.GetAsync(id))
+                .ValueOr(BlogBase.Empty)
+                .Should()
+                .BeEquivalentTo(
+                    new { Id = id },
+                    options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public void GetShouldReturnBlogWithModificationDate()
+        public async Task GetShouldReturnBlogWithModificationDate()
         {
             const int id = default;
 
             var testValue = new DateTime(2017, 1, 1);
 
             var blog = new Data.Entities.Blog { Modified = testValue, Title = string.Empty, Content = string.Empty };
-            var blogDbSet = new[] { blog }.ToMockDbSet();
-            blogDbSet.Find(id).Returns(blog);
+            var blogDbSet = new[] { blog }.AsQueryable().BuildMockDbSet();
+            blogDbSet.FindAsync(id).Returns(blog);
 
             var service = GetBlogService(blogDbSet);
 
-            service.Get(id)
-                   .ValueOr(BlogBase.Empty)
-                   .Should()
-                   .BeEquivalentTo(
-                       new { Dates = new { Modified = testValue.Some() } },
-                       options => options.ExcludingMissingMembers());
+            (await service.GetAsync(id))
+                .ValueOr(BlogBase.Empty)
+                .Should()
+                .BeEquivalentTo(
+                    new { Dates = new { Modified = testValue.Some() } },
+                    options => options.ExcludingMissingMembers());
         }
 
         [Fact]
-        public void GetShouldReturnBlogWithNoModifiedDateWhenDbModifiedDateIsNull()
+        public async Task GetShouldReturnBlogWithNoModifiedDateWhenDbModifiedDateIsNull()
         {
             const int id = 1;
 
             var blog = new Data.Entities.Blog { Modified = null, Title = string.Empty, Content = string.Empty };
-            var blogDbSet = new[] { blog }.ToMockDbSet();
-            blogDbSet.Find(id).Returns(blog);
+            var blogDbSet = new[] { blog }.AsQueryable().BuildMockDbSet();
+            blogDbSet.FindAsync(id).Returns(blog);
 
             var service = GetBlogService(blogDbSet);
 
-            service.Get(id)
-                   .ValueOr(BlogBase.Empty)
-                   .Should()
-                   .BeEquivalentTo(
-                       new { Dates = new { Modified = Option.None<DateTime>() } },
-                       options => options.Including(info => info.Dates.Modified));
+            (await service.GetAsync(id))
+                .ValueOr(BlogBase.Empty)
+                .Should()
+                .BeEquivalentTo(
+                    new { Dates = new { Modified = Option.None<DateTime>() } },
+                    options => options.Including(info => info.Dates.Modified));
         }
 
         [Fact]
-        public void GetShouldReturnBlogWithTitle()
+        public async Task GetShouldReturnBlogWithTitle()
         {
             const int id = 1;
 
             var testValue = "test";
 
             var blog = new Data.Entities.Blog { Title = testValue, Content = string.Empty };
-            var blogDbSet = new[] { blog }.ToMockDbSet();
-            blogDbSet.Find(id).Returns(blog);
+            var blogDbSet = new[] { blog }.AsQueryable().BuildMockDbSet();
+            blogDbSet.FindAsync(id).Returns(blog);
 
             var service = GetBlogService(blogDbSet);
 
-            service.Get(id)
-                   .ValueOr(BlogBase.Empty)
-                   .Should()
-                   .BeEquivalentTo(
-                       new { Title = testValue },
-                       options => options.ExcludingMissingMembers());
+            (await service.GetAsync(id))
+                .ValueOr(BlogBase.Empty)
+                .Should()
+                .BeEquivalentTo(
+                    new { Title = testValue },
+                    options => options.ExcludingMissingMembers());
         }
     }
 }

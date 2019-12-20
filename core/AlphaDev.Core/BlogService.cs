@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AlphaDev.Core.Extensions;
+using AlphaDev.Optional.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Optional;
-using Optional.Collections;
+using Optional.Async;
 
 namespace AlphaDev.Core
 {
@@ -20,45 +22,47 @@ namespace AlphaDev.Core
             _dateProvider = dateProvider;
         }
 
-        public Option<BlogBase> GetLatest()
+        public async Task<Option<BlogBase>> GetLatestAsync()
         {
-            return _blogs.OrderByDescending(blog => blog.Created)
-                         .FirstOrNone()
-                         .Map(blog =>
-                             (BlogBase) new Blog(blog.Id,
-                                 blog.Title,
-                                 blog.Content,
+            var latestBlog = await _blogs.OrderByDescending(blog => blog.Created).FirstOrDefaultAsync();
+
+            return latestBlog.SomeNotNull()
+                             .Map(blog => (BlogBase) new Blog(blog.Id, blog.Title, blog.Content,
                                  new Dates(blog.Created, blog.Modified.ToOption())));
         }
 
-        public Option<BlogBase> Get(int id)
+        public Task<Option<BlogBase>> GetAsync(int id)
         {
-            return _blogs.Find(id)
-                         .SomeNotNull()
-                         .Map(blog =>
-                             (BlogBase) new Blog(blog.Id, blog.Title, blog.Content,
-                                 new Dates(blog.Created, blog.Modified.ToOption())));
+            return _blogs.FindAsync(id)
+                         .SomeNotNullAsync()
+                         .MapAsync(blog => (BlogBase) new Blog(blog.Id, blog.Title, blog.Content,
+                             new Dates(blog.Created, blog.Modified.ToOption())));
         }
 
-        [NotNull]
-        public BlogBase Add([NotNull] BlogBase blog)
+        public async Task<BlogBase> AddAsync([NotNull] BlogBase blog)
         {
-            return _blogs.Add(new Data.Entities.Blog
-                         {
-                             Title = blog.Title,
-                             Content = blog.Content
-                         })
-                         .Map(entry => new Blog(entry.Entity.Id, entry.Entity.Title, entry.Entity.Content,
-                             new Dates(entry.Entity.Created, entry.Entity.Modified.ToOption())));
+            return await _blogs.AddAsync(new Data.Entities.Blog
+                               {
+                                   Title = blog.Title,
+                                   Content = blog.Content
+                               })
+                               .ToAsync(entry => new Blog(entry.Entity.Id, entry.Entity.Title, entry.Entity.Content,
+                                   new Dates(entry.Entity.Created, entry.Entity.Modified.ToOption())));
         }
 
-        public void Delete(int id) => _blogs.Remove(_blogs.Find(id));
-
-        public void Edit(int id, [NotNull] Action<BlogEditArguments> edit)
+        public async Task DeleteAsync(int id)
         {
-            var blog = _blogs.Find(id)
-                             .SomeNotNull(() => new InvalidOperationException($"Blog {id} was not found."))
-                             .ValueOr(exception => throw exception);
+            var blog = await _blogs.FindAsync(id)
+                                   .SomeNotNullAsync(() => new InvalidOperationException($"Blog {id} was not found."))
+                                   .ValueOrAsync(exception => throw exception);
+            _blogs.Remove(blog);
+        }
+
+        public async Task EditAsync(int id, [NotNull] Action<BlogEditArguments> edit)
+        {
+            var blog = await _blogs.FindAsync(id)
+                                   .SomeNotNullAsync(() => new InvalidOperationException($"Blog {id} was not found."))
+                                   .ValueOrAsync(exception => throw exception);
             var arguments = new BlogEditArguments();
             edit(arguments);
             blog.Content = arguments.Content;
@@ -66,28 +70,26 @@ namespace AlphaDev.Core
             blog.Modified = _dateProvider.UtcNow;
         }
 
-        public IEnumerable<BlogBase> GetOrderedByDates(int start, int count)
+        public async Task<IEnumerable<BlogBase>> GetOrderedByDatesAsync(int start, int count)
         {
-            return _blogs.OrderByDescending(x => x.Modified)
-                         .ThenByDescending(x => x.Created)
-                         .Skip(start - 1)
-                         .Take(count)
-                         .SomeNotNull()
-                         .Match(blogs => blogs.Select(targetBlog =>
-                                                  new Blog(targetBlog.Id,
-                                                      targetBlog.Title ?? string.Empty,
-                                                      targetBlog.Content ?? string.Empty,
-                                                      new Dates(targetBlog.Created, targetBlog.Modified.ToOption())))
-                                              .ToArray(),
-                             Enumerable.Empty<BlogBase>);
+            return await _blogs.OrderByDescending(x => x.Modified)
+                               .ThenByDescending(x => x.Created)
+                               .Skip(start - 1)
+                               .Take(count)
+                               .Select(targetBlog =>
+                                   new Blog(targetBlog.Id,
+                                       targetBlog.Title,
+                                       targetBlog.Content,
+                                       new Dates(targetBlog.Created, targetBlog.Modified.ToOption())))
+                               .ToArrayAsync();
         }
 
-        public int GetCount(int start)
+        public async Task<int> GetCountAsync(int start)
         {
-            return _blogs.OrderByDescending(x => x.Modified)
-                         .ThenByDescending(x => x.Created)
-                         .Skip(start - 1)
-                         .Count();
+            return await _blogs.OrderByDescending(x => x.Modified)
+                               .ThenByDescending(x => x.Created)
+                               .Skip(start - 1)
+                               .CountAsync();
         }
     }
 }

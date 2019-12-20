@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Threading.Tasks;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Optional.Extensions;
 using JetBrains.Annotations;
@@ -14,22 +14,25 @@ namespace AlphaDev.Core
 
         public ContactService([NotNull] DbSet<Contact> contacts) => _contacts = contacts;
 
-        public Option<string> GetContactDetails()
+        public async Task<Option<string>> GetContactDetailsAsync()
         {
-            return _contacts.SingleOrDefault().SomeWhenNotNull().Map(contact => contact.Value).FilterNotNull();
+            return (await _contacts.SingleOrDefaultAsync())
+                   .SomeWhenNotNull()
+                   .Map(contact => contact.Value)
+                   .FilterNotNull();
         }
 
-        public void Edit(string value)
+        public async Task EditAsync(string value)
         {
-            _contacts.SingleOrDefault()
-                     .SomeNotNull()
-                     .Match(contact => contact.Value = value,
-                         () => throw new InvalidOperationException("Contact not found."));
+            (await _contacts.SingleOrDefaultAsync())
+                .SomeNotNull()
+                .Match(contact => contact.Value = value,
+                    () => throw new InvalidOperationException("Contact not found."));
         }
 
-        public void Create(string value)
+        public async Task CreateAsync(string value)
         {
-            _contacts.Add(new Contact
+            await _contacts.AddAsync(new Contact
             {
                 Value = value
             });

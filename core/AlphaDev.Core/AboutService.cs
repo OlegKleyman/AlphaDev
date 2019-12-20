@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Optional.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Optional;
-using Optional.Collections;
 
 namespace AlphaDev.Core
 {
@@ -13,21 +13,25 @@ namespace AlphaDev.Core
 
         public AboutService(DbSet<About> abouts) => _abouts = abouts;
 
-        public Option<string> GetAboutDetails()
+        public async Task<Option<string>> GetAboutDetailsAsync()
         {
-            return _abouts.SingleOrNone().Map(about => about.Value).FilterNotNull();
+            return (await _abouts.SingleOrDefaultAsync())
+                   .SomeNotNull()
+                   .Map(about => about.Value)
+                   .FilterNotNull();
         }
 
-        public void Edit(string value)
+        public async Task EditAsync(string value)
         {
-            _abouts.SingleOrNone()
-                   .Match(contact => contact.Value = value,
-                       () => throw new InvalidOperationException("About not found."));
+            (await _abouts.SingleOrDefaultAsync())
+                .SomeNotNull()
+                .Match(about => about.Value = value,
+                    () => throw new InvalidOperationException("About not found."));
         }
 
-        public void Create(string value)
+        public async Task CreateAsync(string value)
         {
-            _abouts.Add(new About
+            await _abouts.AddAsync(new About
             {
                 Value = value
             });

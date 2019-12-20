@@ -1,7 +1,11 @@
+using System.Threading.Tasks;
 using AlphaDev.Core;
+using AlphaDev.Core.Extensions;
+using AlphaDev.Optional.Extensions;
 using AlphaDev.Web.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
+using Optional.Async;
 
 namespace AlphaDev.Web.Controllers
 {
@@ -13,16 +17,16 @@ namespace AlphaDev.Web.Controllers
 
         public DefaultController([NotNull] IBlogService blogService) => _blogService = blogService;
 
-        public ViewResult Index()
+        public async Task<ViewResult> Index()
         {
-            var view = _blogService.GetLatest()
-                                   .Map(blogBase => new BlogViewModel(
-                                       blogBase.Id,
-                                       blogBase.Title,
-                                       blogBase.Content,
-                                       new DatesViewModel(blogBase.Dates.Created, blogBase.Dates.Modified)));
-
-            return View(nameof(Index), view.ValueOr(() => BlogViewModel.Welcome));
+            return await _blogService.GetLatestAsync()
+                                     .MapAsync(blogBase => new BlogViewModel(
+                                         blogBase.Id,
+                                         blogBase.Title,
+                                         blogBase.Content,
+                                         new DatesViewModel(blogBase.Dates.Created, blogBase.Dates.Modified)))
+                                     .WithExceptionAsync(() => BlogViewModel.Welcome)
+                                     .To(async option => View(nameof(Index), await option.GetValueOrExceptionAsync()));
         }
 
         [Route("error/{status}")]
