@@ -29,17 +29,15 @@ namespace AlphaDev.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([CanBeNull] LoginViewModel model, [CanBeNull] string? returnUrl = null)
         {
-            return await ModelState.IsValid.SomeWhen(b => b)
-                                   .MapAsync(async b => await _signInManager
-                                       .PasswordSignInAsync(model?.Username, model?.Password, false, false))
-                                   .FilterAsync(signInResult => signInResult == SignInResult.Success)
-                                   .MapAsync(signInResult => (IActionResult) Redirect(returnUrl ?? "/"))
-                                   .MatchAsync(actionResult => actionResult,
-                                       () =>
-                                       {
-                                           ModelState.AddModelError(string.Empty, "Invalid login");
-                                           return View("Login", model);
-                                       });
+            var mapAsync = await ModelState.IsValid.SomeWhen(b => b)
+                                           .MapAsync(async b =>
+                                               await _signInManager.PasswordSignInAsync(model?.Username,
+                                                   model?.Password, false, false))
+                                           .FilterAsync(signInResult => signInResult == SignInResult.Success)
+                                           .MapAsync(signInResult => (IActionResult) Redirect(returnUrl ?? "/"))
+                                           .WithExceptionAsync(() => View("Login", model));
+            mapAsync.MatchNone(result => ModelState.AddModelError(string.Empty, "Invalid login"));
+            return mapAsync.GetValueOrException();
         }
 
         [HttpPost]

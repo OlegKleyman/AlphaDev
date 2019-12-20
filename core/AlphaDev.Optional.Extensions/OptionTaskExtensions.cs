@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Optional;
 using Optional.Unsafe;
+using AlphaDev.Optional.Extensions.Unsafe;
 
 namespace AlphaDev.Optional.Extensions
 {
@@ -33,8 +34,5 @@ namespace AlphaDev.Optional.Extensions
 
         public static async Task<T> ValueOrAsync<T, TException>(this Task<Option<T, TException>> option,
             Func<TException, T> exception) => (await option).ValueOr(exception);
-
-        public static async Task<TResult> MatchAsync<T, TResult>(this Task<Option<T>> optionTask, Func<T, TResult> some,
-            Func<TResult> none) => (await optionTask).Match(some, none);
     }
 }
