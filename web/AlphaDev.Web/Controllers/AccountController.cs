@@ -1,11 +1,13 @@
 ﻿using System.Threading.Tasks;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
+using AlphaDev.Optional.Extensions;
 using AlphaDev.Web.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Optional;
+using Optional.Async;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace AlphaDev.Web.Controllers
@@ -25,21 +27,19 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public IActionResult Login([CanBeNull] LoginViewModel model, [CanBeNull] string? returnUrl = null)
+        public async Task<IActionResult> Login([CanBeNull] LoginViewModel model, [CanBeNull] string? returnUrl = null)
         {
-            return ModelState.IsValid.SomeWhen(b => b)
-                             .Map(b => _signInManager
-                                       .PasswordSignInAsync(model?.Username, model?.Password, false, false)
-                                       .GetAwaiter()
-                                       .GetResult())
-                             .Filter(signInResult => signInResult == SignInResult.Success)
-                             .Map<IActionResult>(signInResult => Redirect(returnUrl ?? "/"))
-                             .Match(actionResult => actionResult,
-                                 () =>
-                                 {
-                                     ModelState.AddModelError(string.Empty, "Invalid login");
-                                     return View("Login", model);
-                                 });
+            return await ModelState.IsValid.SomeWhen(b => b)
+                                   .MapAsync(async b => await _signInManager
+                                       .PasswordSignInAsync(model?.Username, model?.Password, false, false))
+                                   .FilterAsync(signInResult => signInResult == SignInResult.Success)
+                                   .MapAsync(signInResult => (IActionResult) Redirect(returnUrl ?? "/"))
+                                   .MatchAsync(actionResult => actionResult,
+                                       () =>
+                                       {
+                                           ModelState.AddModelError(string.Empty, "Invalid login");
+                                           return View("Login", model);
+                                       });
         }
 
         [HttpPost]

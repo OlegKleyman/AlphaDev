@@ -24,6 +24,20 @@ namespace AlphaDev.Optional.Extensions.Tests.Unit
         }
 
         [Fact]
+        public async Task MatchAsyncReturnsNoneActionValueWhenOptionHasNone()
+        {
+            var result = await Task.FromResult(Option.None<int>()).MatchAsync(_ => default, () => 1);
+            result.Should().Be(1);
+        }
+
+        [Fact]
+        public async Task MatchAsyncReturnsSomeActionValueWhenOptionHasSome()
+        {
+            var result = await Task.FromResult(1.Some()).MatchAsync(i => i, () => default);
+            result.Should().Be(1);
+        }
+
+        [Fact]
         public static async Task MatchSomeAsyncActionDoesNotExecuteActionWhenNone()
         {
             var optionTask = Task.FromResult(Option.None<object>().WithException(string.Empty));
