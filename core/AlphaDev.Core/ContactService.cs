@@ -18,8 +18,7 @@ namespace AlphaDev.Core
         {
             return (await _contacts.SingleOrDefaultAsync())
                    .SomeWhenNotNull()
-                   .Map(contact => contact.Value)
-                   .FilterNotNull();
+                   .Map(contact => contact.Value);
         }
 
         public async Task EditAsync(string value)
