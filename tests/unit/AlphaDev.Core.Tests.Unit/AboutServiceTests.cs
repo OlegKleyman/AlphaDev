@@ -61,13 +61,5 @@ namespace AlphaDev.Core.Tests.Unit
             var service = GetAboutService(abouts);
             (await service.GetAboutDetailsAsync()).Should().BeNone();
         }
-
-        [Fact]
-        public async Task GetAboutDetailsShouldReturnNoneWhenAboutValueIsNull()
-        {
-            var abouts = new[] { new About() }.ToMockDbSet();
-            var service = GetAboutService(abouts);
-            (await service.GetAboutDetailsAsync()).Should().BeNone();
-        }
     }
 }

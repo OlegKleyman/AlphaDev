@@ -70,13 +70,5 @@ namespace AlphaDev.Core.Tests.Unit
             var service = GetContactService(contacts);
             (await service.GetContactDetailsAsync()).Should().BeNone();
         }
-
-        [Fact]
-        public async Task GetContactDetailsAsyncShouldReturnNoneWhenContactValueIsNull()
-        {
-            var contacts = new[] { new Contact() }.AsQueryable().BuildMockDbSet();
-            var service = GetContactService(contacts);
-            (await service.GetContactDetailsAsync()).Should().BeNone();
-        }
     }
 }
