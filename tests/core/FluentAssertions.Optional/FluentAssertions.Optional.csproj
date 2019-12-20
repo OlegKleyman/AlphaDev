@@ -12,12 +12,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AlphaDev.Optional.Extensions" Version="0.0.0.8" />
     <PackageReference Include="FluentAssertions" Version="5.9.0" />
     <PackageReference Include="Optional" Version="5.0.0-alpha" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\core\AlphaDev.Optional.Extensions\AlphaDev.Optional.Extensions.csproj" />
   </ItemGroup>
 
 </Project>
