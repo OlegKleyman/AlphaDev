@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.Test.Core.Extensions;
 using FluentAssertions;
+using FluentAssertions.Optional.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using MockQueryable.NSubstitute;
@@ -59,7 +60,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var contacts = new[] { new Contact { Value = "test" } }.AsQueryable().BuildMockDbSet();
             var service = GetContactService(contacts);
-            (await service.GetContactDetailsAsync()).Should().BeEquivalentTo(Option.Some("test"));
+            (await service.GetContactDetailsAsync()).Should().HaveSome().Which.Should().Be("test");
         }
 
         [Fact]
@@ -67,15 +68,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var contacts = new List<Contact>().AsQueryable().BuildMockDbSet();
             var service = GetContactService(contacts);
-            (await service.GetContactDetailsAsync()).Should().BeEquivalentTo(Option.None<string>());
-        }
-
-        [Fact]
-        public async Task GetContactDetailsAsyncShouldReturnNoneWhenContactValueIsNull()
-        {
-            var contacts = new[] { new Contact() }.AsQueryable().BuildMockDbSet();
-            var service = GetContactService(contacts);
-            (await service.GetContactDetailsAsync()).Should().BeEquivalentTo(Option.None<string>());
+            (await service.GetContactDetailsAsync()).Should().BeNone();
         }
     }
 }

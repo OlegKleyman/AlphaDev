@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.EntityFramework.Unit.Testing.Extensions;
 using FluentAssertions;
+using FluentAssertions.Optional.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using MockQueryable.NSubstitute;
 using NSubstitute;
-using Optional;
 using Xunit;
 
 namespace AlphaDev.Core.Tests.Unit
@@ -51,7 +51,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var abouts = new[] { new About { Value = "test" } }.ToMockDbSet();
             var service = GetAboutService(abouts);
-            (await service.GetAboutDetailsAsync()).Should().BeEquivalentTo(Option.Some("test"));
+            (await service.GetAboutDetailsAsync()).Should().HaveSome().Which.Should().BeEquivalentTo("test");
         }
 
         [Fact]
@@ -59,15 +59,7 @@ namespace AlphaDev.Core.Tests.Unit
         {
             var abouts = new List<About>().ToMockDbSet();
             var service = GetAboutService(abouts);
-            (await service.GetAboutDetailsAsync()).Should().BeEquivalentTo(Option.None<string>());
-        }
-
-        [Fact]
-        public async Task GetAboutDetailsShouldReturnNoneWhenAboutValueIsNull()
-        {
-            var abouts = new[] { new About() }.ToMockDbSet();
-            var service = GetAboutService(abouts);
-            (await service.GetAboutDetailsAsync()).Should().BeEquivalentTo(Option.None<string>());
+            (await service.GetAboutDetailsAsync()).Should().BeNone();
         }
     }
 }

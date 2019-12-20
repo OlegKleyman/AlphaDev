@@ -17,8 +17,7 @@ namespace AlphaDev.Core
         {
             return (await _abouts.SingleOrDefaultAsync())
                    .SomeNotNull()
-                   .Map(about => about.Value)
-                   .FilterNotNull();
+                   .Map(about => about.Value);
         }
 
         public async Task EditAsync(string value)
