@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using MockQueryable.NSubstitute;
 using NSubstitute;
 using Optional;
-using Optional.Unsafe;
 using Xunit;
 
 namespace AlphaDev.Core.Tests.Unit
@@ -158,12 +157,13 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogsDbSet);
 
-            (await service.GetLatestAsync())
-                .ValueOrFailure()
-                .Should()
-                .BeEquivalentTo(
-                    new { Content = testValue },
-                    options => options.Including(info => info.Content));
+            (await service.GetLatestAsync()).Should()
+                                            .HaveSome()
+                                            .Which
+                                            .Should()
+                                            .BeEquivalentTo(
+                                                new { Content = testValue },
+                                                options => options.Including(info => info.Content));
         }
 
         [Fact]
@@ -178,12 +178,13 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            (await service.GetLatestAsync())
-                .ValueOrFailure()
-                .Should()
-                .BeEquivalentTo(
-                    new { Dates = new { Created = testValue } },
-                    options => options.Including(info => info.Dates.Created));
+            (await service.GetLatestAsync()).Should()
+                                            .HaveSome()
+                                            .Which
+                                            .Should()
+                                            .BeEquivalentTo(
+                                                new { Dates = new { Created = testValue } },
+                                                options => options.Including(info => info.Dates.Created));
         }
 
         [Fact]
@@ -203,12 +204,13 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            (await service.GetLatestAsync())
-                .ValueOrFailure()
-                .Should()
-                .BeEquivalentTo(
-                    new { Id = testValue },
-                    options => options.Including(info => info.Id));
+            (await service.GetLatestAsync()).Should()
+                                            .HaveSome()
+                                            .Which
+                                            .Should()
+                                            .BeEquivalentTo(
+                                                new { Id = testValue },
+                                                options => options.Including(info => info.Id));
         }
 
         [Fact]
@@ -227,12 +229,13 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            (await service.GetLatestAsync())
-                .ValueOrFailure()
-                .Should()
-                .BeEquivalentTo(
-                    new { Dates = new { Modified = Option.Some(testValue) } },
-                    options => options.Including(info => info.Dates.Modified));
+            (await service.GetLatestAsync()).Should()
+                                            .HaveSome()
+                                            .Which
+                                            .Should()
+                                            .BeEquivalentTo(
+                                                new { Dates = new { Modified = Option.Some(testValue) } },
+                                                options => options.Including(info => info.Dates.Modified));
         }
 
         [Fact]
@@ -247,12 +250,13 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            (await service.GetLatestAsync())
-                .ValueOrFailure()
-                .Should()
-                .BeEquivalentTo(
-                    new { Dates = new { Modified = Option.None<DateTime>() } },
-                    options => options.Including(info => info.Dates.Modified));
+            (await service.GetLatestAsync()).Should()
+                                            .HaveSome()
+                                            .Which
+                                            .Should()
+                                            .BeEquivalentTo(
+                                                new { Dates = new { Modified = Option.None<DateTime>() } },
+                                                options => options.Including(info => info.Dates.Modified));
         }
 
         [Fact]
@@ -265,12 +269,13 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogsDbSet);
 
-            (await service.GetLatestAsync())
-                .ValueOrFailure()
-                .Should()
-                .BeEquivalentTo(
-                    new { Title = testValue },
-                    options => options.Including(info => info.Title));
+            (await service.GetLatestAsync()).Should()
+                                            .HaveSome()
+                                            .Which
+                                            .Should()
+                                            .BeEquivalentTo(
+                                                new { Title = testValue },
+                                                options => options.Including(info => info.Title));
         }
 
         [Fact]
@@ -291,12 +296,13 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            (await service.GetLatestAsync())
-                .ValueOrFailure()
-                .Should()
-                .BeEquivalentTo(
-                    new { Dates = new { Created = new DateTime(2017, 6, 20) } },
-                    options => options.Including(info => info.Dates.Created));
+            (await service.GetLatestAsync()).Should()
+                                            .HaveSome()
+                                            .Which
+                                            .Should()
+                                            .BeEquivalentTo(
+                                                new { Dates = new { Created = new DateTime(2017, 6, 20) } },
+                                                options => options.Including(info => info.Dates.Created));
         }
 
         [Fact]
@@ -305,7 +311,7 @@ namespace AlphaDev.Core.Tests.Unit
             var blogDbSet = new List<Data.Entities.Blog>().AsQueryable().BuildMockDbSet();
             var service = GetBlogService(blogDbSet);
 
-            (await service.GetLatestAsync()).HasValue.Should().BeFalse();
+            (await service.GetLatestAsync()).Should().BeNone();
         }
 
         [Fact]
