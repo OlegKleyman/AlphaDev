@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AlphaDev.EntityFramework.Unit.Testing.Extensions;
 using FluentAssertions;
+using FluentAssertions.Optional.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using MockQueryable.NSubstitute;
@@ -491,12 +492,12 @@ namespace AlphaDev.Core.Tests.Unit
             blogDbSet.FindAsync(id).Returns(blog);
             var service = GetBlogService(blogDbSet);
 
-            (await service.GetAsync(id))
-                .ValueOr(BlogBase.Empty)
-                .Should()
-                .BeEquivalentTo(
-                    new { Content = testValue },
-                    options => options.ExcludingMissingMembers());
+            (await service.GetAsync(id)).Should()
+                                        .HaveSome()
+                                        .Which.Should()
+                                        .BeEquivalentTo(
+                                            new { Content = testValue },
+                                            options => options.ExcludingMissingMembers());
         }
 
         [Fact]
@@ -512,12 +513,12 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            (await service.GetAsync(id))
-                .ValueOr(BlogBase.Empty)
-                .Should()
-                .BeEquivalentTo(
-                    new { Dates = new { Created = testValue } },
-                    options => options.ExcludingMissingMembers());
+            (await service.GetAsync(id)).Should()
+                                        .HaveSome()
+                                        .Which.Should()
+                                        .BeEquivalentTo(
+                                            new { Dates = new { Created = testValue } },
+                                            options => options.ExcludingMissingMembers());
         }
 
         [Fact]
@@ -531,12 +532,12 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            (await service.GetAsync(id))
-                .ValueOr(BlogBase.Empty)
-                .Should()
-                .BeEquivalentTo(
-                    new { Id = id },
-                    options => options.ExcludingMissingMembers());
+            (await service.GetAsync(id)).Should()
+                                        .HaveSome()
+                                        .Which.Should()
+                                        .BeEquivalentTo(
+                                            new { Id = id },
+                                            options => options.ExcludingMissingMembers());
         }
 
         [Fact]
@@ -552,12 +553,12 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            (await service.GetAsync(id))
-                .ValueOr(BlogBase.Empty)
-                .Should()
-                .BeEquivalentTo(
-                    new { Dates = new { Modified = testValue.Some() } },
-                    options => options.ExcludingMissingMembers());
+            (await service.GetAsync(id)).Should()
+                                        .HaveSome()
+                                        .Which.Should()
+                                        .BeEquivalentTo(
+                                            new { Dates = new { Modified = testValue.Some() } },
+                                            options => options.ExcludingMissingMembers());
         }
 
         [Fact]
@@ -571,12 +572,12 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            (await service.GetAsync(id))
-                .ValueOr(BlogBase.Empty)
-                .Should()
-                .BeEquivalentTo(
-                    new { Dates = new { Modified = Option.None<DateTime>() } },
-                    options => options.Including(info => info.Dates.Modified));
+            (await service.GetAsync(id)).Should()
+                                        .HaveSome()
+                                        .Which.Should()
+                                        .BeEquivalentTo(
+                                            new { Dates = new { Modified = Option.None<DateTime>() } },
+                                            options => options.Including(info => info.Dates.Modified));
         }
 
         [Fact]
@@ -592,12 +593,22 @@ namespace AlphaDev.Core.Tests.Unit
 
             var service = GetBlogService(blogDbSet);
 
-            (await service.GetAsync(id))
-                .ValueOr(BlogBase.Empty)
-                .Should()
-                .BeEquivalentTo(
-                    new { Title = testValue },
-                    options => options.ExcludingMissingMembers());
+            (await service.GetAsync(id)).Should()
+                                        .HaveSome()
+                                        .Which.Should()
+                                        .BeEquivalentTo(
+                                            new { Title = testValue },
+                                            options => options.ExcludingMissingMembers());
+        }
+
+        [Fact]
+        public async Task GetShouldReturnNoneWhenBlogIsNotFound()
+        {
+            var blogDbSet = Enumerable.Empty<Data.Entities.Blog>().AsQueryable().BuildMockDbSet();
+
+            var service = GetBlogService(blogDbSet);
+
+            (await service.GetAsync(default)).Should().BeNone();
         }
     }
 }
