@@ -10,7 +10,6 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using MockQueryable.NSubstitute;
 using NSubstitute;
-using Optional;
 using Xunit;
 
 namespace AlphaDev.Core.Tests.Unit

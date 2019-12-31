@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AlphaDev.Core;
-using AlphaDev.Core.Extensions;
 using AlphaDev.Paging;
 using AlphaDev.Paging.Extensions;
 using AlphaDev.Web.Controllers;
-using AlphaDev.Web.Core.Extensions;
 using AlphaDev.Web.Models;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -328,14 +326,15 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public async Task PageShouldReturnBlogModelsWithAnAuxiliaryPageNumberWhenThereAreMoreNextPagesThanInPageSettings()
+        public async Task
+            PageShouldReturnBlogModelsWithAnAuxiliaryPageNumberWhenThereAreMoreNextPagesThanInPageSettings()
         {
             var blogService = Substitute.For<IBlogService>();
             blogService.GetOrderedByDatesAsync(Arg.Any<int>(), Arg.Any<int>())
                        .Returns((1..10).ToEnumerable().Select(i => new Blog(string.Empty, string.Empty)));
 
             blogService.GetCountAsync().Returns(101);
-            var controller = GetPostsController(blogService, new PagesSettings(9,9, 10));
+            var controller = GetPostsController(blogService, new PagesSettings(9, 9, 10));
 
             (await controller.Page(1))
                 .Should()
@@ -347,7 +346,8 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public async Task PageShouldReturnBlogModelsWithoutAnAuxiliaryPageNumberWhenThereAreNotMorePagesThanTheNextPagesLength()
+        public async Task
+            PageShouldReturnBlogModelsWithoutAnAuxiliaryPageNumberWhenThereAreNotMorePagesThanTheNextPagesLength()
         {
             var blogs = new[]
             {

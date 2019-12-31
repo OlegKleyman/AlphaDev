@@ -1,19 +1,15 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using AlphaDev.Core;
-using AlphaDev.Core.Extensions;
 using AlphaDev.Optional.Extensions;
 using AlphaDev.Paging;
 using AlphaDev.Paging.Extensions;
 using AlphaDev.Web.Core;
-using AlphaDev.Web.Core.Extensions;
 using AlphaDev.Web.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Optional.Async;
-using Optional.Async.Linq;
-using Optional.Linq;
 
 namespace AlphaDev.Web.Controllers
 {
