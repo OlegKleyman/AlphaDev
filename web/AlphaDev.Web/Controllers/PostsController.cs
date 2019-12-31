@@ -3,14 +3,17 @@ using System.Threading.Tasks;
 using AlphaDev.Core;
 using AlphaDev.Core.Extensions;
 using AlphaDev.Optional.Extensions;
+using AlphaDev.Paging;
+using AlphaDev.Paging.Extensions;
 using AlphaDev.Web.Core;
 using AlphaDev.Web.Core.Extensions;
-using AlphaDev.Web.Core.Support;
 using AlphaDev.Web.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Optional.Async;
+using Optional.Async.Linq;
+using Optional.Linq;
 
 namespace AlphaDev.Web.Controllers
 {
@@ -18,28 +21,26 @@ namespace AlphaDev.Web.Controllers
     public class PostsController : Controller
     {
         private readonly IBlogService _blogService;
+        private readonly PagesSettings _pagesSettings;
 
-        public PostsController([NotNull] IBlogService blogService) => _blogService = blogService;
+        public PostsController([NotNull] IBlogService blogService, PagesSettings pagesSettings)
+        {
+            _blogService = blogService;
+            _pagesSettings = pagesSettings;
+        }
 
         [Route("page/{page}")]
         public async Task<ActionResult> Page(int page)
         {
-            const int itemsPerPage = 10;
-            const int maxPagesToDisplay = 10;
-            var startPage = page.ToPositiveInteger();
-            var startPosition = startPage.ToStartPosition(itemsPerPage.ToPositiveInteger());
-            return await _blogService.GetOrderedByDatesAsync(startPosition.Value, itemsPerPage)
+            var startPosition = (page - 1) * _pagesSettings.ItemsPerPage + 1;
+            return await _blogService.GetOrderedByDatesAsync(startPosition, _pagesSettings.ItemsPerPage)
                                      .SomeNotEmptyAsync(NotFound)
                                      .MapAsync(bases => bases.Select(blog => new BlogViewModel(blog.Id,
                                          blog.Title,
                                          blog.Content,
                                          new DatesViewModel(blog.Dates.Created, blog.Dates.Modified))))
-                                     .MapAsync(async x => x.ToPager(
-                                         new PageDimensions(startPage,
-                                             new PageBoundaries(itemsPerPage.ToPositiveInteger(),
-                                                 maxPagesToDisplay.ToPositiveInteger())),
-                                         (await _blogService.GetCountAsync(startPosition.Value))
-                                         .ToPositiveInteger()))
+                                     .MapAsync(models => models.ToPagerAsync(page,
+                                         () => _blogService.GetCountAsync(), _pagesSettings))
                                      .MapAsync(x => (ActionResult) View("Index", x))
                                      .GetValueOrExceptionAsync();
         }

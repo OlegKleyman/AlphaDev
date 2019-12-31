@@ -177,7 +177,7 @@ namespace AlphaDev.Web.Tests.Integration.Features
 
         private void Then_it_should_display_pages_before_the_current_page()
         {
-            const int maxPreviousPages = 10;
+            const int maxPreviousPages = 9;
             var pages = SiteTester.Posts.Pages.ToLookup(x => x.Page.Attributes.Active);
             var activePageNumber = pages[ActivityStatus.Active].Should().ContainSingle().Subject.Page.Identity.Number;
             var previousPages = pages[ActivityStatus.Inactive]

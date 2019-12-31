@@ -129,15 +129,15 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public async Task GetCountAsyncReturnsCountFromTheStartPosition()
+        public async Task GetCountAsyncReturnsCountOfAllBlogs()
         {
             var blogDbSet = Enumerable.Range(1, 10)
                                       .Select(i => new Data.Entities.Blog())
                                       .AsQueryable()
                                       .BuildMockDbSet();
             var service = GetBlogService(blogDbSet);
-            var result = await service.GetCountAsync(7);
-            result.Should().Be(4);
+            var result = await service.GetCountAsync();
+            result.Should().Be(10);
         }
 
         [Fact]

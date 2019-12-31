@@ -84,12 +84,6 @@ namespace AlphaDev.Core
                                .ToArrayAsync();
         }
 
-        public async Task<int> GetCountAsync(int start)
-        {
-            return await _blogs.OrderByDescending(x => x.Modified)
-                               .ThenByDescending(x => x.Created)
-                               .Skip(start - 1)
-                               .CountAsync();
-        }
+        public async Task<int> GetCountAsync() => await _blogs.CountAsync();
     }
 }

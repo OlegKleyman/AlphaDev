@@ -1,6 +1,7 @@
 ﻿using AlphaDev.Core;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Core.Data.Sql.Support;
+using AlphaDev.Paging;
 using AlphaDev.Web.Bootstrap.Extensions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
@@ -51,7 +52,9 @@ namespace AlphaDev.Web.Bootstrap
                         builder.AddSerilog(logger);
                     })
                     .AddMvc(options => { options.EnableEndpointRouting = false; })
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                    .Services
+                    .AddSingleton(provider => new PagesSettings(9, 9, 10));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
