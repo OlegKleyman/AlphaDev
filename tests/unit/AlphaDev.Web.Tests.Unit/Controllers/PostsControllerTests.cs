@@ -308,7 +308,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             blogService.GetCountAsync().Returns(1);
             const int page = 9;
             await GetPostsController(blogService, PagesSettings.Default).Page(page);
-            var value = page.ToPositiveInteger().ToStartPosition(10.ToPositiveInteger()).Value;
+            var value = (page - 1) * 10 + 1;
             await blogService.Received(1).GetOrderedByDatesAsync(Arg.Is(value), Arg.Is(10));
         }
 
@@ -320,7 +320,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                        .Returns(new[] { new Blog(string.Empty, string.Empty) });
             blogService.GetCountAsync().Returns(1);
             var controller = GetPostsController(blogService, PagesSettings.Default);
-            (await controller.Page(PositiveInteger.MinValue.Value))
+            (await controller.Page(1))
                 .Should()
                 .BeOfType<ViewResult>()
                 .Which.Model.Should()
@@ -337,7 +337,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             blogService.GetCountAsync().Returns(101);
             var controller = GetPostsController(blogService, new PagesSettings(9,9, 10));
 
-            (await controller.Page(PositiveInteger.MinValue.Value))
+            (await controller.Page(1))
                 .Should()
                 .BeOfType<ViewResult>()
                 .Which.Model.Should()
