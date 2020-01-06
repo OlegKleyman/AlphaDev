@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AlphaDev.Core;
 using AlphaDev.Optional.Extensions;
@@ -12,8 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Optional;
 using Optional.Async;
-using Optional.Unsafe;
-using OptionExtensions = AlphaDev.Optional.Extensions.OptionExtensions;
 
 namespace AlphaDev.Web.Controllers
 {

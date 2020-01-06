@@ -54,12 +54,14 @@ namespace AlphaDev.Core
         {
             _blogs.Include(blog1 => blog1.Id.ToString());
             var option = await _blogs.FindAsync(id)
-                                   .SomeNotNullAsync(() => new ObjectNotFoundException<BlogBase>((nameof(Blog.Id), id)));
+                                     .SomeNotNullAsync(() =>
+                                         new ObjectNotFoundException<BlogBase>((nameof(Blog.Id), id)));
             option.MatchSome(blog => _blogs.Remove(blog));
             return option.Map(blog => Unit.Value);
         }
 
-        public async Task<Option<Unit, ObjectNotFoundException<BlogBase>>> EditAsync(int id, [NotNull] Action<BlogEditArguments> edit)
+        public async Task<Option<Unit, ObjectNotFoundException<BlogBase>>> EditAsync(int id,
+            [NotNull] Action<BlogEditArguments> edit)
         {
             var option = await _blogs.FindAsync(id)
                                      .SomeNotNullAsync(() =>

@@ -97,6 +97,26 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
+        public async Task EditAsyncShouldReturnObjectNotFoundExceptionWhenBlogWasNotFound()
+        {
+            var service = GetBlogService(new Data.Entities.Blog[0].AsQueryable().BuildMockDbSet());
+
+            var result = await service.EditAsync(1, arguments => { });
+
+            result.Should()
+                  .BeNone()
+                  .Which.Should()
+                  .BeEquivalentTo(new
+                  {
+                      Type = typeof(BlogBase),
+                      Values = new Dictionary<string, object[]>
+                      {
+                          ["Id"] = new object[] { 1 }
+                      }
+                  });
+        }
+
+        [Fact]
         public async Task EditShouldEditBlogTitleAndContentInDataStore()
         {
             var blogs = new List<Data.Entities.Blog>();
@@ -121,27 +141,6 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public async Task EditShouldSetModifiedFromDateProvider()
-        {
-            var entities = new[] { new Data.Entities.Blog() };
-            var blogsDbSet = entities.AsQueryable().BuildMockDbSet();
-            const int id = default;
-            var blog = new Data.Entities.Blog();
-            blogsDbSet.FindAsync(id).Returns(blog);
-
-            var service = GetBlogService(blogsDbSet);
-            _dateProvider.UtcNow.Returns(new DateTime(2018, 1, 2));
-
-            await service.EditAsync(id, arguments =>
-            {
-                arguments.Content = string.Empty;
-                arguments.Title = string.Empty;
-            });
-
-            blog.Modified.Should().Be(new DateTime(2018, 1, 2));
-        }
-
-        [Fact]
         public async Task EditShouldReturnSomeWhenBlogIsEditedSuccessfully()
         {
             var blogsDbSet = Enumerable.Empty<Data.Entities.Blog>().AsQueryable().BuildMockDbSet();
@@ -160,23 +159,24 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public async Task EditAsyncShouldReturnObjectNotFoundExceptionWhenBlogWasNotFound()
+        public async Task EditShouldSetModifiedFromDateProvider()
         {
-            var service = GetBlogService(new Data.Entities.Blog[0].AsQueryable().BuildMockDbSet());
+            var entities = new[] { new Data.Entities.Blog() };
+            var blogsDbSet = entities.AsQueryable().BuildMockDbSet();
+            const int id = default;
+            var blog = new Data.Entities.Blog();
+            blogsDbSet.FindAsync(id).Returns(blog);
 
-            var result = await service.EditAsync(1, arguments => { });
+            var service = GetBlogService(blogsDbSet);
+            _dateProvider.UtcNow.Returns(new DateTime(2018, 1, 2));
 
-            result.Should()
-                  .BeNone()
-                  .Which.Should()
-                  .BeEquivalentTo(new
-                  {
-                      Type = typeof(BlogBase),
-                      Values = new Dictionary<string, object[]>
-                      {
-                          ["Id"] = new object[] { 1 }
-                      }
-                  });
+            await service.EditAsync(id, arguments =>
+            {
+                arguments.Content = string.Empty;
+                arguments.Title = string.Empty;
+            });
+
+            blog.Modified.Should().Be(new DateTime(2018, 1, 2));
         }
 
         [Fact]
