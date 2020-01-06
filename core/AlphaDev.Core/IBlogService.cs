@@ -13,9 +13,9 @@ namespace AlphaDev.Core
 
         Task<BlogBase> AddAsync(BlogBase blog);
 
-        Task DeleteAsync(int id);
+        Task<Option<Unit, ObjectNotFoundException<BlogBase>>> DeleteAsync(int id);
 
-        Task EditAsync(int id, Action<BlogEditArguments> edit);
+        Task<Option<Unit, ObjectNotFoundException<BlogBase>>> EditAsync(int id, Action<BlogEditArguments> edit);
 
         Task<IEnumerable<BlogBase>> GetOrderedByDatesAsync(int start, int count);
 

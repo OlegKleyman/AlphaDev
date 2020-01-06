@@ -114,13 +114,28 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public async Task DeleteShouldRedirectToDefaultPageAction()
+        public async Task DeleteShouldRedirectToDefaultPageActionWhenDeletedSuccessfully()
         {
-            var controller = GetPostsController(Substitute.For<IBlogService>(), PagesSettings.Default);
+            var service = Substitute.For<IBlogService>();
+            service.DeleteAsync(1)
+                   .Returns(Option.Some<AlphaDev.Core.Unit, ObjectNotFoundException<BlogBase>>(
+                       AlphaDev.Core.Unit.Value));
+            var controller = GetPostsController(service, PagesSettings.Default);
 
-            var result = (await controller.Delete(default)).Should().BeOfType<RedirectToActionResult>();
+            var result = (await controller.Delete(1)).Should().BeOfType<RedirectToActionResult>();
             result.Which.ActionName.Should().BeEquivalentTo("Page");
             result.Which.RouteValues["id"].Should().BeNull();
+        }
+
+        [Fact]
+        public async Task DeleteShouldReturnNotFoundWhenDeleteWasUnsuccessful()
+        {
+            var service = Substitute.For<IBlogService>();
+            service.DeleteAsync(1)
+                   .Returns(Option.None<AlphaDev.Core.Unit, ObjectNotFoundException<BlogBase>>(
+                       new ObjectNotFoundException<BlogBase>()));
+            var controller = GetPostsController(service, PagesSettings.Default);
+            (await controller.Delete(1)).Should().BeOfType<NotFoundResult>();
         }
 
         [Fact]
@@ -136,6 +151,21 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
             await controller.Edit(1, post);
 
             editArguments.Should().BeEquivalentTo(new { post.Content, post.Title });
+        }
+
+        [Fact]
+        public async Task EditShouldNotFoundResultWhenBlogIsNotFound()
+        {
+            var service = Substitute.For<IBlogService>();
+            service.EditAsync(Arg.Any<int>(), Arg.Any<Action<BlogEditArguments>>())
+                   .Returns(Option.None<AlphaDev.Core.Unit, ObjectNotFoundException<BlogBase>>(
+                       new ObjectNotFoundException<BlogBase>()));
+
+            var controller = GetPostsController(service, PagesSettings.Default);
+
+            (await controller.Edit(default, new EditPostViewModel(string.Empty, string.Empty, default)))
+                .Should()
+                .BeOfType<NotFoundResult>();
         }
 
         [Fact]
@@ -199,13 +229,17 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         [Fact]
         public async Task EditShouldReturnViewWithSameModelWhenModelStateIsInvalid()
         {
-            var controller = GetPostsController(Substitute.For<IBlogService>(), PagesSettings.Default);
+            var service = Substitute.For<IBlogService>();
+            service.EditAsync(1, Arg.Any<Action<BlogEditArguments>>())
+                   .Returns(Option.None<AlphaDev.Core.Unit, ObjectNotFoundException<BlogBase>>(
+                       new ObjectNotFoundException<BlogBase>()));
+            var controller = GetPostsController(service, PagesSettings.Default);
 
             controller.ModelState.AddModelError("test", "test");
 
             var post = new EditPostViewModel("title", "content", new DatesViewModel());
 
-            (await controller.Edit(default, post))
+            (await controller.Edit(1, post))
                 .Should()
                 .BeOfType<ViewResult>()
                 .Which.Model.Should()
@@ -213,9 +247,14 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         }
 
         [Fact]
-        public async Task EditShouldRouteToIndexActionWhenModelStateIsValid()
+        public async Task EditShouldRouteToIndexActionWhenModelStateIsValidAndEditIsSuccessful()
         {
-            var controller = GetPostsController(Substitute.For<IBlogService>(), PagesSettings.Default);
+            var service = Substitute.For<IBlogService>();
+            service.EditAsync(Arg.Any<int>(), Arg.Any<Action<BlogEditArguments>>())
+                   .Returns(Option.Some<AlphaDev.Core.Unit, ObjectNotFoundException<BlogBase>>(
+                       AlphaDev.Core.Unit.Value));
+
+            var controller = GetPostsController(service, PagesSettings.Default);
 
             (await controller.Edit(default, new EditPostViewModel(string.Empty, string.Empty, default)))
                 .Should()

@@ -9,6 +9,7 @@ using AlphaDev.Web.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Optional;
 using Optional.Async;
 
 namespace AlphaDev.Web.Controllers
@@ -79,9 +80,10 @@ namespace AlphaDev.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            await _blogService.DeleteAsync(id);
-
-            return RedirectToAction(nameof(Page), new { page = 1 });
+            return await _blogService.DeleteAsync(id)
+                                     .MapAsync(_ => (IActionResult) RedirectToAction(nameof(Page), new { page = 1 }))
+                                     .MapExceptionAsync(exception => NotFound())
+                                     .GetValueOrExceptionAsync();
         }
 
         [Authorize]
@@ -100,21 +102,16 @@ namespace AlphaDev.Web.Controllers
         [SaveFilter]
         [Route("edit/{id}")]
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [CanBeNull] EditPostViewModel model)
+        public async Task<IActionResult> Edit(int id, EditPostViewModel model)
         {
-            var option = model.SomeWhenNotNull()
-                              .Filter(x => ModelState.IsValid)
-                              .WithException(() => View(nameof(Edit), model));
-
-            await option.MatchSomeAsync(x => _blogService.EditAsync(id, arguments =>
-            {
-                arguments.Content = x.Content;
-                arguments.Title = x.Title;
-            }));
-
-            return option
-                   .Map(dictionary => (IActionResult) RedirectToAction(nameof(Index), new { id }))
-                   .GetValueOrException();
+            return await model.SomeWhen(_ => ModelState.IsValid, () => (IActionResult) View(nameof(Edit), model))
+                              .FlatMapAsync(viewModel => _blogService.EditAsync(id, arguments =>
+                              {
+                                  arguments.Content = viewModel.Content;
+                                  arguments.Title = viewModel.Title;
+                              }), exception => NotFound())
+                              .MapAsync(_ => (IActionResult) RedirectToAction(nameof(Index), new { id }))
+                              .GetValueOrExceptionAsync();
         }
     }
 }

@@ -48,14 +48,23 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
-        public void DeleteAsyncShouldThrowInvalidOperationExceptionWhenBlogIsNotFound()
+        public async Task DeleteAsyncShouldReturnObjectNotFoundExceptionWhenBlogIsNotFound()
         {
             var blogsDbSet = new List<Data.Entities.Blog>().AsQueryable().BuildMockDbSet();
 
-            var service = GetBlogService(blogsDbSet);
-            Func<Task> deleteAsync = () => service.DeleteAsync(1);
+            var result = await GetBlogService(blogsDbSet).DeleteAsync(1);
 
-            deleteAsync.Should().Throw<InvalidOperationException>().WithMessage("Blog 1 was not found.");
+            result.Should()
+                  .BeNone()
+                  .Which.Should()
+                  .BeEquivalentTo(new
+                  {
+                      Type = typeof(BlogBase),
+                      Criteria = new Dictionary<string, object[]>
+                      {
+                          ["Id"] = new object[] { 1 }
+                      }
+                  });
         }
 
         [Fact]
@@ -71,6 +80,40 @@ namespace AlphaDev.Core.Tests.Unit
             var service = GetBlogService(blogsDbSet);
             await service.DeleteAsync(1);
             blogsDbSet.Received(1).Remove(Arg.Is<Data.Entities.Blog>(blog => blog.Id == 1));
+        }
+
+        [Fact]
+        public async Task DeleteShouldReturnSomeWhenBlogIsDeleted()
+        {
+            var blogsDbSet = new List<Data.Entities.Blog>().AsQueryable().BuildMockDbSet();
+            blogsDbSet.FindAsync(1)
+                      .Returns(new Data.Entities.Blog
+                      {
+                          Id = 1
+                      });
+
+            var result = await GetBlogService(blogsDbSet).DeleteAsync(1);
+            result.Should().HaveSome().Which.Should().Be(Core.Unit.Value);
+        }
+
+        [Fact]
+        public async Task EditAsyncShouldReturnObjectNotFoundExceptionWhenBlogWasNotFound()
+        {
+            var service = GetBlogService(new Data.Entities.Blog[0].AsQueryable().BuildMockDbSet());
+
+            var result = await service.EditAsync(1, arguments => { });
+
+            result.Should()
+                  .BeNone()
+                  .Which.Should()
+                  .BeEquivalentTo(new
+                  {
+                      Type = typeof(BlogBase),
+                      Criteria = new Dictionary<string, object[]>
+                      {
+                          ["Id"] = new object[] { 1 }
+                      }
+                  });
         }
 
         [Fact]
@@ -98,6 +141,24 @@ namespace AlphaDev.Core.Tests.Unit
         }
 
         [Fact]
+        public async Task EditShouldReturnSomeWhenBlogIsEditedSuccessfully()
+        {
+            var blogsDbSet = Enumerable.Empty<Data.Entities.Blog>().AsQueryable().BuildMockDbSet();
+            const int id = 1;
+            blogsDbSet.FindAsync(id).Returns(new Data.Entities.Blog());
+
+            var service = GetBlogService(blogsDbSet);
+
+            var result = await service.EditAsync(id, arguments =>
+            {
+                arguments.Content = string.Empty;
+                arguments.Title = string.Empty;
+            });
+
+            result.Should().HaveSome();
+        }
+
+        [Fact]
         public async Task EditShouldSetModifiedFromDateProvider()
         {
             var entities = new[] { new Data.Entities.Blog() };
@@ -116,16 +177,6 @@ namespace AlphaDev.Core.Tests.Unit
             });
 
             blog.Modified.Should().Be(new DateTime(2018, 1, 2));
-        }
-
-        [Fact]
-        public void EditShouldThrowInvalidOperationExceptionWhenBlogWasNotFound()
-        {
-            var service = GetBlogService(new Data.Entities.Blog[0].AsQueryable().BuildMockDbSet());
-
-            Func<Task> edit = () => service.EditAsync(default, arguments => { });
-
-            edit.Should().Throw<InvalidOperationException>().WithMessage($"Blog {default(int)} was not found.");
         }
 
         [Fact]
