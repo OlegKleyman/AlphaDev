@@ -38,27 +38,47 @@ input[type="checkbox"].input-validation-error { border: 0 none; }
     padding-top: 0;
 }
 
+/* ****************
+    using the ".bubble div:last-of-type" selector twice because 
+    resharper moves it around during cleanup and it ruins the rendering
+********************/
+
 .bubble div:last-of-type {
     -ms-border-radius: 25px;
+    border-radius: 25px;
+}
+
+.bubble div:last-of-type {
     -ms-border-top-left-radius: 0;
     -ms-border-top-right-radius: 0;
-    border-radius: 25px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+}
+
+/*******************************************/
+
+/* ****************
+    using the ".bubble div:first-of-type" selector twice because 
+    resharper moves it around during cleanup and it ruins the rendering
+********************/
+
+.bubble div:first-of-type {
+    -ms-border-radius: 25px;
+    border-radius: 25px;
 }
 
 .bubble div:first-of-type {
     -ms-border-bottom-left-radius: 0;
     -ms-border-bottom-right-radius: 0;
-    -ms-border-radius: 25px;
     background-color: #bbb;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    border-radius: 25px;
     margin-bottom: 0;
     margin-top: 4px;
     padding: 3px;
 }
+
+/*******************************************/
 
 .nomargin { margin: 0 !important; }
 
