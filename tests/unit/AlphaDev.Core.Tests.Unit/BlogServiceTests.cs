@@ -60,7 +60,7 @@ namespace AlphaDev.Core.Tests.Unit
                   .BeEquivalentTo(new
                   {
                       Type = typeof(BlogBase),
-                      Values = new Dictionary<string, object[]>
+                      Criteria = new Dictionary<string, object[]>
                       {
                           ["Id"] = new object[] { 1 }
                       }
@@ -109,7 +109,7 @@ namespace AlphaDev.Core.Tests.Unit
                   .BeEquivalentTo(new
                   {
                       Type = typeof(BlogBase),
-                      Values = new Dictionary<string, object[]>
+                      Criteria = new Dictionary<string, object[]>
                       {
                           ["Id"] = new object[] { 1 }
                       }
