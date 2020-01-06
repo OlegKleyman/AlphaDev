@@ -50,24 +50,30 @@ namespace AlphaDev.Core
                                    new Dates(entry.Entity.Created, entry.Entity.Modified.ToOption())));
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<Option<Unit, ObjectNotFoundException<BlogBase>>> DeleteAsync(int id)
         {
-            var blog = await _blogs.FindAsync(id)
-                                   .SomeNotNullAsync(() => new InvalidOperationException($"Blog {id} was not found."))
-                                   .ValueOrAsync(exception => throw exception);
-            _blogs.Remove(blog);
+            _blogs.Include(blog1 => blog1.Id.ToString());
+            var option = await _blogs.FindAsync(id)
+                                   .SomeNotNullAsync(() => new ObjectNotFoundException<BlogBase>((nameof(Blog.Id), id)));
+            option.MatchSome(blog => _blogs.Remove(blog));
+            return option.Map(blog => Unit.Value);
         }
 
-        public async Task EditAsync(int id, [NotNull] Action<BlogEditArguments> edit)
+        public async Task<Option<Unit, ObjectNotFoundException<BlogBase>>> EditAsync(int id, [NotNull] Action<BlogEditArguments> edit)
         {
-            var blog = await _blogs.FindAsync(id)
-                                   .SomeNotNullAsync(() => new InvalidOperationException($"Blog {id} was not found."))
-                                   .ValueOrAsync(exception => throw exception);
-            var arguments = new BlogEditArguments();
-            edit(arguments);
-            blog.Content = arguments.Content;
-            blog.Title = arguments.Title;
-            blog.Modified = _dateProvider.UtcNow;
+            var option = await _blogs.FindAsync(id)
+                                     .SomeNotNullAsync(() =>
+                                         new ObjectNotFoundException<BlogBase>((nameof(Blog.Id), id)));
+            option.MatchSome(blog =>
+            {
+                var arguments = new BlogEditArguments();
+                edit(arguments);
+                blog.Content = arguments.Content;
+                blog.Title = arguments.Title;
+                blog.Modified = _dateProvider.UtcNow;
+            });
+
+            return option.Map(blog => Unit.Value);
         }
 
         public async Task<IEnumerable<BlogBase>> GetOrderedByDatesAsync(int start, int count)
