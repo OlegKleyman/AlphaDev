@@ -1,4 +1,5 @@
-﻿using AlphaDev.Core;
+﻿using System;
+using AlphaDev.Core;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Core.Data.Sql.Support;
 using AlphaDev.Paging;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Refit;
 using Serilog;
 
 namespace AlphaDev.Web.Bootstrap
@@ -28,7 +30,10 @@ namespace AlphaDev.Web.Bootstrap
         {
             var securitySqlConfigurer = new SqlConfigurer(_configuration.GetConnectionString("defaultSecurity"));
             var defaultSqlConfigurer = new SqlConfigurer(_configuration.GetConnectionString("default"));
-            services.AddSingleton<IPrefixGenerator, PrefixGenerator>()
+            var blogServiceAddress = _configuration.GetConnectionString("blogService");
+            services.AddRefitClient<Services.IBlogService>()
+                    .ConfigureHttpClient(client => client.BaseAddress = new Uri(blogServiceAddress))
+                    .Services.AddSingleton<IPrefixGenerator, PrefixGenerator>()
                     .AddServices()
                     .AddContexts(defaultSqlConfigurer)
                     .AddDbContextSaveToken()
