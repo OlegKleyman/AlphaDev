@@ -667,5 +667,204 @@ namespace AlphaDev.Core.Tests.Unit
 
             (await service.GetAsync(default)).Should().BeNone();
         }
+
+        [Fact]
+        public async Task GetOrderedByDatesWithTotalAsyncShouldReturnBlogCountBasedOnTheCountArgument()
+        {
+            var blogDbSet = Enumerable.Range(1, 10)
+                                      .Select(x => new Data.Entities.Blog
+                                          { Id = x, Title = string.Empty, Content = string.Empty })
+                                      .ToArray()
+                                      .AsQueryable()
+                                      .BuildMockDbSet();
+
+            var service = GetBlogService(blogDbSet);
+
+            (await service.GetOrderedByDatesWithTotalAsync(1, 4))
+                .blogs
+                .Should()
+                .HaveCount(4)
+                .And.Subject.Select(x => x.Id)
+                .Should()
+                .BeEquivalentTo(Queryable.Take(blogDbSet, 4).Select(x => x.Id));
+        }
+
+        [Fact]
+        public async Task GetOrderedByDatesWithTotalAsyncShouldReturnBlogsOrderedByModifiedThenByCreatedDateDescending()
+        {
+            var blogDbSet = new[]
+                {
+                    new Data.Entities.Blog
+                        { Created = new DateTime(2010, 5, 1), Title = string.Empty, Content = string.Empty },
+                    new Data.Entities.Blog
+                        { Created = new DateTime(2010, 7, 1), Title = string.Empty, Content = string.Empty },
+                    new Data.Entities.Blog
+                        { Created = new DateTime(2010, 4, 1), Title = string.Empty, Content = string.Empty },
+                    new Data.Entities.Blog
+                    {
+                        Created = new DateTime(2010, 1, 1), Modified = new DateTime(2011, 1, 1), Title = string.Empty,
+                        Content = string.Empty
+                    },
+                    new Data.Entities.Blog
+                        { Created = new DateTime(2010, 1, 1), Title = string.Empty, Content = string.Empty },
+                    new Data.Entities.Blog
+                        { Created = new DateTime(2010, 11, 1), Title = string.Empty, Content = string.Empty }
+                }.AsQueryable()
+                 .BuildMockDbSet();
+
+            var service = GetBlogService(blogDbSet);
+
+            (await service.GetOrderedByDatesWithTotalAsync(1, blogDbSet.Count()))
+                .blogs
+                .Select(x => x.Dates)
+                .Should()
+                .BeEquivalentTo(Queryable.OrderByDescending(blogDbSet, x => x.Modified)
+                                         .ThenByDescending(x => x.Created)
+                                         .Select(x => new { x.Created, Modified = x.Modified.ToOption() }));
+        }
+
+        [Fact]
+        public async Task GetOrderedByDatesWithTotalAsyncShouldReturnBlogsStartingFromTheStartArgument()
+        {
+            var blogDbSet = Enumerable.Range(1, 10)
+                                      .Select(x => new Data.Entities.Blog
+                                          { Id = x, Title = string.Empty, Content = string.Empty })
+                                      .ToArray()
+                                      .AsQueryable()
+                                      .BuildMockDbSet();
+
+            var service = GetBlogService(blogDbSet);
+
+            (await service.GetOrderedByDatesWithTotalAsync(7, 10))
+                .blogs
+                .Should()
+                .HaveCount(4)
+                .And.Subject.Select(x => x.Id)
+                .Should()
+                .BeEquivalentTo(Queryable.Skip(blogDbSet, 6).Select(x => x.Id));
+        }
+
+        [Fact]
+        public async Task GetOrderedByDatesWithTotalAsyncShouldReturnBlogsWithCreatedDate()
+        {
+            var testValue = new DateTime(2017, 1, 1);
+
+            var blog = new Data.Entities.Blog { Created = testValue, Title = string.Empty, Content = string.Empty };
+            var blogDbSet = new[] { blog }.AsQueryable().BuildMockDbSet();
+
+            var service = GetBlogService(blogDbSet);
+
+            (await service.GetOrderedByDatesWithTotalAsync(1, 1))
+                .blogs
+                .Should()
+                .BeEquivalentTo(
+                    new[] { new { Dates = new { Created = testValue } } },
+                    options => options.ExcludingMissingMembers());
+        }
+
+        [Fact]
+        public async Task GetOrderedByDatesWithTotalAsyncShouldReturnBlogsWithModifiedDate()
+        {
+            var testValue = new DateTime(2017, 1, 1);
+
+            var blogDbSet = new[]
+                            {
+                                new Data.Entities.Blog
+                                    { Modified = testValue, Title = string.Empty, Content = string.Empty }
+                            }
+                            .AsQueryable()
+                            .BuildMockDbSet();
+            var service = GetBlogService(blogDbSet);
+
+            (await service.GetOrderedByDatesWithTotalAsync(1, 1))
+                .blogs
+                .Should()
+                .BeEquivalentTo(
+                    new[] { new { Dates = new { Modified = Option.Some(testValue) } } },
+                    options => options.ExcludingMissingMembers());
+        }
+
+        [Fact]
+        public async Task GetOrderedByDatesWithTotalAsyncShouldReturnBlogsWithNoModifiedDateWhenDbModifiedDateIsNull()
+        {
+            var blogDbSet = new[] { new Data.Entities.Blog { Title = string.Empty, Content = string.Empty } }
+                            .AsQueryable()
+                            .BuildMockDbSet();
+            var service = GetBlogService(blogDbSet);
+
+            (await service.GetOrderedByDatesWithTotalAsync(1, 1))
+                .blogs
+                .Should()
+                .BeEquivalentTo(
+                    new[] { new { Dates = new { Modified = Option.None<DateTime>() } } },
+                    options => options.ExcludingMissingMembers());
+        }
+
+        [Fact]
+        public async Task GetOrderedByDatesWithTotalAsyncShouldReturnBlogsWithTitle()
+        {
+            const string testValue = "test";
+
+            var blogDbSet = new[]
+                                { new Data.Entities.Blog { Title = testValue, Content = string.Empty } }
+                            .AsQueryable()
+                            .BuildMockDbSet();
+
+            var service = GetBlogService(blogDbSet);
+
+            (await service.GetOrderedByDatesWithTotalAsync(1, 1))
+                .blogs
+                .Should()
+                .BeEquivalentTo(
+                    new[] { new { Title = testValue } },
+                    options => options.ExcludingMissingMembers());
+        }
+
+        [Fact]
+        public async Task GetOrderedByDatesWithTotalAsyncShouldReturnBlogWithContent()
+        {
+            const string testValue = "test content";
+
+            var blogDbSet = new[] { new Data.Entities.Blog { Title = string.Empty, Content = testValue } }
+                            .AsQueryable()
+                            .BuildMockDbSet();
+
+            var service = GetBlogService(blogDbSet);
+
+            (await service.GetOrderedByDatesWithTotalAsync(1, 1))
+                .blogs
+                .Should()
+                .BeEquivalentTo(
+                    new[] { new { Content = "test content" } },
+                    options => options.Including(info => info.Content));
+        }
+
+        [Fact]
+        public async Task GetOrderedByDatesWithTotalAsyncShouldReturnEmptyBlogsWhenNoBlogIsFound()
+        {
+            var blogDbSet = new Data.Entities.Blog[0].AsQueryable().BuildMockDbSet();
+            var service = GetBlogService(blogDbSet);
+
+            (await service.GetOrderedByDatesWithTotalAsync(1, 1)).blogs.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task GetOrderedByDatesWithTotalAsyncShouldReturnWithTotalWhenItsGreaterThanZero()
+        {
+            var blogDbSet = new Data.Entities.Blog[1].AsQueryable().BuildMockDbSet();
+            var service = GetBlogService(blogDbSet);
+            (await service.GetOrderedByDatesWithTotalAsync(2, 1)).total.Should().Be(1);
+        }
+
+        [Fact]
+        public async Task
+            GetOrderedByDatesWithTotalAsyncShouldReturnWithCountAndEmptyEnumerableWhenCountIsNotGreaterThanZero()
+        {
+            var dbSet = Enumerable.Empty<Data.Entities.Blog>().AsQueryable().BuildMockDbSet();
+            var service = GetBlogService(dbSet);
+
+            (await service.GetOrderedByDatesWithTotalAsync(1, 0))
+                .Should().BeEquivalentTo((0, Enumerable.Empty<BlogBase>()));
+        }
     }
 }

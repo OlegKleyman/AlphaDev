@@ -104,7 +104,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             using var context = GetInformationContext();
             SeedAbouts();
 
-            context.About.Should().BeEquivalentTo(new { Id = 1, Value = "test" });
+            context.About.Should().BeEquivalentTo(new { Id = true, Value = "test" });
         }
 
         [Fact]
@@ -201,7 +201,7 @@ namespace AlphaDev.Core.Data.Sql.Tests.Integration
             using var context = GetInformationContext();
             SeedContacts();
 
-            context.Contact.Should().BeEquivalentTo(new { Id = 1, Value = "test" });
+            context.Contact.Should().BeEquivalentTo(new { Id = true, Value = "test" });
         }
 
         [Fact]

@@ -30,16 +30,15 @@ namespace AlphaDev.Web.Controllers
         public async Task<ActionResult> Page(int page)
         {
             var startPosition = (page - 1) * _pagesSettings.ItemsPerPage + 1;
-            return await _blogService.GetOrderedByDatesAsync(startPosition, _pagesSettings.ItemsPerPage)
-                                     .SomeNotEmptyAsync(NotFound)
-                                     .MapAsync(bases => bases.Select(blog => new BlogViewModel(blog.Id,
-                                         blog.Title,
-                                         blog.Content,
-                                         new DatesViewModel(blog.Dates.Created, blog.Dates.Modified))))
-                                     .MapAsync(models => models.ToPagerAsync(page,
-                                         () => _blogService.GetCountAsync(), _pagesSettings))
-                                     .MapAsync(x => (ActionResult) View("Index", x))
-                                     .GetValueOrExceptionAsync();
+            return await _blogService.GetOrderedByDatesWithTotalAsync(startPosition, _pagesSettings.ItemsPerPage)
+                              .SomeNotEmptyAsync(tuple => tuple.blogs, tuple => NotFound())
+                              .MapAsync(tuple => (tuple.total,
+                                  blogs: tuple.blogs.Select(blog => new BlogViewModel(blog.Id, blog.Title,
+                                      blog.Content,
+                                      new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)))))
+                              .MapAsync(tuple => tuple.blogs.ToPager(page, tuple.total, _pagesSettings))
+                              .MapAsync(x => (ActionResult) View("Index", x))
+                              .GetValueOrExceptionAsync();
         }
 
         [Route("{id}")]

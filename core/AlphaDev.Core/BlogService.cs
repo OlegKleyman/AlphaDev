@@ -92,6 +92,15 @@ namespace AlphaDev.Core
                                .ToArrayAsync();
         }
 
+        public async Task<(int total, IEnumerable<BlogBase> blogs)> GetOrderedByDatesWithTotalAsync(int start,
+            int count)
+        {
+            return await _blogs.CountAsync()
+                               .SomeWhenAsync(i => i > 0, x => (x, Enumerable.Empty<BlogBase>()))
+                               .MapAsync(async i => (i, await GetOrderedByDatesAsync(start, count)))
+                               .GetValueOrExceptionAsync();
+        }
+
         public async Task<int> GetCountAsync() => await _blogs.CountAsync();
     }
 }

@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AlphaDev.Paging" Version="0.0.0.5" />
+    <PackageReference Include="AlphaDev.Paging" Version="0.0.0.7" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
     <PackageReference Include="Markdig" Version="0.18.0" />

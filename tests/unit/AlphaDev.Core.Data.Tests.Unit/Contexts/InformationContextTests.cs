@@ -20,7 +20,7 @@ namespace AlphaDev.Core.Data.Tests.Unit.Contexts
             var context = GetInformationContext();
             var abouts = new[] { new About { Id = true, Value = "value" } }.ToMockDbSet();
             context.Abouts = abouts;
-            context.About.Should().BeEquivalentTo(new { Id = 1, Value = "value" });
+            context.About.Should().BeEquivalentTo(new { Id = true, Value = "value" });
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace AlphaDev.Core.Data.Tests.Unit.Contexts
             var context = GetInformationContext();
             var contacts = new[] { new Contact { Id = true, Value = "value" } }.ToMockDbSet();
             context.Contacts = contacts;
-            context.Contact.Should().BeEquivalentTo(new { Id = 1, Value = "value" });
+            context.Contact.Should().BeEquivalentTo(new { Id = true, Value = "value" });
         }
 
         [Fact]

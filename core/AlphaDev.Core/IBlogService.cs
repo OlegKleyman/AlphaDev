@@ -19,6 +19,8 @@ namespace AlphaDev.Core
 
         Task<IEnumerable<BlogBase>> GetOrderedByDatesAsync(int start, int count);
 
+        Task<(int total, IEnumerable<BlogBase> blogs)> GetOrderedByDatesWithTotalAsync(int start, int count);
+
         Task<int> GetCountAsync();
     }
 }

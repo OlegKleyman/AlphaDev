@@ -342,19 +342,19 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         public async Task PageShouldGetLessThanElevenItems()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetCountAsync().Returns(1);
             const int page = 9;
+            blogService.GetOrderedByDatesWithTotalAsync(Arg.Any<int>(), Arg.Any<int>()).Returns((81, Enumerable.Empty<BlogBase>()));
             await GetPostsController(blogService, PagesSettings.Default).Page(page);
             var value = (page - 1) * 10 + 1;
-            await blogService.Received(1).GetOrderedByDatesAsync(Arg.Is(value), Arg.Is(10));
+            await blogService.Received(1).GetOrderedByDatesWithTotalAsync(value, 10);
         }
 
         [Fact]
         public async Task PageShouldReturnBlogModelsAssignableToEnumerableOfBlogViewModel()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetOrderedByDatesAsync(Arg.Any<int>(), Arg.Any<int>())
-                       .Returns(new[] { new Blog(string.Empty, string.Empty) });
+            blogService.GetOrderedByDatesWithTotalAsync(Arg.Any<int>(), Arg.Any<int>())
+                       .Returns((1, new[] { new Blog(string.Empty, string.Empty) }));
             blogService.GetCountAsync().Returns(1);
             var controller = GetPostsController(blogService, PagesSettings.Default);
             (await controller.Page(1))
@@ -362,50 +362,6 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 .BeOfType<ViewResult>()
                 .Which.Model.Should()
                 .BeAssignableTo<IEnumerable<BlogViewModel>>();
-        }
-
-        [Fact]
-        public async Task
-            PageShouldReturnBlogModelsWithAnAuxiliaryPageNumberWhenThereAreMoreNextPagesThanInPageSettings()
-        {
-            var blogService = Substitute.For<IBlogService>();
-            blogService.GetOrderedByDatesAsync(Arg.Any<int>(), Arg.Any<int>())
-                       .Returns((1..10).ToEnumerable().Select(i => new Blog(string.Empty, string.Empty)));
-
-            blogService.GetCountAsync().Returns(101);
-            var controller = GetPostsController(blogService, new PagesSettings(9, 9, 10));
-
-            (await controller.Page(1))
-                .Should()
-                .BeOfType<ViewResult>()
-                .Which.Model.Should()
-                .BeAssignableTo<Pager<BlogViewModel>>()
-                .Which.Pages.NextAuxiliaryPage.Should()
-                .Be(11.Some());
-        }
-
-        [Fact]
-        public async Task
-            PageShouldReturnBlogModelsWithoutAnAuxiliaryPageNumberWhenThereAreNotMorePagesThanTheNextPagesLength()
-        {
-            var blogs = new[]
-            {
-                new Blog(321, default, default,
-                    new Dates(new DateTime(2014, 1, 1), Option.None<DateTime>()))
-            };
-
-            var blogService = Substitute.For<IBlogService>();
-            blogService.GetOrderedByDatesAsync(Arg.Any<int>(), Arg.Any<int>()).Returns(blogs);
-            blogService.GetCountAsync().Returns(1);
-            var controller = GetPostsController(blogService, PagesSettings.Default);
-
-            (await controller.Page(1))
-                .Should()
-                .BeOfType<ViewResult>()
-                .Which.Model.Should()
-                .BeAssignableTo<Pager<BlogViewModel>>()
-                .Which.Pages.NextAuxiliaryPage.Should()
-                .Be(Option.None<int>());
         }
 
         [Fact]
@@ -417,8 +373,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
                 new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
 
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetOrderedByDatesAsync(Arg.Any<int>(), Arg.Any<int>()).Returns(new[] { blog });
-            blogService.GetCountAsync().Returns(100);
+            blogService.GetOrderedByDatesWithTotalAsync(Arg.Any<int>(), Arg.Any<int>()).Returns((100, new[] { blog }));
 
             var controller = GetPostsController(blogService, PagesSettings.Default);
 
@@ -441,6 +396,8 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         public async Task PageShouldReturnNotFoundResultWhenNoBlogsFound()
         {
             var blogService = Substitute.For<IBlogService>();
+            blogService.GetOrderedByDatesWithTotalAsync(Arg.Any<int>(), Arg.Any<int>())
+                       .Returns((default, Array.Empty<BlogBase>()));
             (await GetPostsController(blogService, PagesSettings.Default).Page(1)).Should().BeOfType<NotFoundResult>();
         }
 
@@ -448,9 +405,8 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         public async Task PageShouldReturnPageView()
         {
             var blogService = Substitute.For<IBlogService>();
-            blogService.GetOrderedByDatesAsync(Arg.Any<int>(), Arg.Any<int>())
-                       .Returns(new[] { new Blog(string.Empty, string.Empty) });
-            blogService.GetCountAsync().Returns(100);
+            blogService.GetOrderedByDatesWithTotalAsync(Arg.Any<int>(), Arg.Any<int>())
+                       .Returns((100, new[] { new Blog(string.Empty, string.Empty) }));
             var controller = GetPostsController(blogService, PagesSettings.Default);
 
             (await controller.Page(10)).Should().BeOfType<ViewResult>();
