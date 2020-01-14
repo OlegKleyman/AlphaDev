@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AlphaDev.Services
+﻿namespace AlphaDev.Services.Web
 {
     public interface IBlogService
     {
