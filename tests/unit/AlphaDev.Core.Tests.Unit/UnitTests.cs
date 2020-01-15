@@ -9,7 +9,7 @@ namespace AlphaDev.Core.Tests.Unit
         [Fact]
         public void ValueReturnsSingletonUnitObject()
         {
-            BlogServices.Core.Unit.Value.Should().Be(BlogServices.Core.Unit.Value);
+            Core.Unit.Value.Should().Be(Core.Unit.Value);
         }
     }
 }

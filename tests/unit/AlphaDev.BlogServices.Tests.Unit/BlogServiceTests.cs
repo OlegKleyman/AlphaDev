@@ -96,7 +96,7 @@ namespace AlphaDev.BlogServices.Tests.Unit
                       });
 
             var result = await GetBlogService(blogsDbSet).DeleteAsync(1);
-            result.Should().HaveSome().Which.Should().Be(BlogServices.Core.Unit.Value);
+            result.Should().HaveSome().Which.Should().Be(AlphaDev.Core.Unit.Value);
         }
 
         [Fact]

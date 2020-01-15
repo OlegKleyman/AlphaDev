@@ -120,8 +120,8 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var service = Substitute.For<IBlogService>();
             service.DeleteAsync(1)
-                   .Returns(Option.Some<BlogServices.Core.Unit, ObjectNotFoundException<BlogBase>>(
-                       BlogServices.Core.Unit.Value));
+                   .Returns(Option.Some<AlphaDev.Core.Unit, ObjectNotFoundException<BlogBase>>(
+                       AlphaDev.Core.Unit.Value));
             var controller = GetPostsController(service, PagesSettings.Default);
 
             var result = (await controller.Delete(1)).Should().BeOfType<RedirectToActionResult>();
@@ -134,7 +134,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var service = Substitute.For<IBlogService>();
             service.DeleteAsync(1)
-                   .Returns(Option.None<BlogServices.Core.Unit, ObjectNotFoundException<BlogBase>>(
+                   .Returns(Option.None<AlphaDev.Core.Unit, ObjectNotFoundException<BlogBase>>(
                        new ObjectNotFoundException<BlogBase>()));
             var controller = GetPostsController(service, PagesSettings.Default);
             (await controller.Delete(1)).Should().BeOfType<NotFoundResult>();
@@ -160,7 +160,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var service = Substitute.For<IBlogService>();
             service.EditAsync(Arg.Any<int>(), Arg.Any<Action<BlogEditArguments>>())
-                   .Returns(Option.None<BlogServices.Core.Unit, ObjectNotFoundException<BlogBase>>(
+                   .Returns(Option.None<AlphaDev.Core.Unit, ObjectNotFoundException<BlogBase>>(
                        new ObjectNotFoundException<BlogBase>()));
 
             var controller = GetPostsController(service, PagesSettings.Default);
@@ -233,7 +233,7 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var service = Substitute.For<IBlogService>();
             service.EditAsync(1, Arg.Any<Action<BlogEditArguments>>())
-                   .Returns(Option.None<BlogServices.Core.Unit, ObjectNotFoundException<BlogBase>>(
+                   .Returns(Option.None<AlphaDev.Core.Unit, ObjectNotFoundException<BlogBase>>(
                        new ObjectNotFoundException<BlogBase>()));
             var controller = GetPostsController(service, PagesSettings.Default);
 
@@ -253,8 +253,8 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var service = Substitute.For<IBlogService>();
             service.EditAsync(Arg.Any<int>(), Arg.Any<Action<BlogEditArguments>>())
-                   .Returns(Option.Some<BlogServices.Core.Unit, ObjectNotFoundException<BlogBase>>(
-                       BlogServices.Core.Unit.Value));
+                   .Returns(Option.Some<AlphaDev.Core.Unit, ObjectNotFoundException<BlogBase>>(
+                       AlphaDev.Core.Unit.Value));
 
             var controller = GetPostsController(service, PagesSettings.Default);
 

@@ -1,10 +1,9 @@
 ﻿using System;
-using AlphaDev.BlogServices.Core;
 using FluentAssertions;
 using Optional;
 using Xunit;
 
-namespace AlphaDev.Core.Tests.Unit
+namespace AlphaDev.BlogServices.Core.Tests.Unit
 {
     public class DatesTests
     {

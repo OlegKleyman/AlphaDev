@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AlphaDev.BlogServices.Core\AlphaDev.BlogServices.Core.csproj" />
     <ProjectReference Include="..\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
   </ItemGroup>
 

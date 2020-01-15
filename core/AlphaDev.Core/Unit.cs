@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AlphaDev.BlogServices.Core
+namespace AlphaDev.Core
 {
     public class Unit
     {
