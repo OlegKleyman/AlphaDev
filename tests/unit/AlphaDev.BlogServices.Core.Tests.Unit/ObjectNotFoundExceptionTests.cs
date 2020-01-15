@@ -4,7 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using Xunit;
 
-namespace AlphaDev.Services.Tests.Unit
+namespace AlphaDev.BlogServices.Core.Tests.Unit
 {
     public class ObjectNotFoundExceptionTests
     {

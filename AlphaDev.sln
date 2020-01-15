@@ -63,13 +63,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Web.Api", "web\Alp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Web.Api.Tests.Unit", "tests\unit\AlphaDev.Web.Api.Tests.Unit\AlphaDev.Web.Api.Tests.Unit.csproj", "{D84472AE-F8A5-49B3-802A-B1567052AF80}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Services", "core\AlphaDev.Services\AlphaDev.Services.csproj", "{4718AFC6-1268-4562-B5F0-C4EFCD7E56CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Services.Web", "core\AlphaDev.Services.Web\AlphaDev.Services.Web.csproj", "{BF36C5B2-5705-439A-9002-73AEA17D4F28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Services.Web", "core\AlphaDev.Services.Web\AlphaDev.Services.Web.csproj", "{BF36C5B2-5705-439A-9002-73AEA17D4F28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Services.Tests.Unit", "tests\unit\AlphaDev.Services.Tests.Unit\AlphaDev.Services.Tests.Unit.csproj", "{EE8A66D5-D17A-4E3A-8AC5-8E292267C367}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Services.Tests.Unit", "tests\unit\AlphaDev.Services.Tests.Unit\AlphaDev.Services.Tests.Unit.csproj", "{EE8A66D5-D17A-4E3A-8AC5-8E292267C367}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Services.Web.Tests.Unit", "tests\unit\AlphaDev.Services.Web.Tests.Unit\AlphaDev.Services.Web.Tests.Unit.csproj", "{DFF91DA9-DC67-4C8B-A730-1F4AB98079AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.Services.Web.Tests.Unit", "tests\unit\AlphaDev.Services.Web.Tests.Unit\AlphaDev.Services.Web.Tests.Unit.csproj", "{DFF91DA9-DC67-4C8B-A730-1F4AB98079AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.BlogServices.Core", "core\AlphaDev.BlogServices.Core\AlphaDev.BlogServices.Core.csproj", "{803CA95E-A0B8-4337-8CC5-29E875A77450}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.BlogServices.Core.Tests.Unit", "tests\unit\AlphaDev.BlogServices.Core.Tests.Unit\AlphaDev.BlogServices.Core.Tests.Unit.csproj", "{47742994-0F0B-4C0B-8C83-86D2A977C285}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -169,10 +171,6 @@ Global
 		{D84472AE-F8A5-49B3-802A-B1567052AF80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D84472AE-F8A5-49B3-802A-B1567052AF80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D84472AE-F8A5-49B3-802A-B1567052AF80}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4718AFC6-1268-4562-B5F0-C4EFCD7E56CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4718AFC6-1268-4562-B5F0-C4EFCD7E56CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4718AFC6-1268-4562-B5F0-C4EFCD7E56CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4718AFC6-1268-4562-B5F0-C4EFCD7E56CB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BF36C5B2-5705-439A-9002-73AEA17D4F28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BF36C5B2-5705-439A-9002-73AEA17D4F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF36C5B2-5705-439A-9002-73AEA17D4F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -185,6 +183,14 @@ Global
 		{DFF91DA9-DC67-4C8B-A730-1F4AB98079AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFF91DA9-DC67-4C8B-A730-1F4AB98079AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFF91DA9-DC67-4C8B-A730-1F4AB98079AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{803CA95E-A0B8-4337-8CC5-29E875A77450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{803CA95E-A0B8-4337-8CC5-29E875A77450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{803CA95E-A0B8-4337-8CC5-29E875A77450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{803CA95E-A0B8-4337-8CC5-29E875A77450}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47742994-0F0B-4C0B-8C83-86D2A977C285}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47742994-0F0B-4C0B-8C83-86D2A977C285}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47742994-0F0B-4C0B-8C83-86D2A977C285}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47742994-0F0B-4C0B-8C83-86D2A977C285}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -216,10 +222,11 @@ Global
 		{02CA7AB1-51F6-4F24-8AA2-AC4B38AE6FB2} = {6041D273-6E6B-4F68-B316-646209191525}
 		{352418DB-B05F-4DC5-BB8E-826C6EEF53D4} = {84C624B3-E76D-4BDE-8A47-92778791225F}
 		{D84472AE-F8A5-49B3-802A-B1567052AF80} = {E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}
-		{4718AFC6-1268-4562-B5F0-C4EFCD7E56CB} = {8561F13A-FB6E-45CE-8020-CEDCC9EA77DB}
 		{BF36C5B2-5705-439A-9002-73AEA17D4F28} = {8561F13A-FB6E-45CE-8020-CEDCC9EA77DB}
 		{EE8A66D5-D17A-4E3A-8AC5-8E292267C367} = {E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}
 		{DFF91DA9-DC67-4C8B-A730-1F4AB98079AE} = {E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}
+		{803CA95E-A0B8-4337-8CC5-29E875A77450} = {8561F13A-FB6E-45CE-8020-CEDCC9EA77DB}
+		{47742994-0F0B-4C0B-8C83-86D2A977C285} = {E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FC791FD-FD6E-4ABB-90D8-6B566DF49780}

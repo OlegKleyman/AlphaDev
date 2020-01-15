@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AlphaDev.BlogServices.Core\AlphaDev.BlogServices.Core.csproj" />
     <ProjectReference Include="..\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
-    <ProjectReference Include="..\AlphaDev.Services\AlphaDev.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,14 +2,14 @@
 using FluentAssertions;
 using Xunit;
 
-namespace AlphaDev.Services.Tests.Unit
+namespace AlphaDev.BlogServices.Core.Tests.Unit
 {
     public class ObjectNotFoundExceptionOfTTests
     {
         [Fact]
         public void ConstructorInitializesObjectNotFoundExceptionWithTheGenericType()
         {
-            ((Type) new ObjectNotFoundException<string>().Type).Should().Be<string>();
+            new ObjectNotFoundException<string>().Type.Should().Be<string>();
         }
     }
 }

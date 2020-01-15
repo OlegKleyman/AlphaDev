@@ -1,7 +1,7 @@
 ﻿using System;
 using Optional;
 
-namespace AlphaDev.Services
+namespace AlphaDev.BlogServices.Core
 {
     public readonly struct Dates
     {

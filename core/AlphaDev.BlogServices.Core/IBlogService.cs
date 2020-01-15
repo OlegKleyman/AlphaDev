@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Optional;
 
-namespace AlphaDev.Services
+namespace AlphaDev.BlogServices.Core
 {
     public interface IBlogService
     {

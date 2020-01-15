@@ -1,5 +1,5 @@
 ﻿using System;
-using AlphaDev.Services;
+using AlphaDev.BlogServices.Core;
 using FluentAssertions;
 using Optional;
 using Xunit;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AlphaDev.BlogServices.Core;
 using AlphaDev.Core.Data.Entities;
-using AlphaDev.Services;
 using Microsoft.EntityFrameworkCore;
 using Optional;
 

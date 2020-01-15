@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentAssertions.Common;
 using Xunit;
 
 namespace AlphaDev.Core.Tests.Unit
@@ -8,7 +9,7 @@ namespace AlphaDev.Core.Tests.Unit
         [Fact]
         public void ValueReturnsSingletonUnitObject()
         {
-            Services.Unit.Value.Should().Be(Services.Unit.Value);
+            BlogServices.Core.Unit.Value.Should().Be(BlogServices.Core.Unit.Value);
         }
     }
 }

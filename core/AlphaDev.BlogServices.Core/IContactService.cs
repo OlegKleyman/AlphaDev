@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Optional;
 
-namespace AlphaDev.Services
+namespace AlphaDev.BlogServices.Core
 {
-    public interface IAboutService
+    public interface IContactService
     {
-        Task<Option<string>> GetAboutDetailsAsync();
+        Task<Option<string>> GetContactDetailsAsync();
 
         Task EditAsync(string value);
 

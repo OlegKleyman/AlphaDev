@@ -25,4 +25,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\core\AlphaDev.BlogServices.Core\AlphaDev.BlogServices.Core.csproj" />
+  </ItemGroup>
+
 </Project>
