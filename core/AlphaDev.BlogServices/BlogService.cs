@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AlphaDev.BlogServices.Core;
+using AlphaDev.Core;
 using AlphaDev.Core.Extensions;
 using AlphaDev.Optional.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Optional;
 using Optional.Async;
+using BlogEntity = AlphaDev.Core.Data.Entities.Blog;
 
-namespace AlphaDev.Core
+namespace AlphaDev.BlogServices
 {
     public class BlogService : IBlogService
     {
-        private readonly DbSet<Data.Entities.Blog> _blogs;
+        private readonly DbSet<BlogEntity> _blogs;
         private readonly IDateProvider _dateProvider;
 
-        public BlogService(DbSet<Data.Entities.Blog> blogs, [NotNull] IDateProvider dateProvider)
+        public BlogService(DbSet<BlogEntity> blogs, [NotNull] IDateProvider dateProvider)
         {
             _blogs = blogs;
             _dateProvider = dateProvider;
@@ -42,7 +44,7 @@ namespace AlphaDev.Core
 
         public async Task<BlogBase> AddAsync([NotNull] BlogBase blog)
         {
-            return await _blogs.AddAsync(new Data.Entities.Blog
+            return await _blogs.AddAsync(new BlogEntity
                                {
                                    Title = blog.Title,
                                    Content = blog.Content

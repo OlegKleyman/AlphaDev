@@ -12,7 +12,7 @@ using MockQueryable.NSubstitute;
 using NSubstitute;
 using Xunit;
 
-namespace AlphaDev.Core.Tests.Unit
+namespace AlphaDev.BlogServices.Tests.Unit
 {
     public class ContactServiceTests
     {

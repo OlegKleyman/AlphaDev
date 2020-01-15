@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Optional;
 
-namespace AlphaDev.Core
+namespace AlphaDev.BlogServices
 {
     public class ContactService : IContactService
     {

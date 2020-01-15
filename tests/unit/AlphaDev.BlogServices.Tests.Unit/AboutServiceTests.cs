@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.EntityFramework.Unit.Testing.Extensions;
 using FluentAssertions;
+using FluentAssertions.Optional;
 using FluentAssertions.Optional.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ using MockQueryable.NSubstitute;
 using NSubstitute;
 using Xunit;
 
-namespace AlphaDev.Core.Tests.Unit
+namespace AlphaDev.BlogServices.Tests.Unit
 {
     public class AboutServiceTests
     {
@@ -34,7 +35,7 @@ namespace AlphaDev.Core.Tests.Unit
             var abouts = new[] { new About() }.ToMockDbSet();
             var service = GetAboutService(abouts);
             await service.EditAsync("new value");
-            abouts.Single().Value.Should().BeEquivalentTo("new value");
+            ((string) abouts.Single().Value).Should().BeEquivalentTo("new value");
         }
 
         [Fact]
