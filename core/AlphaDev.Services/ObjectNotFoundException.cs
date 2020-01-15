@@ -3,16 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 
-namespace AlphaDev.Core
+namespace AlphaDev.Services
 {
-    public class ObjectNotFoundException<T> : ObjectNotFoundException
-    {
-        public ObjectNotFoundException([NotNull] params (string propertyName, object criteria)[] values) : base(
-            typeof(T), values)
-        {
-        }
-    }
-
     public class ObjectNotFoundException : Exception
     {
         public ObjectNotFoundException(Type type, [NotNull] params (string propertyName, object criteria)[] values)
@@ -30,5 +22,13 @@ namespace AlphaDev.Core
         public IDictionary<string, object[]> Criteria { get; }
 
         public override string Message { get; }
+    }
+
+    public class ObjectNotFoundException<T> : ObjectNotFoundException
+    {
+        public ObjectNotFoundException([NotNull] params (string propertyName, object criteria)[] values) : base(
+            typeof(T), values)
+        {
+        }
     }
 }

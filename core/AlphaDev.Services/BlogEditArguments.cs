@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace AlphaDev.Core
+namespace AlphaDev.Services
 {
     public class BlogEditArguments
     {

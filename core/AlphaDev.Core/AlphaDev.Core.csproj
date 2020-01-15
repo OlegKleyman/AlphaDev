@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
+    <ProjectReference Include="..\AlphaDev.Services\AlphaDev.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

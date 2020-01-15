@@ -2,7 +2,7 @@ using System;
 using JetBrains.Annotations;
 using Optional;
 
-namespace AlphaDev.Core
+namespace AlphaDev.Services
 {
     public abstract class BlogBase
     {

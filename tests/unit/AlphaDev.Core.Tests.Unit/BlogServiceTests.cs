@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AlphaDev.EntityFramework.Unit.Testing.Extensions;
+using AlphaDev.Services;
 using FluentAssertions;
 using FluentAssertions.Optional.Extensions;
 using JetBrains.Annotations;
@@ -93,7 +94,7 @@ namespace AlphaDev.Core.Tests.Unit
                       });
 
             var result = await GetBlogService(blogsDbSet).DeleteAsync(1);
-            result.Should().HaveSome().Which.Should().Be(Core.Unit.Value);
+            result.Should().HaveSome().Which.Should().Be(Services.Unit.Value);
         }
 
         [Fact]

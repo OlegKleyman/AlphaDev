@@ -1,4 +1,4 @@
-﻿namespace AlphaDev.Core
+﻿namespace AlphaDev.Services
 {
     public class Blog : BlogBase
     {
