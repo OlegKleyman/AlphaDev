@@ -1,9 +1,7 @@
 using System.Threading.Tasks;
 using AlphaDev.BlogServices.Core;
-using AlphaDev.Core;
 using AlphaDev.Core.Extensions;
 using AlphaDev.Optional.Extensions;
-using AlphaDev.Services;
 using AlphaDev.Web.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;

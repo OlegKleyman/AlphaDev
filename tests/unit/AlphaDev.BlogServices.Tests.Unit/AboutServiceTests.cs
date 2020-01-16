@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AlphaDev.Core.Data.Entities;
 using AlphaDev.EntityFramework.Unit.Testing.Extensions;
 using FluentAssertions;
-using FluentAssertions.Optional;
 using FluentAssertions.Optional.Extensions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +34,7 @@ namespace AlphaDev.BlogServices.Tests.Unit
             var abouts = new[] { new About() }.ToMockDbSet();
             var service = GetAboutService(abouts);
             await service.EditAsync("new value");
-            ((string) abouts.Single().Value).Should().BeEquivalentTo("new value");
+            abouts.Single().Value.Should().BeEquivalentTo("new value");
         }
 
         [Fact]

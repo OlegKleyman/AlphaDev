@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AlphaDev.BlogServices.Core;
-using AlphaDev.Core;
 using AlphaDev.Paging;
-using AlphaDev.Paging.Extensions;
-using AlphaDev.Services;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
 using FluentAssertions;
@@ -345,7 +342,8 @@ namespace AlphaDev.Web.Tests.Unit.Controllers
         {
             var blogService = Substitute.For<IBlogService>();
             const int page = 9;
-            blogService.GetOrderedByDatesWithTotalAsync(Arg.Any<int>(), Arg.Any<int>()).Returns((81, Enumerable.Empty<BlogBase>()));
+            blogService.GetOrderedByDatesWithTotalAsync(Arg.Any<int>(), Arg.Any<int>())
+                       .Returns((81, Enumerable.Empty<BlogBase>()));
             await GetPostsController(blogService, PagesSettings.Default).Page(page);
             var value = (page - 1) * 10 + 1;
             await blogService.Received(1).GetOrderedByDatesWithTotalAsync(value, 10);

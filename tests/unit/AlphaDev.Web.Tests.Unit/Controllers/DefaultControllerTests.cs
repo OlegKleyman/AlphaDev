@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AlphaDev.BlogServices.Core;
-using AlphaDev.Core;
-using AlphaDev.Services;
 using AlphaDev.Web.Controllers;
 using AlphaDev.Web.Models;
 using FluentAssertions;

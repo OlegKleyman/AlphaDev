@@ -1,11 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using AlphaDev.BlogServices.Core;
-using AlphaDev.Core;
 using AlphaDev.Optional.Extensions;
 using AlphaDev.Paging;
 using AlphaDev.Paging.Extensions;
-using AlphaDev.Services;
 using AlphaDev.Web.Core;
 using AlphaDev.Web.Models;
 using JetBrains.Annotations;
@@ -33,14 +31,15 @@ namespace AlphaDev.Web.Controllers
         {
             var startPosition = (page - 1) * _pagesSettings.ItemsPerPage + 1;
             return await _blogService.GetOrderedByDatesWithTotalAsync(startPosition, _pagesSettings.ItemsPerPage)
-                              .SomeNotEmptyAsync(tuple => tuple.blogs, tuple => NotFound())
-                              .MapAsync(tuple => (tuple.total,
-                                  blogs: tuple.blogs.Select(blog => new BlogViewModel(blog.Id, blog.Title,
-                                      blog.Content,
-                                      new DatesViewModel(blog.Dates.Created, blog.Dates.Modified)))))
-                              .MapAsync(tuple => tuple.blogs.ToPager(page, tuple.total, _pagesSettings))
-                              .MapAsync(x => (ActionResult) View("Index", x))
-                              .GetValueOrExceptionAsync();
+                                     .SomeNotEmptyAsync(tuple => tuple.blogs, tuple => NotFound())
+                                     .MapAsync(tuple => (tuple.total,
+                                         blogs: tuple.blogs.Select(blog => new BlogViewModel(blog.Id, blog.Title,
+                                             blog.Content,
+                                             new DatesViewModel(blog.Dates.Created,
+                                                 blog.Dates.Modified)))))
+                                     .MapAsync(tuple => tuple.blogs.ToPager(page, tuple.total, _pagesSettings))
+                                     .MapAsync(x => (ActionResult) View("Index", x))
+                                     .GetValueOrExceptionAsync();
         }
 
         [Route("{id}")]

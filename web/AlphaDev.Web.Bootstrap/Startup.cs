@@ -3,6 +3,7 @@ using AlphaDev.Core;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Core.Data.Sql.Support;
 using AlphaDev.Paging;
+using AlphaDev.Services.Web;
 using AlphaDev.Web.Bootstrap.Extensions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
@@ -31,7 +32,7 @@ namespace AlphaDev.Web.Bootstrap
             var securitySqlConfigurer = new SqlConfigurer(_configuration.GetConnectionString("defaultSecurity"));
             var defaultSqlConfigurer = new SqlConfigurer(_configuration.GetConnectionString("default"));
             var blogServiceAddress = _configuration.GetConnectionString("blogService");
-            services.AddRefitClient<Services.Web.IBlogService>()
+            services.AddRefitClient<IBlogService>()
                     .ConfigureHttpClient(client => client.BaseAddress = new Uri(blogServiceAddress))
                     .Services.AddSingleton<IPrefixGenerator, PrefixGenerator>()
                     .AddServices()

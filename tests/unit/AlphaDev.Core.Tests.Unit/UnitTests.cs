@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentAssertions.Common;
 using Xunit;
 
 namespace AlphaDev.Core.Tests.Unit
