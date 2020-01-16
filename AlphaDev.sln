@@ -69,13 +69,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Services.Tests.Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.Services.Web.Tests.Unit", "tests\unit\AlphaDev.Services.Web.Tests.Unit\AlphaDev.Services.Web.Tests.Unit.csproj", "{DFF91DA9-DC67-4C8B-A730-1F4AB98079AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.BlogServices.Core", "core\AlphaDev.BlogServices.Core\AlphaDev.BlogServices.Core.csproj", "{803CA95E-A0B8-4337-8CC5-29E875A77450}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.BlogServices.Core", "core\AlphaDev.BlogServices.Core\AlphaDev.BlogServices.Core.csproj", "{803CA95E-A0B8-4337-8CC5-29E875A77450}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.BlogServices.Core.Tests.Unit", "tests\unit\AlphaDev.BlogServices.Core.Tests.Unit\AlphaDev.BlogServices.Core.Tests.Unit.csproj", "{47742994-0F0B-4C0B-8C83-86D2A977C285}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.BlogServices.Core.Tests.Unit", "tests\unit\AlphaDev.BlogServices.Core.Tests.Unit\AlphaDev.BlogServices.Core.Tests.Unit.csproj", "{47742994-0F0B-4C0B-8C83-86D2A977C285}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.BlogServices", "core\AlphaDev.BlogServices\AlphaDev.BlogServices.csproj", "{9A2B758D-13B7-47C2-A074-E7F53B988A96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.BlogServices", "core\AlphaDev.BlogServices\AlphaDev.BlogServices.csproj", "{9A2B758D-13B7-47C2-A074-E7F53B988A96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.BlogServices.Tests.Unit", "tests\unit\AlphaDev.BlogServices.Tests.Unit\AlphaDev.BlogServices.Tests.Unit.csproj", "{B343CBB6-C162-4E41-A0F8-9A51EE816CAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaDev.BlogServices.Tests.Unit", "tests\unit\AlphaDev.BlogServices.Tests.Unit\AlphaDev.BlogServices.Tests.Unit.csproj", "{B343CBB6-C162-4E41-A0F8-9A51EE816CAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.BlogServices.Web", "core\AlphaDev.BlogServices.Web\AlphaDev.BlogServices.Web.csproj", "{0613E06A-040A-40EB-B477-EEB2AF6DF4C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaDev.BlogServices.Web.Tests.Unit", "tests\unit\AlphaDev.BlogServices.Web.Tests.Unit\AlphaDev.BlogServices.Web.Tests.Unit.csproj", "{AA3B7047-6286-4601-A148-40C5A3E906F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -203,6 +207,14 @@ Global
 		{B343CBB6-C162-4E41-A0F8-9A51EE816CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B343CBB6-C162-4E41-A0F8-9A51EE816CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B343CBB6-C162-4E41-A0F8-9A51EE816CAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0613E06A-040A-40EB-B477-EEB2AF6DF4C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0613E06A-040A-40EB-B477-EEB2AF6DF4C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0613E06A-040A-40EB-B477-EEB2AF6DF4C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0613E06A-040A-40EB-B477-EEB2AF6DF4C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA3B7047-6286-4601-A148-40C5A3E906F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA3B7047-6286-4601-A148-40C5A3E906F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA3B7047-6286-4601-A148-40C5A3E906F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA3B7047-6286-4601-A148-40C5A3E906F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -241,6 +253,8 @@ Global
 		{47742994-0F0B-4C0B-8C83-86D2A977C285} = {E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}
 		{9A2B758D-13B7-47C2-A074-E7F53B988A96} = {8561F13A-FB6E-45CE-8020-CEDCC9EA77DB}
 		{B343CBB6-C162-4E41-A0F8-9A51EE816CAE} = {E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}
+		{0613E06A-040A-40EB-B477-EEB2AF6DF4C6} = {8561F13A-FB6E-45CE-8020-CEDCC9EA77DB}
+		{AA3B7047-6286-4601-A148-40C5A3E906F2} = {E0C4CBD9-0E2F-48ED-975C-36CCD5612DF2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FC791FD-FD6E-4ABB-90D8-6B566DF49780}
