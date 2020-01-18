@@ -26,7 +26,7 @@ namespace AlphaDev.Web.Controllers
                                          blogBase.Content,
                                          new DatesViewModel(blogBase.Dates.Created, blogBase.Dates.Modified)))
                                      .WithExceptionAsync(() => BlogViewModel.Welcome)
-                                     .To(async option => View(nameof(Index), await option.GetValueOrExceptionAsync()));
+                                     .To(async option => View(nameof(Index), await option.ValueOrExceptionAsync()));
         }
 
         [Route("error/{status}")]

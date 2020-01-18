@@ -32,7 +32,7 @@ namespace AlphaDev.Web.Bootstrap
             var securitySqlConfigurer = new SqlConfigurer(_configuration.GetConnectionString("defaultSecurity"));
             var defaultSqlConfigurer = new SqlConfigurer(_configuration.GetConnectionString("default"));
             var blogServiceAddress = _configuration.GetConnectionString("blogService");
-            services.AddRefitClient<IBlogService>()
+            services.AddRefitClient<IBlogRestService>()
                     .ConfigureHttpClient(client => client.BaseAddress = new Uri(blogServiceAddress))
                     .Services.AddSingleton<IPrefixGenerator, PrefixGenerator>()
                     .AddServices()

@@ -39,7 +39,7 @@ namespace AlphaDev.Web.Controllers
                                                  blog.Dates.Modified)))))
                                      .MapAsync(tuple => tuple.blogs.ToPager(page, tuple.total, _pagesSettings))
                                      .MapAsync(x => (ActionResult) View("Index", x))
-                                     .GetValueOrExceptionAsync();
+                                     .ValueOrExceptionAsync();
         }
 
         [Route("{id}")]
@@ -52,7 +52,7 @@ namespace AlphaDev.Web.Controllers
                                          foundBlog.Content,
                                          new DatesViewModel(foundBlog.Dates.Created, foundBlog.Dates.Modified)));
             await option.MatchSomeAsync(model => ViewData["Title"] = model.Title);
-            return await option.MapAsync(model => (ActionResult) View("Post", model)).GetValueOrExceptionAsync();
+            return await option.MapAsync(model => (ActionResult) View("Post", model)).ValueOrExceptionAsync();
         }
 
         [Authorize]
@@ -71,7 +71,7 @@ namespace AlphaDev.Web.Controllers
                          .MapAsync(model => _blogService.AddAsync(new Blog(model.Title, model.Content)))
                          .MapAsync(blog => (ActionResult) RedirectToAction(nameof(Index), new { id = blog.Id }))
                          .WithExceptionAsync(() => View(nameof(Create), post))
-                         .GetValueOrExceptionAsync();
+                         .ValueOrExceptionAsync();
         }
 
         [Authorize]
@@ -83,7 +83,7 @@ namespace AlphaDev.Web.Controllers
             return await _blogService.DeleteAsync(id)
                                      .MapAsync(_ => (IActionResult) RedirectToAction(nameof(Page), new { page = 1 }))
                                      .MapExceptionAsync(exception => NotFound())
-                                     .GetValueOrExceptionAsync();
+                                     .ValueOrExceptionAsync();
         }
 
         [Authorize]
@@ -95,7 +95,7 @@ namespace AlphaDev.Web.Controllers
                                          new DatesViewModel(b.Dates.Created, b.Dates.Modified)))
                                      .MapAsync(model => (IActionResult) View(nameof(Edit), model))
                                      .WithExceptionAsync(NotFound)
-                                     .GetValueOrExceptionAsync();
+                                     .ValueOrExceptionAsync();
         }
 
         [Authorize]
@@ -111,7 +111,7 @@ namespace AlphaDev.Web.Controllers
                                   arguments.Title = viewModel.Title;
                               }), exception => NotFound())
                               .MapAsync(_ => (IActionResult) RedirectToAction(nameof(Index), new { id }))
-                              .GetValueOrExceptionAsync();
+                              .ValueOrExceptionAsync();
         }
     }
 }

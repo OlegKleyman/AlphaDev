@@ -38,7 +38,7 @@ namespace AlphaDev.Web.Controllers
                                                  .WithException(() => GetAboutView("No details"))
                                                  .ValueOrException();
                                       })
-                                      .GetValueOrExceptionAsync();
+                                      .ValueOrExceptionAsync();
         }
 
         [Route("about/edit")]
@@ -48,7 +48,7 @@ namespace AlphaDev.Web.Controllers
                                       .WithExceptionAsync(() => RedirectToAction(nameof(About)))
                                       .MapAsync(s => new AboutEditViewModel(s))
                                       .MapAsync(model => (IActionResult) View(nameof(EditAbout), model))
-                                      .GetValueOrExceptionAsync();
+                                      .ValueOrExceptionAsync();
         }
 
         [SaveFilter]
@@ -62,7 +62,7 @@ namespace AlphaDev.Web.Controllers
                                    .WithExceptionAsync(() => View(nameof(EditAbout), model));
             await option.MatchSomeAsync(b => _aboutService.EditAsync(model.Value));
             return await option.MapAsync(dictionary => (IActionResult) RedirectToAction(nameof(About)))
-                               .GetValueOrExceptionAsync();
+                               .ValueOrExceptionAsync();
         }
 
         [Route("about/create")]
@@ -72,7 +72,7 @@ namespace AlphaDev.Web.Controllers
                                       .WithExceptionAsync(() =>
                                           View(nameof(CreateAbout), new AboutCreateViewModel()))
                                       .MapAsync(s => (IActionResult) RedirectToAction(nameof(EditAbout)))
-                                      .GetValueOrExceptionAsync();
+                                      .ValueOrExceptionAsync();
         }
 
         [SaveFilter]
@@ -86,7 +86,7 @@ namespace AlphaDev.Web.Controllers
                                    .WithExceptionAsync(() => View(nameof(CreateAbout), model));
             await option.MatchSomeAsync(b => _aboutService.CreateAsync(model.Value));
             return await option.MapAsync(b => (IActionResult) RedirectToAction(nameof(About)))
-                               .GetValueOrExceptionAsync();
+                               .ValueOrExceptionAsync();
         }
 
         [AllowAnonymous]
@@ -104,7 +104,7 @@ namespace AlphaDev.Web.Controllers
                                                    .WithException(() => GetContactView("No details"))
                                                    .GetValueOrException();
                                         })
-                                        .GetValueOrExceptionAsync();
+                                        .ValueOrExceptionAsync();
         }
 
         [Route("contact/edit")]
@@ -114,7 +114,7 @@ namespace AlphaDev.Web.Controllers
                                         .WithExceptionAsync(() => RedirectToAction(nameof(Contact)))
                                         .MapAsync(s => new ContactEditViewModel(s))
                                         .MapAsync(model => (IActionResult) View(nameof(EditContact), model))
-                                        .GetValueOrExceptionAsync();
+                                        .ValueOrExceptionAsync();
         }
 
         [SaveFilter]
@@ -128,7 +128,7 @@ namespace AlphaDev.Web.Controllers
                                    .WithExceptionAsync(() => View(nameof(EditContact), model));
             await option.MatchSomeAsync(b => _contactService.EditAsync(model.Value));
             return await option.MapAsync(dictionary => (IActionResult) RedirectToAction(nameof(Contact)))
-                               .GetValueOrExceptionAsync();
+                               .ValueOrExceptionAsync();
         }
 
         [Route("contact/create")]
@@ -138,7 +138,7 @@ namespace AlphaDev.Web.Controllers
                                         .WithExceptionAsync(() =>
                                             View(nameof(CreateContact), new ContactCreateViewModel()))
                                         .MapAsync(s => (IActionResult) RedirectToAction(nameof(EditContact)))
-                                        .GetValueOrExceptionAsync();
+                                        .ValueOrExceptionAsync();
         }
 
         [SaveFilter]
@@ -152,7 +152,7 @@ namespace AlphaDev.Web.Controllers
                                    .WithExceptionAsync(() => View(nameof(CreateContact), model));
             await option.MatchSomeAsync(b => _contactService.CreateAsync(model.Value));
             return await option.MapAsync(dictionary => (IActionResult) RedirectToAction(nameof(Contact)))
-                               .GetValueOrExceptionAsync();
+                               .ValueOrExceptionAsync();
         }
     }
 }

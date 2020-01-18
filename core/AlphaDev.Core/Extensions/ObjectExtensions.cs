@@ -10,5 +10,8 @@ namespace AlphaDev.Core.Extensions
 
         public static async Task<T>
             ToAsync<TTarget, T>(this ValueTask<TTarget> target, [NotNull] Func<TTarget, T> map) => map(await target);
+
+        public static async Task<T>
+            ToAsync<TTarget, T>([NotNull] this Task<TTarget> target, [NotNull] Func<TTarget, T> map) => map(await target);
     }
 }

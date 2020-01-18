@@ -55,7 +55,6 @@ namespace AlphaDev.BlogServices
 
         public async Task<Option<Unit, ObjectNotFoundException<BlogBase>>> DeleteAsync(int id)
         {
-            _blogs.Include(blog1 => blog1.Id.ToString());
             var option = await _blogs.FindAsync(id)
                                      .SomeNotNullAsync(() =>
                                          new ObjectNotFoundException<BlogBase>((nameof(Blog.Id), id)));
@@ -101,7 +100,7 @@ namespace AlphaDev.BlogServices
             return await _blogs.CountAsync()
                                .SomeWhenAsync(i => i > 0, x => (x, Enumerable.Empty<BlogBase>()))
                                .MapAsync(async i => (i, await GetOrderedByDatesAsync(start, count)))
-                               .GetValueOrExceptionAsync();
+                               .ValueOrExceptionAsync();
         }
 
         public async Task<int> GetCountAsync() => await _blogs.CountAsync();

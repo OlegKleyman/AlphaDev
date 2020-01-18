@@ -19,5 +19,12 @@ namespace AlphaDev.Core.Tests.Unit.Extensions
         {
             1.To(i => i.ToString()).Should().Be("1");
         }
+
+        [Fact]
+        public async Task ToAsyncTaskMapsToSpecifiedToFuncReturnValue()
+        {
+            var result = await Task.FromResult(1).ToAsync(i => i.ToString());
+            result.Should().Be("1");
+        }
     }
 }
