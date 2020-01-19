@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.DependencyInjection;
+using BlogService = AlphaDev.BlogServices.Web.BlogService;
 
 namespace AlphaDev.Web.Bootstrap.Extensions
 {
