@@ -1,11 +1,10 @@
 ﻿using System;
+using JetBrains.Annotations;
 
-namespace AlphaDev.Services.Web.Models
+namespace AlphaDev.Web.Api.Models
 {
     public class Blog
     {
-        public Blog(Dates dates) => Dates = dates;
-
         public int Id { get; set; }
 
         private string? _title;
@@ -24,6 +23,13 @@ namespace AlphaDev.Services.Web.Models
             set => _content = value;
         }
 
-        public Dates Dates { get; }
+        private Dates? _dates;
+
+        [NotNull]
+        public Dates Dates
+        {
+            get => _dates ?? throw new InvalidOperationException($"{nameof(Dates)} is missing.");
+            set => _dates = value;
+        }
     }
 }

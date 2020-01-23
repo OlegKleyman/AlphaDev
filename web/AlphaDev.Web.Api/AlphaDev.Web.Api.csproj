@@ -2,6 +2,24 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Version></Version>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AlphaDev.Optional.Extensions" Version="0.0.0.19" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\core\AlphaDev.BlogServices\AlphaDev.BlogServices.csproj" />
+    <ProjectReference Include="..\..\core\AlphaDev.Core.Data.Sql\AlphaDev.Core.Data.Sql.csproj" />
+  </ItemGroup>
 
 </Project>

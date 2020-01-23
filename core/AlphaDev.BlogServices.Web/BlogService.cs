@@ -36,13 +36,12 @@ namespace AlphaDev.BlogServices.Web
 
         public async Task<BlogBase> AddAsync([NotNull] BlogBase blog)
         {
-            return await _blogRestService.Add(new BlogModel
+            return await _blogRestService.Add(new BlogModel(new DatesModel
+                                         {
+                                             Created = _dateProvider.UtcNow
+                                         })
                                          {
                                              Content = blog.Content,
-                                             Dates = new DatesModel
-                                             {
-                                                 Created = _dateProvider.UtcNow
-                                             },
                                              Title = blog.Title
                                          })
                                          .SomeWhenAsync(response => response.IsSuccessStatusCode,
@@ -75,14 +74,13 @@ namespace AlphaDev.BlogServices.Web
             var arguments = new BlogEditArguments();
             edit(arguments);
 
-            var blogToEdit = new BlogModel
+            var blogToEdit = new BlogModel(new DatesModel
+            {
+                Modified = _dateProvider.UtcNow
+            })
             {
                 Content = arguments.Content,
-                Title = arguments.Title,
-                Dates = new DatesModel
-                {
-                    Modified = _dateProvider.UtcNow
-                }
+                Title = arguments.Title
             };
 
             return await _blogRestService.Edit(id, blogToEdit)

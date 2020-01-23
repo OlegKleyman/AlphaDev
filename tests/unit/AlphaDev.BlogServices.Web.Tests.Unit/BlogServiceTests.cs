@@ -27,16 +27,15 @@ namespace AlphaDev.BlogServices.Web.Tests.Unit
         public async Task GetLatestAsyncReturnsSomeBlogFromRestService()
         {
             var blogRestService = Substitute.For<IBlogRestService>();
-            var blog = new Blog
+            var blog = new Blog(new Dates
+            {
+                Created = new DateTime(2010, 1, 1),
+                Modified = new DateTime(2012, 12, 28)
+            })
             {
                 Title = nameof(Blog.Title),
                 Content = nameof(Blog.Content),
-                Id = 1,
-                Dates = new Dates
-                {
-                    Created = new DateTime(2010, 1, 1),
-                    Modified = new DateTime(2012, 12, 28)
-                }
+                Id = 1
             };
 
             blogRestService.GetLatest().Returns(new ApiResponse<Blog>(new HttpResponseMessage(), blog));
@@ -59,16 +58,15 @@ namespace AlphaDev.BlogServices.Web.Tests.Unit
         public async Task GetAsyncReturnsSomeBlogFromRestService()
         {
             var blogRestService = Substitute.For<IBlogRestService>();
-            var blog = new Blog
+            var blog = new Blog(new Dates
+            {
+                Created = new DateTime(2010, 1, 1),
+                Modified = new DateTime(2012, 12, 28)
+            })
             {
                 Title = nameof(Blog.Title),
                 Content = nameof(Blog.Content),
-                Id = 1,
-                Dates = new Dates
-                {
-                    Created = new DateTime(2010, 1, 1),
-                    Modified = new DateTime(2012, 12, 28)
-                }
+                Id = 1
             };
 
             blogRestService.Get(1).Returns(new ApiResponse<Blog>(new HttpResponseMessage(), blog));
@@ -93,15 +91,14 @@ namespace AlphaDev.BlogServices.Web.Tests.Unit
             var dateProvider = Substitute.For<IDateProvider>();
             dateProvider.UtcNow.Returns(new DateTime(2010, 1, 1));
             var blogRestService = Substitute.For<IBlogRestService>();
-            var blog = new Blog
+            var blog = new Blog(new Dates
+            {
+                Created = dateProvider.UtcNow
+            })
             {
                 Id = 1,
                 Title = nameof(Blog.Title),
-                Content = nameof(Blog.Content),
-                Dates = new Dates
-                {
-                    Created = dateProvider.UtcNow
-                }
+                Content = nameof(Blog.Content)
             };
 
             blogRestService
@@ -134,7 +131,7 @@ namespace AlphaDev.BlogServices.Web.Tests.Unit
 
             var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
             var error = await ApiException.Create(default, default, responseMessage);
-            var response = new ApiResponse<Blog>(responseMessage, new Blog(), error);
+            var response = new ApiResponse<Blog>(responseMessage, new Blog(new Dates()), error);
             blogRestService.Add(Arg.Any<Blog>()).Returns(response);
 
             var service = GetBlogService(blogRestService, dateProvider);

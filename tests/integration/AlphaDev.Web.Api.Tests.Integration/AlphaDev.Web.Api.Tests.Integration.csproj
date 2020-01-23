@@ -9,8 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCoreTestServer.Core" Version="0.0.0.3" />
+    <PackageReference Include="AspNetCoreTestServer.Core" Version="0.0.0.4" />
     <PackageReference Include="FluentAssertions" Version="5.10.0" />
+    <PackageReference Include="FluentAssertions.Optional" Version="0.0.0.11" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="refit" Version="5.0.23" />
@@ -27,12 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\core\AlphaDev.Core.Data.Sql\AlphaDev.Core.Data.Sql.csproj" />
+    <ProjectReference Include="..\..\..\core\AlphaDev.Core.Data\AlphaDev.Core.Data.csproj" />
+    <ProjectReference Include="..\..\..\core\AlphaDev.Services.Web\AlphaDev.Services.Web.csproj" />
     <ProjectReference Include="..\..\..\web\AlphaDev.Web.Api\AlphaDev.Web.Api.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\" />
-    <Folder Include="FeatureSteps\" />
   </ItemGroup>
 
 </Project>

@@ -23,7 +23,7 @@ namespace AlphaDev.Services.Web
         [Put("/blog/{id}")]
         Task<HttpResponseMessage> Edit(int id, [Body] Blog blog);
 
-        [Get("/blog/start/{start}/end/{end}")]
+        [Get("/blog/start/{start}/count/{count}")]
         Task<Segmented<Blog>> Get(int start, int count);
     }
 }

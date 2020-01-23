@@ -23,7 +23,7 @@ namespace AlphaDev.BlogServices.Web.Tests.Unit.Extensions
         {
             var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
             var error = await ApiException.Create(default, default, responseMessage);
-            var response = new ApiResponse<Blog>(responseMessage, new Blog(), error);
+            var response = new ApiResponse<Blog>(responseMessage, new Blog(new Dates()), error);
             Func<Task> toOptionAsync = () => Task.FromResult(response).ToOptionAsync();
             toOptionAsync.Should().ThrowExactly<ApiException>();
         }
@@ -33,7 +33,7 @@ namespace AlphaDev.BlogServices.Web.Tests.Unit.Extensions
         {
             var responseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);
             var error = await ApiException.Create(default, default, responseMessage);
-            var response = new ApiResponse<Blog>(responseMessage, new Blog(), error);
+            var response = new ApiResponse<Blog>(responseMessage, new Blog(new Dates()), error);
             var result = await Task.FromResult(response).ToOptionAsync();
             result.Should().BeNone();
         }
@@ -42,16 +42,15 @@ namespace AlphaDev.BlogServices.Web.Tests.Unit.Extensions
         public async Task ToOptionAsyncReturnsBlogWhenResponseIsSuccessful()
         {
             var responseMessage = new HttpResponseMessage(HttpStatusCode.OK);
-            var blog = new Blog
+            var blog = new Blog(new Dates
+            {
+                Created = new DateTime(2010, 1, 1),
+                Modified = new DateTime(2012, 12, 28)
+            })
             {
                 Title = nameof(Blog.Title),
                 Content = nameof(Blog.Content),
-                Id = 1,
-                Dates = new Dates
-                {
-                    Created = new DateTime(2010,1,1),
-                    Modified = new DateTime(2012,12,28)
-                }
+                Id = 1
             };
 
             var response = new ApiResponse<Blog>(responseMessage, blog);
