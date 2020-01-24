@@ -34,13 +34,13 @@ namespace AlphaDev.Web.Api.Tests.Integration.FeatureSteps
             _server = server;
         }
 
-        [BeforeScenario]
+        [BeforeScenario("blog")]
         public void InitializeDatabase()
         {
             _blogContext.Database.Migrate();
         }
 
-        [BeforeScenario]
+        [BeforeScenario("blog")]
         public async Task StartServer()
         {
             var state = await _server.StartAsync<Startup>(typeof(Startup).Assembly, Option.None<string>(),

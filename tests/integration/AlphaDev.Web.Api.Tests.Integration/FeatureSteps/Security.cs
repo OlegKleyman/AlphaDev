@@ -18,6 +18,7 @@ using TechTalk.SpecFlow;
 
 namespace AlphaDev.Web.Api.Tests.Integration.FeatureSteps
 {
+    [Binding]
     public class Security : Steps
     {
         private readonly ScenarioContext _scenarioContext;
@@ -36,13 +37,22 @@ namespace AlphaDev.Web.Api.Tests.Integration.FeatureSteps
         {
             var configuration = new Dictionary<string, string>
             {
-                ["connectionStrings:default"] = _context.Database.GetDbConnection().ConnectionString
+                ["connectionStrings:security"] = _context.Database.GetDbConnection().ConnectionString,
+                ["Jwt:Issuer"] = "issuer",
+                ["Jwt:Audience"] = "audience",
+                ["Jwt:Key"] = "key"
             };
 
             var state = await _server.StartAsync<Startup>(typeof(Startup).Assembly, Option.None<string>(),
                 configuration);
             _scenarioContext["BLOG_SERVICE_URL"] = state.Endpoint;
             _scenarioContext["WEB_CONFIGURATION"] = configuration;
+        }
+
+        [BeforeScenario]
+        public void InitializeDatabase()
+        {
+            _context.Database.Migrate();
         }
 
         [Given(@"I am an existing user")]
@@ -75,7 +85,7 @@ namespace AlphaDev.Web.Api.Tests.Integration.FeatureSteps
         [When(@"I request a token")]
         public async Task WhenIRequestAToken()
         {
-            var service = RestService.For<ITokenRestService>(_scenarioContext.Get<string>("BLOG_SERVICE_URL"));
+            var service = RestService.For<ITokenRestService>(_scenarioContext.Get<Uri>("BLOG_SERVICE_URL").AbsoluteUri);
             var user = _scenarioContext.Get<User[]>().First();
 
             var claims = new Claims(user.UserName, "H3ll04321!");
