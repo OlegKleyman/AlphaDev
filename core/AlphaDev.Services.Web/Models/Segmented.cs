@@ -2,7 +2,9 @@
 {
     public class Segmented<T>
     {
-        public T[]? Values { get; set; }
+        public Segmented(T[] values) => Values = values;
+
+        public T[] Values { get; }
 
         public int Total { get; set; }
     }
