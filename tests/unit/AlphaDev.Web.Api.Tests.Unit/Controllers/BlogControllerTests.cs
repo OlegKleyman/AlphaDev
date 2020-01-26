@@ -28,7 +28,10 @@ namespace AlphaDev.Web.Api.Tests.Unit.Controllers
             var controller = GetBlogController(blogService);
 
             (await controller.GetLatest())
-                .Value.Should()
+                .Should()
+                .BeOfType<OkObjectResult>()
+                .Which.Value
+                .Should()
                 .BeEquivalentTo(
                     new
                     {
@@ -47,7 +50,7 @@ namespace AlphaDev.Web.Api.Tests.Unit.Controllers
 
             var controller = GetBlogController(blogService);
 
-            (await controller.GetLatest()).Result.Should().BeOfType<NotFoundResult>();
+            (await controller.GetLatest()).Should().BeOfType<NotFoundResult>();
         }
 
         [NotNull]

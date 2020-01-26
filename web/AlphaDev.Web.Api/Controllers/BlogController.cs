@@ -21,10 +21,10 @@ namespace AlphaDev.Web.Api.Controllers
 
         [Route("GetLatest")]
         [ItemNotNull]
-        public async Task<ActionResult<Blog>> GetLatest()
+        public async Task<IActionResult> GetLatest()
         {
             return await _service.GetLatestAsync()
-                                 .WithExceptionAsync(() => (ActionResult<Blog>) NotFound())
+                                 .WithExceptionAsync(() => (IActionResult) NotFound())
                                  .MapAsync(b => new Blog
                                  {
                                      Title =b.Title,
@@ -36,8 +36,8 @@ namespace AlphaDev.Web.Api.Controllers
                                          Modified = b.Dates.Modified.ValueOrDefault()
                                      }
                                  })
-                                 .MapAsync(b => new ActionResult<Blog>(b))
-                                 .ValueOrExceptionAsync();
+                                 .MapAsync(Ok)
+                                 .ExceptionOrValueAsync();
         }
     }
 }
