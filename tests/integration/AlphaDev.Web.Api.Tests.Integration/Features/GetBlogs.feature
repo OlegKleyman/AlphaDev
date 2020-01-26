@@ -1,4 +1,6 @@
-﻿Feature: GetBlogs
+﻿@blog
+@web
+Feature: GetBlogs
 	In order to retrieve blog information
 	As a developer
 	I want to have a service that is able to retrieve blog information

@@ -19,12 +19,16 @@ namespace AlphaDev.Web.Api.Tests.Integration.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.1.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [Xunit.TraitAttribute("Category", "security")]
+    [Xunit.TraitAttribute("Category", "web")]
     public partial class SecurityFeature : object, Xunit.IClassFixture<SecurityFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
-        private string[] _featureTags = ((string[])(null));
+        private string[] _featureTags = new string[] {
+                "security",
+                "web"};
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
@@ -41,7 +45,9 @@ namespace AlphaDev.Web.Api.Tests.Integration.Features
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Security", "\tTo be able to identify myself\r\n\tAs a developer\r\n\tI want a service for security r" +
-                    "elated operations", ProgrammingLanguage.CSharp, ((string[])(null)));
+                    "elated operations", ProgrammingLanguage.CSharp, new string[] {
+                        "security",
+                        "web"});
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -88,7 +94,7 @@ namespace AlphaDev.Web.Api.Tests.Integration.Features
         {
             string[] tagsOfScenario = ((string[])(null));
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Authentication successful", null, ((string[])(null)));
-#line 6
+#line 8
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -108,13 +114,13 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 7
+#line 9
  testRunner.Given("I am an existing user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 8
+#line 10
  testRunner.When("I request a token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 9
+#line 11
  testRunner.Then("I will receive a security token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

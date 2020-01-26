@@ -19,12 +19,16 @@ namespace AlphaDev.Web.Api.Tests.Integration.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.1.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [Xunit.TraitAttribute("Category", "blog")]
+    [Xunit.TraitAttribute("Category", "web")]
     public partial class GetBlogsFeature : object, Xunit.IClassFixture<GetBlogsFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
-        private string[] _featureTags = ((string[])(null));
+        private string[] _featureTags = new string[] {
+                "blog",
+                "web"};
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
@@ -41,7 +45,9 @@ namespace AlphaDev.Web.Api.Tests.Integration.Features
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "GetBlogs", "\tIn order to retrieve blog information\r\n\tAs a developer\r\n\tI want to have a servic" +
-                    "e that is able to retrieve blog information", ProgrammingLanguage.CSharp, ((string[])(null)));
+                    "e that is able to retrieve blog information", ProgrammingLanguage.CSharp, new string[] {
+                        "blog",
+                        "web"});
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -78,9 +84,9 @@ namespace AlphaDev.Web.Api.Tests.Integration.Features
         
         public virtual void FeatureBackground()
         {
-#line 6
+#line 8
 #line hidden
-#line 7
+#line 9
 testRunner.Given("There are blogs", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
         }
@@ -97,7 +103,7 @@ testRunner.Given("There are blogs", ((string)(null)), ((TechTalk.SpecFlow.Table)
         {
             string[] tagsOfScenario = ((string[])(null));
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get latest blog", null, ((string[])(null)));
-#line 9
+#line 11
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -117,16 +123,16 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 6
+#line 8
 this.FeatureBackground();
 #line hidden
-#line 10
+#line 12
  testRunner.Given("I am an API consumer", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 11
+#line 13
  testRunner.When("I make a request to get the latest blog", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 12
+#line 14
  testRunner.Then("the latest blog is returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

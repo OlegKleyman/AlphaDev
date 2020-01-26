@@ -1,4 +1,6 @@
-﻿Feature: Security
+﻿@security
+@web
+Feature: Security
 	To be able to identify myself
 	As a developer
 	I want a service for security related operations

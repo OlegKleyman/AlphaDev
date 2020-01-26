@@ -1,4 +1,4 @@
-using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using AlphaDev.BlogServices;
 using AlphaDev.BlogServices.Core;
@@ -7,19 +7,17 @@ using AlphaDev.Core.Data.Account.Security.Sql;
 using AlphaDev.Core.Data.Account.Security.Sql.Entities;
 using AlphaDev.Core.Data.Contexts;
 using AlphaDev.Core.Data.Sql.Support;
-using AlphaDev.Web.Api.Support;
+using AlphaDev.Core.Extensions;
+using AlphaDev.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Blog = AlphaDev.Core.Data.Entities.Blog;
 
 namespace AlphaDev.Web.Api
 {
@@ -37,14 +35,13 @@ namespace AlphaDev.Web.Api
             services.AddScoped<BlogContext>(provider => new Core.Data.Sql.Contexts.BlogContext(blogConfigurer));
             services.AddScoped<IdentityDbContext<User>>(provider =>
                 new ApplicationContextFactory(securityConfigurer).CreateDbContext());
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<IdentityDbContext<User>>();
+            services.AddIdentityCore<User>().AddEntityFrameworkStores<IdentityDbContext<User>>();
             services.AddScoped(provider => provider.GetRequiredService<BlogContext>().Blogs);
             services.AddSingleton<IDateProvider, DateProvider>();
             services.AddScoped<IBlogService, BlogService>();
+            services.AddCors(options => options.AddPolicy("CorsPolicy",
+                builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials().Build()));
             services.AddControllers();
-            services.Configure<TokenSettings>(_configuration);
-            services.AddCors(options => options.AddDefaultPolicy(builder =>
-                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials()));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -57,6 +54,15 @@ namespace AlphaDev.Web.Api
                         IssuerSigningKey =
                             new SymmetricSecurityKey(Encoding.Default.GetBytes(_configuration["Jwt:Key"]))
                     });
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddSingleton<SecurityTokenHandler, JwtSecurityTokenHandler>();
+            services.AddSingleton<IJwtTokenBuilderFactory, JwtTokenBuilderFactory>();
+            services.AddSingleton(provider =>
+                _configuration.GetSection("Jwt")
+                              .Get<TokenSettings>()
+                              .To(settings =>
+                                  provider.GetRequiredService<IJwtTokenBuilderFactory>().Create(settings)));
+            services.AddSingleton<ISecurityTokenWriter, JwtSecurityTokenWriter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,8 +70,8 @@ namespace AlphaDev.Web.Api
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
             }
+            app.UseDeveloperExceptionPage();
 
             app.UseRouting();
             app.UseAuthentication();

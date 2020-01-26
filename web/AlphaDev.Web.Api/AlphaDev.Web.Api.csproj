@@ -23,6 +23,12 @@
     <ProjectReference Include="..\..\core\AlphaDev.BlogServices\AlphaDev.BlogServices.csproj" />
     <ProjectReference Include="..\..\core\AlphaDev.Core.Data.Account.Security.Sql\AlphaDev.Core.Data.Account.Security.Sql.csproj" />
     <ProjectReference Include="..\..\core\AlphaDev.Core.Data.Sql\AlphaDev.Core.Data.Sql.csproj" />
+    <ProjectReference Include="..\..\core\AlphaDev.Extensions.DependencyInjection\AlphaDev.Extensions.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\core\AlphaDev.Security\AlphaDev.Security.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Support\" />
   </ItemGroup>
 
 </Project>

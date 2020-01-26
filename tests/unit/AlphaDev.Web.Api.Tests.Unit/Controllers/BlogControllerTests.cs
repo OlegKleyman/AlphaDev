@@ -10,7 +10,7 @@ using Optional;
 using Optional.Unsafe;
 using Xunit;
 
-namespace AlphaDev.Web.Api.Tests.Unit
+namespace AlphaDev.Web.Api.Tests.Unit.Controllers
 {
     public class BlogControllerTests
     {

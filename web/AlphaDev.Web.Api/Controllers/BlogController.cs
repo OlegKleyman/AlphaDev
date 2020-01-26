@@ -3,6 +3,7 @@ using AlphaDev.BlogServices.Core;
 using AlphaDev.Optional.Extensions;
 using AlphaDev.Web.Api.Models;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Optional.Async;
 using Optional.Unsafe;
