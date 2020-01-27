@@ -93,23 +93,25 @@ namespace AlphaDev.Web.Api.Tests.Integration.FeatureSteps
         public void ThenThoseBlogsAreReturned()
         {
             var returnedBlogs = ScenarioContext.Get<Segmented<Services.Web.Models.Blog>>();
-            returnedBlogs.Total.Should().Be(ScenarioContext.Get<int>("TOTAL_GET_BLOGS"));
-            var actualBlogs = ScenarioContext.Get<ImmutableArray<Blog>>()
-                                             .OrderByDescending(blog => blog.Created)
-                                             .Skip(ScenarioContext.Get<int>("START_GET_BLOGS_POSITION") - 1)
-                                             .Take(returnedBlogs.Total)
-                                             .Select(blog => new
-                                             {
-                                                 blog.Title,
-                                                 blog.Content,
-                                                 Dates = new
-                                                 {
-                                                     blog.Created,
-                                                     blog.Modified
-                                                 }
-                                             });
+            var actualBlogs = ScenarioContext.Get<ImmutableArray<Blog>>();
+            returnedBlogs.Total.Should().Be(actualBlogs.Length);
+            var expectedBlogs = actualBlogs
+                              .OrderByDescending(blog => blog.Modified)
+                              .ThenByDescending(blog => blog.Created)
+                              .Skip(ScenarioContext.Get<int>("START_GET_BLOGS_POSITION") - 1)
+                              .Take(ScenarioContext.Get<int>("TOTAL_GET_BLOGS"))
+                              .Select(blog => new
+                              {
+                                  blog.Title,
+                                  blog.Content,
+                                  Dates = new
+                                  {
+                                      blog.Created,
+                                      blog.Modified
+                                  }
+                              });
 
-            returnedBlogs.Values.Should().BeEquivalentTo(actualBlogs);
+            returnedBlogs.Values.Should().BeEquivalentTo(expectedBlogs);
         }
     }
 }

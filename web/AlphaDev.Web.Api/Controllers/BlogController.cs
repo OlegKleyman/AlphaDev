@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AlphaDev.BlogServices.Core;
+using AlphaDev.Core.Extensions;
 using AlphaDev.Optional.Extensions;
 using AlphaDev.Web.Api.Models;
 using JetBrains.Annotations;
@@ -38,6 +40,33 @@ namespace AlphaDev.Web.Api.Controllers
                                  })
                                  .MapAsync(Ok)
                                  .ExceptionOrValueAsync();
+        }
+
+        [Route("start/{startPosition}/count/{count}")]
+        [NotNull]
+        public async Task<IActionResult> GetBlogs(int startPosition, int count)
+        {
+            return (await _service.GetOrderedByDatesWithTotalAsync(startPosition, count))
+                   .To(tuple =>
+                   {
+                       return new Segmented<Blog>
+                       {
+                           Total = tuple.total,
+                           Values = tuple.blogs.Select(b => new Blog
+                                         {
+                                             Title = b.Title,
+                                             Content = b.Content,
+                                             Id = b.Id,
+                                             Dates = new Models.Dates
+                                             {
+                                                 Created = b.Dates.Created,
+                                                 Modified = b.Dates.Modified.ValueOrDefault()
+                                             }
+                                         })
+                                         .ToArray()
+                       };
+                   })
+                   .To(Ok);
         }
     }
 }

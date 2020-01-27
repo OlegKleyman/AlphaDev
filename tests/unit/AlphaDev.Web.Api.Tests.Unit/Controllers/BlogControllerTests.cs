@@ -1,14 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AlphaDev.BlogServices.Core;
 using AlphaDev.Web.Api.Controllers;
+using AlphaDev.Web.Api.Models;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using NSubstitute.Core;
 using Optional;
 using Optional.Unsafe;
 using Xunit;
+using Blog = AlphaDev.BlogServices.Core.Blog;
+using Dates = AlphaDev.BlogServices.Core.Dates;
 
 namespace AlphaDev.Web.Api.Tests.Unit.Controllers
 {
@@ -53,7 +59,37 @@ namespace AlphaDev.Web.Api.Tests.Unit.Controllers
             (await controller.GetLatest()).Should().BeOfType<NotFoundResult>();
         }
 
+        [Fact]
+        public async Task GetBlogsReturnsBlogsWithTotalFromTheBlogServiceWhenFound()
+        {
+            var blogService = Substitute.For<IBlogService>();
+            var blogs = new []{new Blog(1, "title", "content", new Dates(new DateTime(), DateTime.MaxValue.Some())) };
+            var blogsWithCount = (total: 100, blogs);
+            blogService.GetOrderedByDatesWithTotalAsync(10, 7)
+                       .Returns(blogsWithCount);
+
+            var controller = GetBlogController(blogService);
+
+            var result = await controller.GetBlogs(10, 7);
+
+            result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeEquivalentTo(new
+            {
+                Values = blogsWithCount.blogs.Select(b =>  new
+                {
+                    Dates = new
+                    {
+                        b.Dates.Created,
+                        Modified = b.Dates.Modified.ValueOrDefault()
+                    },
+                    b.Title,
+                    b.Content,
+                    b.Id
+                }),
+                Total = blogsWithCount.total
+            });
+        }
+
         [NotNull]
-        private BlogController GetBlogController(IBlogService blogService) => new BlogController(blogService);
+        private static BlogController GetBlogController(IBlogService blogService) => new BlogController(blogService);
     }
 }
