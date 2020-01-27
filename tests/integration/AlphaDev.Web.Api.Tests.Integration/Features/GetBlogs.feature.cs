@@ -130,13 +130,13 @@ this.ScenarioInitialize(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Get blog from position sorted by created date")]
+        [Xunit.SkippableFactAttribute(DisplayName="Get latest blog when no blogs exist")]
         [Xunit.TraitAttribute("FeatureTitle", "GetBlogs")]
-        [Xunit.TraitAttribute("Description", "Get blog from position sorted by created date")]
-        public virtual void GetBlogFromPositionSortedByCreatedDate()
+        [Xunit.TraitAttribute("Description", "Get latest blog when no blogs exist")]
+        public virtual void GetLatestBlogWhenNoBlogsExist()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get blog from position sorted by created date", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get latest blog when no blogs exist", null, ((string[])(null)));
 #line 14
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -161,12 +161,55 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Given("I am an API consumer", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 16
- testRunner.And("I have 100 blogs", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("There are no blogs", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 17
- testRunner.When("I make a request to get 20 blogs from position 17", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I make a request to get the latest blog", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 18
+ testRunner.Then("I will receive a 404 response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Get blog from position sorted by created date")]
+        [Xunit.TraitAttribute("FeatureTitle", "GetBlogs")]
+        [Xunit.TraitAttribute("Description", "Get blog from position sorted by created date")]
+        public virtual void GetBlogFromPositionSortedByCreatedDate()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get blog from position sorted by created date", null, ((string[])(null)));
+#line 20
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 21
+ testRunner.Given("I am an API consumer", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 22
+ testRunner.And("I have 100 blogs", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 23
+ testRunner.When("I make a request to get 20 blogs from position 17", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 24
  testRunner.Then("those blogs are returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

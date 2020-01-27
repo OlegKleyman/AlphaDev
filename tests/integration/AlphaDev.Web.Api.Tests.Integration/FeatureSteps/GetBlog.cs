@@ -25,6 +25,11 @@ namespace AlphaDev.Web.Api.Tests.Integration.FeatureSteps
             await GivenIHaveBlogs(100);
         }
 
+        [Given(@"There are no blogs")]
+        public void GivenThereAreNoBlogs()
+        {
+        }
+
         [Given(@"I am an API consumer")]
         public void GivenIAmAnApiConsumer()
         {
@@ -38,6 +43,13 @@ namespace AlphaDev.Web.Api.Tests.Integration.FeatureSteps
                                               .SomeWhenAsync(response => response.IsSuccessStatusCode,
                                                   response => response.Error)
                                               .MapAsync(response => response.Content));
+        }
+
+        [Then(@"I will receive a (\d+) response")]
+        public void ThenIWillReceiveAResponse(int statusCode)
+        {
+            var option = ScenarioContext.Get<Option<Services.Web.Models.Blog, ApiException>>();
+            option.Should().BeNone().Which.StatusCode.Should().BeEquivalentTo(statusCode);
         }
 
         [Then(@"the latest blog is returned")]

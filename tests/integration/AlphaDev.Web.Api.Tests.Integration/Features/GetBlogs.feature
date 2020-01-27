@@ -11,6 +11,12 @@ Scenario: Get latest blog
 	When I make a request to get the latest blog
 	Then the latest blog is returned
 
+Scenario: Get latest blog when no blogs exist
+	Given I am an API consumer
+	And There are no blogs
+	When I make a request to get the latest blog
+	Then I will receive a 404 response
+
 Scenario: Get blog from position sorted by created date
 	Given I am an API consumer
 	And I have 100 blogs
