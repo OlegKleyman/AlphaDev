@@ -7,11 +7,9 @@ using AlphaDev.Optional.Extensions;
 using AlphaDev.Services.Web;
 using AlphaDev.Services.Web.Models;
 using FluentAssertions;
-using FluentAssertions.Optional.Extensions;
-using Optional;
-using Optional.Async;
 using Refit;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Blog = AlphaDev.Core.Data.Entities.Blog;
 
 namespace AlphaDev.Web.Api.Tests.Integration.FeatureSteps
@@ -39,17 +37,17 @@ namespace AlphaDev.Web.Api.Tests.Integration.FeatureSteps
         public async Task WhenIMakeARequestToGetTheLatestBlog()
         {
             var service = RestService.For<IBlogRestService>(ScenarioContext.Get<Uri>("BLOG_SERVICE_URL").AbsoluteUri);
-            ScenarioContext.Set(await service.GetLatest()
-                                              .SomeWhenAsync(response => response.IsSuccessStatusCode,
-                                                  response => response.Error)
-                                              .MapAsync(response => response.Content));
+            await service.GetLatest()
+                         .SomeWhenAsync(apiResponse => apiResponse.IsSuccessStatusCode,
+                             apiResponse => apiResponse.Error)
+                         .MatchAsync(apiResponse => ScenarioContext.Set(apiResponse.Content),
+                             exception => ScenarioContext.Set(exception));
         }
 
         [Then(@"I will receive a (\d+) response")]
         public void ThenIWillReceiveAResponse(int statusCode)
         {
-            var option = ScenarioContext.Get<Option<Services.Web.Models.Blog, ApiException>>();
-            option.Should().BeNone().Which.StatusCode.Should().BeEquivalentTo(statusCode);
+            ScenarioContext.Get<ApiException>()?.StatusCode.Should().BeEquivalentTo(statusCode);
         }
 
         [Then(@"the latest blog is returned")]
@@ -59,8 +57,8 @@ namespace AlphaDev.Web.Api.Tests.Integration.FeatureSteps
                                             .OrderByDescending(blog => blog.Created)
                                             .First();
 
-            var option = ScenarioContext.Get<Option<Services.Web.Models.Blog, ApiException>>();
-            option.Should().HasValueEquivalentTo(new
+            var blog = ScenarioContext.Get<Services.Web.Models.Blog>();
+            blog.Should().BeEquivalentTo(new
             {
                 latestBlog.Title,
                 latestBlog.Content ,
@@ -124,6 +122,52 @@ namespace AlphaDev.Web.Api.Tests.Integration.FeatureSteps
                               });
 
             returnedBlogs.Values.Should().BeEquivalentTo(expectedBlogs);
+        }
+
+        [Given(@"There is a blog")]
+        public async Task GivenThereIsABlog(Table blogTable)
+        {
+            var context = ScenarioContext.Get<BlogContext>();
+            var blog = blogTable.CreateSet<Blog>().Single();
+            await context.Blogs.AddAsync(blog);
+            await context.SaveChangesAsync();
+            ScenarioContext.Set(context.Blogs.ToImmutableArray());
+            ScenarioContext.Set(blog);
+        }
+
+        [When(@"I make a request to get that blog")]
+        public async Task WhenIMakeARequestToGetThatBlog()
+        {
+            await WhenIMakeARequestToGetABlogByTheIdOf(ScenarioContext.Get<Blog>().Id);
+        }
+
+        [Then(@"the blog is returned")]
+        public void ThenTheBlogIsReturned()
+        {
+            var blog = ScenarioContext.Get<Blog>();
+            ScenarioContext.Get<Services.Web.Models.Blog>().Should().BeEquivalentTo(new
+            {
+                blog.Id,
+                blog.Title,
+                blog.Content,
+                Dates = new
+                {
+                    blog.Created,
+                    blog.Modified
+                }
+            });
+        }
+
+        [When(@"I make a request to get a blog by the id of (\d+)")]
+        public async Task WhenIMakeARequestToGetABlogByTheIdOf(int id)
+        {
+            var service = RestService.For<IBlogRestService>(ScenarioContext.Get<Uri>("BLOG_SERVICE_URL").AbsoluteUri);
+            var response = await service.Get(id);
+            await service.Get(id)
+                         .SomeWhenAsync(apiResponse => apiResponse.IsSuccessStatusCode,
+                             apiResponse => apiResponse.Error)
+                         .MatchAsync(apiResponse => ScenarioContext.Set(response.Content),
+                             exception => ScenarioContext.Set(exception));
         }
     }
 }

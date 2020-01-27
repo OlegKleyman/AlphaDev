@@ -22,3 +22,16 @@ Scenario: Get blog from position sorted by created date
 	And I have 100 blogs
 	When I make a request to get 20 blogs from position 17
 	Then those blogs are returned
+
+Scenario: Get specific blog by ID
+	Given I am an API consumer
+	And There is a blog
+	| Content | Title |
+	| content | title |
+	When I make a request to get that blog
+	Then the blog is returned
+
+Scenario: Get specific blog by ID when it doesn't exist
+	Given I am an API consumer
+	When I make a request to get a blog by the id of 1
+	Then I will receive a 404 response

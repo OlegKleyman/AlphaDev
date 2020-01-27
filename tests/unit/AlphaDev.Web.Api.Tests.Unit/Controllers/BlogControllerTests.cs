@@ -89,6 +89,45 @@ namespace AlphaDev.Web.Api.Tests.Unit.Controllers
             });
         }
 
+        [Fact]
+        public async Task GetReturnsBlogModelWithValuesSetFromTheBlogService()
+        {
+            BlogBase blog = new Blog(123,
+                "title",
+                "content",
+                new Dates(new DateTime(2015, 7, 27), Option.Some(new DateTime(2016, 8, 28))));
+
+            var blogService = Substitute.For<IBlogService>();
+            blogService.GetAsync(1).Returns(blog.Some());
+
+            var controller = GetBlogController(blogService);
+
+            (await controller.Get(1))
+                .Should()
+                .BeOfType<OkObjectResult>()
+                .Which.Value
+                .Should()
+                .BeEquivalentTo(
+                    new
+                    {
+                        blog.Id,
+                        blog.Title,
+                        blog.Content,
+                        Dates = new { blog.Dates.Created, Modified = blog.Dates.Modified.ValueOrDefault() }
+                    });
+        }
+
+        [Fact]
+        public async Task GetReturnsNotFoundWhenServiceReturnsNone()
+        {
+            var blogService = Substitute.For<IBlogService>();
+            blogService.GetAsync(1).Returns(Option.None<BlogBase>());
+
+            var controller = GetBlogController(blogService);
+
+            (await controller.Get(1)).Should().BeOfType<NotFoundResult>();
+        }
+
         [NotNull]
         private static BlogController GetBlogController(IBlogService blogService) => new BlogController(blogService);
     }

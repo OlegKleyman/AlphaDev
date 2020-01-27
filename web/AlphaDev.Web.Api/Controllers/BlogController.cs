@@ -3,13 +3,10 @@ using System.Threading.Tasks;
 using AlphaDev.BlogServices.Core;
 using AlphaDev.Core.Extensions;
 using AlphaDev.Optional.Extensions;
-using AlphaDev.Web.Api.Models;
 using JetBrains.Annotations;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Optional.Async;
 using Optional.Unsafe;
-using Blog = AlphaDev.Web.Api.Models.Blog;
 
 namespace AlphaDev.Web.Api.Controllers
 {
@@ -27,15 +24,15 @@ namespace AlphaDev.Web.Api.Controllers
         {
             return await _service.GetLatestAsync()
                                  .WithExceptionAsync(() => (IActionResult) NotFound())
-                                 .MapAsync(b => new Blog
+                                 .MapAsync(b => new
                                  {
-                                     Title =b.Title,
-                                     Content = b.Content,
-                                     Id = b.Id,
-                                     Dates = new Models.Dates
+                                     b.Title,
+                                     b.Content,
+                                     b.Id,
+                                     Dates = new
                                      {
-                                         Created = b.Dates.Created,
-                                         Modified = b.Dates.Modified.ValueOrDefault()
+                                         b.Dates.Created,
+                                         Modified = b.Dates.Modified.ToNullable()
                                      }
                                  })
                                  .MapAsync(Ok)
@@ -49,17 +46,17 @@ namespace AlphaDev.Web.Api.Controllers
             return (await _service.GetOrderedByDatesWithTotalAsync(startPosition, count))
                    .To(tuple =>
                    {
-                       return new Segmented<Blog>
+                       return new
                        {
                            Total = tuple.total,
-                           Values = tuple.blogs.Select(b => new Blog
+                           Values = tuple.blogs.Select(b => new
                                          {
-                                             Title = b.Title,
-                                             Content = b.Content,
-                                             Id = b.Id,
-                                             Dates = new Models.Dates
+                                             b.Title,
+                                             b.Content,
+                                             b.Id,
+                                             Dates = new
                                              {
-                                                 Created = b.Dates.Created,
+                                                 b.Dates.Created,
                                                  Modified = b.Dates.Modified.ValueOrDefault()
                                              }
                                          })
@@ -67,6 +64,27 @@ namespace AlphaDev.Web.Api.Controllers
                        };
                    })
                    .To(Ok);
+        }
+
+        [Route("{id}")]
+        [ItemNotNull]
+        public async Task<IActionResult> Get(int id)
+        {
+            return await _service.GetAsync(id)
+                                 .WithExceptionAsync(NotFound)
+                                 .MapAsync(b => new
+                                 {
+                                     b.Content,
+                                     b.Title,
+                                     b.Id,
+                                     Dates = new
+                                     {
+                                         b.Dates.Created,
+                                         Modified = b.Dates.Modified.ToNullable()
+                                     }
+                                 })
+                                 .MapAsync(b => (IActionResult) Ok(b))
+                                 .ValueOrExceptionAsync();
         }
     }
 }
